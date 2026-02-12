@@ -19,6 +19,7 @@ import {
   Zap, 
   Cpu, 
   Palette, 
+  Camera,
   ChevronRight, 
   ChevronLeft,
   Globe, 
@@ -28,11 +29,10 @@ import {
   CheckCircle2,
   ExternalLink,
   Quote,
-  Calendar,
   MapPin,
   Phone,
-  BookOpen,
-  Briefcase
+  Sparkles,
+  Send
 } from 'lucide-react';
 import { PROJECTS, SKILLS, SERVICES, SOCIALS, TESTIMONIALS, EDUCATION, EXPERIENCE, SKILLS_PROGRESS, CONTACT_INFO, BLOG_POSTS } from './constants';
 
@@ -50,14 +50,14 @@ const ScrollToTop = () => {
 /**
  * COMPONENT: Section Wrapper for Scroll Animations
  */
-const RevealSection = ({ children, className = "", id }: { children?: React.ReactNode, className?: string, id?: string }) => {
+const RevealSection = ({ children, className = "", id, delay = 0 }: { children?: React.ReactNode, className?: string, id?: string, delay?: number }) => {
   return (
     <motion.div
       id={id}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay }}
       className={className}
     >
       {children}
@@ -66,13 +66,40 @@ const RevealSection = ({ children, className = "", id }: { children?: React.Reac
 };
 
 /**
+ * COMPONENT: Floating Background Orbs
+ */
+const FloatingOrbs = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div 
+      className="absolute top-20 -left-32 w-[500px] h-[500px] rounded-full opacity-[0.07]"
+      style={{ background: 'radial-gradient(circle, #8b5cf6 0%, transparent 70%)', animation: 'float 20s ease-in-out infinite' }}
+    />
+    <div 
+      className="absolute bottom-20 -right-32 w-[400px] h-[400px] rounded-full opacity-[0.05]"
+      style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)', animation: 'floatReverse 25s ease-in-out infinite' }}
+    />
+    <div 
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.04]"
+      style={{ background: 'radial-gradient(circle, #a78bfa 0%, transparent 70%)', animation: 'floatSlow 30s ease-in-out infinite' }}
+    />
+  </div>
+);
+
+/**
  * COMPONENT: Navigation
  */
 const Nav = () => {
   const [activeTab, setActiveTab] = useState('About');
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { name: 'Projects', id: 'projects' },
@@ -104,43 +131,45 @@ const Nav = () => {
 
   return (
     <>
-      <nav className="fixed top-8 left-1/2 -translate-x-1/2 z-50 max-w-fit px-4 py-2 rounded-full flex items-center gap-4 border border-white/40 bg-white/70 backdrop-blur-xl shadow-xl">
-        {/* Logo Section */}
-        <Link to="/" onClick={() => setActiveTab('About')} className="flex items-center px-2" aria-label="Go to Homepage">
+      <motion.nav 
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 max-w-fit px-3 py-2 rounded-full flex items-center gap-2 transition-all duration-500 ${
+          scrolled 
+            ? 'bg-black/80 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.8)]' 
+            : 'bg-black/50 backdrop-blur-xl border border-white/[0.06]'
+        }`}
+      >
+        {/* Logo */}
+        <Link to="/" onClick={() => setActiveTab('About')} className="flex items-center px-1" aria-label="Go to Homepage">
           <motion.div 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="w-10 h-10 bg-black rounded-xl flex items-center justify-center font-bold text-xs text-white"
+            className="w-10 h-10 bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] rounded-xl flex items-center justify-center font-bold text-xs text-white shadow-lg shadow-violet-500/20"
           >
             EM
           </motion.div>
         </Link>
         
         {/* Navigation Links */}
-        <div className="hidden lg:flex items-center gap-1">
+        <div className="hidden lg:flex items-center gap-0.5">
           {navLinks.map((link) => {
             const isActive = activeTab === link.name;
             return (
               <button 
                 key={link.name}
                 onClick={(e) => handleNavClick(e, link)}
-                className={`relative px-6 py-3 text-[11px] font-black uppercase tracking-widest transition-all duration-300 z-10 ${isActive ? 'text-[#ffffff]' : 'text-[#000000]'}`}
+                className={`relative px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 z-10 rounded-full ${
+                  isActive ? 'text-white' : 'text-neutral-400 hover:text-white'
+                }`}
               >
                 {isActive && (
-                  <>
-                    <motion.div 
-                      layoutId="pill-active-bg"
-                      className="absolute inset-0 bg-[#000000] rounded-full -z-10 shadow-lg shadow-black/20"
-                      transition={{ type: "spring", duration: 0.6, bounce: 0.15 }}
-                    />
-                    <motion.div 
-                      layoutId="active-underline"
-                      className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-white rounded-full"
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    />
-                  </>
+                  <motion.div 
+                    layoutId="pill-active-bg"
+                    className="absolute inset-0 bg-white/[0.08] border border-white/[0.08] rounded-full -z-10"
+                    transition={{ type: "spring", duration: 0.5, bounce: 0.15 }}
+                  />
                 )}
                 {link.name}
               </button>
@@ -148,65 +177,71 @@ const Nav = () => {
           })}
         </div>
 
-        {/* Action Button */}
+        {/* CTA Button */}
         <button 
           onClick={(e) => handleNavClick(e, { name: 'Hire', id: 'contact' })}
-          className={`hidden lg:block px-6 py-3 text-[11px] font-black rounded-full uppercase tracking-widest transition-all z-10 relative ${activeTab === 'Hire' ? 'text-[#ffffff]' : 'text-[#000000]'}`}
+          className="hidden lg:flex items-center gap-2 px-5 py-2.5 text-[10px] font-bold rounded-full uppercase tracking-widest bg-gradient-to-r from-[#8b5cf6] to-[#6d28d9] text-white shadow-lg shadow-violet-500/20 hover:shadow-violet-500/40 transition-all duration-300 hover:scale-105"
         >
-          {activeTab === 'Hire' && (
-            <>
-              <motion.div 
-                layoutId="pill-active-bg"
-                className="absolute inset-0 bg-[#000000] rounded-full -z-10 shadow-lg shadow-black/20"
-                transition={{ type: "spring", duration: 0.6, bounce: 0.15 }}
-              />
-              <motion.div 
-                layoutId="active-underline"
-                className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-white rounded-full"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-              />
-            </>
-          )}
-          Hire
+          <Sparkles size={12} />
+          Hire Me
         </button>
 
+        {/* Mobile Toggle */}
         <button 
-          className="lg:hidden p-2 text-black transition-colors"
+          className="lg:hidden p-2 text-white transition-colors"
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
-      </nav>
+      </motion.nav>
 
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-40 bg-black/98 backdrop-blur-2xl lg:hidden pt-32 px-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-black/98 backdrop-blur-2xl lg:hidden"
           >
-            <div className="flex flex-col gap-8 text-3xl font-bold">
-              {navLinks.map((link, idx) => {
-                const isActive = activeTab === link.name;
-                return (
-                  <motion.button
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    key={link.name}
-                    onClick={(e) => handleNavClick(e, link)}
-                    className={`text-left transition-all flex items-center justify-between group ${isActive ? 'text-[#ffffff] scale-105' : 'text-neutral-400 hover:text-white'}`}
-                  >
-                    <span className="flex items-center gap-4">
-                      {isActive && <motion.div layoutId="mobile-dot" className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_#ffffff]" />}
-                      {link.name}
-                    </span>
-                    <ChevronRight className={isActive ? 'opacity-100' : 'opacity-40'} />
-                  </motion.button>
-                );
-              })}
+            <div className="flex flex-col justify-center h-full px-10">
+              <div className="flex flex-col gap-6">
+                {navLinks.map((link, idx) => {
+                  const isActive = activeTab === link.name;
+                  return (
+                    <motion.button
+                      initial={{ opacity: 0, x: -30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.06 }}
+                      key={link.name}
+                      onClick={(e) => handleNavClick(e, link)}
+                      className={`text-left transition-all flex items-center justify-between group py-2 ${
+                        isActive ? 'text-white' : 'text-neutral-500 hover:text-white'
+                      }`}
+                    >
+                      <span className="flex items-center gap-4 text-3xl font-bold">
+                        {isActive && (
+                          <motion.div 
+                            layoutId="mobile-dot" 
+                            className="w-2 h-2 rounded-full bg-[#8b5cf6] shadow-[0_0_12px_#8b5cf6]" 
+                          />
+                        )}
+                        {link.name}
+                      </span>
+                      <ChevronRight size={20} className={isActive ? 'text-[#8b5cf6]' : 'opacity-30'} />
+                    </motion.button>
+                  );
+                })}
+              </div>
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                onClick={(e) => handleNavClick(e, { name: 'Hire', id: 'contact' })}
+                className="mt-12 w-full py-4 bg-gradient-to-r from-[#8b5cf6] to-[#6d28d9] text-white font-bold rounded-2xl text-center text-sm uppercase tracking-widest"
+              >
+                Get in Touch
+              </motion.button>
             </div>
           </motion.div>
         )}
@@ -245,25 +280,30 @@ const ContactForm = () => {
   };
 
   const inputClasses = (hasError: boolean) => `
-    w-full bg-black border ${hasError ? 'border-red-500/50' : 'border-white/10'} 
+    w-full bg-white/[0.03] border ${hasError ? 'border-red-500/50' : 'border-white/[0.06]'} 
     rounded-2xl px-5 py-4 text-white transition-all duration-300
-    focus:outline-none focus:border-white focus:ring-1 focus:ring-white/50 
-    focus:shadow-[0_0_25px_rgba(255,255,255,0.3)]
-    focus:animate-[pulse_3s_infinite]
+    focus:outline-none focus:border-[#8b5cf6]/50 focus:ring-1 focus:ring-[#8b5cf6]/30 
+    focus:shadow-[0_0_20px_rgba(139,92,246,0.15)]
+    placeholder:text-neutral-600
   `;
 
   return (
-    <div className="bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-[2rem] glass shadow-2xl">
+    <div className="bg-white/[0.02] border border-white/[0.06] p-8 md:p-12 rounded-[2rem] backdrop-blur-xl shadow-2xl relative overflow-hidden">
+      {/* Decorative accent glow */}
+      <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#8b5cf6]/10 rounded-full blur-[80px] pointer-events-none" />
+      
       {status === 'success' ? (
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
-          <CheckCircle2 size={40} className="text-white mx-auto mb-6" />
+          <div className="w-16 h-16 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 size={32} className="text-[#8b5cf6]" />
+          </div>
           <h3 className="text-3xl font-bold mb-3 text-white">Sent!</h3>
           <p className="text-neutral-400">Thanks for reaching out, I'll be in touch.</p>
         </motion.div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Full Name</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Full Name</label>
             <input 
               type="text" 
               value={formData.name}
@@ -271,9 +311,10 @@ const ContactForm = () => {
               className={inputClasses(!!errors.name)} 
               placeholder="Your Name" 
             />
+            {errors.name && <p className="text-red-400 text-xs">{errors.name}</p>}
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Email Address</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Email Address</label>
             <input 
               type="email" 
               value={formData.email}
@@ -281,9 +322,10 @@ const ContactForm = () => {
               className={inputClasses(!!errors.email)} 
               placeholder="eliosmernica@gmail.com" 
             />
+            {errors.email && <p className="text-red-400 text-xs">{errors.email}</p>}
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500">Message</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Message</label>
             <textarea 
               rows={4} 
               value={formData.message}
@@ -291,12 +333,14 @@ const ContactForm = () => {
               className={inputClasses(!!errors.message) + " resize-none"} 
               placeholder="How can I help?" 
             />
+            {errors.message && <p className="text-red-400 text-xs">{errors.message}</p>}
           </div>
           <button 
             type="submit" 
             disabled={status === 'loading'}
-            className="w-full py-5 bg-white text-black font-black rounded-2xl hover:bg-neutral-200 transition-all disabled:opacity-50"
+            className="w-full py-4 bg-gradient-to-r from-[#8b5cf6] to-[#6d28d9] text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-violet-500/25 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
           >
+            <Send size={16} />
             {status === 'loading' ? 'Sending...' : 'Send Message'}
           </button>
         </form>
@@ -319,24 +363,57 @@ const Testimonials = () => {
         <AnimatePresence mode="wait">
           <motion.div 
             key={index}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            className="p-10 md:p-14 rounded-[3rem] glass max-w-3xl w-full text-center relative border border-white/5"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="p-10 md:p-16 rounded-[3rem] glass-accent max-w-3xl w-full text-center relative"
           >
-            <Quote size={50} className="text-white/10 absolute top-10 left-10" />
-            <p className="text-xl md:text-2xl font-medium leading-relaxed mb-10 text-neutral-200">"{TESTIMONIALS[index].text}"</p>
+            <Quote size={50} className="text-[#8b5cf6]/15 absolute top-10 left-10" />
+            <p className="text-xl md:text-2xl font-medium leading-relaxed mb-10 text-neutral-200">
+              "{TESTIMONIALS[index].text}"
+            </p>
             <div className="flex flex-col items-center">
-              <img src={TESTIMONIALS[index].avatar} alt={TESTIMONIALS[index].name} className="w-16 h-16 rounded-full mb-4 border border-white/10 grayscale" />
+              <div className="w-16 h-16 rounded-full mb-4 border-2 border-[#8b5cf6]/30 p-0.5 overflow-hidden">
+                <img src={TESTIMONIALS[index].avatar} alt={TESTIMONIALS[index].name} className="w-full h-full rounded-full object-cover" />
+              </div>
               <h4 className="font-bold text-xl text-white">{TESTIMONIALS[index].name}</h4>
-              <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-black">{TESTIMONIALS[index].role}</p>
+              <p className="text-[10px] uppercase tracking-widest text-[#a78bfa] font-bold mt-1">{TESTIMONIALS[index].role}</p>
             </div>
           </motion.div>
         </AnimatePresence>
       </div>
-      <div className="flex justify-center gap-6 mt-8">
-        <button onClick={prev} className="w-12 h-12 rounded-full glass border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all"><ChevronLeft size={20} /></button>
-        <button onClick={next} className="w-12 h-12 rounded-full glass border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all"><ChevronRight size={20} /></button>
+      
+      {/* Controls */}
+      <div className="flex items-center justify-center gap-6 mt-8">
+        <button 
+          onClick={prev} 
+          className="w-11 h-11 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center hover:bg-[#8b5cf6] hover:border-[#8b5cf6] transition-all duration-300"
+        >
+          <ChevronLeft size={18} />
+        </button>
+        
+        {/* Dots */}
+        <div className="flex items-center gap-2">
+          {TESTIMONIALS.map((_, i) => (
+            <button 
+              key={i} 
+              onClick={() => setIndex(i)}
+              className={`rounded-full transition-all duration-300 ${
+                i === index 
+                  ? 'w-6 h-2 bg-[#8b5cf6]' 
+                  : 'w-2 h-2 bg-white/20 hover:bg-white/40'
+              }`}
+            />
+          ))}
+        </div>
+        
+        <button 
+          onClick={next} 
+          className="w-11 h-11 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center hover:bg-[#8b5cf6] hover:border-[#8b5cf6] transition-all duration-300"
+        >
+          <ChevronRight size={18} />
+        </button>
       </div>
     </div>
   );
@@ -353,15 +430,16 @@ const ProjectDetail = () => {
   if (!project) return <div className="min-h-screen flex items-center justify-center text-white">Project Not Found</div>;
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-32 pb-24 px-6 max-w-6xl mx-auto text-white">
-      <button onClick={() => navigate(-1)} className="mb-14 flex items-center gap-3 text-neutral-500 hover:text-white transition-all group">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-32 pb-24 px-6 max-w-6xl mx-auto text-white relative">
+      <FloatingOrbs />
+      <button onClick={() => navigate(-1)} className="mb-14 flex items-center gap-3 text-neutral-500 hover:text-[#a78bfa] transition-all group relative z-10">
         <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
         <span className="text-xs font-bold uppercase tracking-[0.3em]">Back to Showcase</span>
       </button>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 relative z-10">
         <div className="lg:col-span-8">
-          <motion.div layoutId={`img-${project.id}`} className="aspect-[16/9] rounded-[3rem] overflow-hidden border border-white/5 mb-16 shadow-2xl">
-            <img src={project.image} alt={project.title} className="w-full h-full object-cover object-center grayscale-[0.5]" />
+          <motion.div layoutId={`img-${project.id}`} className="aspect-[16/9] rounded-[2.5rem] overflow-hidden border border-white/[0.06] mb-16 shadow-2xl">
+            <img src={project.image} alt={project.title} className="w-full h-full object-cover object-center" />
           </motion.div>
           <RevealSection>
             <h1 className="text-5xl md:text-8xl font-black mb-10 tracking-tighter text-gradient leading-tight">{project.title}</h1>
@@ -369,16 +447,36 @@ const ProjectDetail = () => {
           </RevealSection>
         </div>
         <div className="lg:col-span-4">
-          <div className="p-10 rounded-[2.5rem] glass border border-white/5 sticky top-32">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-500 mb-8 border-b border-white/5 pb-4">Specs</h3>
+          <div className="p-10 rounded-[2.5rem] glass-accent sticky top-32">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#a78bfa] mb-8 border-b border-[#8b5cf6]/10 pb-4">Project Specs</h3>
             <div className="space-y-6">
-              <div><p className="text-neutral-500 text-[10px] uppercase font-bold tracking-widest mb-1">Year</p><p className="text-white font-bold">{project.year}</p></div>
-              <div><p className="text-neutral-500 text-[10px] uppercase font-bold tracking-widest mb-1">Category</p><p className="text-white font-bold">{project.category}</p></div>
-              <div><p className="text-neutral-500 text-[10px] uppercase font-bold tracking-widest mb-1">Stack</p>
-                <div className="flex flex-wrap gap-2 mt-2">{project.tech.map(t => <span key={t} className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-[10px] font-bold text-neutral-400">{t}</span>)}</div>
+              <div>
+                <p className="text-neutral-500 text-[10px] uppercase font-bold tracking-widest mb-1">Year</p>
+                <p className="text-white font-bold">{project.year}</p>
+              </div>
+              <div>
+                <p className="text-neutral-500 text-[10px] uppercase font-bold tracking-widest mb-1">Category</p>
+                <p className="text-white font-bold">{project.category}</p>
+              </div>
+              <div>
+                <p className="text-neutral-500 text-[10px] uppercase font-bold tracking-widest mb-1">Stack</p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {project.tech.map(t => (
+                    <span key={t} className="px-3 py-1 bg-[#8b5cf6]/10 border border-[#8b5cf6]/20 rounded-lg text-[10px] font-bold text-[#c4b5fd]">
+                      {t}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
-            <a href={project.link} target="_blank" rel="noopener noreferrer" className="mt-12 w-full py-5 bg-white text-black rounded-2xl flex items-center justify-center gap-3 font-bold hover:bg-neutral-200 transition-all">Visit Live <ExternalLink size={18} /></a>
+            <a 
+              href={project.link} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="mt-10 w-full py-4 bg-gradient-to-r from-[#8b5cf6] to-[#6d28d9] text-white rounded-2xl flex items-center justify-center gap-3 font-bold hover:shadow-lg hover:shadow-violet-500/25 transition-all"
+            >
+              Visit Live <ExternalLink size={16} />
+            </a>
           </div>
         </div>
       </div>
@@ -402,107 +500,175 @@ const Home = () => {
     }
   };
 
-  const handleSkillClick = (skill: string) => {
-    console.log(`Skill selected: ${skill}`);
-  };
-
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative pt-48 pb-24 px-6 max-w-7xl mx-auto overflow-hidden text-white">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="lg:col-span-8 p-10 md:p-16 rounded-[4rem] glass relative overflow-hidden flex flex-col justify-end min-h-[600px] shadow-2xl">
-            <div className="absolute top-12 right-12 flex items-center gap-4">
-              <div className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_10px_#fff]" />
-              <span className="text-[10px] font-black tracking-widest text-neutral-400 uppercase">Operating Globally</span>
+      {/* ===== HERO SECTION ===== */}
+      <section className="relative pt-44 pb-24 px-6 max-w-7xl mx-auto overflow-hidden text-white">
+        <FloatingOrbs />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
+          {/* Main Hero Card */}
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }} 
+            className="lg:col-span-8 p-10 md:p-16 rounded-[3rem] bg-white/[0.02] border border-white/[0.06] relative overflow-hidden flex flex-col justify-end min-h-[560px]"
+          >
+            {/* Status badge */}
+            <div className="absolute top-10 right-10 flex items-center gap-3 bg-white/[0.04] px-4 py-2 rounded-full border border-white/[0.06]">
+              <div className="w-2 h-2 rounded-full bg-[#8b5cf6] animate-pulse shadow-[0_0_8px_#8b5cf6]" />
+              <span className="text-[10px] font-bold tracking-widest text-neutral-400 uppercase">Available for Work</span>
             </div>
+            
             <div className="relative z-10">
-              <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-8 leading-[1] text-gradient">Elios <br />Mernica.</h1>
-              <p className="max-w-xl text-neutral-400 text-xl md:text-2xl leading-relaxed mb-12 font-light">
-                Software Engineer specializing in web development, system design, and network infrastructure.
-              </p>
-              <div className="flex flex-wrap gap-5">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+              >
+                <p className="text-[#a78bfa] text-xs font-bold uppercase tracking-[0.3em] mb-6">Software Engineer</p>
+                <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 leading-[0.9] text-gradient">
+                  Elios<br />Mernica.
+                </h1>
+              </motion.div>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+                className="max-w-lg text-neutral-400 text-lg md:text-xl leading-relaxed mb-10 font-light"
+              >
+                Specializing in web development, system design, and network infrastructure.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.8 }}
+                className="flex flex-wrap gap-4"
+              >
                 <button 
                   onClick={scrollToProjects}
-                  className="px-10 py-5 bg-white text-black font-black rounded-2xl hover:bg-neutral-200 transition-all flex items-center gap-3"
+                  className="px-8 py-4 bg-gradient-to-r from-[#8b5cf6] to-[#6d28d9] text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-violet-500/30 transition-all flex items-center gap-3 hover:scale-[1.02]"
                 >
-                  Showcase <ArrowUpRight size={18} />
+                  View Showcase <ArrowUpRight size={18} />
                 </button>
-              </div>
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="px-8 py-4 bg-white/[0.04] border border-white/10 text-white font-bold rounded-2xl hover:bg-white/[0.08] transition-all"
+                >
+                  Contact Me
+                </button>
+              </motion.div>
             </div>
-            <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-white/[0.03] blur-[120px] rounded-full pointer-events-none" />
+            
+            {/* Background decoration */}
+            <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-[#8b5cf6]/[0.06] blur-[100px] rounded-full pointer-events-none" />
           </motion.div>
-          <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-8">
-            <div className="p-10 rounded-[3rem] glass flex flex-col justify-between border border-white/5 hover:border-white/20 transition-all">
-              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-white"><Globe size={28} /></div>
-              <div className="mt-16"><h3 className="text-2xl font-black mb-3">Kosovo, EU</h3><p className="text-neutral-500 leading-relaxed">Available for elite digital missions and remote engineering.</p></div>
-            </div>
-            <div className="p-10 rounded-[3rem] bg-white text-black flex flex-col justify-between shadow-2xl overflow-hidden relative group">
-              <div className="relative z-10"><h3 className="text-6xl font-black tracking-tighter">9+</h3><p className="font-black text-xs uppercase tracking-widest opacity-60 mt-12">Years of Growth</p></div>
-              <Zap size={200} className="absolute -bottom-10 -right-10 opacity-5 group-hover:rotate-12 transition-transform duration-1000" fill="currentColor" />
-            </div>
+          
+          {/* Side Cards */}
+          <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/[0.06] flex flex-col justify-between hover:border-[#8b5cf6]/20 transition-all duration-500 group"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-[#8b5cf6]/10 flex items-center justify-center text-[#a78bfa] group-hover:shadow-[0_0_20px_rgba(139,92,246,0.2)] transition-all">
+                <Globe size={24} />
+              </div>
+              <div className="mt-12">
+                <h3 className="text-2xl font-black mb-2">Kosovo, EU</h3>
+                <p className="text-neutral-500 text-sm leading-relaxed">Available for remote engineering and digital missions.</p>
+              </div>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="p-8 rounded-[2.5rem] bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] text-white flex flex-col justify-between shadow-2xl shadow-violet-500/20 overflow-hidden relative group"
+            >
+              <div className="relative z-10">
+                <h3 className="text-6xl font-black tracking-tighter">9+</h3>
+              </div>
+              <p className="font-bold text-xs uppercase tracking-widest opacity-70 mt-10 relative z-10">Years of Growth</p>
+              <Zap size={180} className="absolute -bottom-8 -right-8 opacity-10 group-hover:rotate-12 transition-transform duration-1000" fill="currentColor" />
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="py-32 px-6 max-w-7xl mx-auto scroll-mt-24 text-white">
-        <RevealSection className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-10">
-          <div><span className="text-neutral-500 font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">Work</span><h2 className="text-5xl md:text-7xl font-black">Curated <span className="text-neutral-500 italic">Labs.</span></h2></div>
-          <div className="flex flex-wrap gap-2 bg-white/5 p-2 rounded-[2rem] border border-white/5">
-            {categories.map(cat => <button key={cat} onClick={() => setFilter(cat)} className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${filter === cat ? 'bg-white text-black' : 'text-neutral-500 hover:text-white'}`}>{cat}</button>)}
+      {/* ===== PROJECTS SECTION ===== */}
+      <section id="projects" className="py-28 px-6 max-w-7xl mx-auto scroll-mt-24 text-white">
+        <RevealSection className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+          <div>
+            <span className="text-[#a78bfa] font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">Portfolio</span>
+            <h2 className="text-5xl md:text-7xl font-black">
+              Curated <span className="text-neutral-500 italic">Labs.</span>
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-1.5 bg-white/[0.03] p-1.5 rounded-2xl border border-white/[0.06]">
+            {categories.map(cat => (
+              <button 
+                key={cat} 
+                onClick={() => setFilter(cat)} 
+                className={`px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
+                  filter === cat 
+                    ? 'bg-[#8b5cf6] text-white shadow-lg shadow-violet-500/20' 
+                    : 'text-neutral-500 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
         </RevealSection>
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+        
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project) => (
               <motion.div 
                 key={project.id} 
                 layout 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }} 
-                exit={{ opacity: 0 }} 
+                initial={{ opacity: 0, scale: 0.95 }} 
+                animate={{ opacity: 1, scale: 1 }} 
+                exit={{ opacity: 0, scale: 0.95 }} 
+                transition={{ duration: 0.4 }}
                 className="group cursor-pointer"
               >
-                <Link to={`/project/${project.id}`} className="block relative overflow-hidden rounded-[2.5rem] border border-white/10 aspect-[16/10]">
-                  {/* Image with improved centering */}
+                <Link to={`/project/${project.id}`} className="block relative overflow-hidden rounded-[2rem] border border-white/[0.06] aspect-[16/10] hover:border-[#8b5cf6]/30 transition-all duration-500">
                   <motion.div 
-                    whileHover={{ scale: 1.15 }} 
-                    transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1] }} 
+                    whileHover={{ scale: 1.08 }} 
+                    transition={{ duration: 1, ease: [0.33, 1, 0.68, 1] }} 
                     className="absolute inset-0 w-full h-full"
                   >
                     <img 
                       src={project.image} 
                       alt={project.title} 
-                      className="w-full h-full object-cover object-center grayscale group-hover:grayscale-0 transition-all duration-1000" 
+                      className="w-full h-full object-cover object-center grayscale-[0.6] group-hover:grayscale-0 transition-all duration-700" 
                     />
                   </motion.div>
                   
-                  {/* Unified Overlay matching reference screenshot */}
-                  <motion.div 
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-8 md:p-14 transition-all duration-500"
-                  >
-                    <div className="flex items-end justify-between gap-6">
-                      <div className="flex-1 space-y-2">
-                        <span className="text-[#a78bfa] text-[10px] font-black uppercase tracking-[0.4em] block">
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 flex flex-col justify-end p-8 md:p-10 transition-all duration-500">
+                    <div className="flex items-end justify-between gap-4">
+                      <div className="flex-1 space-y-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <span className="text-[#a78bfa] text-[10px] font-bold uppercase tracking-[0.3em] block">
                           {project.category}
                         </span>
-                        <h4 className="text-3xl md:text-4xl font-black text-white tracking-tighter brightness-110 drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]">
+                        <h4 className="text-2xl md:text-3xl font-black text-white tracking-tight">
                           {project.title}
                         </h4>
-                        <p className="text-neutral-400 text-sm md:text-base leading-relaxed max-w-sm font-medium">
+                        <p className="text-neutral-400 text-sm leading-relaxed max-w-sm">
                           {project.description}
                         </p>
                       </div>
-                      
-                      {/* Circular Action Button */}
-                      <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(255,255,255,0.4)] shrink-0">
-                        <ArrowUpRight size={32} className="text-black" />
+                      <div className="w-12 h-12 bg-[#8b5cf6] rounded-full flex items-center justify-center shadow-lg shadow-violet-500/30 shrink-0 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
+                        <ArrowUpRight size={24} className="text-white" />
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 </Link>
               </motion.div>
             ))}
@@ -510,72 +676,103 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* Interactive Skills Section */}
-      <section className="py-20 px-6 max-w-7xl mx-auto text-white overflow-hidden">
-        <RevealSection className="text-center mb-16">
-          <span className="text-neutral-500 font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">Technical Arsenal</span>
+      {/* ===== SKILLS SECTION ===== */}
+      <section className="py-24 px-6 max-w-7xl mx-auto text-white overflow-hidden">
+        <RevealSection className="text-center mb-14">
+          <span className="text-[#a78bfa] font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">Technical Arsenal</span>
           <h2 className="text-4xl md:text-6xl font-black">Tools of <span className="text-neutral-500 italic">Choice.</span></h2>
         </RevealSection>
-        <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+        <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
           {SKILLS.map((skill, idx) => (
-            <motion.button
+            <motion.div
               key={skill}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.05, duration: 0.5 }}
               whileHover={{ 
-                scale: 1.1, 
-                backgroundColor: '#ffffff', 
-                color: '#000000',
-                boxShadow: "0 0 30px rgba(255,255,255,0.6)"
+                scale: 1.08,
+                boxShadow: "0 0 25px rgba(139,92,246,0.4)"
               }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => handleSkillClick(skill)}
-              className="px-8 py-4 rounded-full border border-white/10 bg-white/5 text-sm font-bold tracking-tight transition-all duration-300"
+              className="px-6 py-3 rounded-xl border border-white/[0.06] bg-white/[0.03] text-sm font-medium tracking-tight hover:border-[#8b5cf6]/40 hover:bg-[#8b5cf6]/10 hover:text-white transition-all duration-300 cursor-default"
             >
               {skill}
-            </motion.button>
+            </motion.div>
           ))}
         </div>
       </section>
 
-      {/* Resume Section */}
-      <section id="resume" className="py-32 px-6 bg-black scroll-mt-24 text-white">
-        <div className="max-w-7xl mx-auto">
+      {/* ===== RESUME SECTION ===== */}
+      <section id="resume" className="py-28 px-6 scroll-mt-24 text-white relative">
+        <FloatingOrbs />
+        <div className="max-w-7xl mx-auto relative z-10">
           <RevealSection className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-            <div className="lg:col-span-4 space-y-12">
+            {/* Left: Header + Contact */}
+            <div className="lg:col-span-4 space-y-10">
               <div>
-                <span className="text-neutral-500 font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">Resume</span>
-                <h2 className="text-5xl font-black mb-10 leading-tight">Career <span className="text-neutral-500 italic">Core.</span></h2>
+                <span className="text-[#a78bfa] font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">Resume</span>
+                <h2 className="text-5xl font-black mb-8 leading-tight">Career <span className="text-neutral-500 italic">Core.</span></h2>
               </div>
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4 text-neutral-500"><Mail size={16} /> <span className="text-xs uppercase tracking-widest font-bold">{CONTACT_INFO.email}</span></div>
-                  <div className="flex items-center gap-4 text-neutral-500"><Phone size={16} /> <span className="text-xs uppercase tracking-widest font-bold">{CONTACT_INFO.phone}</span></div>
-                  <div className="flex items-center gap-4 text-neutral-500"><MapPin size={16} /> <span className="text-xs uppercase tracking-widest font-bold">{CONTACT_INFO.location}</span></div>
+              <div className="space-y-4 p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                <div className="flex items-center gap-4 text-neutral-400 hover:text-[#a78bfa] transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-[#8b5cf6]/10 flex items-center justify-center">
+                    <Mail size={14} className="text-[#a78bfa]" />
+                  </div>
+                  <span className="text-xs tracking-wide font-medium">{CONTACT_INFO.email}</span>
+                </div>
+                <div className="flex items-center gap-4 text-neutral-400 hover:text-[#a78bfa] transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-[#8b5cf6]/10 flex items-center justify-center">
+                    <Phone size={14} className="text-[#a78bfa]" />
+                  </div>
+                  <span className="text-xs tracking-wide font-medium">{CONTACT_INFO.phone}</span>
+                </div>
+                <div className="flex items-center gap-4 text-neutral-400 hover:text-[#a78bfa] transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-[#8b5cf6]/10 flex items-center justify-center">
+                    <MapPin size={14} className="text-[#a78bfa]" />
+                  </div>
+                  <span className="text-xs tracking-wide font-medium">{CONTACT_INFO.location}</span>
                 </div>
               </div>
             </div>
+            
+            {/* Right: Timelines */}
             <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div className="space-y-8">
-                <div className="flex items-center gap-3 text-white mb-6 font-black uppercase tracking-widest text-xs border-b border-white/5 pb-4">Education</div>
-                <div className="space-y-10 border-l border-white/5 pl-8">
+              {/* Education */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3 text-white font-bold uppercase tracking-widest text-xs border-b border-white/[0.06] pb-4">
+                  <div className="w-6 h-6 rounded-md bg-[#8b5cf6]/10 flex items-center justify-center">
+                    <Sparkles size={12} className="text-[#a78bfa]" />
+                  </div>
+                  Education
+                </div>
+                <div className="space-y-8 border-l border-white/[0.06] pl-6">
                   {EDUCATION.map((edu, idx) => (
-                    <div key={idx} className="relative">
-                      <div className="absolute -left-10 top-1.5 w-3 h-3 rounded-full bg-white border-2 border-black shadow-[0_0_10px_rgba(255,255,255,0.4)]" />
-                      <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">{edu.period}</span>
-                      <h4 className="text-lg font-bold mt-1 text-white">{edu.title}</h4>
-                      <p className="text-neutral-500 text-xs mt-2">{edu.desc}</p>
+                    <div key={idx} className="relative group">
+                      <div className="absolute -left-[27px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#8b5cf6] border-2 border-black shadow-[0_0_8px_rgba(139,92,246,0.5)] group-hover:shadow-[0_0_15px_rgba(139,92,246,0.7)] transition-all" />
+                      <span className="text-[10px] font-bold text-[#a78bfa] uppercase tracking-widest">{edu.period}</span>
+                      <h4 className="text-base font-bold mt-1 text-white">{edu.title}</h4>
+                      <p className="text-neutral-500 text-xs mt-1.5 leading-relaxed">{edu.desc}</p>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="space-y-8">
-                <div className="flex items-center gap-3 text-white mb-6 font-black uppercase tracking-widest text-xs border-b border-white/5 pb-4">Experience</div>
-                <div className="space-y-10 border-l border-white/5 pl-8">
+              
+              {/* Experience */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3 text-white font-bold uppercase tracking-widest text-xs border-b border-white/[0.06] pb-4">
+                  <div className="w-6 h-6 rounded-md bg-[#8b5cf6]/10 flex items-center justify-center">
+                    <Zap size={12} className="text-[#a78bfa]" />
+                  </div>
+                  Experience
+                </div>
+                <div className="space-y-8 border-l border-white/[0.06] pl-6">
                   {EXPERIENCE.map((exp, idx) => (
-                    <div key={idx} className="relative">
-                      <div className="absolute -left-10 top-1.5 w-3 h-3 rounded-full bg-white border-2 border-black shadow-[0_0_10px_rgba(255,255,255,0.4)]" />
-                      <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">{exp.period}</span>
-                      <h4 className="text-lg font-bold mt-1 text-white">{exp.company}</h4>
-                      <p className="text-neutral-500 text-xs mt-2">{exp.desc}</p>
+                    <div key={idx} className="relative group">
+                      <div className="absolute -left-[27px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#8b5cf6] border-2 border-black shadow-[0_0_8px_rgba(139,92,246,0.5)] group-hover:shadow-[0_0_15px_rgba(139,92,246,0.7)] transition-all" />
+                      <span className="text-[10px] font-bold text-[#a78bfa] uppercase tracking-widest">{exp.period}</span>
+                      <h4 className="text-base font-bold mt-1 text-white">{exp.company}</h4>
+                      <p className="text-neutral-500 text-xs mt-1.5 leading-relaxed">{exp.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -583,22 +780,23 @@ const Home = () => {
             </div>
           </RevealSection>
           
-          <RevealSection className="mt-32 p-12 rounded-[3rem] border border-white/5 bg-white/[0.01]">
-            <h3 className="text-xs font-black mb-12 text-center uppercase tracking-[0.4em] text-neutral-500">System Proficiency</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-10">
+          {/* Skills Progress */}
+          <RevealSection className="mt-24 p-10 rounded-[2.5rem] border border-white/[0.06] bg-white/[0.01]">
+            <h3 className="text-xs font-bold mb-10 text-center uppercase tracking-[0.4em] text-[#a78bfa]">System Proficiency</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8">
               {SKILLS_PROGRESS.map((skill, idx) => (
-                <div key={idx} className="space-y-3">
-                  <div className="flex justify-between font-black text-[10px] uppercase tracking-widest text-neutral-400">
+                <div key={idx} className="space-y-2.5">
+                  <div className="flex justify-between font-bold text-[10px] uppercase tracking-widest text-neutral-400">
                     <span>{skill.name}</span>
                     <span className="text-white">{skill.value}%</span>
                   </div>
-                  <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
                       whileInView={{ width: `${skill.value}%` }}
                       viewport={{ once: true }}
-                      transition={{ duration: 1.5 }}
-                      className="h-full bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]" 
+                      transition={{ duration: 1.2, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                      className="h-full rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa] shadow-[0_0_8px_rgba(139,92,246,0.5)]" 
                     />
                   </div>
                 </div>
@@ -608,76 +806,125 @@ const Home = () => {
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-32 px-6 scroll-mt-24 text-white">
+      {/* ===== ABOUT SECTION ===== */}
+      <section id="about" className="py-28 px-6 scroll-mt-24 text-white">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            <RevealSection className="lg:col-span-7 p-12 md:p-16 rounded-[4rem] glass border border-white/5 relative overflow-hidden">
-              <h2 className="text-5xl font-black mb-10 leading-tight">Pure <br /><span className="text-neutral-500 italic">Logic.</span></h2>
-              <p className="text-neutral-400 text-xl md:text-2xl leading-relaxed font-light mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Main About Card */}
+            <RevealSection className="lg:col-span-7 p-10 md:p-14 rounded-[3rem] bg-white/[0.02] border border-white/[0.06] relative overflow-hidden">
+              <div className="absolute -top-20 -right-20 w-60 h-60 bg-[#8b5cf6]/[0.05] blur-[80px] rounded-full pointer-events-none" />
+              <span className="text-[#a78bfa] font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">About</span>
+              <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight">Pure <br /><span className="text-neutral-500 italic">Logic.</span></h2>
+              <p className="text-neutral-400 text-lg md:text-xl leading-relaxed font-light mb-10">
                 As a skilled IT engineer, I specialize in web development, system design, and network infrastructure. With expertise in both front-end and back-end development, I create responsive, user-friendly websites and robust software systems. Additionally, I hold certifications in network configuration and administration, ensuring seamless connectivity and secure IT environments.
               </p>
-              <div className="grid grid-cols-2 gap-12 pt-12 border-t border-white/5">
-                <div><h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-500 mb-4">Focus</h4><p className="text-white text-lg font-bold">Web & Infrastructure</p></div>
-                <div><h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-500 mb-4">Principle</h4><p className="text-white text-lg font-bold">Minimalism & Speed</p></div>
+              <div className="grid grid-cols-2 gap-8 pt-8 border-t border-white/[0.06]">
+                <div>
+                  <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#a78bfa] mb-3">Focus</h4>
+                  <p className="text-white text-base font-bold">Web & Infrastructure</p>
+                </div>
+                <div>
+                  <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#a78bfa] mb-3">Principle</h4>
+                  <p className="text-white text-base font-bold">Minimalism & Speed</p>
+                </div>
               </div>
             </RevealSection>
-            <div className="lg:col-span-5 grid grid-cols-2 gap-6">
+            
+            {/* Services Grid */}
+            <div className="lg:col-span-5 grid grid-cols-2 gap-4">
               {SERVICES.map((s, idx) => (
-                <div key={idx} className={`p-10 rounded-[3rem] glass flex flex-col justify-between border border-white/5 hover:border-white/20 transition-all ${idx === 3 ? 'col-span-2' : ''}`}>
-                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-12 text-white">
-                    {s.icon === "Cpu" && <Cpu size={24} />}
-                    {s.icon === "Palette" && <Palette size={24} />}
-                    {s.icon === "Zap" && <Zap size={24} />}
+                <RevealSection 
+                  key={idx} 
+                  delay={idx * 0.1}
+                  className={`p-8 rounded-[2rem] bg-white/[0.02] border border-white/[0.06] flex flex-col justify-between hover:border-[#8b5cf6]/25 transition-all duration-500 group ${
+                    idx === 3 ? 'col-span-2' : ''
+                  }`}
+                >
+                  <div className="w-11 h-11 rounded-xl bg-[#8b5cf6]/10 flex items-center justify-center mb-10 text-[#a78bfa] group-hover:shadow-[0_0_20px_rgba(139,92,246,0.2)] transition-all">
+                    {s.icon === "Cpu" && <Cpu size={20} />}
+                    {s.icon === "Palette" && (s.title === "Photography" ? <Camera size={20} /> : <Palette size={20} />)}
+                    {s.icon === "Zap" && <Zap size={20} />}
                   </div>
-                  <div><h3 className="font-black text-xl mb-4 uppercase tracking-tighter">{s.title}</h3><p className="text-xs text-neutral-500 leading-relaxed font-medium">{s.desc}</p></div>
-                </div>
+                  <div>
+                    <h3 className="font-black text-lg mb-3 tracking-tight">{s.title}</h3>
+                    <p className="text-xs text-neutral-500 leading-relaxed">{s.desc}</p>
+                  </div>
+                </RevealSection>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Blog Section */}
-      <section id="blog" className="py-32 px-6 bg-black scroll-mt-24 text-white">
+      {/* ===== BLOG SECTION ===== */}
+      <section id="blog" className="py-28 px-6 scroll-mt-24 text-white">
         <div className="max-w-7xl mx-auto">
-          <RevealSection className="text-center mb-24">
-            <span className="text-neutral-500 font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">Journal</span>
+          <RevealSection className="text-center mb-16">
+            <span className="text-[#a78bfa] font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">Journal</span>
             <h2 className="text-5xl md:text-7xl font-black">Digital <span className="text-neutral-500 italic">Notes.</span></h2>
           </RevealSection>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {BLOG_POSTS.map((post, idx) => (
-              <motion.div key={idx} className="group cursor-pointer">
-                <div className="aspect-[3/4] rounded-[2.5rem] overflow-hidden border border-white/5 mb-8 grayscale hover:grayscale-0 transition-all duration-700">
-                  <img src={post.img} alt={post.title} className="w-full h-full object-cover object-center" />
-                </div>
-                <div className="px-2">
-                  <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-4">
-                    <span>{post.category}</span> <span className="w-1 h-1 rounded-full bg-neutral-800" /> <span>{post.date}</span>
+              <RevealSection key={idx} delay={idx * 0.08}>
+                <motion.div className="group cursor-pointer">
+                  <div className="aspect-[4/3] rounded-[2rem] overflow-hidden border border-white/[0.06] mb-6 relative group-hover:border-[#8b5cf6]/25 transition-all duration-500">
+                    <img 
+                      src={post.img} 
+                      alt={post.title} 
+                      className="w-full h-full object-cover object-center grayscale-[0.5] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
                   </div>
-                  <h3 className="text-xl font-black mb-4 group-hover:text-white transition-colors uppercase tracking-tighter">{post.title}</h3>
-                  <p className="text-neutral-500 text-sm leading-relaxed line-clamp-2">{post.desc}</p>
-                </div>
-              </motion.div>
+                  <div className="px-1">
+                    <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest mb-3">
+                      <span className="text-[#a78bfa]">{post.category}</span>
+                      <span className="w-1 h-1 rounded-full bg-neutral-700" />
+                      <span className="text-neutral-500">{post.date}</span>
+                    </div>
+                    <h3 className="text-lg font-bold mb-3 group-hover:text-white text-neutral-200 transition-colors tracking-tight">{post.title}</h3>
+                    <p className="text-neutral-500 text-sm leading-relaxed line-clamp-2">{post.desc}</p>
+                  </div>
+                </motion.div>
+              </RevealSection>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-32 px-6 max-w-7xl mx-auto text-white">
-        <RevealSection className="text-center mb-24"><span className="text-neutral-500 font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">Feedback</span><h2 className="text-5xl md:text-7xl font-black">Verified <span className="text-neutral-500 italic">Trust.</span></h2></RevealSection>
+      {/* ===== TESTIMONIALS ===== */}
+      <section className="py-28 px-6 max-w-7xl mx-auto text-white">
+        <RevealSection className="text-center mb-16">
+          <span className="text-[#a78bfa] font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">Feedback</span>
+          <h2 className="text-5xl md:text-7xl font-black">Verified <span className="text-neutral-500 italic">Trust.</span></h2>
+        </RevealSection>
         <Testimonials />
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-40 px-6 scroll-mt-24 relative overflow-hidden text-white">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      {/* ===== CONTACT SECTION ===== */}
+      <section id="contact" className="py-32 px-6 scroll-mt-24 relative overflow-hidden text-white">
+        <FloatingOrbs />
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
           <RevealSection>
-            <h2 className="text-6xl md:text-8xl font-black mb-10 tracking-tighter text-gradient leading-none">Craft the <br />Future.</h2>
-            <p className="text-neutral-400 text-xl md:text-2xl mb-16 max-w-md font-light leading-relaxed italic">Architecting the next generation of digital excellence.</p>
+            <span className="text-[#a78bfa] font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">Get in Touch</span>
+            <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter text-gradient leading-none">
+              Craft the<br />Future.
+            </h2>
+            <p className="text-neutral-400 text-lg md:text-xl mb-12 max-w-md font-light leading-relaxed">
+              Architecting the next generation of digital excellence. Let's build something remarkable together.
+            </p>
+            {/* Quick contact links */}
+            <div className="flex flex-wrap gap-3">
+              <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm text-neutral-400 hover:text-[#a78bfa] hover:border-[#8b5cf6]/30 transition-all">
+                <Mail size={14} /> {CONTACT_INFO.email}
+              </a>
+              <a href={`tel:${CONTACT_INFO.phone}`} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-sm text-neutral-400 hover:text-[#a78bfa] hover:border-[#8b5cf6]/30 transition-all">
+                <Phone size={14} /> {CONTACT_INFO.phone}
+              </a>
+            </div>
           </RevealSection>
-          <RevealSection><ContactForm /></RevealSection>
+          <RevealSection delay={0.2}>
+            <ContactForm />
+          </RevealSection>
         </div>
       </section>
     </>
@@ -691,39 +938,45 @@ export default function App() {
   return (
     <HashRouter>
       <ScrollToTop />
-      <div className="min-h-screen bg-black text-white selection:bg-white/20">
+      <div className="min-h-screen bg-black text-white">
         <Nav />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/project/:id" element={<ProjectDetail />} />
         </Routes>
 
-        <footer className="pt-32 border-t border-white/5 px-6 max-w-7xl mx-auto text-white pb-20">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-10 mb-16">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-black text-lg text-black">EM</div>
-            </div>
-            <div className="flex gap-8">
+        {/* ===== FOOTER ===== */}
+        <footer className="pt-24 border-t border-white/[0.06] px-6 max-w-7xl mx-auto text-white pb-16">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] rounded-xl flex items-center justify-center font-bold text-sm text-white shadow-lg shadow-violet-500/20">
+                EM
+              </div>
+              <span className="text-sm font-bold text-neutral-500 group-hover:text-white transition-colors">Elios Mernica</span>
+            </Link>
+            <div className="flex gap-4">
               {SOCIALS.map(s => (
                 <motion.a 
                   key={s.name} 
                   href={s.link} 
-                  whileHover={{ scale: 1.3, rotate: 5 }}
-                  className="text-white bg-white/5 p-3 rounded-xl border border-white/10 hover:border-white transition-all shadow-lg hover:shadow-[0_0_15px_#ffffff]"
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.03] border border-white/[0.06] text-neutral-400 hover:text-white hover:border-[#8b5cf6]/30 hover:bg-[#8b5cf6]/10 transition-all duration-300"
                 >
-                  {s.icon === 'Github' && <Github size={24} />}
-                  {s.icon === 'Twitter' && <Twitter size={24} />}
-                  {s.icon === 'Linkedin' && <Linkedin size={24} />}
+                  {s.icon === 'Github' && <Github size={18} />}
+                  {s.icon === 'Twitter' && <Twitter size={18} />}
+                  {s.icon === 'Linkedin' && <Linkedin size={18} />}
                 </motion.a>
               ))}
             </div>
           </div>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-10 border-t border-white/5 text-neutral-600 text-[9px] font-black uppercase tracking-[0.3em]">
-            <p className="text-neutral-500">© 2024 Elios Mernica. Zero latency guaranteed.</p>
-            <div className="flex gap-6 text-neutral-400">
-              <span className="hover:text-white transition-colors cursor-default">TS</span>
-              <span className="hover:text-white transition-colors cursor-default">NEXT</span>
-              <span className="hover:text-white transition-colors cursor-default">FRAMER</span>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-8 border-t border-white/[0.04] text-[10px] font-medium uppercase tracking-[0.2em]">
+            <p className="text-neutral-600">&copy; 2025 Elios Mernica. All rights reserved.</p>
+            <div className="flex gap-4 text-neutral-500">
+              <span className="hover:text-[#a78bfa] transition-colors cursor-default">React</span>
+              <span className="text-neutral-700">/</span>
+              <span className="hover:text-[#a78bfa] transition-colors cursor-default">TypeScript</span>
+              <span className="text-neutral-700">/</span>
+              <span className="hover:text-[#a78bfa] transition-colors cursor-default">Framer Motion</span>
             </div>
           </div>
         </footer>
