@@ -56,7 +56,8 @@ const Resume: React.FC = () => {
             <MagneticButton strength={0.15}>
               <motion.a
                 href="/Elios-Mernica-CV.pdf"
-                download
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 className="flex items-center justify-center gap-3 w-full py-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-violet-500/25 transition-all text-sm uppercase tracking-widest"
