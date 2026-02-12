@@ -1,24 +1,32 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, CheckCircle2, Send, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { CONTACT_INFO } from '../constants';
 import RevealSection from './RevealSection';
 import FloatingOrbs from './FloatingOrbs';
 import MagneticButton from './MagneticButton';
 
 /*
-  Web3Forms Setup (takes 30 seconds):
-  1. Go to https://web3forms.com/
-  2. Enter your email address and click "Create Access Key"
-  3. Check your inbox — copy the access key from the email
-  4. Create a .env file in the project root with:
-     VITE_WEB3FORMS_KEY=your_access_key_here
-  5. Restart the dev server — done!
+  EmailJS Setup:
+  1. Create a free account at https://www.emailjs.com/
+  2. Add an Email Service (e.g. Gmail) — copy the Service ID
+  3. Create an Email Template with variables: {{from_name}}, {{from_email}}, {{message}}
+     — copy the Template ID
+  4. Go to Account > General > copy your Public Key
+  5. Create a .env file in the project root with:
+     VITE_EMAILJS_SERVICE_ID=your_service_id
+     VITE_EMAILJS_TEMPLATE_ID=your_template_id
+     VITE_EMAILJS_PUBLIC_KEY=your_public_key
+  6. Restart the dev server — done!
 */
 
-const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || '';
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || '';
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '';
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '';
 
 const ContactForm: React.FC = () => {
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -43,32 +51,20 @@ const ContactForm: React.FC = () => {
     if (!validate()) return;
     setStatus('loading');
 
-    if (WEB3FORMS_KEY) {
+    if (SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY) {
       try {
-        const res = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            access_key: WEB3FORMS_KEY,
-            name: formData.name,
-            email: formData.email,
-            message: formData.message,
-            subject: `Portfolio Contact: ${formData.name}`,
-          }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          setStatus('success');
-          setFormData({ name: '', email: '', message: '' });
-        } else {
-          setStatus('error');
-        }
+        await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current!, PUBLIC_KEY);
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
       } catch {
         setStatus('error');
       }
       setTimeout(() => setStatus('idle'), 5000);
     } else {
-      // Demo mode — no API key configured
+      // Demo mode — no credentials configured
+      console.warn(
+        'EmailJS credentials not configured. Running in demo mode. See .env.example for setup instructions.'
+      );
       setTimeout(() => {
         setStatus('success');
         setFormData({ name: '', email: '', message: '' });
@@ -135,13 +131,14 @@ const ContactForm: React.FC = () => {
           </p>
         </motion.div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
               Full Name
             </label>
             <input
               type="text"
+              name="from_name"
               value={formData.name}
               onChange={e => setFormData({ ...formData, name: e.target.value })}
               className={inputClass(!!errors.name)}
@@ -174,6 +171,7 @@ const ContactForm: React.FC = () => {
             </label>
             <input
               type="email"
+              name="from_email"
               value={formData.email}
               onChange={e => setFormData({ ...formData, email: e.target.value })}
               className={inputClass(!!errors.email)}
@@ -206,6 +204,7 @@ const ContactForm: React.FC = () => {
             </label>
             <textarea
               rows={4}
+              name="message"
               value={formData.message}
               onChange={e => setFormData({ ...formData, message: e.target.value })}
               className={`${inputClass(!!errors.message)} resize-none`}
