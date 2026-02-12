@@ -132,13 +132,17 @@ const ContactForm: React.FC = () => {
         </motion.div>
       ) : (
         <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
+          {/* Hidden fields for EmailJS template */}
+          <input type="hidden" name="title" value={formData.name ? `Message from ${formData.name}` : 'New Contact'} />
+          <input type="hidden" name="time" value={new Date().toLocaleString()} />
+          <input type="hidden" name="reply_to" value={formData.email} />
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
               Full Name
             </label>
             <input
               type="text"
-              name="from_name"
+              name="name"
               value={formData.name}
               onChange={e => setFormData({ ...formData, name: e.target.value })}
               className={inputClass(!!errors.name)}
@@ -171,7 +175,7 @@ const ContactForm: React.FC = () => {
             </label>
             <input
               type="email"
-              name="from_email"
+              name="email"
               value={formData.email}
               onChange={e => setFormData({ ...formData, email: e.target.value })}
               className={inputClass(!!errors.email)}
