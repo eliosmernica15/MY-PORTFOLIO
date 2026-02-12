@@ -109,6 +109,8 @@ const Footer: React.FC = () => {
                   <MagneticButton key={s.name} strength={0.2}>
                     <motion.a
                       href={s.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       whileHover={{ scale: 1.1 }}
                       className="w-10 h-10 flex items-center justify-center rounded-xl border transition-all duration-300"
                       style={{
