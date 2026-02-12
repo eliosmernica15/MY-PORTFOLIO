@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #1e1b4b;
+    line-height: 1.55;
+    font-size: 10.5pt;
+    padding: 40px 48px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  a { color: #7c3aed; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Header */
+  .header { margin-bottom: 24px; border-bottom: 2px solid #8b5cf6; padding-bottom: 16px; }
+  .header h1 { font-size: 26pt; font-weight: 700; color: #1e1b4b; letter-spacing: -0.5px; margin-bottom: 6px; }
+  .header .contact-row { font-size: 9.5pt; color: #4b5563; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .header .contact-row .sep { color: #d1d5db; }
+  .header .links { margin-top: 4px; font-size: 9.5pt; }
+  .header .links a { font-weight: 600; margin-right: 14px; }
+
+  /* Sections */
+  .section { margin-bottom: 18px; }
+  .section-title {
+    font-size: 11pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #7c3aed;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+  }
+
+  /* Items */
+  .item { margin-bottom: 12px; }
+  .item-header { display: flex; justify-content: space-between; align-items: baseline; }
+  .item-title { font-weight: 600; font-size: 10.5pt; color: #1e1b4b; }
+  .item-sub { font-size: 9.5pt; color: #6b7280; font-style: italic; }
+  .item-period { font-size: 9pt; color: #6b7280; white-space: nowrap; }
+  .item p { margin-top: 3px; color: #374151; font-size: 10pt; }
+  .item ul { margin-top: 3px; padding-left: 18px; color: #374151; font-size: 10pt; }
+  .item li { margin-bottom: 2px; }
+
+  /* Skills */
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 32px; }
+  .skill-cat { font-weight: 600; color: #1e1b4b; font-size: 10pt; }
+  .skill-cat span { font-weight: 400; color: #374151; }
+
+  /* Projects */
+  .project-link { font-size: 9pt; color: #7c3aed; }
+
+  /* Two col */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; }
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Elios Mernica</h1>
+    <div class="contact-row">
+      <span>Vushtrri, Kosovo</span>
+      <span class="sep">|</span>
+      <span>+383 49 363 163</span>
+      <span class="sep">|</span>
+      <a href="mailto:eliosmernica@gmail.com">eliosmernica@gmail.com</a>
+    </div>
+    <div class="links">
+      <a href="https://github.com/eliosmernica15">GitHub</a>
+      <a href="https://eliosmernica.vercel.app/">Portfolio</a>
+      <a href="https://www.linkedin.com/in/elios-mernica-880562204/">LinkedIn</a>
+    </div>
+  </div>
+
+  <!-- PROFESSIONAL SUMMARY -->
+  <div class="section">
+    <div class="section-title">Professional Summary</div>
+    <p style="color: #374151; font-size: 10pt;">
+      Driven software engineering student specializing in front-end and full-stack web development. Experienced in building modern, responsive web applications using React, TypeScript, and Node.js. Passionate about clean code, intuitive UI/UX, and continuous learning. Combines strong technical foundations with a global perspective from cross-cultural experiences.
+    </p>
+  </div>
+
+  <!-- KEY SKILLS -->
+  <div class="section">
+    <div class="section-title">Key Skills</div>
+    <div class="skills-grid">
+      <div class="skill-cat">Front-End: <span>React, Next.js, TypeScript, JavaScript (ES6+), HTML5, CSS3, Tailwind CSS, Framer Motion</span></div>
+      <div class="skill-cat">Back-End: <span>Node.js, Express, PostgreSQL, MongoDB, Supabase, Firebase</span></div>
+      <div class="skill-cat">Tools: <span>Git/GitHub, VS Code, Vite, Figma, WordPress, Vercel, Netlify</span></div>
+      <div class="skill-cat">Soft Skills: <span>Problem-solving, adaptability, time management, cross-functional collaboration</span></div>
+      <div class="skill-cat">Languages: <span>English (Fluent, Cambridge-certified), Albanian (Native)</span></div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="section">
+    <div class="section-title">Work Experience</div>
+
+    <div class="item">
+      <div class="item-header">
+        <div>
+          <span class="item-title">Web Developer & Designer</span>
+          <span class="item-sub"> — Innovation Academy, Vushtrri</span>
+        </div>
+        <span class="item-period">2023 – 2025</span>
+      </div>
+      <ul>
+        <li>Created and developed visual concepts aligned with project goals and objectives</li>
+        <li>Supervised design processes and managed timelines and budgets for design projects</li>
+        <li>Built responsive websites using React, Tailwind CSS, and modern web technologies</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="item-header">
+        <div>
+          <span class="item-title">English Speaking Support</span>
+          <span class="item-sub"> — Linkify</span>
+        </div>
+        <span class="item-period">2024</span>
+      </div>
+      <ul>
+        <li>Provided English-language support bridging communication between technical and non-technical stakeholders</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="section">
+    <div class="section-title">Education</div>
+
+    <div class="item">
+      <div class="item-header">
+        <div>
+          <span class="item-title">Web Development</span>
+          <span class="item-sub"> — Unity Tech Hub</span>
+        </div>
+        <span class="item-period">2025 – Present</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-header">
+        <div>
+          <span class="item-title">Computer Science</span>
+          <span class="item-sub"> — Isa Boletini - UBMI</span>
+        </div>
+        <span class="item-period">2025 – Present</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-header">
+        <div>
+          <span class="item-title">Web & Design Development Course</span>
+          <span class="item-sub"> — Innovation Academy</span>
+        </div>
+        <span class="item-period">2024 – 2026</span>
+      </div>
+      <p>Front-end development certification, progressing from fundamentals to modern frameworks (React.js)</p>
+    </div>
+
+    <div class="item">
+      <div class="item-header">
+        <div>
+          <span class="item-title">Natural Science — High School Diploma</span>
+          <span class="item-sub"> — "Eqrem Çabej", Vushtrri</span>
+        </div>
+        <span class="item-period">2022 – 2025</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-header">
+        <div>
+          <span class="item-title">English Speaking Development</span>
+          <span class="item-sub"> — The Cambridge School</span>
+        </div>
+        <span class="item-period">2015 – 2024</span>
+      </div>
+      <p>Native-level American English certification</p>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="section">
+    <div class="section-title">Selected Projects</div>
+
+    <div class="item">
+      <div class="item-header">
+        <span class="item-title">Foodery — Food Delivery Platform</span>
+        <span class="item-period">2024</span>
+      </div>
+      <p>Full-stack food delivery ecosystem with real-time tracking. Built with Next.js, Supabase, Redis, Framer Motion, and Tailwind CSS.
+        <a class="project-link" href="https://fooderydelivery.netlify.app">Live Demo</a>
+      </p>
+    </div>
+
+    <div class="item">
+      <div class="item-header">
+        <span class="item-title">EM E-Commerce Store</span>
+        <span class="item-period">2024</span>
+      </div>
+      <p>Full-scale digital storefront with dynamic catalog, secure checkout, and high-conversion design. React, Tailwind, Node.js.
+        <a class="project-link" href="https://emecommerce.netlify.app">Live Demo</a>
+      </p>
+    </div>
+
+    <div class="item">
+      <div class="item-header">
+        <span class="item-title">File Sharing & Link Shortening</span>
+        <span class="item-period">2024</span>
+      </div>
+      <p>Secure file distribution tool with trackable shortened links. Built with Vite, Firebase, and TypeScript.
+        <a class="project-link" href="https://filesharingem.netlify.app">Live Demo</a>
+      </p>
+    </div>
+
+    <div class="item">
+      <div class="item-header">
+        <span class="item-title">Note-Taking Web App</span>
+        <span class="item-period">2024</span>
+      </div>
+      <p>Advanced note-taking system with intelligent auto-organization and cross-platform sync. React, TypeScript, MongoDB.
+        <a class="project-link" href="https://advanced-note-taking-app.netlify.app">Live Demo</a>
+      </p>
+    </div>
+
+    <div class="item" style="margin-bottom: 4px;">
+      <p style="font-size: 9pt; color: #6b7280;">+ 5 more projects available at <a href="https://eliosmernica.vercel.app/">eliosmernica.vercel.app</a></p>
+    </div>
+  </div>
+
+  <!-- ADDITIONAL -->
+  <div class="section">
+    <div class="section-title">Additional</div>
+    <div class="skills-grid">
+      <div class="skill-cat">Driving License: <span>Category B</span></div>
+      <div class="skill-cat">Interests: <span>Emerging technologies, travel, photography</span></div>
+    </div>
+  </div>
+
+</body>
+</html>
