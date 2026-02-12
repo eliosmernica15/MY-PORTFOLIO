@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, Twitter, Linkedin, Mail, ArrowUp } from 'lucide-react';
+import { Github, Instagram, Linkedin, Mail, ArrowUp } from 'lucide-react';
 import { SOCIALS, CONTACT_INFO } from '../constants';
 import MagneticButton from './MagneticButton';
 
@@ -119,7 +119,7 @@ const Footer: React.FC = () => {
                       aria-label={s.name}
                     >
                       {s.icon === 'Github' && <Github size={18} />}
-                      {s.icon === 'Twitter' && <Twitter size={18} />}
+                      {s.icon === 'Instagram' && <Instagram size={18} />}
                       {s.icon === 'Linkedin' && <Linkedin size={18} />}
                     </motion.a>
                   </MagneticButton>

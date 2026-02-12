@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, CheckCircle2, Send } from 'lucide-react';
+import { Mail, Phone, CheckCircle2, Send, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { CONTACT_INFO } from '../constants';
 import RevealSection from './RevealSection';
 import FloatingOrbs from './FloatingOrbs';
 import MagneticButton from './MagneticButton';
 
+/*
+  EmailJS Setup Instructions:
+  1. Create a free account at https://www.emailjs.com/
+  2. Add an email service (e.g. Gmail) and note the Service ID
+  3. Create an email template with variables: {{from_name}}, {{from_email}}, {{message}}
+  4. Get your Public Key from Account > General
+  5. Create a .env file in the project root with:
+     VITE_EMAILJS_SERVICE_ID=your_service_id
+     VITE_EMAILJS_TEMPLATE_ID=your_template_id
+     VITE_EMAILJS_PUBLIC_KEY=your_public_key
+*/
+
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || '';
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '';
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '';
+
 const ContactForm: React.FC = () => {
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -26,15 +44,39 @@ const ContactForm: React.FC = () => {
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (ev: React.FormEvent) => {
+  const handleSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     if (!validate()) return;
     setStatus('loading');
-    setTimeout(() => {
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setStatus('idle'), 5000);
-    }, 1500);
+
+    // If EmailJS is configured, send real email; otherwise fall back to demo mode
+    if (EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY) {
+      try {
+        await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID,
+          {
+            from_name: formData.name,
+            from_email: formData.email,
+            message: formData.message,
+          },
+          EMAILJS_PUBLIC_KEY
+        );
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setStatus('idle'), 5000);
+      } catch {
+        setStatus('error');
+        setTimeout(() => setStatus('idle'), 5000);
+      }
+    } else {
+      // Demo mode fallback
+      setTimeout(() => {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setStatus('idle'), 5000);
+      }, 1500);
+    }
   };
 
   const inputClass = (hasErr: boolean) =>
@@ -73,14 +115,36 @@ const ContactForm: React.FC = () => {
             Thanks for reaching out. I'll be in touch soon.
           </p>
         </motion.div>
+      ) : status === 'error' ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center py-10"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', bounce: 0.5, delay: 0.1 }}
+            className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6"
+          >
+            <AlertCircle size={32} className="text-red-400" />
+          </motion.div>
+          <h3 className="text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
+            Oops!
+          </h3>
+          <p style={{ color: 'var(--text-secondary)' }}>
+            Something went wrong. Please try again or email me directly.
+          </p>
+        </motion.div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
               Full Name
             </label>
             <input
               type="text"
+              name="from_name"
               value={formData.name}
               onChange={e => setFormData({ ...formData, name: e.target.value })}
               className={inputClass(!!errors.name)}
@@ -113,6 +177,7 @@ const ContactForm: React.FC = () => {
             </label>
             <input
               type="email"
+              name="from_email"
               value={formData.email}
               onChange={e => setFormData({ ...formData, email: e.target.value })}
               className={inputClass(!!errors.email)}
@@ -145,6 +210,7 @@ const ContactForm: React.FC = () => {
             </label>
             <textarea
               rows={4}
+              name="message"
               value={formData.message}
               onChange={e => setFormData({ ...formData, message: e.target.value })}
               className={`${inputClass(!!errors.message)} resize-none`}

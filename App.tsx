@@ -13,6 +13,7 @@ import Preloader from './components/Preloader';
 import ScrollProgress from './components/ScrollProgress';
 import Home from './pages/Home';
 import ProjectDetail from './pages/ProjectDetail';
+import NotFound from './pages/NotFound';
 
 /* Scroll to top on route change */
 const ScrollToTop = () => {
@@ -31,6 +32,7 @@ const AnimatedRoutes = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Home />} />
         <Route path="/project/:id" element={<ProjectDetail />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
   );

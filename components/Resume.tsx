@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Sparkles, Zap } from 'lucide-react';
+import { Mail, Phone, MapPin, Sparkles, Zap, Download } from 'lucide-react';
 import { EDUCATION, EXPERIENCE, SKILLS_PROGRESS, CONTACT_INFO } from '../constants';
 import RevealSection from './RevealSection';
 import FloatingOrbs from './FloatingOrbs';
+import MagneticButton from './MagneticButton';
 
 const Resume: React.FC = () => {
   return (
@@ -50,6 +51,19 @@ const Resume: React.FC = () => {
                 </div>
               ))}
             </div>
+
+            {/* Download CV Button */}
+            <MagneticButton strength={0.15}>
+              <motion.a
+                href="/Elios-Mernica-CV.pdf"
+                download
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="flex items-center justify-center gap-3 w-full py-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-violet-500/25 transition-all text-sm uppercase tracking-widest"
+              >
+                <Download size={16} /> Download CV
+              </motion.a>
+            </MagneticButton>
           </div>
 
           <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-12">
