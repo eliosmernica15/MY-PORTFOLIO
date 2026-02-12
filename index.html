@@ -120,6 +120,16 @@
       box-shadow: 0 0 30px rgba(139, 92, 246, 0.3), 0 0 60px rgba(139, 92, 246, 0.1);
     }
 
+    /* Infinite marquee animations */
+    @keyframes marquee-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-100% / 3)); }
+    }
+    @keyframes marquee-right {
+      0% { transform: translateX(calc(-100% / 3)); }
+      100% { transform: translateX(0); }
+    }
+
     /* Subtle noise texture overlay */
     .noise::before {
       content: '';
