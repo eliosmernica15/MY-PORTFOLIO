@@ -57,7 +57,7 @@ const Nav: React.FC = () => {
       <motion.nav
         animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
         transition={{ duration: 0.35, ease: 'easeInOut' }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 max-w-fit px-3 py-2 rounded-full flex items-center gap-2 transition-colors duration-500 backdrop-blur-2xl"
+        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 max-w-fit px-3 py-2 rounded-full flex items-center justify-center gap-2 transition-colors duration-500 backdrop-blur-2xl"
         style={{
           backgroundColor: scrolled ? 'var(--nav-bg-scrolled)' : 'var(--nav-bg)',
           borderWidth: '1px',
