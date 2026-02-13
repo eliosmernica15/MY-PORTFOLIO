@@ -1,5 +1,18 @@
 export const PROJECTS = [
   {
+    id: 'eltrix-cloud',
+    title: 'Eltrix Cloud',
+    category: 'Applications',
+    description: 'AI-powered creative platform for content creation, file sharing, and digital asset management.',
+    longDescription:
+      'Eltrix Cloud is an all-in-one AI-powered platform that combines content creation, file sharing, and digital asset management into a seamless experience. It features AI-assisted content generation, secure cloud storage, real-time collaboration tools, and an intuitive dashboard for managing digital assets. The platform delivers a premium, immersive UI with 3D visuals and smooth interactions.',
+    image: '/eltrix-cloud-hero.png',
+    link: 'https://eltrixcloud.netlify.app/',
+    color: '#7c3aed',
+    tech: ['React', 'TypeScript', 'AI Integration', 'Cloud Storage', 'Tailwind CSS'],
+    year: '2025',
+  },
+  {
     id: 'flixverse',
     title: 'FlixVerse',
     category: 'Web Development',
@@ -260,6 +273,19 @@ export const CONTACT_INFO = {
    ================================================================ */
 export const CASE_STUDIES = [
   {
+    title: 'Eltrix Cloud: An AI-Powered Creative Platform',
+    category: 'Applications',
+    date: '2025',
+    challenge:
+      'Build an all-in-one platform combining AI content creation, file sharing, and digital asset management with a premium, immersive user experience.',
+    solution:
+      'Developed a React + TypeScript application with AI integration for content generation, secure cloud storage, real-time collaboration, and a striking 3D landing page with smooth animations.',
+    result:
+      'A polished creative platform that streamlines digital workflows with AI-assisted tools and an intuitive, visually stunning interface.',
+    tech: ['React', 'TypeScript', 'AI Integration'],
+    img: '/eltrix-cloud-hero.png',
+  },
+  {
     title: 'FlixVerse: Building a Premium Streaming Experience',
     category: 'Web Development',
     date: '2025',
@@ -356,7 +382,7 @@ export const CASE_STUDIES = [
    Stats Section Data
    ================================================================ */
 export const STATS = [
-  { value: 10, suffix: '+', label: 'Projects Completed' },
+  { value: 11, suffix: '+', label: 'Projects Completed' },
   { value: 2, suffix: '+', label: 'Years Experience' },
   { value: 5, suffix: '+', label: 'Happy Clients' },
   { value: 9, suffix: '+', label: 'Skills Mastered' },
