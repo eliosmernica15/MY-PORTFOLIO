@@ -91,19 +91,6 @@ export const PROJECTS = [
     year: '2024',
   },
   {
-    id: 'filesharing',
-    title: 'File Sharing and Link Shortening EM',
-    category: 'Applications',
-    description: 'Secure tool for rapid file distribution and link management.',
-    longDescription:
-      'A utility application that allows users to securely upload files and share them via shortened, trackable links. Focused on privacy and speed.',
-    image: 'https://i.postimg.cc/tJjfnf2z/filesharingimg-1.jpg',
-    link: 'https://filesharingem.netlify.app/',
-    color: '#10b981',
-    tech: ['Vite', 'Firebase', 'TypeScript'],
-    year: '2024',
-  },
-  {
     id: 'innovation-academy',
     title: 'Innovation Academy New Look EM',
     category: 'Web Design',
@@ -363,26 +350,13 @@ export const CASE_STUDIES = [
     tech: ['React', 'Tailwind', 'Node.js'],
     img: 'https://i.postimg.cc/v89rSVsc/projectimg5.png',
   },
-  {
-    title: 'Secure File Sharing and Link Shortening',
-    category: 'Applications',
-    date: '2024',
-    challenge:
-      'Create a fast, secure utility for file distribution with trackable shortened links.',
-    solution:
-      'Built with Firebase for real-time file handling and TypeScript for type-safe link management.',
-    result:
-      'A privacy-focused utility with instant file uploads and trackable link analytics.',
-    tech: ['Vite', 'Firebase', 'TypeScript'],
-    img: 'https://i.postimg.cc/tJjfnf2z/filesharingimg-1.jpg',
-  },
 ];
 
 /* ================================================================
    Stats Section Data
    ================================================================ */
 export const STATS = [
-  { value: 11, suffix: '+', label: 'Projects Completed' },
+  { value: 10, suffix: '+', label: 'Projects Completed' },
   { value: 2, suffix: '+', label: 'Years Experience' },
   { value: 5, suffix: '+', label: 'Happy Clients' },
   { value: 9, suffix: '+', label: 'Skills Mastered' },
