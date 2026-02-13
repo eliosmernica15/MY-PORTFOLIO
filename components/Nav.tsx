@@ -54,20 +54,21 @@ const Nav: React.FC = () => {
 
   return (
     <>
-      <motion.nav
-        animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
-        transition={{ duration: 0.35, ease: 'easeInOut' }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 max-w-fit px-3 py-2 rounded-full flex items-center justify-center gap-2 transition-colors duration-500 backdrop-blur-2xl"
-        style={{
-          backgroundColor: scrolled ? 'var(--nav-bg-scrolled)' : 'var(--nav-bg)',
-          borderWidth: '1px',
-          borderStyle: 'solid',
-          borderColor: 'var(--border)',
-          boxShadow: scrolled ? '0 8px 32px var(--shadow-color)' : 'none',
-        }}
-        role="navigation"
-        aria-label="Main navigation"
-      >
+      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center pointer-events-none px-4">
+        <motion.nav
+          animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
+          transition={{ duration: 0.35, ease: 'easeInOut' }}
+          className="pointer-events-auto max-w-fit px-3 py-2 rounded-full flex items-center justify-center gap-2 transition-colors duration-500 backdrop-blur-2xl"
+          style={{
+            backgroundColor: scrolled ? 'var(--nav-bg-scrolled)' : 'var(--nav-bg)',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderColor: 'var(--border)',
+            boxShadow: scrolled ? '0 8px 32px var(--shadow-color)' : 'none',
+          }}
+          role="navigation"
+          aria-label="Main navigation"
+        >
         <Link
           to="/"
           onClick={() => setActiveTab('About')}
@@ -141,6 +142,7 @@ const Nav: React.FC = () => {
           {isOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </motion.nav>
+      </div>
 
       {/* Mobile menu */}
       <AnimatePresence>
