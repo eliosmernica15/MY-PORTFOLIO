@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {
-  HashRouter,
-  Routes,
-  Route,
+import { 
+  HashRouter, 
+  Routes, 
+  Route, 
   useLocation,
 } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
@@ -47,7 +47,7 @@ export default function App() {
         <ScrollToTop />
 
         {/* Preloader */}
-        <AnimatePresence>
+      <AnimatePresence>
           {loading && <Preloader onComplete={() => setLoading(false)} />}
         </AnimatePresence>
 
@@ -69,7 +69,7 @@ export default function App() {
             <Footer />
           </>
         )}
-      </HashRouter>
+    </HashRouter>
     </ThemeProvider>
   );
 }

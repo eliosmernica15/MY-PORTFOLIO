@@ -1,5 +1,18 @@
 export const PROJECTS = [
   {
+    id: 'flixverse',
+    title: 'FlixVerse',
+    category: 'Web Development',
+    description: 'A premium streaming platform with real-time content discovery and immersive UI.',
+    longDescription:
+      'FlixVerse is a full-featured streaming platform inspired by Netflix, built with a focus on performance and user experience. It features dynamic content carousels, real-time search with autocomplete, user authentication, watchlist management, and HD-ready video playback. The UI delivers a cinematic feel with smooth animations and responsive layouts across all devices.',
+    image: '/flixverse-hero.png',
+    link: 'https://flixverse-streaming-pro.vercel.app/',
+    color: '#e50914',
+    tech: ['React', 'TypeScript', 'TMDB API', 'Tailwind CSS', 'Vercel'],
+    year: '2025',
+  },
+  {
     id: 'foodery',
     title: 'Foodery',
     category: 'Web Design',
@@ -247,6 +260,19 @@ export const CONTACT_INFO = {
    ================================================================ */
 export const CASE_STUDIES = [
   {
+    title: 'FlixVerse: Building a Premium Streaming Experience',
+    category: 'Web Development',
+    date: '2025',
+    challenge:
+      'Create a cinematic streaming platform with real-time content discovery, smooth animations, and a Netflix-level user experience.',
+    solution:
+      'Built with React and TypeScript, leveraging the TMDB API for live content data. Implemented dynamic carousels, real-time search, watchlist management, and responsive HD-ready layouts with Tailwind CSS.',
+    result:
+      'A polished, performant streaming UI with seamless navigation, instant search, and a premium feel across all devices.',
+    tech: ['React', 'TypeScript', 'TMDB API'],
+    img: '/flixverse-hero.png',
+  },
+  {
     title: 'Building Foodery: A Scalable Food Delivery Platform',
     category: 'Web Development',
     date: '2024',
@@ -330,7 +356,7 @@ export const CASE_STUDIES = [
    Stats Section Data
    ================================================================ */
 export const STATS = [
-  { value: 9, suffix: '+', label: 'Projects Completed' },
+  { value: 10, suffix: '+', label: 'Projects Completed' },
   { value: 2, suffix: '+', label: 'Years Experience' },
   { value: 5, suffix: '+', label: 'Happy Clients' },
   { value: 9, suffix: '+', label: 'Skills Mastered' },
