@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, CheckCircle2, Send, AlertCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
@@ -26,7 +26,6 @@ const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '';
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '';
 
 const ContactForm: React.FC = () => {
-  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -53,10 +52,18 @@ const ContactForm: React.FC = () => {
 
     if (SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY) {
       try {
-        await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current!, PUBLIC_KEY);
+        await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          title: `Message from ${formData.name}`,
+          time: new Date().toLocaleString(),
+          reply_to: formData.email,
+        }, PUBLIC_KEY);
         setStatus('success');
         setFormData({ name: '', email: '', message: '' });
-      } catch {
+      } catch (err) {
+        console.error('EmailJS error:', err);
         setStatus('error');
       }
       setTimeout(() => setStatus('idle'), 5000);
@@ -131,18 +138,13 @@ const ContactForm: React.FC = () => {
           </p>
         </motion.div>
       ) : (
-        <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
-          {/* Hidden fields for EmailJS template */}
-          <input type="hidden" name="title" value={formData.name ? `Message from ${formData.name}` : 'New Contact'} />
-          <input type="hidden" name="time" value={new Date().toLocaleString()} />
-          <input type="hidden" name="reply_to" value={formData.email} />
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
               Full Name
             </label>
             <input
               type="text"
-              name="name"
               value={formData.name}
               onChange={e => setFormData({ ...formData, name: e.target.value })}
               className={inputClass(!!errors.name)}
@@ -175,7 +177,6 @@ const ContactForm: React.FC = () => {
             </label>
             <input
               type="email"
-              name="email"
               value={formData.email}
               onChange={e => setFormData({ ...formData, email: e.target.value })}
               className={inputClass(!!errors.email)}
@@ -208,7 +209,6 @@ const ContactForm: React.FC = () => {
             </label>
             <textarea
               rows={4}
-              name="message"
               value={formData.message}
               onChange={e => setFormData({ ...formData, message: e.target.value })}
               className={`${inputClass(!!errors.message)} resize-none`}
