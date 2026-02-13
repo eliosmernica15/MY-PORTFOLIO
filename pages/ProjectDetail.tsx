@@ -1,7 +1,7 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ExternalLink, LayoutGrid } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import FloatingOrbs from '../components/FloatingOrbs';
 import RevealSection from '../components/RevealSection';
@@ -9,7 +9,17 @@ import RevealSection from '../components/RevealSection';
 const ProjectDetail: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const project = PROJECTS.find(p => p.id === id);
+
+  const scrollToProjects = () => {
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }), 100);
+    } else {
+      document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   if (!project) {
     return (
@@ -28,20 +38,33 @@ const ProjectDetail: React.FC = () => {
       className="pt-32 pb-24 px-6 max-w-6xl mx-auto relative"
     >
       <FloatingOrbs />
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-14 flex items-center gap-3 transition-all group relative z-10 hover:text-[var(--accent-light)]"
-        style={{ color: 'var(--text-muted)' }}
-        aria-label="Go back to previous page"
-      >
-        <ArrowLeft
-          size={18}
-          className="group-hover:-translate-x-1 transition-transform"
-        />
-        <span className="text-xs font-bold uppercase tracking-[0.3em]">
-          Back to Showcase
-        </span>
-      </button>
+      <div className="mb-14 flex flex-wrap items-center gap-4 relative z-10">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-3 transition-all group hover:text-[var(--accent-light)]"
+          style={{ color: 'var(--text-muted)' }}
+          aria-label="Go back to previous page"
+        >
+          <ArrowLeft
+            size={18}
+            className="group-hover:-translate-x-1 transition-transform"
+          />
+          <span className="text-xs font-bold uppercase tracking-[0.3em]">
+            Back to Showcase
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={scrollToProjects}
+          className="flex items-center gap-3 transition-all group hover:text-[var(--accent-light)]"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          <LayoutGrid size={18} className="group-hover:scale-110 transition-transform" />
+          <span className="text-xs font-bold uppercase tracking-[0.3em]">
+            View all projects
+          </span>
+        </button>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
         <div className="lg:col-span-8">
           <motion.div

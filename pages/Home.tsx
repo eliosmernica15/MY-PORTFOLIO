@@ -20,6 +20,7 @@ const Home: React.FC = () => {
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
       <Hero />
+      <About />
       <Projects />
 
       {/* Skills Marquee */}
@@ -43,7 +44,6 @@ const Home: React.FC = () => {
 
       <StatsSection />
       <Resume />
-      <About />
       <CaseStudies />
       <Testimonials />
       <Contact />

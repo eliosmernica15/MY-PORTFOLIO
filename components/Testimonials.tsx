@@ -112,25 +112,34 @@ const TestimonialCarousel: React.FC = () => {
             <ChevronLeft size={16} />
           </button>
         </MagneticButton>
-        <div className="flex items-center gap-2">
-          {TESTIMONIALS.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIndex(i)}
-              className={`rounded-full transition-all duration-300 ${
-                i === index
-                  ? 'w-6 h-2 bg-[var(--accent)]'
-                  : 'w-2 h-2 hover:opacity-60'
-              }`}
-              style={
-                i !== index
-                  ? { backgroundColor: 'var(--border)' }
-                  : undefined
-              }
-              aria-label={`Go to testimonial ${i + 1}`}
-              aria-current={i === index ? 'true' : undefined}
-            />
-          ))}
+        <div className="flex items-center gap-3">
+          <span
+            className="text-[10px] font-bold uppercase tracking-widest tabular-nums"
+            style={{ color: 'var(--text-muted)' }}
+            aria-live="polite"
+          >
+            {index + 1} of {TESTIMONIALS.length}
+          </span>
+          <div className="flex items-center gap-2">
+            {TESTIMONIALS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                className={`rounded-full transition-all duration-300 ${
+                  i === index
+                    ? 'w-6 h-2 bg-[var(--accent)]'
+                    : 'w-2 h-2 hover:opacity-60'
+                }`}
+                style={
+                  i !== index
+                    ? { backgroundColor: 'var(--border)' }
+                    : undefined
+                }
+                aria-label={`Go to testimonial ${i + 1}`}
+                aria-current={i === index ? 'true' : undefined}
+              />
+            ))}
+          </div>
         </div>
         <MagneticButton strength={0.2}>
           <button

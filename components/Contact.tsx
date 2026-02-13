@@ -112,9 +112,25 @@ const ContactForm: React.FC = () => {
           <h3 className="text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
             Sent!
           </h3>
-          <p style={{ color: 'var(--text-secondary)' }}>
+          <p style={{ color: 'var(--text-secondary)' }} className="mb-6">
             Thanks for reaching out. I'll be in touch soon.
           </p>
+          <MagneticButton strength={0.1}>
+            <motion.button
+              type="button"
+              onClick={() => setStatus('idle')}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-6 py-3 rounded-xl text-sm font-bold transition-all"
+              style={{
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                color: 'var(--text-primary)',
+              }}
+            >
+              Send another message
+            </motion.button>
+          </MagneticButton>
         </motion.div>
       ) : status === 'error' ? (
         <motion.div
@@ -133,9 +149,25 @@ const ContactForm: React.FC = () => {
           <h3 className="text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
             Oops!
           </h3>
-          <p style={{ color: 'var(--text-secondary)' }}>
+          <p style={{ color: 'var(--text-secondary)' }} className="mb-6">
             Something went wrong. Please try again or email me directly.
           </p>
+          <MagneticButton strength={0.1}>
+            <motion.button
+              type="button"
+              onClick={() => setStatus('idle')}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-6 py-3 rounded-xl text-sm font-bold transition-all"
+              style={{
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                color: 'var(--text-primary)',
+              }}
+            >
+              Try again
+            </motion.button>
+          </MagneticButton>
         </motion.div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
