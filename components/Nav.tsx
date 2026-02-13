@@ -34,6 +34,30 @@ const Nav: React.FC = () => {
     { name: 'Contact', id: 'contact' },
   ];
 
+  // Sync nav highlight with section in view (home page only)
+  useEffect(() => {
+    if (pathname !== '/') return;
+
+    const sectionIds = navLinks.map(l => l.id);
+    const observer = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const id = entry.target.id;
+          const link = navLinks.find(l => l.id === id);
+          if (link) setActiveTab(link.name);
+        }
+      },
+      { rootMargin: '-40% 0px -40% 0px', threshold: 0 }
+    );
+
+    const els = sectionIds
+      .map(id => document.getElementById(id))
+      .filter((el): el is HTMLElement => el != null);
+    els.forEach(el => observer.observe(el));
+    return () => els.forEach(el => observer.unobserve(el));
+  }, [pathname]);
+
   const handleNavClick = useCallback(
     (e: React.MouseEvent, link: { name: string; id: string }) => {
       e.preventDefault();
