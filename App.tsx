@@ -11,6 +11,7 @@ import Nav from './components/Nav';
 import Footer from './components/Footer';
 import Preloader from './components/Preloader';
 import ScrollProgress from './components/ScrollProgress';
+import CustomCursor from './components/CustomCursor';
 import Home from './pages/Home';
 import ProjectDetail from './pages/ProjectDetail';
 import NotFound from './pages/NotFound';
@@ -53,6 +54,7 @@ export default function App() {
 
         {!loading && (
           <>
+            <CustomCursor />
             <ScrollProgress />
 
             {/* Skip to content - Accessibility */}

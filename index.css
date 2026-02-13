@@ -232,6 +232,54 @@ a:focus-visible {
 }
 
 /* ================================================================
+   Custom Cursor (pointer devices only, respect reduced motion)
+   ================================================================ */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  body.cursor-custom,
+  body.cursor-custom * {
+    cursor: none !important;
+  }
+  body.cursor-custom a,
+  body.cursor-custom button,
+  body.cursor-custom [role="button"],
+  body.cursor-custom input,
+  body.cursor-custom textarea,
+  body.cursor-custom [data-cursor-hover] {
+    cursor: none !important;
+  }
+}
+
+.custom-cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  z-index: 99999;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+}
+
+.custom-cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  z-index: 99998;
+  background: transparent;
+}
+
+/* Restore cursor for skip link */
+.skip-link:hover,
+.skip-link:focus {
+  cursor: pointer !important;
+}
+
+/* ================================================================
    Scroll Snap (Desktop Only)
    ================================================================ */
 @media (min-width: 1024px) {
