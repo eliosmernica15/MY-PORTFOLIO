@@ -178,6 +178,7 @@ export const SKILLS_PROGRESS = [
   { name: 'IT Systems', value: 60 },
   { name: 'WordPress', value: 80 },
   { name: 'Application Development', value: 70 },
+  { name: 'AI Engineer', value: 95 },
 ];
 
 export const SKILLS = [
