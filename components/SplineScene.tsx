@@ -3,9 +3,22 @@ import Spline from '@splinetool/react-spline';
 
 const SPLINE_SCENE_URL = 'https://prod.spline.design/RONF3SHpGTERZs4g/scene.splinecode';
 
+function hideSplineLogo() {
+  document.querySelectorAll('a[href*="spline.design"]').forEach((node) => {
+    const el = node as HTMLElement;
+    const label = (el.textContent || el.getAttribute('aria-label') || '').toLowerCase();
+    if (!label || /built|spline|powered|logo/.test(label)) {
+      el.style.setProperty('display', 'none', 'important');
+    }
+  });
+}
+
 const SplineScene: React.FC = () => {
   const onLoad = (spline: { setBackgroundColor: (color: string) => void }) => {
     spline.setBackgroundColor('transparent');
+    [0, 300, 800].forEach((delay) =>
+      setTimeout(hideSplineLogo, delay)
+    );
   };
 
   return (
