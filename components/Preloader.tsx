@@ -9,15 +9,14 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   const [shouldExit, setShouldExit] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShouldExit(true), 900);
+    const timer = setTimeout(() => setShouldExit(true), 600);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    if (shouldExit) {
-      const exitTimer = setTimeout(onComplete, 400);
-      return () => clearTimeout(exitTimer);
-    }
+    if (!shouldExit) return;
+    const exitTimer = setTimeout(onComplete, 280);
+    return () => clearTimeout(exitTimer);
   }, [shouldExit, onComplete]);
 
   return (
@@ -25,7 +24,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       className="fixed inset-0 z-[200] flex items-center justify-center"
       style={{ backgroundColor: 'var(--bg-primary)' }}
       animate={shouldExit ? { opacity: 0, scale: 1.05 } : { opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="flex flex-col items-center gap-8">
         {/* Logo */}

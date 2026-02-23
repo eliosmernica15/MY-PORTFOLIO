@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { 
   HashRouter, 
   Routes, 
@@ -42,8 +42,16 @@ const AnimatedRoutes = () => {
   );
 };
 
+const PRELOADER_MAX_MS = 2500;
+
 export default function App() {
   const [loading, setLoading] = useState(true);
+  const finishLoading = useCallback(() => setLoading(false), []);
+
+  useEffect(() => {
+    const safety = setTimeout(finishLoading, PRELOADER_MAX_MS);
+    return () => clearTimeout(safety);
+  }, [finishLoading]);
 
   return (
     <ThemeProvider>
@@ -52,7 +60,7 @@ export default function App() {
 
         {/* Preloader */}
       <AnimatePresence>
-          {loading && <Preloader onComplete={() => setLoading(false)} />}
+          {loading && <Preloader onComplete={finishLoading} />}
         </AnimatePresence>
 
         {!loading && (
