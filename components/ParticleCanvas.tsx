@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 
 interface Particle {
@@ -9,34 +9,43 @@ interface Particle {
   size: number;
 }
 
+const getPrefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const ParticleCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const [reduceMotion] = useState(getPrefersReducedMotion);
 
   useEffect(() => {
+    if (reduceMotion) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     const particleColor = isDark ? 'rgba(255, 255, 255, 0.35)' : 'rgba(0, 0, 0, 0.2)';
 
     const getParticleConfig = () => {
       const w = typeof window !== 'undefined' ? window.innerWidth : 1024;
-      if (w < 640) return { numParticles: 28, connectionDistance: 100 };
-      if (w < 1024) return { numParticles: 40, connectionDistance: 120 };
-      return { numParticles: 55, connectionDistance: 140 };
+      if (w < 640) return { numParticles: 24, connectionDistance: 90 };
+      if (w < 1024) return { numParticles: 36, connectionDistance: 110 };
+      return { numParticles: 50, connectionDistance: 130 };
     };
 
     let animationId: number;
+    let width = canvas.offsetWidth;
+    let height = canvas.offsetHeight;
     const particles: Particle[] = [];
     const { numParticles, connectionDistance } = getParticleConfig();
 
     const resize = () => {
+      width = canvas.offsetWidth;
+      height = canvas.offsetHeight;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = canvas.offsetWidth * dpr;
-      canvas.height = canvas.offsetHeight * dpr;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
@@ -45,30 +54,29 @@ const ParticleCanvas: React.FC = () => {
 
     for (let i = 0; i < numParticles; i++) {
       particles.push({
-        x: Math.random() * canvas.offsetWidth,
-        y: Math.random() * canvas.offsetHeight,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        size: Math.random() * 1.8 + 0.8,
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        size: Math.random() * 1.5 + 0.6,
       });
     }
 
     const animate = () => {
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
-      ctx.clearRect(0, 0, w, h);
+      ctx.clearRect(0, 0, width, height);
 
-      particles.forEach(p => {
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = particleColor;
         ctx.fill();
-      });
+      }
 
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -76,11 +84,11 @@ const ParticleCanvas: React.FC = () => {
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < connectionDistance) {
-            const alpha = (isDark ? 0.1 : 0.06) * (1 - dist / connectionDistance);
+            const alpha = (isDark ? 0.08 : 0.05) * (1 - dist / connectionDistance);
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = isDark ? `rgba(255, 255, 255, ${alpha})` : `rgba(0, 0, 0, ${alpha})`;
+            ctx.strokeStyle = isDark ? `rgba(255,255,255,${alpha})` : `rgba(0,0,0,${alpha})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -96,7 +104,9 @@ const ParticleCanvas: React.FC = () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
     };
-  }, [isDark]);
+  }, [isDark, reduceMotion]);
+
+  if (reduceMotion) return null;
 
   return (
     <canvas

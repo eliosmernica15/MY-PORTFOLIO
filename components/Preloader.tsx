@@ -9,13 +9,13 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   const [shouldExit, setShouldExit] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShouldExit(true), 1200);
+    const timer = setTimeout(() => setShouldExit(true), 900);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     if (shouldExit) {
-      const exitTimer = setTimeout(onComplete, 500);
+      const exitTimer = setTimeout(onComplete, 400);
       return () => clearTimeout(exitTimer);
     }
   }, [shouldExit, onComplete]);

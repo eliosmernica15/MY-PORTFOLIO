@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, CheckCircle2, Send, AlertCircle } from 'lucide-react';
-import emailjs from '@emailjs/browser';
 import { CONTACT_INFO } from '../constants';
 import RevealSection from './RevealSection';
 import FloatingOrbs from './FloatingOrbs';
@@ -52,6 +51,7 @@ const ContactForm: React.FC = () => {
 
     if (SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY) {
       try {
+        const { default: emailjs } = await import('@emailjs/browser');
         await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
           name: formData.name,
           email: formData.email,

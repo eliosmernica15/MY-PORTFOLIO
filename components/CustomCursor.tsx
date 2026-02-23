@@ -22,10 +22,14 @@ const CustomCursor: React.FC = () => {
       'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (isTouchDevice()) return;
 
+    let rafId: number;
     const handleMove = (e: MouseEvent) => {
       if (!isVisible) setIsVisible(true);
-      rawX.set(e.clientX);
-      rawY.set(e.clientY);
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        rawX.set(e.clientX);
+        rawY.set(e.clientY);
+      });
     };
 
     const handleLeave = () => setIsVisible(false);
@@ -56,6 +60,7 @@ const CustomCursor: React.FC = () => {
     document.documentElement.addEventListener('mouseenter', handleEnter);
 
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener('mousemove', handleMove);
       window.removeEventListener('mouseover', handleMouseOver);
       window.removeEventListener('mouseout', handleMouseOut);

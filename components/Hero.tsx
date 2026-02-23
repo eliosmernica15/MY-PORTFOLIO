@@ -1,14 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Globe, Zap, ArrowDown } from 'lucide-react';
 import AnimatedCounter from './AnimatedCounter';
-import SplineScene from './SplineScene';
 import FloatingOrbs from './FloatingOrbs';
 import ParticleCanvas from './ParticleCanvas';
 import MagneticButton from './MagneticButton';
 import { useTypingEffect } from '../hooks/useTypingEffect';
 
+const LazySplineScene = lazy(() => import('./SplineScene'));
+
 const Hero: React.FC = () => {
+  const [load3D, setLoad3D] = useState(false);
+
+  useEffect(() => {
+    const cb = () => setLoad3D(true);
+    let cancelled = false;
+    const run = () => {
+      if (!cancelled) setLoad3D(true);
+    };
+    const id =
+      typeof requestIdleCallback !== 'undefined'
+        ? requestIdleCallback(run, { timeout: 500 })
+        : window.setTimeout(run, 350);
+    return () => {
+      cancelled = true;
+      if (typeof cancelIdleCallback !== 'undefined') cancelIdleCallback(id as number);
+      else clearTimeout(id as number);
+    };
+  }, []);
+
   const typedText = useTypingEffect(
     [
       'Web Development',
@@ -24,7 +44,11 @@ const Hero: React.FC = () => {
   return (
     <section className="relative pt-28 sm:pt-32 md:pt-40 lg:pt-44 pb-16 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden min-h-[100dvh] sm:min-h-screen flex flex-col justify-center snap-section">
       <div className="absolute inset-0 z-0">
-        <SplineScene />
+        {load3D && (
+          <Suspense fallback={null}>
+            <LazySplineScene />
+          </Suspense>
+        )}
       </div>
       <FloatingOrbs />
       <div className="absolute inset-0 pointer-events-none z-[1]">
