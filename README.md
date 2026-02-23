@@ -1,20 +1,78 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Elios Mernica — Portfolio
 
-# Run and deploy your AI Studio app
+A modern, responsive portfolio site built with React, TypeScript, and Vite. Features a 3D Spline hero, dark/light theme, and smooth animations.
 
-This contains everything you need to run your app locally.
+## Tech stack
 
-View your app in AI Studio: https://ai.studio/apps/drive/1KKFoi56T8yh87RY4JbuANQkoJz6c01PY
+- **React 19** + **TypeScript**
+- **Vite** — build tool and dev server
+- **Tailwind CSS** — styling (v3.4)
+- **Framer Motion** — animations
+- **React Router** — routing (Home, project detail, 404)
+- **Spline** — 3D hero scene
+- **EmailJS** — contact form (optional, via env)
 
-## Run Locally
+## Project structure
 
-**Prerequisites:**  Node.js
+```
+├── components/       # UI components (Hero, Nav, Footer, Projects, Contact, etc.)
+├── pages/            # Route pages (Home, ProjectDetail, NotFound)
+├── constants.ts      # Projects, services, and site copy
+├── index.html
+├── index.tsx         # App entry, routes, theme
+└── index.css         # Global styles and theme variables
+```
 
+## Prerequisites
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- **Node.js** (v18 or newer recommended)
+
+## Setup
+
+1. **Clone and install**
+
+   ```bash
+   git clone https://github.com/eliosmernica15/MY-PORTFOLIO.git
+   cd MY-PORTFOLIO
+   npm install
+   ```
+
+2. **Environment (optional — contact form)**
+
+   To enable the contact form, copy the example env file and add your [EmailJS](https://www.emailjs.com/) keys:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Edit `.env` and set:
+
+   - `VITE_EMAILJS_SERVICE_ID`
+   - `VITE_EMAILJS_TEMPLATE_ID`
+   - `VITE_EMAILJS_PUBLIC_KEY`
+
+   See `.env.example` for setup steps. The site runs without these; the form will show a demo message if they are missing.
+
+3. **Run locally**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000).
+
+## Scripts
+
+| Command           | Description              |
+|-------------------|--------------------------|
+| `npm run dev`     | Start dev server (port 3000) |
+| `npm run build`   | Production build         |
+| `npm run preview` | Preview production build |
+
+## Deploy
+
+The project is set up for [Vercel](https://vercel.com). Push to `main` to trigger a deploy. Ensure any required env vars (e.g. EmailJS) are set in the Vercel project settings.
+
+## License
+
+Private. All rights reserved.
