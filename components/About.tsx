@@ -1,29 +1,29 @@
 import React from 'react';
-import { Cpu, Palette, Zap, Camera } from 'lucide-react';
+import { Cpu, Palette, Zap } from 'lucide-react';
 import { SERVICES } from '../constants';
 import RevealSection from './RevealSection';
 
 const About: React.FC = () => {
   return (
-    <section id="about" className="py-28 px-6 scroll-mt-24 snap-section">
+    <section id="about" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 scroll-mt-24 snap-section">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
           <RevealSection className="lg:col-span-7">
             <div
-              className="p-10 md:p-14 rounded-[3rem] relative overflow-hidden"
+              className="p-6 sm:p-10 md:p-14 rounded-[2rem] sm:rounded-[3rem] relative overflow-hidden"
               style={{
                 backgroundColor: 'var(--bg-card)',
                 border: '1px solid var(--border)',
               }}
             >
-              <div className="absolute -top-20 -right-20 w-60 h-60 bg-[rgba(139,92,246,0.05)] blur-[80px] rounded-full pointer-events-none" />
+              <div className="absolute -top-20 -right-20 w-60 h-60 blur-[80px] rounded-full pointer-events-none" style={{ background: 'var(--glass-accent-bg)' }} />
               <span
                 className="font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block"
                 style={{ color: 'var(--accent-light)' }}
               >
                 About
               </span>
-              <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-6 sm:mb-8 leading-tight">
                 Pure <br />
                 <span className="italic" style={{ color: 'var(--text-muted)' }}>
                   Logic.
@@ -85,16 +85,11 @@ const About: React.FC = () => {
                   }}
                 >
                   <div
-                    className="w-11 h-11 rounded-xl bg-[rgba(139,92,246,0.1)] flex items-center justify-center mb-10 group-hover:shadow-[0_0_20px_rgba(139,92,246,0.2)] group-hover:bg-[rgba(139,92,246,0.2)] transition-all"
-                    style={{ color: 'var(--accent-light)' }}
+                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-10 shadow-accent group-hover:shadow-accent-hover transition-all"
+                    style={{ backgroundColor: 'var(--glass-accent-bg)', color: 'var(--accent)' }}
                   >
                     {s.icon === 'Cpu' && <Cpu size={20} />}
-                    {s.icon === 'Palette' &&
-                      (s.title === 'Photography' ? (
-                        <Camera size={20} />
-                      ) : (
-                        <Palette size={20} />
-                      ))}
+                    {s.icon === 'Palette' && <Palette size={20} />}
                     {s.icon === 'Zap' && <Zap size={20} />}
                   </div>
                   <div>

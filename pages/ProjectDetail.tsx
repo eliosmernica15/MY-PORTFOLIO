@@ -159,7 +159,7 @@ const ProjectDetail: React.FC = () => {
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 w-full py-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] text-white rounded-2xl flex items-center justify-center gap-3 font-bold hover:shadow-lg hover:shadow-violet-500/25 transition-all"
+              className="mt-8 w-full py-4 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-2xl flex items-center justify-center gap-3 font-bold hover:shadow-accent-hover shadow-accent transition-all"
             >
               Visit Live <ExternalLink size={16} />
             </a>

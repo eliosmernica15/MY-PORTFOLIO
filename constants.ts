@@ -209,11 +209,6 @@ export const SERVICES = [
     desc: 'Professional development of applications for iOS and Android.',
     icon: 'Zap',
   },
-  {
-    title: 'Photography',
-    desc: 'I make high-quality photos of any category at a professional level.',
-    icon: 'Palette',
-  },
 ];
 
 export const SOCIALS = [

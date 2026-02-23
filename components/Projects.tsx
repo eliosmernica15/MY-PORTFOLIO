@@ -21,7 +21,7 @@ const Projects: React.FC = () => {
   return (
     <section
       id="projects"
-      className="py-28 px-6 max-w-7xl mx-auto scroll-mt-24 snap-section"
+      className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto scroll-mt-24 snap-section"
     >
       <RevealSection className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
         <div>
@@ -31,7 +31,7 @@ const Projects: React.FC = () => {
           >
             Portfolio
           </span>
-          <h2 className="text-5xl md:text-7xl font-black">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black">
             Curated{' '}
             <span className="italic" style={{ color: 'var(--text-muted)' }}>
               Labs.
@@ -51,7 +51,7 @@ const Projects: React.FC = () => {
                 onClick={() => setFilter(cat)}
                 className={`px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
                   filter === cat
-                    ? 'bg-[var(--accent)] text-white shadow-lg shadow-violet-500/20'
+                    ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-accent'
                     : 'hover:bg-[var(--bg-card)]'
                 }`}
                 style={
@@ -101,27 +101,28 @@ const Projects: React.FC = () => {
                       loading="lazy"
                     />
                   </motion.div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 flex flex-col justify-end p-8 md:p-10 transition-all duration-500">
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 flex flex-col justify-end p-8 md:p-10 transition-all duration-500" style={{ background: 'linear-gradient(to top, var(--bg-primary) 0%, transparent 50%)' }}>
                     <div className="flex items-end justify-between gap-4">
                       <div className="flex-1 space-y-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                         <span className="text-[var(--accent-light)] text-[10px] font-bold uppercase tracking-[0.3em] block">
                           {project.category}
                         </span>
                         <h4
-                          className={`font-black text-white tracking-tight ${
+                          className={`font-black tracking-tight ${
                             idx === 0 && filter === 'All'
                               ? 'text-3xl md:text-5xl'
                               : 'text-2xl md:text-3xl'
                           }`}
+                          style={{ color: 'var(--text-primary)' }}
                         >
                           {project.title}
                         </h4>
-                        <p className="text-neutral-400 text-sm leading-relaxed max-w-md">
+                        <p className="text-sm leading-relaxed max-w-md" style={{ color: 'var(--text-secondary)' }}>
                           {project.description}
                         </p>
                       </div>
-                      <div className="w-12 h-12 bg-[var(--accent)] rounded-full flex items-center justify-center shadow-lg shadow-violet-500/30 shrink-0 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
-                        <ArrowUpRight size={24} className="text-white" />
+                      <div className="w-12 h-12 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-full flex items-center justify-center shadow-accent shrink-0 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
+                        <ArrowUpRight size={24} style={{ color: 'var(--accent-contrast)' }} />
                       </div>
                     </div>
                   </div>

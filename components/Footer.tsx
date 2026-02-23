@@ -41,12 +41,12 @@ const Footer: React.FC = () => {
         {/* Gradient divider */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-50" />
 
-        <div className="max-w-7xl mx-auto px-6 pt-20 pb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-12 mb-12 sm:mb-16">
             {/* Brand */}
             <div>
               <Link to="/" className="flex items-center gap-3 group mb-6">
-                <div className="w-10 h-10 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] rounded-xl flex items-center justify-center font-bold text-sm text-white shadow-lg shadow-violet-500/20">
+                <div className="w-10 h-10 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-xl flex items-center justify-center font-bold text-sm shadow-accent">
                   EM
                 </div>
                 <span
@@ -163,7 +163,7 @@ const Footer: React.FC = () => {
                 onClick={scrollToTop}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-12 h-12 rounded-full bg-[var(--accent)] text-white flex items-center justify-center shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-shadow"
+                className="w-12 h-12 rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] flex items-center justify-center shadow-accent hover:shadow-accent-hover transition-shadow"
                 aria-label="Back to top"
               >
                 <ArrowUp size={20} />

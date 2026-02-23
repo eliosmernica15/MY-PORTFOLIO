@@ -78,7 +78,7 @@ const Nav: React.FC = () => {
 
   return (
     <>
-      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center pointer-events-none px-4">
+      <div className="fixed top-4 left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4 pt-[env(safe-area-inset-top)] sm:top-6">
         <motion.nav
           animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
           transition={{ duration: 0.35, ease: 'easeInOut' }}
@@ -103,7 +103,7 @@ const Nav: React.FC = () => {
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-10 h-10 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] rounded-xl flex items-center justify-center font-bold text-xs text-white shadow-lg shadow-violet-500/20"
+              className="w-10 h-10 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-xl flex items-center justify-center font-bold text-xs shadow-accent"
             >
               EM
             </motion.div>
@@ -150,7 +150,7 @@ const Nav: React.FC = () => {
         <MagneticButton strength={0.2}>
           <button
             onClick={e => handleNavClick(e, { name: 'Hire', id: 'contact' })}
-            className="hidden lg:flex items-center gap-2 px-5 py-2.5 text-[10px] font-bold rounded-full uppercase tracking-widest bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] text-white shadow-lg shadow-violet-500/20 hover:shadow-violet-500/40 transition-all duration-300 hover:scale-105"
+            className="hidden lg:flex items-center gap-2 px-5 py-2.5 text-[10px] font-bold rounded-full uppercase tracking-widest bg-[var(--accent)] text-[var(--accent-contrast)] shadow-accent hover:shadow-accent-hover transition-all duration-300 hover:scale-105"
           >
             <Sparkles size={12} /> Hire Me
           </button>
@@ -219,7 +219,7 @@ const Nav: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
                 onClick={e => handleNavClick(e, { name: 'Hire', id: 'contact' })}
-                className="mt-12 w-full py-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] text-white font-bold rounded-2xl text-center text-sm uppercase tracking-widest"
+                className="mt-12 w-full py-4 bg-[var(--accent)] text-[var(--accent-contrast)] font-bold rounded-2xl text-center text-sm uppercase tracking-widest"
               >
                 Get in Touch
               </motion.button>

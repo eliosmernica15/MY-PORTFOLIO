@@ -12,7 +12,7 @@ const FloatingOrbs: React.FC = () => (
     <div
       className="absolute bottom-20 -right-32 w-[400px] h-[400px] rounded-full opacity-[0.05]"
       style={{
-        background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)',
+        background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)',
         animation: 'floatReverse 25s ease-in-out infinite',
       }}
     />

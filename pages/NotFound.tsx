@@ -56,7 +56,7 @@ const NotFound: React.FC = () => {
           <MagneticButton strength={0.15}>
             <Link
               to="/"
-              className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-violet-500/30 transition-shadow"
+              className="flex items-center gap-3 px-8 py-4 bg-[var(--accent)] text-[var(--accent-contrast)] font-bold rounded-2xl hover:shadow-accent-hover shadow-accent transition-shadow"
             >
               <Home size={18} /> Back to Home
             </Link>

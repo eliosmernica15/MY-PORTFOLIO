@@ -10,7 +10,7 @@ const SkillMarquee: React.FC = () => {
   ];
 
   const pillClass =
-    'shrink-0 px-5 py-2.5 rounded-xl border text-sm font-medium transition-colors duration-300 cursor-default whitespace-nowrap select-none hover:text-white';
+    'shrink-0 px-5 py-2.5 rounded-xl border text-sm font-medium transition-colors duration-300 cursor-default whitespace-nowrap select-none hover:bg-[var(--accent)] hover:text-[var(--accent-contrast)]';
 
   return (
     <div className="space-y-3 overflow-hidden py-2 [&:hover_div]:![animation-play-state:paused]">

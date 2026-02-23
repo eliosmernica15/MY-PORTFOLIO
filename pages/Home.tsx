@@ -17,14 +17,14 @@ const Home: React.FC = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
     >
       <Hero />
       <About />
       <Projects />
 
       {/* Skills Marquee */}
-      <section className="py-24 px-6 max-w-7xl mx-auto snap-section">
+      <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 max-w-7xl mx-auto snap-section">
         <RevealSection className="text-center mb-12">
           <span
             className="font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block"
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
           >
             Technical Arsenal
           </span>
-          <h2 className="text-4xl md:text-6xl font-black">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black">
             Tools of{' '}
             <span className="italic" style={{ color: 'var(--text-muted)' }}>
               Choice.

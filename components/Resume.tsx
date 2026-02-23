@@ -8,7 +8,7 @@ import MagneticButton from './MagneticButton';
 
 const Resume: React.FC = () => {
   return (
-    <section id="resume" className="py-28 px-6 scroll-mt-24 relative snap-section">
+    <section id="resume" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 scroll-mt-24 relative snap-section">
       <FloatingOrbs />
       <div className="max-w-7xl mx-auto relative z-10">
         <RevealSection className="grid grid-cols-1 lg:grid-cols-12 gap-16">
@@ -44,7 +44,7 @@ const Resume: React.FC = () => {
                   className="flex items-center gap-4 transition-colors hover:text-[var(--accent-light)]"
                   style={{ color: 'var(--text-secondary)' }}
                 >
-                  <div className="w-8 h-8 rounded-lg bg-[rgba(139,92,246,0.1)] flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--glass-accent-bg)] flex items-center justify-center">
                     <Icon size={14} style={{ color: 'var(--accent-light)' }} />
                   </div>
                   <span className="text-xs tracking-wide font-medium">{text}</span>
@@ -60,7 +60,7 @@ const Resume: React.FC = () => {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="flex items-center justify-center gap-3 w-full py-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-violet-500/25 transition-all text-sm uppercase tracking-widest"
+                className="flex items-center justify-center gap-3 w-full py-4 bg-[var(--accent)] text-[var(--accent-contrast)] font-bold rounded-2xl hover:shadow-accent-hover shadow-accent transition-all text-sm uppercase tracking-widest"
               >
                 <Download size={16} /> Download CV
               </motion.a>
@@ -77,7 +77,7 @@ const Resume: React.FC = () => {
                   borderBottom: '1px solid var(--border)',
                 }}
               >
-                <div className="w-6 h-6 rounded-md bg-[rgba(139,92,246,0.1)] flex items-center justify-center">
+                <div className="w-6 h-6 rounded-md bg-[var(--glass-accent-bg)] flex items-center justify-center">
                   <Sparkles size={12} style={{ color: 'var(--accent-light)' }} />
                 </div>
                 Education
@@ -95,7 +95,7 @@ const Resume: React.FC = () => {
                     transition={{ delay: idx * 0.08 }}
                     className="relative group"
                   >
-                    <div className="absolute -left-[27px] top-1.5 w-2.5 h-2.5 rounded-full bg-[var(--accent)] border-2 shadow-[0_0_8px_rgba(139,92,246,0.5)] group-hover:shadow-[0_0_15px_rgba(139,92,246,0.7)] transition-all" style={{ borderColor: 'var(--bg-primary)' }} />
+                    <div className="absolute -left-[27px] top-1.5 w-2.5 h-2.5 rounded-full bg-[var(--accent)] border-2 shadow-accent group-hover:shadow-accent-hover transition-all" style={{ borderColor: 'var(--bg-primary)' }} />
                     <span
                       className="text-[10px] font-bold uppercase tracking-widest"
                       style={{ color: 'var(--accent-light)' }}
@@ -122,7 +122,7 @@ const Resume: React.FC = () => {
                   borderBottom: '1px solid var(--border)',
                 }}
               >
-                <div className="w-6 h-6 rounded-md bg-[rgba(139,92,246,0.1)] flex items-center justify-center">
+                <div className="w-6 h-6 rounded-md bg-[var(--glass-accent-bg)] flex items-center justify-center">
                   <Zap size={12} style={{ color: 'var(--accent-light)' }} />
                 </div>
                 Experience
@@ -140,7 +140,7 @@ const Resume: React.FC = () => {
                     transition={{ delay: idx * 0.08 }}
                     className="relative group"
                   >
-                    <div className="absolute -left-[27px] top-1.5 w-2.5 h-2.5 rounded-full bg-[var(--accent)] border-2 shadow-[0_0_8px_rgba(139,92,246,0.5)] group-hover:shadow-[0_0_15px_rgba(139,92,246,0.7)] transition-all" style={{ borderColor: 'var(--bg-primary)' }} />
+                    <div className="absolute -left-[27px] top-1.5 w-2.5 h-2.5 rounded-full bg-[var(--accent)] border-2 shadow-accent group-hover:shadow-accent-hover transition-all" style={{ borderColor: 'var(--bg-primary)' }} />
                     <span
                       className="text-[10px] font-bold uppercase tracking-widest"
                       style={{ color: 'var(--accent-light)' }}
@@ -192,7 +192,7 @@ const Resume: React.FC = () => {
                         delay: idx * 0.1,
                         ease: [0.22, 1, 0.36, 1],
                       }}
-                      className="h-full rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] shadow-[0_0_8px_rgba(139,92,246,0.5)]"
+                      className="h-full rounded-full bg-[var(--accent)] shadow-accent"
                     />
                   </div>
                 </div>

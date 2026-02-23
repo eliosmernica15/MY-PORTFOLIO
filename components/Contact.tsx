@@ -81,7 +81,7 @@ const ContactForm: React.FC = () => {
   };
 
   const inputClass = (hasErr: boolean) =>
-    `w-full rounded-2xl px-5 py-4 transition-all duration-300 focus:outline-none focus:border-[rgba(139,92,246,0.5)] focus:ring-1 focus:ring-[rgba(139,92,246,0.3)] focus:shadow-[0_0_20px_rgba(139,92,246,0.15)] placeholder:opacity-40 ${
+    `w-full rounded-2xl px-5 py-4 transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--glass-accent-border)] focus:shadow-accent placeholder:opacity-40 ${
       hasErr ? 'border-red-500/50' : ''
     }`;
 
@@ -94,7 +94,7 @@ const ContactForm: React.FC = () => {
         color: 'var(--text-primary)',
       }}
     >
-      <div className="absolute -top-20 -right-20 w-40 h-40 bg-[rgba(139,92,246,0.1)] rounded-full blur-[80px] pointer-events-none" />
+      <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[80px] pointer-events-none" style={{ background: 'var(--glass-accent-bg)' }} />
       {status === 'success' ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -105,7 +105,8 @@ const ContactForm: React.FC = () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', bounce: 0.5, delay: 0.1 }}
-            className="w-16 h-16 rounded-full bg-[rgba(139,92,246,0.1)] flex items-center justify-center mx-auto mb-6"
+            className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+            style={{ backgroundColor: 'var(--glass-accent-bg)' }}
           >
             <CheckCircle2 size={32} className="text-[var(--accent)]" />
           </motion.div>
@@ -184,7 +185,7 @@ const ContactForm: React.FC = () => {
                 backgroundColor: 'var(--input-bg)',
                 borderWidth: '1px',
                 borderStyle: 'solid',
-                borderColor: errors.name ? 'rgba(239,68,68,0.5)' : 'var(--border)',
+                borderColor: errors.name ? 'var(--text-primary)' : 'var(--border)',
                 color: 'var(--text-primary)',
               }}
               placeholder="Your Name"
@@ -216,7 +217,7 @@ const ContactForm: React.FC = () => {
                 backgroundColor: 'var(--input-bg)',
                 borderWidth: '1px',
                 borderStyle: 'solid',
-                borderColor: errors.email ? 'rgba(239,68,68,0.5)' : 'var(--border)',
+                borderColor: errors.email ? 'var(--text-primary)' : 'var(--border)',
                 color: 'var(--text-primary)',
               }}
               placeholder="your@email.com"
@@ -248,7 +249,7 @@ const ContactForm: React.FC = () => {
                 backgroundColor: 'var(--input-bg)',
                 borderWidth: '1px',
                 borderStyle: 'solid',
-                borderColor: errors.message ? 'rgba(239,68,68,0.5)' : 'var(--border)',
+                borderColor: errors.message ? 'var(--text-primary)' : 'var(--border)',
                 color: 'var(--text-primary)',
               }}
               placeholder="How can I help?"
@@ -273,7 +274,7 @@ const ContactForm: React.FC = () => {
               disabled={status === 'loading'}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-violet-500/25 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-4 bg-[var(--accent)] text-[var(--accent-contrast)] font-bold rounded-2xl hover:shadow-accent-hover shadow-accent transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <Send size={16} /> {status === 'loading' ? 'Sending...' : 'Send Message'}
             </motion.button>
@@ -286,9 +287,9 @@ const ContactForm: React.FC = () => {
 
 const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-32 px-6 scroll-mt-24 relative overflow-hidden snap-section">
+    <section id="contact" className="py-20 sm:py-24 lg:py-32 px-4 sm:px-6 scroll-mt-24 relative overflow-hidden snap-section">
       <FloatingOrbs />
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-center relative z-10">
         <RevealSection>
           <span
             className="font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block"
@@ -296,7 +297,7 @@ const Contact: React.FC = () => {
           >
             Get in Touch
           </span>
-          <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter text-gradient leading-none">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 sm:mb-8 tracking-tighter text-gradient leading-none">
             Craft the
             <br />
             Future.

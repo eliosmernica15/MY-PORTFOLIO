@@ -48,7 +48,7 @@ const TestimonialCarousel: React.FC = () => {
             className="max-w-3xl w-full text-center relative"
           >
             {/* Gradient border wrapper */}
-            <div className="p-px rounded-[3rem] bg-gradient-to-br from-[rgba(139,92,246,0.2)] via-transparent to-[rgba(109,40,217,0.1)]">
+            <div className="p-px rounded-[3rem] bg-gradient-to-br from-[var(--glass-accent-border)] via-transparent to-[var(--glass-accent-bg)]">
               <div
                 className="p-10 md:p-14 rounded-[3rem] relative overflow-hidden"
                 style={{ backgroundColor: 'var(--bg-primary)' }}
@@ -162,7 +162,7 @@ const TestimonialCarousel: React.FC = () => {
 
 const Testimonials: React.FC = () => {
   return (
-    <section className="py-28 px-6 max-w-7xl mx-auto snap-section">
+    <section className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto snap-section">
       <RevealSection className="text-center mb-16">
         <span
           className="font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block"

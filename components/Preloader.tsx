@@ -36,7 +36,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           className="relative"
         >
           <motion.div
-            className="w-20 h-20 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] rounded-2xl flex items-center justify-center shadow-2xl shadow-violet-500/30"
+            className="w-20 h-20 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-2xl flex items-center justify-center shadow-accent"
             animate={{ rotate: [0, 4, -4, 0] }}
             transition={{
               duration: 3,
@@ -44,7 +44,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
               ease: 'easeInOut',
             }}
           >
-            <span className="text-2xl font-black text-white select-none">EM</span>
+            <span className="text-2xl font-black select-none" style={{ color: 'var(--accent-contrast)' }}>EM</span>
           </motion.div>
           {/* Glow ring */}
           <motion.div
@@ -53,7 +53,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
             animate={{ opacity: [0, 0.5, 0], scale: [0.8, 1.4, 1.8] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
             style={{
-              background: 'radial-gradient(circle, rgba(139,92,246,0.3), transparent 70%)',
+              background: 'radial-gradient(circle, var(--shadow-accent), transparent 70%)',
             }}
           />
         </motion.div>
