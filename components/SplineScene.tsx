@@ -18,8 +18,8 @@ const SplineScene: React.FC = () => {
           <div className="absolute inset-0 min-w-full min-h-full" style={{ background: 'transparent' }} />
         }
       >
-        {/* Responsive scale: frame robot well on narrow (mobile) and wide (desktop) viewports */}
-        <div className="absolute inset-0 min-w-full min-h-full scale-[1.28] sm:scale-[1.22] md:scale-[1.18] lg:scale-[1.15] origin-center" style={{ background: 'transparent' }}>
+        {/* Responsive scale: smaller on phones, then scale up for tablet/desktop */}
+        <div className="absolute inset-0 min-w-full min-h-full scale-[1.05] sm:scale-[1.18] md:scale-[1.18] lg:scale-[1.15] origin-center" style={{ background: 'transparent' }}>
           <Spline scene={SPLINE_SCENE_URL} onLoad={onLoad} style={{ background: 'transparent' }} />
         </div>
       </Suspense>
