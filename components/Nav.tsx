@@ -68,12 +68,10 @@ const Nav: React.FC = () => {
     };
   }, [pathname]);
 
-  /** Scroll to section by id; if element not yet in DOM (e.g. Home still loading), retry until it appears or timeout */
+  /** Scroll to section by id; instant scroll so scroll-snap does not snap to another section mid-scroll */
   const scrollToSection = useCallback((id: string) => {
     const doScroll = (el: HTMLElement) => {
-      requestAnimationFrame(() => {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+      el.scrollIntoView({ behavior: 'auto', block: 'start' });
     };
     const scroll = (): boolean => {
       const el = document.getElementById(id);
