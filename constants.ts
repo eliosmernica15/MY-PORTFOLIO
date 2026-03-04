@@ -1,5 +1,18 @@
 export const PROJECTS = [
   {
+    id: 'forexpulse',
+    title: 'ForexPulse',
+    category: 'Web Development',
+    description: 'Trading platform for forex and prop with live rates, charts, tools, and dashboard.',
+    longDescription:
+      'ForexPulse is a trading platform built for forex and prop traders. It delivers real-time forex rates for 50+ pairs via the Frankfurter API, pair detail pages with full charts, a Tools page with pip value, position size calculator, and currency converter, plus a dashboard for portfolio snapshot and watchlist. The landing page and app share a dark, modern UI with amber accents—free to use, with optional sign-in for saving preferences.',
+    image: '/forexpulse-hero.png',
+    link: 'https://forexpulse-trading.vercel.app/',
+    color: '#f59e0b',
+    tech: ['HTML', 'JavaScript', 'Tailwind CSS', 'Frankfurter API', 'Vercel'],
+    year: '2025',
+  },
+  {
     id: 'eltrix-cloud',
     title: 'Eltrix Cloud',
     category: 'Applications',
@@ -255,6 +268,19 @@ export const CONTACT_INFO = {
    Case Studies (converted from Blog Posts)
    ================================================================ */
 export const CASE_STUDIES = [
+  {
+    title: 'ForexPulse: A Trading Platform for Forex & Prop',
+    category: 'Web Development',
+    date: '2025',
+    challenge:
+      'Build a single place for traders to view live forex rates, open charts, use conversion and pip tools, and manage a dashboard.',
+    solution:
+      'Built a multi-page app with HTML, CSS, and JavaScript, using the Frankfurter API for real-time rates. Implemented pair list and detail pages with charts, a Tools page for pip value and currency conversion, and a dashboard with portfolio snapshot and watchlist. Deployed on Vercel with a dark, modern landing page.',
+    result:
+      'A focused trading platform with 50+ pairs, live rates, charts, tools, and dashboard in one place—free to use with optional sign-in.',
+    tech: ['HTML', 'JavaScript', 'Tailwind CSS', 'Frankfurter API'],
+    img: '/forexpulse-hero.png',
+  },
   {
     title: 'Eltrix Cloud: An AI-Powered Creative Platform',
     category: 'Applications',
