@@ -240,7 +240,7 @@ a:focus-visible {
 .skip-link {
   position: fixed;
   top: -100%;
-  left: 16px;
+  left: max(16px, env(safe-area-inset-left));
   z-index: 9999;
   padding: 8px 16px;
   background: var(--accent);
@@ -252,7 +252,7 @@ a:focus-visible {
   transition: top 0.2s;
 }
 .skip-link:focus {
-  top: 16px;
+  top: max(16px, env(safe-area-inset-top));
 }
 
 /* ================================================================
