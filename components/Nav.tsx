@@ -68,10 +68,21 @@ const Nav: React.FC = () => {
     };
   }, [pathname]);
 
-  /** Scroll to section by id; instant scroll so scroll-snap does not snap to another section mid-scroll */
+  /** Scroll to section by id; smooth scroll with scroll-snap disabled via data-nav-scrolling so we land on target */
   const scrollToSection = useCallback((id: string) => {
+    const clearNavScrolling = () => {
+      document.documentElement.removeAttribute('data-nav-scrolling');
+    };
     const doScroll = (el: HTMLElement) => {
-      el.scrollIntoView({ behavior: 'auto', block: 'start' });
+      document.documentElement.setAttribute('data-nav-scrolling', 'true');
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const timeout = setTimeout(clearNavScrolling, 1200);
+      if ('onscrollend' in window) {
+        window.addEventListener('scrollend', () => {
+          clearTimeout(timeout);
+          clearNavScrolling();
+        }, { once: true });
+      }
     };
     const scroll = (): boolean => {
       const el = document.getElementById(id);

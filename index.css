@@ -311,6 +311,10 @@ a:focus-visible {
   .snap-section {
     scroll-snap-align: start;
   }
+  /* Disable scroll-snap during nav-driven smooth scroll so we land on the target section */
+  html[data-nav-scrolling] .snap-container {
+    scroll-snap-type: none;
+  }
 }
 
 /* ================================================================
