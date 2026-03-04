@@ -34,7 +34,7 @@ const Nav: React.FC = () => {
     { name: 'Contact', id: 'contact' },
   ];
 
-  // Sync nav highlight with section in view (home page only)
+  // Sync nav highlight with section in view (home page only). Re-run after delay so lazy-mounted sections are observed.
   useEffect(() => {
     if (pathname !== '/') return;
 
@@ -51,12 +51,39 @@ const Nav: React.FC = () => {
       { rootMargin: '-40% 0px -40% 0px', threshold: 0 }
     );
 
-    const els = sectionIds
-      .map(id => document.getElementById(id))
-      .filter((el): el is HTMLElement => el != null);
-    els.forEach(el => observer.observe(el));
-    return () => els.forEach(el => observer.unobserve(el));
+    let observed: HTMLElement[] = [];
+    const observeAll = () => {
+      observed.forEach(el => observer.unobserve(el));
+      observed = sectionIds
+        .map(id => document.getElementById(id))
+        .filter((el): el is HTMLElement => el != null);
+      observed.forEach(el => observer.observe(el));
+    };
+
+    observeAll();
+    const t = setTimeout(observeAll, 800);
+    return () => {
+      clearTimeout(t);
+      observed.forEach(el => observer.unobserve(el));
+    };
   }, [pathname]);
+
+  /** Scroll to section by id; if element not yet in DOM (e.g. Home still loading), retry until it appears or timeout */
+  const scrollToSection = useCallback((id: string) => {
+    const scroll = () => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return true;
+      }
+      return false;
+    };
+    if (scroll()) return;
+    const deadline = Date.now() + 4000;
+    const interval = setInterval(() => {
+      if (Date.now() > deadline || scroll()) clearInterval(interval);
+    }, 50);
+  }, []);
 
   const handleNavClick = useCallback(
     (e: React.MouseEvent, link: { name: string; id: string }) => {
@@ -64,16 +91,13 @@ const Nav: React.FC = () => {
       setActiveTab(link.name);
       if (pathname !== '/') {
         navigate('/');
-        setTimeout(
-          () => document.getElementById(link.id)?.scrollIntoView({ behavior: 'smooth' }),
-          100
-        );
+        setTimeout(() => scrollToSection(link.id), 150);
       } else {
-        document.getElementById(link.id)?.scrollIntoView({ behavior: 'smooth' });
+        scrollToSection(link.id);
       }
       setIsOpen(false);
     },
-    [pathname, navigate]
+    [pathname, navigate, scrollToSection]
   );
 
   return (
