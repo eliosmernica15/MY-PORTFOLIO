@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { 
   HashRouter, 
   Routes, 
@@ -9,7 +9,6 @@ import { AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
-import Preloader from './components/Preloader';
 import Home from './pages/Home';
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -42,21 +41,13 @@ const AnimatedRoutes = () => {
 };
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
-
   return (
     <ThemeProvider>
       <HashRouter>
         <ScrollToTop />
 
-        {/* Preloader */}
-      <AnimatePresence>
-          {loading && <Preloader onComplete={() => setLoading(false)} />}
-        </AnimatePresence>
-
-        {!loading && (
-          <>
-            <Suspense fallback={null}>
+        <>
+          <Suspense fallback={null}>
               <CustomCursor />
               <ScrollProgress />
             </Suspense>
@@ -73,9 +64,8 @@ export default function App() {
             </main>
 
             <Footer />
-          </>
-        )}
-    </HashRouter>
+        </>
+      </HashRouter>
     </ThemeProvider>
   );
 }
