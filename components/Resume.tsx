@@ -8,7 +8,7 @@ import MagneticButton from './MagneticButton';
 
 const Resume: React.FC = () => {
   return (
-    <section id="resume" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 scroll-mt-24 relative snap-section">
+    <section className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 relative snap-section">
       <FloatingOrbs />
       <div className="max-w-7xl mx-auto relative z-10">
         <RevealSection className="grid grid-cols-1 lg:grid-cols-12 gap-16">

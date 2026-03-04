@@ -34,7 +34,7 @@ const Home: React.FC = () => {
     >
       <Hero />
       <About />
-      <LazySection fallback={sectionFallback}>
+      <LazySection id="projects" fallback={sectionFallback}>
         <Projects />
       </LazySection>
 
@@ -60,7 +60,7 @@ const Home: React.FC = () => {
       </section>
 
       {LAZY_SECTIONS.map(({ id, Component }) => (
-        <LazySection key={id} fallback={sectionFallback}>
+        <LazySection key={id} id={id} fallback={sectionFallback}>
           <Component />
         </LazySection>
       ))}

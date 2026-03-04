@@ -86,8 +86,7 @@ const Projects: React.FC = () => {
 
   return (
     <section
-      id="projects"
-      className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto scroll-mt-24 snap-section"
+      className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto snap-section"
     >
       <RevealSection className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
         <div>

@@ -4,7 +4,7 @@ import RevealSection from './RevealSection';
 
 const CaseStudies: React.FC = () => {
   return (
-    <section id="case-studies" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 scroll-mt-24 snap-section">
+    <section className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 snap-section">
       <div className="max-w-7xl mx-auto">
         <RevealSection className="text-center mb-16">
           <span
