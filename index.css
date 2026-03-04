@@ -92,6 +92,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Hide Spline "Build with Spline" watermark */
+a[href*="spline.design"],
+a[href*="spline.tool"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
 /* ================================================================
    Glass Morphism
    ================================================================ */

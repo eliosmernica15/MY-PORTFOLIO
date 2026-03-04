@@ -1,25 +1,53 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 import Spline from '@splinetool/react-spline';
 
 const SPLINE_SCENE_URL = 'https://prod.spline.design/RONF3SHpGTERZs4g/scene.splinecode';
 
-function hideSplineLogo() {
-  document.querySelectorAll('a[href*="spline.design"]').forEach((node) => {
+function hideSplineWatermark() {
+  // Hide links that are clearly the "Build with Spline" / Spline branding
+  document.querySelectorAll('a[href*="spline.design"], a[href*="spline.tool"]').forEach((node) => {
     const el = node as HTMLElement;
     const label = (el.textContent || el.getAttribute('aria-label') || '').toLowerCase();
-    if (!label || /built|spline|powered|logo/.test(label)) {
+    if (!label || /built|spline|powered|logo|watermark|made with/.test(label)) {
       el.style.setProperty('display', 'none', 'important');
+      el.style.setProperty('visibility', 'hidden', 'important');
+    }
+  });
+  // Hide any element whose text is only "Build with Spline" or similar
+  document.querySelectorAll('a, span, div').forEach((node) => {
+    const el = node as HTMLElement;
+    const text = (el.textContent || '').trim().toLowerCase();
+    if (/^build with spline$|^made with spline$|^spline$/.test(text) && el.offsetParent !== null) {
+      el.style.setProperty('display', 'none', 'important');
+      el.style.setProperty('visibility', 'hidden', 'important');
     }
   });
 }
 
 const SplineScene: React.FC = () => {
+  const observerRef = useRef<MutationObserver | null>(null);
+
   const onLoad = (spline: { setBackgroundColor: (color: string) => void }) => {
     spline.setBackgroundColor('transparent');
-    [0, 300, 800].forEach((delay) =>
-      setTimeout(hideSplineLogo, delay)
-    );
+    hideSplineWatermark();
+    [100, 300, 600, 1000, 2000].forEach((delay) => setTimeout(hideSplineWatermark, delay));
   };
+
+  useEffect(() => {
+    hideSplineWatermark();
+    observerRef.current = new MutationObserver(hideSplineWatermark);
+    observerRef.current.observe(document.body, { childList: true, subtree: true });
+    const interval = setInterval(hideSplineWatermark, 500);
+    const stop = () => {
+      clearInterval(interval);
+      observerRef.current?.disconnect();
+    };
+    const t = setTimeout(stop, 5000);
+    return () => {
+      clearTimeout(t);
+      stop();
+    };
+  }, []);
 
   return (
     <div
