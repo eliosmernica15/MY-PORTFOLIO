@@ -17,6 +17,7 @@
   --accent: #ffffff;
   --accent-light: #ffffff;
   --accent-dark: #ffffff;
+  --accent-muted: rgba(255, 255, 255, 0.45);
   --accent-contrast: #000000;
   --border: rgba(255, 255, 255, 0.1);
   --border-hover: rgba(255, 255, 255, 0.25);
@@ -50,6 +51,7 @@
   --accent: #000000;
   --accent-light: #000000;
   --accent-dark: #000000;
+  --accent-muted: rgba(0, 0, 0, 0.45);
   --accent-contrast: #ffffff;
   --border: rgba(0, 0, 0, 0.1);
   --border-hover: rgba(0, 0, 0, 0.25);

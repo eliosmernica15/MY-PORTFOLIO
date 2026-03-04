@@ -75,7 +75,7 @@ const About: React.FC = () => {
               <RevealSection
                 key={idx}
                 delay={idx * 0.1}
-                className={`${idx === 3 ? 'col-span-2' : ''}`}
+                className={idx === SERVICES.length - 1 ? 'col-span-2' : ''}
               >
                 <div
                   className="p-8 rounded-[2rem] flex flex-col justify-between transition-all duration-500 group h-full"

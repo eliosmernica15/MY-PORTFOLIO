@@ -80,6 +80,7 @@ const Footer: React.FC = () => {
                     onClick={() => handleNavClick(link.id)}
                     className="text-sm text-left transition-colors hover:text-[var(--accent-light)]"
                     style={{ color: 'var(--text-secondary)' }}
+                    aria-label={`Go to ${link.name} section`}
                   >
                     {link.name}
                   </button>
@@ -156,7 +157,7 @@ const Footer: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-8 right-8 z-40"
+            className="fixed z-40 right-[max(2rem,env(safe-area-inset-right))] bottom-[max(2rem,env(safe-area-inset-bottom))]"
           >
             <MagneticButton strength={0.3}>
               <motion.button

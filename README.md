@@ -69,6 +69,13 @@ A modern, responsive portfolio site built with React, TypeScript, and Vite. Feat
 | `npm run build`   | Production build         |
 | `npm run preview` | Preview production build |
 
+## Required static assets
+
+Place these in the `public/` folder so links and images resolve correctly:
+
+- **Hero images:** `forexpulse-hero.png` (included). For full project coverage, add `eltrix-cloud-hero.png` and `flixverse-hero.png` if you use those projects (or update `constants.ts` to use external URLs).
+- **Resume:** Add `Elios-Mernica-CV.pdf` to `public/` if you want the Resume section “Download CV” link to work; otherwise replace the link in `components/Resume.tsx` with your own URL.
+
 ## Deploy
 
 The project is set up for [Vercel](https://vercel.com). Push to `main` to trigger a deploy. Ensure any required env vars (e.g. EmailJS) are set in the Vercel project settings.

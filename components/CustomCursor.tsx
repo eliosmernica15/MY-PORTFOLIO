@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+  const [useCustomCursor, setUseCustomCursor] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -17,7 +19,10 @@ const CustomCursor: React.FC = () => {
   const ringXCentered = useTransform(ringX, (v) => v - 20);
   const ringYCentered = useTransform(ringY, (v) => v - 20);
 
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
+    if (!mounted || typeof window === 'undefined') return;
     const isTouchDevice = () =>
       'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (isTouchDevice()) return;
@@ -67,19 +72,21 @@ const CustomCursor: React.FC = () => {
       document.documentElement.removeEventListener('mouseleave', handleLeave);
       document.documentElement.removeEventListener('mouseenter', handleEnter);
     };
-  }, [isVisible, rawX, rawY]);
+  }, [mounted, isVisible, rawX, rawY]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
-    document.body.classList.add('cursor-custom');
-    return () => document.body.classList.remove('cursor-custom');
-  }, []);
+    if (!mounted || typeof window === 'undefined') return;
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const use = !isTouch && !prefersReducedMotion;
+    setUseCustomCursor(use);
+    if (use) document.body.classList.add('cursor-custom');
+    return () => {
+      document.body.classList.remove('cursor-custom');
+    };
+  }, [mounted]);
 
-  if (typeof window !== 'undefined' &&
-    ('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
-    return null;
-  }
+  if (!mounted || !useCustomCursor) return null;
 
   return (
     <>

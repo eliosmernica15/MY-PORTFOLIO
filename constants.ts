@@ -1,3 +1,4 @@
+/* Projects with image paths like /name.png expect files in public/. See README "Required static assets". */
 export const PROJECTS = [
   {
     id: 'forexpulse',
@@ -19,7 +20,7 @@ export const PROJECTS = [
     description: 'AI-powered creative platform for content creation, file sharing, and digital asset management.',
     longDescription:
       'Eltrix Cloud is an all-in-one AI-powered platform that combines content creation, file sharing, and digital asset management into a seamless experience. It features AI-assisted content generation, secure cloud storage, real-time collaboration tools, and an intuitive dashboard for managing digital assets. The platform delivers a premium, immersive UI with 3D visuals and smooth interactions.',
-    image: '/eltrix-cloud-hero.png',
+    image: 'https://i.postimg.cc/MpKvKpRK/projectimg.jpg',
     link: 'https://eltrixcloud.netlify.app/',
     color: '#7c3aed',
     tech: ['React', 'TypeScript', 'AI Integration', 'Cloud Storage', 'Tailwind CSS'],
@@ -32,7 +33,7 @@ export const PROJECTS = [
     description: 'A premium streaming platform with real-time content discovery and immersive UI.',
     longDescription:
       'FlixVerse is a full-featured streaming platform inspired by Netflix, built with a focus on performance and user experience. It features dynamic content carousels, real-time search with autocomplete, user authentication, watchlist management, and HD-ready video playback. The UI delivers a cinematic feel with smooth animations and responsive layouts across all devices.',
-    image: '/flixverse-hero.png',
+    image: 'https://i.postimg.cc/wjCXkDWx/projectimg3.png',
     link: 'https://flixverse-streaming-pro.vercel.app/',
     color: '#e50914',
     tech: ['React', 'TypeScript', 'TMDB API', 'Tailwind CSS', 'Vercel'],
@@ -292,7 +293,7 @@ export const CASE_STUDIES = [
     result:
       'A polished creative platform that streamlines digital workflows with AI-assisted tools and an intuitive, visually stunning interface.',
     tech: ['React', 'TypeScript', 'AI Integration'],
-    img: '/eltrix-cloud-hero.png',
+    img: 'https://i.postimg.cc/MpKvKpRK/projectimg.jpg',
   },
   {
     title: 'FlixVerse: Building a Premium Streaming Experience',
@@ -305,7 +306,7 @@ export const CASE_STUDIES = [
     result:
       'A polished, performant streaming UI with seamless navigation, instant search, and a premium feel across all devices.',
     tech: ['React', 'TypeScript', 'TMDB API'],
-    img: '/flixverse-hero.png',
+    img: 'https://i.postimg.cc/wjCXkDWx/projectimg3.png',
   },
   {
     title: 'Building Foodery: A Scalable Food Delivery Platform',

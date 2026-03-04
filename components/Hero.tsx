@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Globe, Zap, ArrowDown } from 'lucide-react';
 import AnimatedCounter from './AnimatedCounter';
@@ -13,10 +13,16 @@ const Hero: React.FC = () => {
   const [load3D, setLoad3D] = useState(false);
 
   useEffect(() => {
-    const cb = () => setLoad3D(true);
     let cancelled = false;
+    const isLowEnd = () => {
+      if (typeof navigator === 'undefined' || typeof window === 'undefined') return true;
+      const cores = navigator.hardwareConcurrency ?? 4;
+      const narrow = window.innerWidth < 640;
+      return cores <= 2 || narrow;
+    };
     const run = () => {
-      if (!cancelled) setLoad3D(true);
+      if (cancelled || isLowEnd()) return;
+      setLoad3D(true);
     };
     const id =
       typeof requestIdleCallback !== 'undefined'
@@ -29,17 +35,16 @@ const Hero: React.FC = () => {
     };
   }, []);
 
-  const typedText = useTypingEffect(
-    [
+  const heroPhrases = useMemo(
+    () => [
       'Web Development',
       'System Design',
       'Network Infrastructure',
       'Full-Stack Engineering',
     ],
-    70,
-    35,
-    2200
+    []
   );
+  const typedText = useTypingEffect(heroPhrases, 70, 35, 2200);
 
   return (
     <section className="relative pt-28 sm:pt-32 md:pt-40 lg:pt-44 pb-16 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden min-h-[100dvh] sm:min-h-screen flex flex-col justify-center snap-section">

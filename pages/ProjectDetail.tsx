@@ -98,7 +98,7 @@ const ProjectDetail: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="p-8 rounded-[2.5rem] glass-accent sticky top-32"
+            className="p-8 rounded-[2.5rem] glass-accent sticky top-24 lg:top-28"
           >
             <h3
               className="text-[10px] font-bold uppercase tracking-[0.4em] mb-6 pb-3"
