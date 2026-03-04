@@ -20,7 +20,7 @@ export const PROJECTS = [
     description: 'AI-powered creative platform for content creation, file sharing, and digital asset management.',
     longDescription:
       'Eltrix Cloud is an all-in-one AI-powered platform that combines content creation, file sharing, and digital asset management into a seamless experience. It features AI-assisted content generation, secure cloud storage, real-time collaboration tools, and an intuitive dashboard for managing digital assets. The platform delivers a premium, immersive UI with 3D visuals and smooth interactions.',
-    image: 'https://i.postimg.cc/MpKvKpRK/projectimg.jpg',
+    image: 'https://i.postimg.cc/VLP0pdyx/Eltrix-Cloud-AI-IMG.png',
     link: 'https://eltrixcloud.netlify.app/',
     color: '#7c3aed',
     tech: ['React', 'TypeScript', 'AI Integration', 'Cloud Storage', 'Tailwind CSS'],
@@ -293,7 +293,7 @@ export const CASE_STUDIES = [
     result:
       'A polished creative platform that streamlines digital workflows with AI-assisted tools and an intuitive, visually stunning interface.',
     tech: ['React', 'TypeScript', 'AI Integration'],
-    img: 'https://i.postimg.cc/MpKvKpRK/projectimg.jpg',
+    img: 'https://i.postimg.cc/VLP0pdyx/Eltrix-Cloud-AI-IMG.png',
   },
   {
     title: 'FlixVerse: Building a Premium Streaming Experience',
