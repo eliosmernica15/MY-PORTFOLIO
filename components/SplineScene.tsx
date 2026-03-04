@@ -80,9 +80,14 @@ const SplineScene: React.FC = () => {
           <Spline scene={SPLINE_SCENE_URL} onLoad={onLoad} style={{ background: 'transparent' }} />
         </div>
       </Suspense>
-      {/* Cover Spline "Build with Spline" logo (above iframe; logo is in iframe so JS/CSS cannot remove it) */}
+      {/* Cover Spline logo / UI symmetrically on both bottom corners */}
       <div
         className="absolute bottom-0 right-0 w-[150px] h-[44px] sm:w-[160px] sm:h-[48px] pointer-events-none z-[9999]"
+        style={{ backgroundColor: 'var(--bg-primary)' }}
+        aria-hidden
+      />
+      <div
+        className="absolute bottom-0 left-0 w-[150px] h-[44px] sm:w-[160px] sm:h-[48px] pointer-events-none z-[9999]"
         style={{ backgroundColor: 'var(--bg-primary)' }}
         aria-hidden
       />
