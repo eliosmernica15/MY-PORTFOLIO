@@ -10,7 +10,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import Preloader from './components/Preloader';
-const Home = lazy(() => import('./pages/Home'));
+import Home from './pages/Home';
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const CustomCursor = lazy(() => import('./components/CustomCursor'));
