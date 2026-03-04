@@ -1,13 +1,19 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { visualizer } from 'rollup-plugin-visualizer';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   server: {
     port: 3000,
     host: '0.0.0.0',
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    ...(mode === 'analyze'
+      ? [visualizer({ filename: 'dist/stats.html', gzipSize: true, open: false })]
+      : []),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),
@@ -25,6 +31,7 @@ export default defineConfig({
             if (id.includes('framer-motion')) return 'framer';
             if (id.includes('react-dom') || id.includes('react/')) return 'react-vendor';
             if (id.includes('react-router')) return 'router';
+            if (id.includes('lucide-react')) return 'lucide';
           }
         },
         chunkFileNames: 'assets/[name]-[hash].js',
@@ -33,4 +40,4 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 600,
   },
-});
+}));

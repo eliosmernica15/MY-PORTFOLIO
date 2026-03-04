@@ -78,6 +78,7 @@ const ProjectDetail: React.FC = () => {
               src={project.image}
               alt={project.title}
               className="w-full h-full object-cover"
+              decoding="async"
             />
           </motion.div>
           <RevealSection>

@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, Quote, Star } from 'lucide-react';
 import { TESTIMONIALS } from '../constants';
 import RevealSection from './RevealSection';
 import MagneticButton from './MagneticButton';
+
+type Testimonial = (typeof TESTIMONIALS)[number];
 
 const StarRating: React.FC<{ count?: number }> = ({ count = 5 }) => (
   <div className="flex gap-1">
@@ -12,6 +14,49 @@ const StarRating: React.FC<{ count?: number }> = ({ count = 5 }) => (
     ))}
   </div>
 );
+
+const TestimonialSlide = memo<{ testimonial: Testimonial }>(function TestimonialSlide({ testimonial }) {
+  return (
+    <>
+      <Quote
+        size={60}
+        className="absolute top-6 left-8 opacity-[0.08]"
+        style={{ color: 'var(--accent)' }}
+      />
+      <div className="flex justify-center mb-6">
+        <StarRating />
+      </div>
+      <p
+        className="text-lg md:text-2xl font-medium leading-relaxed mb-8"
+        style={{ color: 'var(--text-secondary)' }}
+      >
+        &ldquo;{testimonial.text}&rdquo;
+      </p>
+      <div className="flex flex-col items-center">
+        <div className="w-16 h-16 rounded-full mb-3 p-0.5 overflow-hidden" style={{ border: '2px solid var(--accent)' }}>
+          <img
+            src={testimonial.avatar}
+            alt={testimonial.name}
+            className="w-full h-full rounded-full object-cover"
+            width={64}
+            height={64}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <h4 className="font-bold text-lg" style={{ color: 'var(--text-primary)' }}>
+          {testimonial.name}
+        </h4>
+        <p
+          className="text-[10px] uppercase tracking-widest font-bold mt-1"
+          style={{ color: 'var(--accent-light)' }}
+        >
+          {testimonial.role}
+        </p>
+      </div>
+    </>
+  );
+});
 
 const TestimonialCarousel: React.FC = () => {
   const [index, setIndex] = useState(0);
@@ -47,49 +92,12 @@ const TestimonialCarousel: React.FC = () => {
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-3xl w-full text-center relative"
           >
-            {/* Gradient border wrapper */}
             <div className="p-px rounded-[3rem] bg-gradient-to-br from-[var(--glass-accent-border)] via-transparent to-[var(--glass-accent-bg)]">
               <div
                 className="p-10 md:p-14 rounded-[3rem] relative overflow-hidden"
                 style={{ backgroundColor: 'var(--bg-primary)' }}
               >
-                <Quote
-                  size={60}
-                  className="absolute top-6 left-8 opacity-[0.08]"
-                  style={{ color: 'var(--accent)' }}
-                />
-
-                {/* Stars */}
-                <div className="flex justify-center mb-6">
-                  <StarRating />
-                </div>
-
-                <p
-                  className="text-lg md:text-2xl font-medium leading-relaxed mb-8"
-                  style={{ color: 'var(--text-secondary)' }}
-                >
-                  &ldquo;{TESTIMONIALS[index].text}&rdquo;
-                </p>
-
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 rounded-full mb-3 p-0.5 overflow-hidden" style={{ border: '2px solid var(--accent)' }}>
-                    <img
-                      src={TESTIMONIALS[index].avatar}
-                      alt={TESTIMONIALS[index].name}
-                      className="w-full h-full rounded-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <h4 className="font-bold text-lg" style={{ color: 'var(--text-primary)' }}>
-                    {TESTIMONIALS[index].name}
-                  </h4>
-                  <p
-                    className="text-[10px] uppercase tracking-widest font-bold mt-1"
-                    style={{ color: 'var(--accent-light)' }}
-                  >
-                    {TESTIMONIALS[index].role}
-                  </p>
-                </div>
+                <TestimonialSlide testimonial={TESTIMONIALS[index]} />
               </div>
             </div>
           </motion.div>

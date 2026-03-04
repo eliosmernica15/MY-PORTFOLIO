@@ -29,6 +29,12 @@ const ParticleCanvas: React.FC = () => {
 
     const getParticleConfig = () => {
       const w = typeof window !== 'undefined' ? window.innerWidth : 1024;
+      const lowEnd = typeof navigator !== 'undefined' && (navigator.hardwareConcurrency ?? 4) <= 2;
+      if (lowEnd) {
+        if (w < 640) return { numParticles: 12, connectionDistance: 70 };
+        if (w < 1024) return { numParticles: 18, connectionDistance: 85 };
+        return { numParticles: 24, connectionDistance: 100 };
+      }
       if (w < 640) return { numParticles: 24, connectionDistance: 90 };
       if (w < 1024) return { numParticles: 36, connectionDistance: 110 };
       return { numParticles: 50, connectionDistance: 130 };

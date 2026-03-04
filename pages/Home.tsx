@@ -1,16 +1,28 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy } from 'react';
 import { motion } from 'framer-motion';
 import Hero from '../components/Hero';
-import Projects from '../components/Projects';
-import SkillMarquee from '../components/SkillMarquee';
 import About from '../components/About';
 import RevealSection from '../components/RevealSection';
+import LazySection from '../components/LazySection';
 
+const Projects = lazy(() => import('../components/Projects'));
+const SkillMarquee = lazy(() => import('../components/SkillMarquee'));
 const StatsSection = lazy(() => import('../components/StatsSection'));
 const Resume = lazy(() => import('../components/Resume'));
 const CaseStudies = lazy(() => import('../components/CaseStudies'));
 const Testimonials = lazy(() => import('../components/Testimonials'));
 const Contact = lazy(() => import('../components/Contact'));
+
+const sectionFallback = <div className="min-h-[200px]" aria-hidden="true" />;
+
+/** Order and set of below-the-fold lazy sections (after Skills). Single place to reorder or add sections. */
+const LAZY_SECTIONS = [
+  { id: 'stats', Component: StatsSection },
+  { id: 'resume', Component: Resume },
+  { id: 'case-studies', Component: CaseStudies },
+  { id: 'testimonials', Component: Testimonials },
+  { id: 'contact', Component: Contact },
+] as const;
 
 const Home: React.FC = () => {
   return (
@@ -22,7 +34,9 @@ const Home: React.FC = () => {
     >
       <Hero />
       <About />
-      <Projects />
+      <LazySection fallback={sectionFallback}>
+        <Projects />
+      </LazySection>
 
       {/* Skills Marquee */}
       <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 max-w-7xl mx-auto snap-section">
@@ -40,24 +54,16 @@ const Home: React.FC = () => {
             </span>
           </h2>
         </RevealSection>
-        <SkillMarquee />
+        <LazySection fallback={sectionFallback}>
+          <SkillMarquee />
+        </LazySection>
       </section>
 
-      <Suspense fallback={null}>
-        <StatsSection />
-      </Suspense>
-      <Suspense fallback={null}>
-        <Resume />
-      </Suspense>
-      <Suspense fallback={null}>
-        <CaseStudies />
-      </Suspense>
-      <Suspense fallback={null}>
-        <Testimonials />
-      </Suspense>
-      <Suspense fallback={null}>
-        <Contact />
-      </Suspense>
+      {LAZY_SECTIONS.map(({ id, Component }) => (
+        <LazySection key={id} fallback={sectionFallback}>
+          <Component />
+        </LazySection>
+      ))}
     </motion.div>
   );
 };

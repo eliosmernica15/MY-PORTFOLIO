@@ -10,12 +10,11 @@ import { ThemeProvider } from './context/ThemeContext';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import Preloader from './components/Preloader';
-import ScrollProgress from './components/ScrollProgress';
-import CustomCursor from './components/CustomCursor';
-import Home from './pages/Home';
-
+const Home = lazy(() => import('./pages/Home'));
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const CustomCursor = lazy(() => import('./components/CustomCursor'));
+const ScrollProgress = lazy(() => import('./components/ScrollProgress'));
 
 /* Scroll to top on route change */
 const ScrollToTop = () => {
@@ -57,8 +56,10 @@ export default function App() {
 
         {!loading && (
           <>
-            <CustomCursor />
-            <ScrollProgress />
+            <Suspense fallback={null}>
+              <CustomCursor />
+              <ScrollProgress />
+            </Suspense>
 
             {/* Skip to content - Accessibility */}
             <a href="#main-content" className="skip-link">
