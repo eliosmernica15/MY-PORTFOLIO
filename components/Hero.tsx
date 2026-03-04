@@ -206,7 +206,7 @@ const Hero: React.FC = () => {
           >
             <div className="relative z-10">
               <h3 className="text-5xl sm:text-6xl font-black tracking-tighter">
-                <AnimatedCounter target={9} suffix="+" />
+                <AnimatedCounter target={4} suffix="+" />
               </h3>
             </div>
             <p className="font-bold text-[10px] sm:text-xs uppercase tracking-widest opacity-70 mt-6 sm:mt-10 relative z-10">
