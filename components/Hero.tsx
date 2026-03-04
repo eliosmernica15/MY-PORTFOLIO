@@ -20,8 +20,8 @@ const Hero: React.FC = () => {
     };
     const id =
       typeof requestIdleCallback !== 'undefined'
-        ? requestIdleCallback(run, { timeout: 500 })
-        : window.setTimeout(run, 350);
+        ? requestIdleCallback(run, { timeout: 1200 })
+        : window.setTimeout(run, 800);
     return () => {
       cancelled = true;
       if (typeof cancelIdleCallback !== 'undefined') cancelIdleCallback(id as number);

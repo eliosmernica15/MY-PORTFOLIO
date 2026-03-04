@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import Hero from '../components/Hero';
 import Projects from '../components/Projects';
 import SkillMarquee from '../components/SkillMarquee';
-import StatsSection from '../components/StatsSection';
-import Resume from '../components/Resume';
 import About from '../components/About';
-import CaseStudies from '../components/CaseStudies';
-import Testimonials from '../components/Testimonials';
-import Contact from '../components/Contact';
 import RevealSection from '../components/RevealSection';
+
+const StatsSection = lazy(() => import('../components/StatsSection'));
+const Resume = lazy(() => import('../components/Resume'));
+const CaseStudies = lazy(() => import('../components/CaseStudies'));
+const Testimonials = lazy(() => import('../components/Testimonials'));
+const Contact = lazy(() => import('../components/Contact'));
 
 const Home: React.FC = () => {
   return (
@@ -42,11 +43,21 @@ const Home: React.FC = () => {
         <SkillMarquee />
       </section>
 
-      <StatsSection />
-      <Resume />
-      <CaseStudies />
-      <Testimonials />
-      <Contact />
+      <Suspense fallback={null}>
+        <StatsSection />
+      </Suspense>
+      <Suspense fallback={null}>
+        <Resume />
+      </Suspense>
+      <Suspense fallback={null}>
+        <CaseStudies />
+      </Suspense>
+      <Suspense fallback={null}>
+        <Testimonials />
+      </Suspense>
+      <Suspense fallback={null}>
+        <Contact />
+      </Suspense>
     </motion.div>
   );
 };
