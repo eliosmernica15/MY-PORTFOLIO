@@ -3,6 +3,8 @@ import Spline from '@splinetool/react-spline';
 
 const SPLINE_SCENE_URL = 'https://prod.spline.design/RONF3SHpGTERZs4g/scene.splinecode';
 
+const HIDE_DURATION_MS = 25000; // Run on all devices (including slow phones) for 25s
+
 function hideSplineWatermark() {
   // Hide links that are clearly the "Build with Spline" / Spline branding
   document.querySelectorAll('a[href*="spline.design"], a[href*="spline.tool"]').forEach((node) => {
@@ -11,6 +13,7 @@ function hideSplineWatermark() {
     if (!label || /built|spline|powered|logo|watermark|made with/.test(label)) {
       el.style.setProperty('display', 'none', 'important');
       el.style.setProperty('visibility', 'hidden', 'important');
+      el.style.setProperty('opacity', '0', 'important');
     }
   });
   // Hide any element whose text is only "Build with Spline" or similar
@@ -20,6 +23,17 @@ function hideSplineWatermark() {
     if (/^build with spline$|^made with spline$|^spline$/.test(text) && el.offsetParent !== null) {
       el.style.setProperty('display', 'none', 'important');
       el.style.setProperty('visibility', 'hidden', 'important');
+      el.style.setProperty('opacity', '0', 'important');
+    }
+  });
+  // Hide known Spline viewer UI containers (e.g. logo wrapper) by role or class-like patterns
+  document.querySelectorAll('[class*="spline"], [id*="spline"]').forEach((node) => {
+    const el = node as HTMLElement;
+    const text = (el.textContent || '').toLowerCase();
+    if (/build with spline|made with spline|spline\.design|spline\.tool/.test(text)) {
+      el.style.setProperty('display', 'none', 'important');
+      el.style.setProperty('visibility', 'hidden', 'important');
+      el.style.setProperty('opacity', '0', 'important');
     }
   });
 }
@@ -30,19 +44,21 @@ const SplineScene: React.FC = () => {
   const onLoad = (spline: { setBackgroundColor: (color: string) => void }) => {
     spline.setBackgroundColor('transparent');
     hideSplineWatermark();
-    [100, 300, 600, 1000, 2000].forEach((delay) => setTimeout(hideSplineWatermark, delay));
+    [0, 100, 300, 600, 1000, 2000, 4000, 8000].forEach((delay) =>
+      setTimeout(hideSplineWatermark, delay)
+    );
   };
 
   useEffect(() => {
     hideSplineWatermark();
     observerRef.current = new MutationObserver(hideSplineWatermark);
     observerRef.current.observe(document.body, { childList: true, subtree: true });
-    const interval = setInterval(hideSplineWatermark, 500);
+    const interval = setInterval(hideSplineWatermark, 400);
     const stop = () => {
       clearInterval(interval);
       observerRef.current?.disconnect();
     };
-    const t = setTimeout(stop, 5000);
+    const t = setTimeout(stop, HIDE_DURATION_MS);
     return () => {
       clearTimeout(t);
       stop();
@@ -64,6 +80,12 @@ const SplineScene: React.FC = () => {
           <Spline scene={SPLINE_SCENE_URL} onLoad={onLoad} style={{ background: 'transparent' }} />
         </div>
       </Suspense>
+      {/* Cover Spline "Build with Spline" logo on all devices (works when logo is inside iframe on mobile) */}
+      <div
+        className="absolute bottom-0 right-0 w-[180px] h-[80px] sm:w-[200px] sm:h-[88px] md:w-[220px] md:h-[96px] pointer-events-none z-10"
+        style={{ backgroundColor: 'var(--bg-primary)' }}
+        aria-hidden
+      />
     </div>
   );
 };
