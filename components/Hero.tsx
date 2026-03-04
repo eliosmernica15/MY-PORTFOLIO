@@ -14,16 +14,8 @@ const Hero: React.FC = () => {
 
   useEffect(() => {
     let cancelled = false;
-    const shouldSkipSpline = () => {
-      if (typeof navigator === 'undefined' || typeof window === 'undefined') return true;
-      const touch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-      if (touch) return true;
-      const cores = navigator.hardwareConcurrency ?? 4;
-      const narrow = window.innerWidth < 1024;
-      return cores <= 2 || narrow;
-    };
     const run = () => {
-      if (cancelled || shouldSkipSpline()) return;
+      if (cancelled) return;
       setLoad3D(true);
     };
     const id =
