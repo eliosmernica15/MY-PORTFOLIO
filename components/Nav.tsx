@@ -70,10 +70,15 @@ const Nav: React.FC = () => {
 
   /** Scroll to section by id; if element not yet in DOM (e.g. Home still loading), retry until it appears or timeout */
   const scrollToSection = useCallback((id: string) => {
-    const scroll = () => {
+    const doScroll = (el: HTMLElement) => {
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    };
+    const scroll = (): boolean => {
       const el = document.getElementById(id);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        doScroll(el);
         return true;
       }
       return false;
@@ -81,7 +86,11 @@ const Nav: React.FC = () => {
     if (scroll()) return;
     const deadline = Date.now() + 4000;
     const interval = setInterval(() => {
-      if (Date.now() > deadline || scroll()) clearInterval(interval);
+      if (Date.now() > deadline) {
+        clearInterval(interval);
+        return;
+      }
+      if (scroll()) clearInterval(interval);
     }, 50);
   }, []);
 
