@@ -100,16 +100,17 @@ const ProjectDetail: React.FC = () => {
                   className="w-full h-full object-cover"
                   decoding="async"
                 />
+                {/* subtle dark-to-transparent overlay to keep white controls readable */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent pointer-events-none" />
                 {gallery.length > 1 && (
                   <>
                     <button
                       type="button"
                       onClick={handlePrev}
-                      className="absolute left-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[var(--accent)] hover:border-[var(--accent)]"
+                      className="absolute left-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-white/90 hover:bg-white text-xs font-bold shadow-lg"
                       style={{
-                        border: '1px solid var(--border)',
-                        backgroundColor: 'var(--bg-card)',
-                        color: 'var(--text-primary)',
+                        border: '1px solid rgba(255,255,255,0.7)',
+                        color: '#020617',
                       }}
                       aria-label="Previous screenshot"
                     >
@@ -118,11 +119,10 @@ const ProjectDetail: React.FC = () => {
                     <button
                       type="button"
                       onClick={handleNext}
-                      className="absolute right-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[var(--accent)] hover:border-[var(--accent)]"
+                      className="absolute right-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-white/90 hover:bg-white text-xs font-bold shadow-lg"
                       style={{
-                        border: '1px solid var(--border)',
-                        backgroundColor: 'var(--bg-card)',
-                        color: 'var(--text-primary)',
+                        border: '1px solid rgba(255,255,255,0.7)',
+                        color: '#020617',
                       }}
                       aria-label="Next screenshot"
                     >
@@ -136,12 +136,12 @@ const ProjectDetail: React.FC = () => {
                           onClick={() => setCurrentSlide(idx)}
                           className={`rounded-full transition-all duration-300 ${
                             idx === currentSlide
-                              ? 'w-6 h-2 bg-[var(--accent)]'
-                              : 'w-2 h-2 hover:opacity-60'
+                              ? 'w-6 h-2 bg-white'
+                              : 'w-2 h-2 hover:opacity-80'
                           }`}
                           style={
                             idx !== currentSlide
-                              ? { backgroundColor: 'var(--border)' }
+                              ? { backgroundColor: 'rgba(255,255,255,0.6)' }
                               : undefined
                           }
                           aria-label={`Go to slide ${idx + 1}`}
