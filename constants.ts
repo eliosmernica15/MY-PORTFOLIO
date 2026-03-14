@@ -33,7 +33,13 @@ export const PROJECTS = [
     description: 'A premium streaming platform with real-time content discovery and immersive UI.',
     longDescription:
       'FlixVerse is a full-featured streaming platform inspired by Netflix, built with a focus on performance and user experience. It features dynamic content carousels, real-time search with autocomplete, user authentication, watchlist management, and HD-ready video playback. The UI delivers a cinematic feel with smooth animations and responsive layouts across all devices.',
-    image: 'https://i.postimg.cc/wjCXkDWx/projectimg3.png',
+    image: 'https://i.postimg.cc/DZy2krtn/Screenshot-2026-03-14-201510.png',
+    gallery: [
+      'https://i.postimg.cc/DZy2krtn/Screenshot-2026-03-14-201510.png',
+      'https://i.postimg.cc/J752BwDN/Screenshot-2026-03-14-202157.png',
+      'https://i.postimg.cc/1R7DdML8/Flix-Verse-(1).png',
+      'https://i.postimg.cc/J0XJZCKg/Flix-Verse-(2).png',
+    ],
     link: 'https://flixverse-streaming-pro.vercel.app/',
     color: '#e50914',
     tech: ['React', 'TypeScript', 'TMDB API', 'Tailwind CSS', 'Vercel'],

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, LayoutGrid } from 'lucide-react';
@@ -11,6 +11,24 @@ const ProjectDetail: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const project = PROJECTS.find(p => p.id === id);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const gallery =
+    project && 'gallery' in project && Array.isArray((project as any).gallery)
+      ? ((project as any).gallery as string[])
+      : project
+      ? [project.image]
+      : [];
+
+  const showSlider = project?.id === 'flixverse' && gallery.length > 0;
+
+  const handlePrev = () => {
+    setCurrentSlide(prev => (prev - 1 + gallery.length) % gallery.length);
+  };
+
+  const handleNext = () => {
+    setCurrentSlide(prev => (prev + 1) % gallery.length);
+  };
 
   const scrollToProjects = () => {
     if (location.pathname !== '/') {
@@ -71,15 +89,77 @@ const ProjectDetail: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="aspect-[16/9] rounded-[2.5rem] overflow-hidden mb-14 shadow-2xl"
+            className="aspect-[16/9] rounded-[2.5rem] overflow-hidden mb-14 shadow-2xl relative"
             style={{ border: '1px solid var(--border)' }}
           >
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-cover"
-              decoding="async"
-            />
+            {showSlider ? (
+              <>
+                <img
+                  src={gallery[currentSlide]}
+                  alt={`${project.title} screenshot ${currentSlide + 1}`}
+                  className="w-full h-full object-cover"
+                  decoding="async"
+                />
+                {gallery.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handlePrev}
+                      className="absolute left-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[var(--accent)] hover:border-[var(--accent)]"
+                      style={{
+                        border: '1px solid var(--border)',
+                        backgroundColor: 'var(--bg-card)',
+                        color: 'var(--text-primary)',
+                      }}
+                      aria-label="Previous screenshot"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleNext}
+                      className="absolute right-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[var(--accent)] hover:border-[var(--accent)]"
+                      style={{
+                        border: '1px solid var(--border)',
+                        backgroundColor: 'var(--bg-card)',
+                        color: 'var(--text-primary)',
+                      }}
+                      aria-label="Next screenshot"
+                    >
+                      ›
+                    </button>
+                    <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                      {gallery.map((_, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setCurrentSlide(idx)}
+                          className={`rounded-full transition-all duration-300 ${
+                            idx === currentSlide
+                              ? 'w-6 h-2 bg-[var(--accent)]'
+                              : 'w-2 h-2 hover:opacity-60'
+                          }`}
+                          style={
+                            idx !== currentSlide
+                              ? { backgroundColor: 'var(--border)' }
+                              : undefined
+                          }
+                          aria-label={`Go to slide ${idx + 1}`}
+                          aria-current={idx === currentSlide ? 'true' : undefined}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </>
+            ) : (
+              <img
+                src={project.image}
+                alt={project.title}
+                className="w-full h-full object-cover"
+                decoding="async"
+              />
+            )}
           </motion.div>
           <RevealSection>
             <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter text-gradient leading-tight">
