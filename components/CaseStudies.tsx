@@ -36,7 +36,7 @@ const CaseStudies: React.FC = () => {
                   <img
                     src={study.img}
                     alt={study.title}
-                    className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                    className="w-full h-full object-contain grayscale-[0.5] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                     loading="lazy"
                     decoding="async"
                   />

@@ -28,9 +28,8 @@ const ProjectCard = memo<ProjectCardProps>(function ProjectCard({ project, isFea
       <TiltCard>
         <Link
           to={`/project/${project.id}`}
-          className={`block relative overflow-hidden rounded-[2rem] group cursor-pointer transition-all duration-500 ${
-            isFeatured ? 'aspect-[2.4/1]' : 'aspect-[16/10]'
-          }`}
+          className={`block relative overflow-hidden rounded-[2rem] group cursor-pointer transition-all duration-500 ${isFeatured ? 'aspect-[2.4/1]' : 'aspect-[16/10]'
+            }`}
           style={{ border: '1px solid var(--border)' }}
         >
           <motion.div
@@ -41,7 +40,7 @@ const ProjectCard = memo<ProjectCardProps>(function ProjectCard({ project, isFea
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-cover object-center grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700"
+              className="w-full h-full object-contain object-center grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700"
               loading={isFeatured ? 'eager' : 'lazy'}
               decoding="async"
               fetchPriority={isFeatured ? 'high' : undefined}
@@ -115,11 +114,10 @@ const Projects: React.FC = () => {
             <MagneticButton key={cat} strength={0.1}>
               <button
                 onClick={() => setFilter(cat)}
-                className={`px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
-                  filter === cat
+                className={`px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${filter === cat
                     ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-accent'
                     : 'hover:bg-[var(--bg-card)]'
-                }`}
+                  }`}
                 style={
                   filter !== cat
                     ? { color: 'var(--text-muted)' }

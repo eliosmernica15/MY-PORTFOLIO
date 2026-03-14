@@ -1,6 +1,19 @@
 /* Projects with image paths like /name.png expect files in public/. See README "Required static assets". */
 export const PROJECTS = [
   {
+    id: 'em-motors',
+    title: 'EM Motors',
+    category: 'Web Development',
+    description: 'A modern and interactive car presentation and dealership website.',
+    longDescription:
+      'EM Motors is an interactive, high-performance website for showcasing cars. It features a modern design built with HTML, CSS, JavaScript, and Bootstrap, ensuring a responsive and engaging user experience across all devices. The platform offers detailed car listings, smooth animations, and an intuitive UI.',
+    image: 'https://i.postimg.cc/W3kCFhRg/Screenshot-2026-03-14-205330.png',
+    link: 'https://em-motors.vercel.app/',
+    color: '#3b82f6',
+    tech: ['HTML', 'CSS', 'JavaScript', 'Bootstrap'],
+    year: '2026',
+  },
+  {
     id: 'forexpulse',
     title: 'ForexPulse',
     category: 'Web Development',
@@ -275,6 +288,19 @@ export const CONTACT_INFO = {
    Case Studies (converted from Blog Posts)
    ================================================================ */
 export const CASE_STUDIES = [
+  {
+    title: 'EM Motors: A Modern Car Presentation Platform',
+    category: 'Web Development',
+    date: '2026',
+    challenge:
+      'Design and develop a responsive and visually appealing car dealership website with a focus on user experience and detailed vehicle showcases.',
+    solution:
+      'Built a custom, responsive interface using HTML, CSS, JavaScript, and Bootstrap. Implemented smooth scrolling, dynamic vehicle loading, and mobile-first design patterns.',
+    result:
+      'A sleek, fast, and interactive platform that effectively displays cars and engages potential customers across all devices.',
+    tech: ['HTML', 'CSS', 'JavaScript', 'Bootstrap'],
+    img: 'https://i.postimg.cc/W3kCFhRg/Screenshot-2026-03-14-205330.png',
+  },
   {
     title: 'ForexPulse: A Trading Platform for Forex & Prop',
     category: 'Web Development',
