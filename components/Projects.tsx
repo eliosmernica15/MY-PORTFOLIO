@@ -40,7 +40,7 @@ const ProjectCard = memo<ProjectCardProps>(function ProjectCard({ project, isFea
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-contain object-center grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700"
+              className="w-full h-full object-cover object-top grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700"
               loading={isFeatured ? 'eager' : 'lazy'}
               decoding="async"
               fetchPriority={isFeatured ? 'high' : undefined}
