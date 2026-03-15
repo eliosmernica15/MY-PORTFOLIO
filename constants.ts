@@ -196,7 +196,7 @@ export const EXPERIENCE = [
   {
     company: 'Innovation Academy',
     period: '2023 - 2025',
-    desc: 'Web Developer & Designer. Created and developed visual concepts aligned with project goals and objectives. Supervised design processes and managed timelines and budgets for design projects. Built responsive websites using React, Tailwind CSS, and modern web technologies.',
+    desc: 'Web Developer & Designer. Managed design processes and built responsive websites using React and Tailwind CSS.',
   },
   {
     company: 'Linkify',

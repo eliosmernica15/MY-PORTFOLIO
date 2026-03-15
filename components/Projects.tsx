@@ -15,7 +15,7 @@ interface ProjectCardProps {
   index: number;
 }
 
-const ProjectCard = memo<ProjectCardProps>(function ProjectCard({ project, isFeatured, index }) {
+const ProjectCard = memo(function ProjectCard({ project, isFeatured, index }: ProjectCardProps) {
   return (
     <motion.div
       layout
