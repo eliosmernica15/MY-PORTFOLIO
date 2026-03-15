@@ -194,11 +194,6 @@ export const EDUCATION = [
 
 export const EXPERIENCE = [
   {
-    company: 'Innovation Academy',
-    period: '2023 - 2025',
-    desc: "I create and develop visual concepts that align with the project's goals and objectives, supervising the design process and managing timelines and budgets for design projects.",
-  },
-  {
     company: 'Linkify',
     period: '2024',
     desc: 'English Speaking Support',
@@ -215,32 +210,52 @@ export const SKILLS_PROGRESS = [
 ];
 
 export const SKILLS = [
-  'React / Next.js',
+  'React.Js',
+  'Next.js',
+  'Node.Js',
+  '.NET',
+  'Nest Js',
+  'Angular',
+  'React Native',
+  'MySQL',
+  'JavaScript',
   'TypeScript',
-  'Node.js',
+  'MongoDB',
+  'MSSQl',
+  'Github',
+  'WordPress',
+  'Firebase',
+  'CSS',
+  'HTML',
   'Python (AI/ML)',
-  'Framer Motion',
   'Tailwind CSS',
-  'PostgreSQL',
-  'Supabase',
-  'Three.js',
+  'Framer Motion',
 ];
 
 export const SERVICES = [
   {
-    title: 'Web Design',
-    desc: 'The most modern and high-quality design made at a professional level.',
-    icon: 'Palette',
+    title: 'Responsive Design',
+    desc: 'Ensure your website looks great on every device. I build fluid, resilient layouts tailored for any screen size.',
+    icon: 'MonitorSmartphone',
+    number: '01',
   },
   {
-    title: 'Web Development',
-    desc: 'High-quality development of sites at the professional level.',
-    icon: 'Cpu',
+    title: 'E-Commerce',
+    desc: 'Elevate your business to the next level. I can showcase and sell your products on a custom, professional e-commerce platform.',
+    icon: 'Store',
+    number: '02',
   },
   {
-    title: 'Mobile Apps',
-    desc: 'Professional development of applications for iOS and Android.',
-    icon: 'Zap',
+    title: 'Data Integration',
+    desc: 'Seamlessly connect data to the user interface. I present complex information in an optimal, user-friendly format.',
+    icon: 'Database',
+    number: '03',
+  },
+  {
+    title: 'Full-Stack Web Creation',
+    desc: 'Transform an idea into a real project. I oversee its development from zero to production, providing ongoing maintenance.',
+    icon: 'Code',
+    number: '04',
   },
 ];
 

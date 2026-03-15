@@ -6,6 +6,7 @@ import RevealSection from '../components/RevealSection';
 import LazySection from '../components/LazySection';
 
 const Projects = lazy(() => import('../components/Projects'));
+const Services = lazy(() => import('../components/Services'));
 const SkillMarquee = lazy(() => import('../components/SkillMarquee'));
 const StatsSection = lazy(() => import('../components/StatsSection'));
 const Resume = lazy(() => import('../components/Resume'));
@@ -13,10 +14,12 @@ const CaseStudies = lazy(() => import('../components/CaseStudies'));
 const Testimonials = lazy(() => import('../components/Testimonials'));
 const Contact = lazy(() => import('../components/Contact'));
 
+
 const sectionFallback = <div className="min-h-[200px]" aria-hidden="true" />;
 
 /** Order and set of below-the-fold lazy sections (after Skills). Single place to reorder or add sections. */
 const LAZY_SECTIONS = [
+  { id: 'services', Component: Services },
   { id: 'stats', Component: StatsSection },
   { id: 'resume', Component: Resume },
   { id: 'case-studies', Component: CaseStudies },

@@ -1,6 +1,4 @@
 import React from 'react';
-import { Cpu, Palette, Zap } from 'lucide-react';
-import { SERVICES } from '../constants';
 import RevealSection from './RevealSection';
 
 const About: React.FC = () => {
@@ -8,7 +6,7 @@ const About: React.FC = () => {
     <section id="about" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 scroll-mt-24 snap-section">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
-          <RevealSection className="lg:col-span-7">
+          <RevealSection className="lg:col-span-12">
             <div
               className="p-6 sm:p-10 md:p-14 rounded-[2rem] sm:rounded-[3rem] relative overflow-hidden"
               style={{
@@ -69,44 +67,6 @@ const About: React.FC = () => {
               </div>
             </div>
           </RevealSection>
-
-          <div className="lg:col-span-5 grid grid-cols-2 gap-4">
-            {SERVICES.map((s, idx) => (
-              <RevealSection
-                key={idx}
-                delay={idx * 0.1}
-                className={idx === SERVICES.length - 1 ? 'col-span-2' : ''}
-              >
-                <div
-                  className="p-8 rounded-[2rem] flex flex-col justify-between transition-all duration-500 group h-full"
-                  style={{
-                    backgroundColor: 'var(--bg-card)',
-                    border: '1px solid var(--border)',
-                  }}
-                >
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-10 shadow-accent group-hover:shadow-accent-hover transition-all"
-                    style={{ backgroundColor: 'var(--glass-accent-bg)', color: 'var(--accent)' }}
-                  >
-                    {s.icon === 'Cpu' && <Cpu size={20} />}
-                    {s.icon === 'Palette' && <Palette size={20} />}
-                    {s.icon === 'Zap' && <Zap size={20} />}
-                  </div>
-                  <div>
-                    <h3
-                      className="font-black text-lg mb-3 tracking-tight"
-                      style={{ color: 'var(--text-primary)' }}
-                    >
-                      {s.title}
-                    </h3>
-                    <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                      {s.desc}
-                    </p>
-                  </div>
-                </div>
-              </RevealSection>
-            ))}
-          </div>
         </div>
       </div>
     </section>

@@ -28,6 +28,7 @@ const Nav: React.FC = () => {
 
   const navLinks = [
     { name: 'Projects', id: 'projects' },
+    { name: 'Services', id: 'services' },
     { name: 'Resume', id: 'resume' },
     { name: 'About', id: 'about' },
     { name: 'Case Studies', id: 'case-studies' },
