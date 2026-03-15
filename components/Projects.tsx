@@ -97,9 +97,9 @@ const Projects: React.FC = () => {
             Portfolio
           </span>
           <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black">
-            Curated{' '}
+            Latest{' '}
             <span className="italic" style={{ color: 'var(--text-muted)' }}>
-              Labs.
+              Works.
             </span>
           </h2>
         </div>

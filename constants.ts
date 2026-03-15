@@ -136,19 +136,7 @@ export const PROJECTS = [
     tech: ['HTML', 'CSS', 'JavaScript', 'Responsive Design'],
     year: '2024',
   },
-  {
-    id: 'invoice-generator',
-    title: 'Invoice Generator',
-    category: 'Web Development',
-    description: 'Professional invoice creation and management tool.',
-    longDescription:
-      'A streamlined invoicing application that enables users to create, customize, and export professional invoices. Features include template customization, client management, and PDF export capabilities.',
-    image: 'https://i.postimg.cc/NMfhW8G0/invoice-generator-img.png',
-    link: 'https://invoice-generator-em.netlify.app',
-    color: '#f59e0b',
-    tech: ['React', 'TypeScript', 'PDF Generation'],
-    year: '2024',
-  },
+
   {
     id: 'currency-converter',
     title: 'Currency Converter',
