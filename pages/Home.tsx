@@ -10,7 +10,6 @@ const Services = lazy(() => import('../components/Services'));
 const SkillMarquee = lazy(() => import('../components/SkillMarquee'));
 const StatsSection = lazy(() => import('../components/StatsSection'));
 const Resume = lazy(() => import('../components/Resume'));
-const CaseStudies = lazy(() => import('../components/CaseStudies'));
 const Testimonials = lazy(() => import('../components/Testimonials'));
 const Contact = lazy(() => import('../components/Contact'));
 const sectionFallback = <div className="min-h-[200px]" aria-hidden="true" />;
@@ -32,6 +31,10 @@ const Home: React.FC = () => {
 
       <LazySection id="projects" fallback={sectionFallback}>
         <Projects />
+      </LazySection>
+
+      <LazySection id="stats" fallback={sectionFallback}>
+        <StatsSection />
       </LazySection>
 
       <LazySection id="resume" fallback={sectionFallback}>
@@ -58,6 +61,10 @@ const Home: React.FC = () => {
           <SkillMarquee />
         </LazySection>
       </section>
+
+      <LazySection id="testimonials" fallback={sectionFallback}>
+        <Testimonials />
+      </LazySection>
 
       <LazySection id="contact" fallback={sectionFallback}>
         <Contact />
