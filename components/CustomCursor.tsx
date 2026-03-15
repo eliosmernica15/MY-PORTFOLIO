@@ -10,7 +10,7 @@ const CustomCursor: React.FC = () => {
   const rawX = useMotionValue(-100);
   const rawY = useMotionValue(-100);
 
-  const springConfig = { damping: 25, stiffness: 200 };
+  const springConfig = { damping: 20, stiffness: 300, mass: 0.5 };
   const ringX = useSpring(rawX, springConfig);
   const ringY = useSpring(rawY, springConfig);
 
@@ -27,14 +27,10 @@ const CustomCursor: React.FC = () => {
       'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (isTouchDevice()) return;
 
-    let rafId: number;
     const handleMove = (e: MouseEvent) => {
       if (!isVisible) setIsVisible(true);
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        rawX.set(e.clientX);
-        rawY.set(e.clientY);
-      });
+      rawX.set(e.clientX);
+      rawY.set(e.clientY);
     };
 
     const handleLeave = () => setIsVisible(false);
@@ -65,7 +61,6 @@ const CustomCursor: React.FC = () => {
     document.documentElement.addEventListener('mouseenter', handleEnter);
 
     return () => {
-      if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener('mousemove', handleMove);
       window.removeEventListener('mouseover', handleMouseOver);
       window.removeEventListener('mouseout', handleMouseOut);

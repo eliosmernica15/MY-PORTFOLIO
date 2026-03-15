@@ -19,24 +19,19 @@ const About: React.FC = () => {
                 className="font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block"
                 style={{ color: 'var(--accent-light)' }}
               >
-                About
+                About Me
               </span>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-6 sm:mb-8 leading-tight">
-                Pure <br />
+                I am Elios <br />
                 <span className="italic" style={{ color: 'var(--text-muted)' }}>
-                  Logic.
+                  Web-App Developer
                 </span>
               </h2>
               <p
                 className="text-lg md:text-xl leading-relaxed font-light mb-10"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                As a skilled IT engineer, I specialize in web development, system
-                design, and network infrastructure. With expertise in both front-end
-                and back-end development, I create responsive, user-friendly websites
-                and robust software systems. Additionally, I hold certifications in
-                network configuration and administration, ensuring seamless
-                connectivity and secure IT environments.
+                I am Elios Mernica, a web app developer with a keen interest in building innovative, user-friendly applications and robust system infrastructures. My goal is to create modern web apps that solve real-world problems while delivering an exceptional, seamless user experience.
               </p>
               <div
                 className="grid grid-cols-2 gap-8 pt-8"

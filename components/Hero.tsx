@@ -41,7 +41,7 @@ const Hero: React.FC = () => {
   const typedText = useTypingEffect(heroPhrases, 70, 35, 2200);
 
   return (
-    <section className="relative pt-28 sm:pt-32 md:pt-40 lg:pt-44 pb-16 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden min-h-[100dvh] sm:min-h-screen flex flex-col justify-center snap-section">
+    <section id="home" className="relative pt-28 sm:pt-32 md:pt-40 lg:pt-44 pb-16 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden min-h-[100dvh] sm:min-h-screen flex flex-col justify-center snap-section">
       <div className="absolute inset-0 z-0">
         {load3D && (
           <Suspense fallback={null}>

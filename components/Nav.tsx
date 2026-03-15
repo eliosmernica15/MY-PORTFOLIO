@@ -27,11 +27,11 @@ const Nav: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Projects', id: 'projects' },
-    { name: 'Services', id: 'services' },
-    { name: 'Resume', id: 'resume' },
+    { name: 'Home', id: 'home' },
     { name: 'About', id: 'about' },
-    { name: 'Case Studies', id: 'case-studies' },
+    { name: 'Services', id: 'services' },
+    { name: 'Projects', id: 'projects' },
+    { name: 'Resume', id: 'resume' },
     { name: 'Contact', id: 'contact' },
   ];
 

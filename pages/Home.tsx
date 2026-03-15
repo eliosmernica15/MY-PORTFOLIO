@@ -10,22 +10,8 @@ const Services = lazy(() => import('../components/Services'));
 const SkillMarquee = lazy(() => import('../components/SkillMarquee'));
 const StatsSection = lazy(() => import('../components/StatsSection'));
 const Resume = lazy(() => import('../components/Resume'));
-const CaseStudies = lazy(() => import('../components/CaseStudies'));
-const Testimonials = lazy(() => import('../components/Testimonials'));
-const Contact = lazy(() => import('../components/Contact'));
-
-
 const sectionFallback = <div className="min-h-[200px]" aria-hidden="true" />;
 
-/** Order and set of below-the-fold lazy sections (after Skills). Single place to reorder or add sections. */
-const LAZY_SECTIONS = [
-  { id: 'services', Component: Services },
-  { id: 'stats', Component: StatsSection },
-  { id: 'resume', Component: Resume },
-  { id: 'case-studies', Component: CaseStudies },
-  { id: 'testimonials', Component: Testimonials },
-  { id: 'contact', Component: Contact },
-] as const;
 
 const Home: React.FC = () => {
   return (
@@ -37,8 +23,16 @@ const Home: React.FC = () => {
     >
       <Hero />
       <About />
+      <LazySection id="services" fallback={sectionFallback}>
+        <Services />
+      </LazySection>
+
       <LazySection id="projects" fallback={sectionFallback}>
         <Projects />
+      </LazySection>
+
+      <LazySection id="resume" fallback={sectionFallback}>
+        <Resume />
       </LazySection>
 
       {/* Skills Marquee */}
@@ -62,11 +56,9 @@ const Home: React.FC = () => {
         </LazySection>
       </section>
 
-      {LAZY_SECTIONS.map(({ id, Component }) => (
-        <LazySection key={id} id={id} fallback={sectionFallback}>
-          <Component />
-        </LazySection>
-      ))}
+      <LazySection id="contact" fallback={sectionFallback}>
+        <Contact />
+      </LazySection>
     </motion.div>
   );
 };
