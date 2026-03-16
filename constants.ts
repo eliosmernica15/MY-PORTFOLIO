@@ -181,121 +181,56 @@ export const CONTACT_INFO = {
    ================================================================ */
 export const CASE_STUDIES = [
   {
-    title: 'EM Motors: A Modern Car Presentation Platform',
-    category: 'Web Development',
-    date: '2026',
-    challenge:
-      'Design and develop a responsive and visually appealing car dealership website with a focus on user experience and detailed vehicle showcases.',
-    solution:
-      'Built a custom, responsive interface using HTML, CSS, JavaScript, and Bootstrap. Implemented smooth scrolling, dynamic vehicle loading, and mobile-first design patterns.',
-    result:
-      'A sleek, fast, and interactive platform that effectively displays cars and engages potential customers across all devices.',
-    tech: ['HTML', 'CSS', 'JavaScript', 'Bootstrap'],
-    img: 'https://i.postimg.cc/W3kCFhRg/Screenshot-2026-03-14-205330.png',
-  },
-  {
-    title: 'ForexPulse: A Trading Platform for Forex & Prop',
-    category: 'Web Development',
+    title: 'Bloombots: AI-Powered Bedtime Stories',
+    category: 'Mobile Development',
     date: '2025',
     challenge:
-      'Build a single place for traders to view live forex rates, open charts, use conversion and pip tools, and manage a dashboard.',
+      'Create an engaging mobile experience that helps children generate personalized and magical bedtime stories using AI.',
     solution:
-      'Built a multi-page app with HTML, CSS, and JavaScript, using the Frankfurter API for real-time rates. Implemented pair list and detail pages with charts, a Tools page for pip value and currency conversion, and a dashboard with portfolio snapshot and watchlist. Deployed on Vercel with a dark, modern landing page.',
+      'Developed a React Native application integrated with generative AI. Implemented custom character selection, theme engines, and an intuitive UI for children.',
     result:
-      'A focused trading platform with 50+ pairs, live rates, charts, tools, and dashboard in one place—free to use with optional sign-in.',
-    tech: ['HTML', 'JavaScript', 'Tailwind CSS', 'Frankfurter API'],
-    img: '/forexpulse-hero.png',
-  },
-  {
-    title: 'Eltrix Cloud: An AI-Powered Creative Platform',
-    category: 'Applications',
-    date: '2025',
-    challenge:
-      'Build an all-in-one platform combining AI content creation, file sharing, and digital asset management with a premium, immersive user experience.',
-    solution:
-      'Developed a React + TypeScript application with AI integration for content generation, secure cloud storage, real-time collaboration, and a striking 3D landing page with smooth animations.',
-    result:
-      'A polished creative platform that streamlines digital workflows with AI-assisted tools and an intuitive, visually stunning interface.',
-    tech: ['React', 'TypeScript', 'AI Integration'],
-    img: 'https://i.postimg.cc/VLP0pdyx/Eltrix-Cloud-AI-IMG.png',
-  },
-  {
-    title: 'FlixVerse: Building a Premium Streaming Experience',
-    category: 'Web Development',
-    date: '2025',
-    challenge:
-      'Create a cinematic streaming platform with real-time content discovery, smooth animations, and a Netflix-level user experience.',
-    solution:
-      'Built with React and TypeScript, leveraging the TMDB API for live content data. Implemented dynamic carousels, real-time search, watchlist management, and responsive HD-ready layouts with Tailwind CSS.',
-    result:
-      'A polished, performant streaming UI with seamless navigation, instant search, and a premium feel across all devices.',
-    tech: ['React', 'TypeScript', 'TMDB API'],
-    img: 'https://i.postimg.cc/wjCXkDWx/projectimg3.png',
-  },
-  {
-    title: 'Building Foodery: A Scalable Food Delivery Platform',
-    category: 'Web Development',
-    date: '2024',
-    challenge:
-      'Create a food delivery ecosystem handling thousands of concurrent orders with real-time tracking.',
-    solution:
-      'Built a reactive Next.js frontend with Supabase backend, implementing real-time GPS tracking and optimistic UI updates.',
-    result:
-      'Sub-100ms response times with seamless real-time order tracking across consumer and driver apps.',
-    tech: ['Next.js', 'Supabase', 'Redis'],
+      'A successful mobile app that sparks child imagination through unique, AI-woven narratives and seamless user experience.',
+    tech: ['React Native', 'AI Integration', 'Framer Motion'],
     img: 'https://i.postimg.cc/MpKvKpRK/projectimg.jpg',
   },
   {
-    title: 'Calista: Crafting a Premium E-Commerce Experience',
-    category: 'Web Design',
-    date: '2023',
+    title: 'Creative Deer: Scalable Client Solutions',
+    category: 'Web Development',
+    date: '2025',
     challenge:
-      "Translate a luxury fashion brand's identity into an immersive digital shopping experience.",
+      'Build and maintain high-performance web and mobile applications for various clients with tight deadlines and specific brand requirements.',
     solution:
-      'Designed micro-interactions with Three.js and GSAP, paired with a headless CMS for dynamic inventory.',
+      'Utilized WordPress, React.js, and React Native to deliver cross-platform solutions. Focused on troubleshooting, customization, and performance optimization.',
     result:
-      "A visually stunning storefront that elevated the brand's digital presence and boosted engagement.",
-    tech: ['React', 'Three.js', 'GSAP'],
+      'Delivered multiple successful client projects with stable performance, improved user experience, and robust system administration.',
+    tech: ['WordPress', 'React.js', 'React Native', 'Tailwind CSS'],
     img: 'https://i.postimg.cc/pVJ2ZxLg/projectimg2.png',
   },
   {
-    title: 'Optimizing UI for a Streaming Platform Clone',
-    category: 'Performance',
-    date: '2024',
-    challenge:
-      'Achieve instant playback and native-feeling responsiveness in a web-based streaming UI.',
-    solution:
-      'Leveraged edge-caching, HLS.js for adaptive streaming, and Zustand for lightweight state management.',
-    result:
-      'Native-like performance across devices with instant playback initiation and smooth navigation.',
-    tech: ['Vite', 'Zustand', 'HLS.js'],
-    img: 'https://i.postimg.cc/wjCXkDWx/projectimg3.png',
-  },
-  {
-    title: 'Designing an Intelligent Note-Taking System',
-    category: 'Applications',
-    date: '2024',
-    challenge:
-      'Transform static note-taking into a dynamic knowledge management system.',
-    solution:
-      'Built intelligent auto-organization with rich text editing, cross-platform sync via MongoDB.',
-    result:
-      'A seamless note system that works across web and mobile with smart content organization.',
-    tech: ['React', 'TypeScript', 'MongoDB'],
-    img: 'https://i.postimg.cc/zf4vR1kV/projectimg4.png',
-  },
-  {
-    title: 'E-Commerce Store: Conversion-Focused Design',
+    title: 'JobPortal: Advanced Career Platform',
     category: 'Web Development',
     date: '2024',
     challenge:
-      'Build a digital storefront optimized for conversion with complex product catalog management.',
+      'Develop a robust job listing website with efficient search and filtering capabilities for job seekers and employers.',
     solution:
-      'Implemented dynamic filtering, secure checkout, and performance-optimized image loading.',
+      'Built a comprehensive platform using HTML, CSS, and JavaScript. Implemented real-time search, category filtering, and a clean interface design.',
     result:
-      'High-conversion product pages with fast load times and intuitive shopping flow.',
-    tech: ['React', 'Tailwind', 'Node.js'],
-    img: 'https://i.postimg.cc/v89rSVsc/projectimg5.png',
+      'A feature-rich job portal that simplifies the hiring process through advanced filtering and high-conversion UX.',
+    tech: ['HTML', 'CSS', 'JavaScript'],
+    img: 'https://i.postimg.cc/wjCXkDWx/projectimg3.png',
+  },
+  {
+    title: 'Runok: Fluid Web Application Experience',
+    category: 'Web Development',
+    date: '2024',
+    challenge:
+      'Design a web application where smooth transitions and premium UI animations are at the core of the user experience.',
+    solution:
+      'Leveraged React, Sass, and Framer Motion to create fluid animations. Focused on performance optimization and minimalist design patterns.',
+    result:
+      'A highly responsive and visually stunning web application that provides a native-like experience on any device.',
+    tech: ['React', 'Sass', 'Framer Motion'],
+    img: 'https://i.postimg.cc/zf4vR1kV/projectimg4.png',
   },
 ];
 
