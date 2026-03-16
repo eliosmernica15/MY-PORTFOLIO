@@ -1,79 +1,124 @@
 /* Projects with image paths like /name.png expect files in public/. See README "Required static assets". */
 export const PERSONAL_INFO = {
-  name: 'Rinor Zeqiri',
-  title: 'Full-Stack Developer',
-  summary: 'Full-Stack Developer and Computer Science student at "Isa Boletini" University, experienced in building and maintaining web and mobile applications. Skilled at troubleshooting and user support, with a focus on IT, system administration, and client-oriented solutions.',
+  name: 'Elios Mernica',
+  title: 'Software Engineer',
+  summary: 'Software engineer specializing in web development, system design, and network infrastructure. Based in Kosovo, available worldwide.',
 };
 
 export const PROJECTS = [
   {
-    id: 'bloombots',
-    title: 'Bloombots',
-    category: 'Mobile Development',
-    description: 'AI-powered magical bedtime story generator for children.',
-    longDescription: 'Bloombots is an AI-powered app built with React Native that lets children create personalized, magical bedtime stories by choosing characters, themes, and worlds. It leverages advanced AI to weave unique narratives that spark imagination.',
-    image: 'https://i.postimg.cc/MpKvKpRK/projectimg.jpg', // Placeholder image
-    link: '#',
-    color: '#ec4899',
-    tech: ['React Native', 'AI Integration', 'Framer Motion'],
-    year: '2025',
-  },
-  {
-    id: 'creative-deer',
-    title: 'Creative Deer',
+    id: 'em-motors',
+    title: 'EM Motors',
     category: 'Web Development',
-    description: 'Client project portfolio and management systems.',
-    longDescription: 'Developed and maintained various client websites and internal management tools for Creative Deer, utilizing WordPress, Elementor, and custom React components to deliver high-performance solutions.',
-    image: 'https://i.postimg.cc/pVJ2ZxLg/projectimg2.png',
-    link: '#',
+    description: 'A modern and interactive car presentation and dealership website.',
+    longDescription:
+      'EM Motors is an interactive, high-performance website for showcasing cars. It features a modern design built with HTML, CSS, JavaScript, and Bootstrap, ensuring a responsive and engaging user experience across all devices. The platform offers detailed car listings, smooth animations, and an intuitive UI.',
+    image: 'https://i.postimg.cc/W3kCFhRg/Screenshot-2026-03-14-205330.png',
+    link: 'https://em-motors.vercel.app/',
     color: '#3b82f6',
-    tech: ['WordPress', 'Elementor', 'React', 'Tailwind CSS'],
+    tech: ['HTML', 'CSS', 'JavaScript', 'Bootstrap'],
+    year: '2026',
+  },
+  {
+    id: 'forexpulse',
+    title: 'ForexPulse',
+    category: 'Web Development',
+    description: 'Trading platform for forex and prop with live rates, charts, tools, and dashboard.',
+    longDescription:
+      'ForexPulse is a trading platform built for forex and prop traders. It delivers real-time forex rates for 50+ pairs via the Frankfurter API, pair detail pages with full charts, a Tools page with pip value, position size calculator, and currency converter, plus a dashboard for portfolio snapshot and watchlist. The landing page and app share a dark, modern UI with amber accents—free to use, with optional sign-in for saving preferences.',
+    image: '/forexpulse-hero.png',
+    link: 'https://forexpulse-trading.vercel.app/',
+    color: '#f59e0b',
+    tech: ['HTML', 'JavaScript', 'Tailwind CSS', 'Frankfurter API', 'Vercel'],
     year: '2025',
   },
   {
-    id: 'jobportal',
-    title: 'JobPortal',
+    id: 'eltrix-cloud',
+    title: 'Eltrix Cloud',
+    category: 'Applications',
+    description: 'AI-powered creative platform for content creation, file sharing, and digital asset management.',
+    longDescription:
+      'Eltrix Cloud is an all-in-one AI-powered platform that combines content creation, file sharing, and digital asset management into a seamless experience. It features AI-assisted content generation, secure cloud storage, real-time collaboration tools, and an intuitive dashboard for managing digital assets. The platform delivers a premium, immersive UI with 3D visuals and smooth interactions.',
+    image: 'https://i.postimg.cc/VLP0pdyx/Eltrix-Cloud-AI-IMG.png',
+    link: 'https://eltrixcloud.netlify.app/',
+    color: '#7c3aed',
+    tech: ['React', 'TypeScript', 'AI Integration', 'Cloud Storage', 'Tailwind CSS'],
+    year: '2025',
+  },
+  {
+    id: 'flixverse',
+    title: 'FlixVerse',
     category: 'Web Development',
-    description: 'A robust job listing platform with advanced filtering.',
-    longDescription: 'JobPortal is a comprehensive job listing website built with HTML, CSS, and JavaScript. It features real-time search, category filtering, and a clean, intuitive UI for job seekers and employers.',
-    image: 'https://i.postimg.cc/wjCXkDWx/projectimg3.png',
-    link: '#',
-    color: '#10b981',
-    tech: ['HTML', 'CSS', 'JavaScript'],
+    description: 'A premium streaming platform with real-time content discovery and immersive UI.',
+    longDescription:
+      'FlixVerse is a full-featured streaming platform inspired by Netflix, built with a focus on performance and user experience. It features dynamic content carousels, real-time search with autocomplete, user authentication, watchlist management, and HD-ready video playback. The UI delivers a cinematic feel with smooth animations and responsive layouts across all devices.',
+    image: 'https://i.postimg.cc/DZy2krtn/Screenshot-2026-03-14-201510.png',
+    link: 'https://flixverse-streaming-pro.vercel.app/',
+    color: '#e50914',
+    tech: ['React', 'TypeScript', 'TMDB API', 'Tailwind CSS', 'Vercel'],
+    year: '2025',
+  },
+  {
+    id: 'foodery',
+    title: 'Foodery',
+    category: 'Web Design',
+    description: 'A comprehensive food delivery and ordering platform with modern UI.',
+    longDescription:
+      'Foodery is a high-performance food delivery ecosystem built for scale. It features a reactive dashboard for restaurant owners, a driver app with real-time GPS tracking, and a consumer marketplace. The system handles thousands of concurrent requests with sub-100ms response times.',
+    image: 'https://i.postimg.cc/MpKvKpRK/projectimg.jpg',
+    link: 'https://fooderydelivery.netlify.app',
+    color: '#fbbf24',
+    tech: ['Next.js', 'Supabase', 'Redis', 'Framer Motion', 'Tailwind CSS'],
     year: '2024',
   },
   {
-    id: 'runok',
-    title: 'Runok',
+    id: 'calista',
+    title: 'Calista',
     category: 'Web Development',
-    description: 'Modern web application with smooth Framer Motion animations.',
-    longDescription: 'Runok is a high-performance web application built with React and Sass. It prioritizes user experience with fluid Framer Motion animations and a sleek, minimal design aesthetic.',
-    image: 'https://i.postimg.cc/zf4vR1kV/projectimg4.png',
-    link: '#',
-    color: '#8b5cf6',
-    tech: ['React', 'Sass', 'Framer Motion'],
-    year: '2024',
+    description: 'High-end retail experience with bespoke interaction patterns.',
+    longDescription:
+      'Calista redefines the online shopping experience for high-end fashion. The project focuses on micro-interactions, seamless transitions, and high-quality asset delivery. It includes a custom headless CMS integration for dynamic inventory management.',
+    image: 'https://i.postimg.cc/pVJ2ZxLg/projectimg2.png',
+    link: 'https://calista-bake.netlify.app',
+    color: '#ec4899',
+    tech: ['React', 'Shopify Hydrogen', 'Three.js', 'GSAP'],
+    year: '2023',
   },
 ];
 
 export const EDUCATION = [
   {
-    title: '"Isa Boletini" University – Mitrovica',
-    period: 'October 2025 – July 2028',
-    desc: 'Bachelor in Computer Science and Engineering. Coursework includes software development, databases, networking, and IT project management.',
+    title: 'Unity Tech Hub',
+    period: '2025 - Present',
+    desc: 'Web Development',
+  },
+  {
+    title: 'Isa Boletini - UBMI',
+    period: '2025 - Present',
+    desc: 'Computer Science',
+  },
+  {
+    title: 'Course of Web and design developer',
+    period: '2024 - 2026',
+    desc: 'Innovation academy course, Web development directions.',
+  },
+  {
+    title: 'Natural Science',
+    period: '2022 - 2025',
+    desc: 'High School "Eqrem Çabej"',
+  },
+  {
+    title: 'Speaking Development',
+    period: '2015 - 2024',
+    desc: '"The Cambridge School" (Native Speaking "American English")',
   },
 ];
 
 export const EXPERIENCE = [
   {
-    company: 'Creative Deer',
-    period: 'July 2025 – Jan 2026',
-    desc: 'Software Developer. Develop and maintain cross-platform web and mobile applications using WordPress, React.js, React Native etc., ensuring stable performance and reliability. Troubleshoot, customize, and maintain client websites, resolving technical issues and improving user experience. Collaborate with cross-functional teams to implement features, optimize performance, and support client.',
-  },
-  {
-    company: 'Creative Deer',
-    period: 'Feb 2025 – July 2025',
-    desc: 'Software Developer Intern. Assisted in the development of cross-platform applications, contributing to mobile and web functionality. Supported website customization and maintenance, enhancing responsive design and usability. Worked closely with senior developers to implement interactive features and troubleshoot performance issues.',
+    company: 'Linkify',
+    period: '2024',
+    desc: 'English Speaking Support',
   },
 ];
 
@@ -137,109 +182,91 @@ export const SERVICES = [
 ];
 
 export const SOCIALS = [
-  { name: 'GitHub', link: 'https://github.com/rinorze', icon: 'Github' },
-  { name: 'Instagram', link: 'https://www.instagram.com/rinorzeqiri/', icon: 'Instagram' },
-  { name: 'LinkedIn', link: 'https://www.linkedin.com/in/rinor-zeqiri/', icon: 'Linkedin' },
+  { name: 'GitHub', link: 'https://github.com/eliosmernica15', icon: 'Github' },
+  { name: 'Instagram', link: 'https://www.instagram.com/e_mer03/', icon: 'Instagram' },
+  { name: 'LinkedIn', link: 'https://www.linkedin.com/in/elios-mernica-880562204/', icon: 'Linkedin' },
 ];
 
 export const TESTIMONIALS = [
   {
     name: 'Daniel Lewis',
     role: 'Director of Brand Strategy',
-    text: "Rinor was hired to create a corporate identity. It's modern, clean and with a beautiful design that got a lot of praises from colleagues and visitors. We were very pleased with the work done. He has a lot of experience and is very concerned about the needs of client.",
+    text: "Elios was hired to create a corporate identity. It's modern, clean and with a beautiful design that got a lot of praises from colleagues and visitors. We were very pleased with the work done. He has a lot of experience and is very concerned about the needs of client.",
     avatar: 'https://i.postimg.cc/zGDHfn3G/avatar-1.png',
   },
   {
     name: 'Jessica Miller',
     role: 'Project Manager',
-    text: 'Working with Rinor has been an absolute pleasure. I was impressed with his attention to detail, his web design skills and his professional approach to our timelines and processes.',
+    text: 'Working with Elios has been an absolute pleasure. I was impressed with his attention to detail, his web design skills and his professional approach to our timelines and processes.',
     avatar: 'https://i.postimg.cc/DwY0yHtx/avatar-2.png',
   },
   {
     name: 'Emily Evans',
     role: 'Marketing Manager',
-    text: "I couldn't be happier with the website that Rinor created for us. His attention to detail and creativity is unmatched. Our clients frequently compliment the design, and it has significantly improved our brand image.",
+    text: "I couldn't be happier with the website that Elios created for us. His attention to detail and creativity is unmatched. Our clients frequently compliment the design, and it has significantly improved our brand image.",
     avatar: 'https://i.postimg.cc/fRFWhX9F/avatar-3.png',
   },
   {
     name: 'Henry Williams',
     role: 'Business Owner',
-    text: "I was overwhelmed with the thought of redesigning my online store, but Rinor made the process seamless. The site is not only visually appealing but also optimized for conversions. I've seen a 50% increase in traffic since the launch!",
+    text: "I was overwhelmed with the thought of redesigning my online store, but Elios made the process seamless. The site is not only visually appealing but also optimized for conversions. I've seen a 50% increase in traffic since the launch!",
     avatar: 'https://i.postimg.cc/zXv1Xv81/avatar-4.png',
   },
 ];
 
 export const CONTACT_INFO = {
-  email: 'rzeqiri03@gmail.com',
-  phone: '+383 45 964 715',
-  birthday: 'March 15, 2003',
+  email: 'eliosmernica@gmail.com',
+  phone: '+383 (49) 363 163',
+  birthday: 'March 15, 2007',
   location: 'Vushtrri, Kosovo',
 };
 
-/* ================================================================
-   Case Studies (converted from Blog Posts)
-   ================================================================ */
 export const CASE_STUDIES = [
   {
-    title: 'Bloombots: AI-Powered Bedtime Stories',
-    category: 'Mobile Development',
-    date: '2025',
-    challenge:
-      'Create an engaging mobile experience that helps children generate personalized and magical bedtime stories using AI.',
-    solution:
-      'Developed a React Native application integrated with generative AI. Implemented custom character selection, theme engines, and an intuitive UI for children.',
-    result:
-      'A successful mobile app that sparks child imagination through unique, AI-woven narratives and seamless user experience.',
-    tech: ['React Native', 'AI Integration', 'Framer Motion'],
-    img: 'https://i.postimg.cc/MpKvKpRK/projectimg.jpg',
+    title: 'EM Motors: A Modern Car Presentation Platform',
+    category: 'Web Development',
+    date: '2026',
+    challenge: 'Design and develop a responsive and visually appealing car dealership website with a focus on user experience.',
+    solution: 'Built a custom interface using HTML, CSS, JavaScript, and Bootstrap. Implemented dynamic vehicle loading and mobile-first patterns.',
+    result: 'A sleek, fast, and interactive platform that effectively displays cars and engages potential customers.',
+    tech: ['HTML', 'CSS', 'JavaScript', 'Bootstrap'],
+    img: 'https://i.postimg.cc/W3kCFhRg/Screenshot-2026-03-14-205330.png',
   },
   {
-    title: 'Creative Deer: Scalable Client Solutions',
+    title: 'ForexPulse: A Trading Platform for Forex & Prop',
     category: 'Web Development',
     date: '2025',
-    challenge:
-      'Build and maintain high-performance web and mobile applications for various clients with tight deadlines and specific brand requirements.',
-    solution:
-      'Utilized WordPress, React.js, and React Native to deliver cross-platform solutions. Focused on troubleshooting, customization, and performance optimization.',
-    result:
-      'Delivered multiple successful client projects with stable performance, improved user experience, and robust system administration.',
-    tech: ['WordPress', 'React.js', 'React Native', 'Tailwind CSS'],
-    img: 'https://i.postimg.cc/pVJ2ZxLg/projectimg2.png',
+    challenge: 'Build a single place for traders to view live rates, open charts, and manage a dashboard.',
+    solution: 'Built a multi-page app with Tailwind CSS and Frankfurter API. Implemented pip value and position size calculators.',
+    result: 'A focused trading platform with 50+ pairs and live rates in one place.',
+    tech: ['HTML', 'JavaScript', 'Tailwind CSS', 'Frankfurter API'],
+    img: '/forexpulse-hero.png',
   },
   {
-    title: 'JobPortal: Advanced Career Platform',
+    title: 'Eltrix Cloud: AI-Powered Creative Platform',
+    category: 'Applications',
+    date: '2025',
+    challenge: 'Build an all-in-one platform for AI content creation and file sharing.',
+    solution: 'Developed a React application with AI integration and secure cloud storage.',
+    result: 'A polished platform that streamlines digital workflows with AI tools.',
+    tech: ['React', 'TypeScript', 'AI Integration'],
+    img: 'https://i.postimg.cc/VLP0pdyx/Eltrix-Cloud-AI-IMG.png',
+  },
+  {
+    title: 'FlixVerse: Building a Premium Streaming Experience',
     category: 'Web Development',
-    date: '2024',
-    challenge:
-      'Develop a robust job listing website with efficient search and filtering capabilities for job seekers and employers.',
-    solution:
-      'Built a comprehensive platform using HTML, CSS, and JavaScript. Implemented real-time search, category filtering, and a clean interface design.',
-    result:
-      'A feature-rich job portal that simplifies the hiring process through advanced filtering and high-conversion UX.',
-    tech: ['HTML', 'CSS', 'JavaScript'],
+    date: '2025',
+    challenge: 'Create a cinematic streaming platform with real-time content discovery.',
+    solution: 'Built with React and leveraging the TMDB API. Implemented dynamic carousels and instant search.',
+    result: 'A performant streaming UI with a premium feel across all devices.',
+    tech: ['React', 'TypeScript', 'TMDB API'],
     img: 'https://i.postimg.cc/wjCXkDWx/projectimg3.png',
-  },
-  {
-    title: 'Runok: Fluid Web Application Experience',
-    category: 'Web Development',
-    date: '2024',
-    challenge:
-      'Design a web application where smooth transitions and premium UI animations are at the core of the user experience.',
-    solution:
-      'Leveraged React, Sass, and Framer Motion to create fluid animations. Focused on performance optimization and minimalist design patterns.',
-    result:
-      'A highly responsive and visually stunning web application that provides a native-like experience on any device.',
-    tech: ['React', 'Sass', 'Framer Motion'],
-    img: 'https://i.postimg.cc/zf4vR1kV/projectimg4.png',
   },
 ];
 
-/* ================================================================
-   Stats Section Data
-   ================================================================ */
 export const STATS = [
-  { value: 10, suffix: '+', label: 'Projects Completed' },
-  { value: 2, suffix: '+', label: 'Years Experience' },
-  { value: 5, suffix: '+', label: 'Happy Clients' },
-  { value: 4, suffix: '+', label: 'Skills Mastered' },
+  { value: 12, suffix: '+', label: 'Projects Completed' },
+  { value: 3, suffix: '+', label: 'Years Experience' },
+  { value: 15, suffix: '+', label: 'Happy Clients' },
+  { value: 8, suffix: '+', label: 'Skills Mastered' },
 ];

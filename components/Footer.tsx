@@ -47,7 +47,7 @@ const Footer: React.FC = () => {
             <div>
               <Link to="/" className="flex items-center gap-3 group mb-6">
                 <div className="w-10 h-10 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-xl flex items-center justify-center font-bold text-sm shadow-accent">
-                  RZ
+                  EM
                 </div>
                 <span
                   className="text-sm font-bold transition-colors"
