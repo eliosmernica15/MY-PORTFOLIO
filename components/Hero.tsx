@@ -1,6 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Globe, Zap, ArrowDown } from 'lucide-react';
+import { PERSONAL_INFO } from '../constants';
 import AnimatedCounter from './AnimatedCounter';
 import FloatingOrbs from './FloatingOrbs';
 import ParticleCanvas from './ParticleCanvas';
@@ -95,9 +96,9 @@ const Hero: React.FC = () => {
 
             {/* Staggered heading */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter mb-6 sm:mb-8 leading-[0.9]">
-              {['Elios', 'Mernica.'].map((word, i) => (
+              {PERSONAL_INFO.name.split(' ').map((word, i) => (
                 <motion.span
-                  key={word}
+                  key={word + i}
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
@@ -107,7 +108,7 @@ const Hero: React.FC = () => {
                   }}
                   className="text-gradient inline-block mr-4"
                 >
-                  {word}
+                  {word}{i === PERSONAL_INFO.name.split(' ').length - 1 ? '.' : ''}
                 </motion.span>
               ))}
             </h1>

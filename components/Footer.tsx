@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, Instagram, Linkedin, Mail, ArrowUp } from 'lucide-react';
-import { SOCIALS, CONTACT_INFO } from '../constants';
+import { SOCIALS, CONTACT_INFO, PERSONAL_INFO } from '../constants';
 import MagneticButton from './MagneticButton';
 
 const Footer: React.FC = () => {
@@ -47,20 +47,20 @@ const Footer: React.FC = () => {
             <div>
               <Link to="/" className="flex items-center gap-3 group mb-6">
                 <div className="w-10 h-10 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-xl flex items-center justify-center font-bold text-sm shadow-accent">
-                  EM
+                  RZ
                 </div>
                 <span
                   className="text-sm font-bold transition-colors"
                   style={{ color: 'var(--text-secondary)' }}
                 >
-                  Elios Mernica
+                  {PERSONAL_INFO.name}
                 </span>
               </Link>
               <p
                 className="text-sm leading-relaxed max-w-xs"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                Software engineer crafting digital experiences with precision and
+                Full-stack developer crafting digital experiences with precision and
                 purpose. Based in Kosovo, available worldwide.
               </p>
             </div>
@@ -137,7 +137,7 @@ const Footer: React.FC = () => {
             style={{ borderTop: '1px solid var(--border)' }}
           >
             <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-              &copy; {new Date().getFullYear()} Elios Mernica. All rights reserved.
+              &copy; {new Date().getFullYear()} {PERSONAL_INFO.name}. All rights reserved.
             </p>
             <div className="flex gap-3 text-[10px] font-medium uppercase tracking-[0.2em]" style={{ color: 'var(--text-secondary)' }}>
               <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">React</span>

@@ -1,5 +1,6 @@
 import React from 'react';
 import RevealSection from './RevealSection';
+import { PERSONAL_INFO } from '../constants';
 
 const About: React.FC = () => {
   return (
@@ -22,16 +23,16 @@ const About: React.FC = () => {
                 About Me
               </span>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-6 sm:mb-8 leading-tight">
-                I am Elios <br />
+                I am {PERSONAL_INFO.name.split(' ')[0]} <br />
                 <span className="italic" style={{ color: 'var(--text-muted)' }}>
-                  Web-App Developer
+                  {PERSONAL_INFO.title}
                 </span>
               </h2>
               <p
                 className="text-lg md:text-xl leading-relaxed font-light mb-10"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                I am Elios Mernica, a web app developer with a keen interest in building innovative, user-friendly applications and robust system infrastructures. My goal is to create modern web apps that solve real-world problems while delivering an exceptional, seamless user experience.
+                {PERSONAL_INFO.summary}
               </p>
               <div
                 className="grid grid-cols-2 gap-8 pt-8"

@@ -3,251 +3,243 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: #1e1b4b;
-    line-height: 1.55;
-    font-size: 10.5pt;
-    padding: 40px 48px;
+    font-family: 'Inter', 'Calibri', 'Segoe UI', system-ui, sans-serif;
+    color: #1a1a1a;
+    line-height: 1.5;
+    font-size: 10pt;
+    padding: 40px 50px;
     max-width: 800px;
     margin: 0 auto;
   }
 
-  a { color: #7c3aed; text-decoration: none; }
+  a { color: #1a5fb4; text-decoration: none; }
   a:hover { text-decoration: underline; }
 
-  /* Header */
-  .header { margin-bottom: 24px; border-bottom: 2px solid #8b5cf6; padding-bottom: 16px; }
-  .header h1 { font-size: 26pt; font-weight: 700; color: #1e1b4b; letter-spacing: -0.5px; margin-bottom: 6px; }
-  .header .contact-row { font-size: 9.5pt; color: #4b5563; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-  .header .contact-row .sep { color: #d1d5db; }
-  .header .links { margin-top: 4px; font-size: 9.5pt; }
-  .header .links a { font-weight: 600; margin-right: 14px; }
+  /* ========== HEADER ========== */
+  .header {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'EB Garamond', 'Georgia', 'Times New Roman', serif;
+    font-size: 32pt;
+    font-weight: 400;
+    color: #1a1a1a;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .header .contact-row {
+    font-size: 9.5pt;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+  }
+  .header .contact-row .sep { color: #999; margin: 0 4px; }
+  .header .contact-row a { color: #1a5fb4; }
 
-  /* Sections */
-  .section { margin-bottom: 18px; }
-  .section-title {
-    font-size: 11pt;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #7c3aed;
-    border-bottom: 1px solid #e5e7eb;
-    padding-bottom: 4px;
-    margin-bottom: 10px;
+  /* Divider after header */
+  .header-divider {
+    border: none;
+    border-top: 1.5px solid #333;
+    margin: 14px 0 10px 0;
   }
 
-  /* Items */
+  /* ========== SUMMARY ========== */
+  .summary {
+    text-align: center;
+    font-size: 9.5pt;
+    color: #333;
+    line-height: 1.55;
+    margin-bottom: 20px;
+    padding: 0 10px;
+  }
+
+  /* ========== SECTIONS ========== */
+  .section { margin-bottom: 20px; }
+  .section-title {
+    font-size: 13pt;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #1a1a1a;
+    padding-bottom: 5px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  /* ========== ITEMS ========== */
   .item { margin-bottom: 12px; }
-  .item-header { display: flex; justify-content: space-between; align-items: baseline; }
-  .item-title { font-weight: 600; font-size: 10.5pt; color: #1e1b4b; }
-  .item-sub { font-size: 9.5pt; color: #6b7280; font-style: italic; }
-  .item-period { font-size: 9pt; color: #6b7280; white-space: nowrap; }
-  .item p { margin-top: 3px; color: #374151; font-size: 10pt; }
-  .item ul { margin-top: 3px; padding-left: 18px; color: #374151; font-size: 10pt; }
-  .item li { margin-bottom: 2px; }
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .item-title {
+    font-weight: 700;
+    font-size: 10.5pt;
+    color: #1a1a1a;
+  }
+  .item-role {
+    font-size: 10pt;
+    color: #1a1a1a;
+    margin-top: 1px;
+  }
+  .item-period {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #1a1a1a;
+    white-space: nowrap;
+  }
+  .item p {
+    margin-top: 4px;
+    color: #333;
+    font-size: 9.5pt;
+    line-height: 1.5;
+  }
+  .item ul {
+    margin-top: 4px;
+    padding-left: 18px;
+    color: #333;
+    font-size: 9.5pt;
+    line-height: 1.55;
+  }
+  .item li { margin-bottom: 3px; }
 
-  /* Skills */
-  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 32px; }
-  .skill-cat { font-weight: 600; color: #1e1b4b; font-size: 10pt; }
-  .skill-cat span { font-weight: 400; color: #374151; }
+  /* ========== PROJECTS ========== */
+  .project-item {
+    margin-bottom: 4px;
+    font-size: 9.5pt;
+    color: #333;
+    line-height: 1.5;
+  }
+  .project-item .project-name {
+    font-weight: 700;
+    color: #1a1a1a;
+  }
 
-  /* Projects */
-  .project-link { font-size: 9pt; color: #7c3aed; }
-
-  /* Two col */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; }
+  /* ========== SKILLS ========== */
+  .skills-list {
+    padding-left: 18px;
+    font-size: 9.5pt;
+    color: #333;
+    line-height: 1.6;
+  }
+  .skills-list li { margin-bottom: 3px; }
+  .skills-list .skill-label {
+    font-weight: 700;
+    color: #1a1a1a;
+  }
 </style>
 </head>
 <body>
 
   <!-- HEADER -->
   <div class="header">
-    <h1>Elios Mernica</h1>
+    <h1>Rinor Zeqiri</h1>
     <div class="contact-row">
       <span>Vushtrri, Kosovo</span>
       <span class="sep">|</span>
-      <span>+383 49 363 163</span>
+      <span>+383 45 964-715</span>
       <span class="sep">|</span>
-      <a href="mailto:eliosmernica@gmail.com">eliosmernica@gmail.com</a>
-    </div>
-    <div class="links">
-      <a href="https://github.com/eliosmernica15" target="_blank">GitHub</a>
-      <a href="https://eliosmernica.vercel.app/" target="_blank">Portfolio</a>
-      <a href="https://www.linkedin.com/in/elios-mernica-880562204/" target="_blank">LinkedIn</a>
+      <a href="mailto:rzeqiri03@gmail.com">rzeqiri03@gmail.com</a>
+      <span class="sep">|</span>
+      <a href="https://github.com/rinorze" target="_blank">github.com/rinorze</a>
     </div>
   </div>
+
+  <hr class="header-divider">
 
   <!-- PROFESSIONAL SUMMARY -->
-  <div class="section">
-    <div class="section-title">Professional Summary</div>
-    <p style="color: #374151; font-size: 10pt;">
-      Driven software engineering student specializing in front-end and full-stack web development. Experienced in building modern, responsive web applications using React, TypeScript, and Node.js. Passionate about clean code, intuitive UI/UX, and continuous learning. Combines strong technical foundations with a global perspective from cross-cultural experiences.
-    </p>
+  <div class="summary">
+    Full-Stack Developer and Computer Science student at “Isa Boletini” University, experienced in building and maintaining web and mobile applications. Skilled at troubleshooting and user support, with a focus on IT, system administration, and client-oriented solutions.
   </div>
 
-  <!-- KEY SKILLS -->
+  <!-- PROFESSIONAL EXPERIENCE -->
   <div class="section">
-    <div class="section-title">Key Skills</div>
-    <div class="skills-grid">
-      <div class="skill-cat">Front-End: <span>React, Next.js, TypeScript, JavaScript (ES6+), HTML5, CSS3, Tailwind CSS, Framer Motion</span></div>
-      <div class="skill-cat">Back-End: <span>Node.js, Express, PostgreSQL, MongoDB, Supabase, Firebase</span></div>
-      <div class="skill-cat">Tools: <span>Git/GitHub, VS Code, Vite, Figma, WordPress, Vercel, Netlify</span></div>
-      <div class="skill-cat">Soft Skills: <span>Problem-solving, adaptability, time management, cross-functional collaboration</span></div>
-      <div class="skill-cat">Languages: <span>English (Fluent, Cambridge-certified), Albanian (Native)</span></div>
-    </div>
-  </div>
-
-  <!-- EXPERIENCE -->
-  <div class="section">
-    <div class="section-title">Work Experience</div>
+    <div class="section-title">PROFESSIONAL EXPERIENCE</div>
 
     <div class="item">
       <div class="item-header">
         <div>
-          <span class="item-title">Web Developer & Designer</span>
-          <span class="item-sub"> — Innovation Academy, Vushtrri</span>
+          <span class="item-title">Creative Deer</span>
         </div>
-        <span class="item-period">2023 – 2025</span>
+        <span class="item-period">July 2025 – Jan 2026</span>
       </div>
+      <div class="item-role">Software Developer</div>
       <ul>
-        <li>Created and developed visual concepts aligned with project goals and objectives</li>
-        <li>Supervised design processes and managed timelines and budgets for design projects</li>
-        <li>Built responsive websites using React, Tailwind CSS, and modern web technologies</li>
+        <li>Develop and maintain cross-platform web and mobile applications using WordPress, React.js, React Native etc., ensuring stable performance and reliability.</li>
+        <li>Troubleshoot, customize, and maintain client websites, resolving technical issues and improving user experience.</li>
+        <li>Collaborate with cross-functional teams to implement features, optimize performance, and support client.</li>
       </ul>
     </div>
 
     <div class="item">
       <div class="item-header">
         <div>
-          <span class="item-title">English Speaking Support</span>
-          <span class="item-sub"> — Linkify</span>
+          <span class="item-title">Creative Deer</span>
         </div>
-        <span class="item-period">2024</span>
+        <span class="item-period">Feb 2025 – July 2025</span>
       </div>
+      <div class="item-role">Software Developer Intern</div>
       <ul>
-        <li>Provided English-language support bridging communication between technical and non-technical stakeholders</li>
+        <li>Assisted in the development of cross-platform applications, contributing to mobile and web functionality.</li>
+        <li>Supported website customization and maintenance, enhancing responsive design and usability.</li>
+        <li>Worked closely with senior developers to implement interactive features and troubleshoot performance issues.</li>
       </ul>
     </div>
   </div>
 
   <!-- EDUCATION -->
   <div class="section">
-    <div class="section-title">Education</div>
+    <div class="section-title">EDUCATION</div>
 
     <div class="item">
       <div class="item-header">
         <div>
-          <span class="item-title">Web Development</span>
-          <span class="item-sub"> — Unity Tech Hub</span>
+          <span class="item-title">“Isa Boletini” University – Mitrovica</span>
         </div>
-        <span class="item-period">2025 – Present</span>
+        <span class="item-period">October 2025 – July 2028</span>
       </div>
-    </div>
-
-    <div class="item">
-      <div class="item-header">
-        <div>
-          <span class="item-title">Computer Science</span>
-          <span class="item-sub"> — Isa Boletini - UBMI</span>
-        </div>
-        <span class="item-period">2025 – Present</span>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="item-header">
-        <div>
-          <span class="item-title">Web & Design Development Course</span>
-          <span class="item-sub"> — Innovation Academy</span>
-        </div>
-        <span class="item-period">2024 – 2026</span>
-      </div>
-      <p>Front-end development certification, progressing from fundamentals to modern frameworks (React.js)</p>
-    </div>
-
-    <div class="item">
-      <div class="item-header">
-        <div>
-          <span class="item-title">Natural Science — High School Diploma</span>
-          <span class="item-sub"> — "Eqrem Çabej", Vushtrri</span>
-        </div>
-        <span class="item-period">2022 – 2025</span>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="item-header">
-        <div>
-          <span class="item-title">English Speaking Development</span>
-          <span class="item-sub"> — The Cambridge School</span>
-        </div>
-        <span class="item-period">2015 – 2024</span>
-      </div>
-      <p>Native-level American English certification</p>
+      <div class="item-role">Bachelor in Computer Science and Engineering</div>
+      <p>Coursework includes software development, databases, networking, and IT project management.</p>
     </div>
   </div>
 
   <!-- PROJECTS -->
   <div class="section">
-    <div class="section-title">Selected Projects</div>
+    <div class="section-title">PROJECTS</div>
 
-    <div class="item">
-      <div class="item-header">
-        <span class="item-title">Foodery — Food Delivery Platform</span>
-        <span class="item-period">2024</span>
-      </div>
-      <p>Full-stack food delivery ecosystem with real-time tracking. Built with Next.js, Supabase, Redis, Framer Motion, and Tailwind CSS.
-        <a class="project-link" href="https://fooderydelivery.netlify.app" target="_blank">Live Demo</a>
-      </p>
+    <div class="project-item">
+      &bull; <span class="project-name">Bloombots</span> &mdash; AI-powered app built with React Native that lets children create personalized, magical bedtime stories by choosing characters, themes, and worlds.
     </div>
-
-    <div class="item">
-      <div class="item-header">
-        <span class="item-title">EM E-Commerce Store</span>
-        <span class="item-period">2024</span>
-      </div>
-      <p>Full-scale digital storefront with dynamic catalog, secure checkout, and high-conversion design. React, Tailwind, Node.js.
-        <a class="project-link" href="https://emecommerce.netlify.app" target="_blank">Live Demo</a>
-      </p>
+    <div class="project-item">
+      &bull; <span class="project-name">Creative Deer (Client Projects)</span> &mdash; Developed and maintained client websites using WordPress and Elementor.
     </div>
-
-    <div class="item">
-      <div class="item-header">
-        <span class="item-title">File Sharing & Link Shortening</span>
-        <span class="item-period">2024</span>
-      </div>
-      <p>Secure file distribution tool with trackable shortened links. Built with Vite, Firebase, and TypeScript.
-        <a class="project-link" href="https://filesharingem.netlify.app" target="_blank">Live Demo</a>
-      </p>
+    <div class="project-item">
+      &bull; <span class="project-name">JobPortal</span> &mdash; Job listing website using HTML, CSS, JavaScript; implemented search and filter features.
     </div>
-
-    <div class="item">
-      <div class="item-header">
-        <span class="item-title">Note-Taking Web App</span>
-        <span class="item-period">2024</span>
-      </div>
-      <p>Advanced note-taking system with intelligent auto-organization and cross-platform sync. React, TypeScript, MongoDB.
-        <a class="project-link" href="https://advanced-note-taking-app.netlify.app" target="_blank">Live Demo</a>
-      </p>
-    </div>
-
-    <div class="item" style="margin-bottom: 4px;">
-      <p style="font-size: 9pt; color: #6b7280;">+ 5 more projects available at <a href="https://eliosmernica.vercel.app/" target="_blank">eliosmernica.vercel.app</a></p>
+    <div class="project-item">
+      &bull; <span class="project-name">Runok</span> &mdash; Web application built with React, Sass, and Framer Motion for smooth UI animations.
     </div>
   </div>
 
-  <!-- ADDITIONAL -->
+  <!-- ADDITIONAL SKILLS -->
   <div class="section">
-    <div class="section-title">Additional</div>
-    <div class="skills-grid">
-      <div class="skill-cat">Driving License: <span>Category B</span></div>
-      <div class="skill-cat">Interests: <span>Emerging technologies, travel, photography</span></div>
-    </div>
+    <div class="section-title">ADDITIONAL SKILLS</div>
+    <ul class="skills-list">
+      <li><span class="skill-label">Technical Skills:</span> HTML, CSS, JavaScript, React.js, Tailwind CSS, React Native, Node.js, MongoDB, WordPress, MS Office, Outlook, Google Workspace</li>
+      <li><span class="skill-label">Tools:</span> Git, GitHub, Docker, Postman, Figma, Vercel, Netlify</li>
+      <li><span class="skill-label">Soft Skills:</span> Troubleshooting, Customer Support, Problem Solving, Communication</li>
+      <li><span class="skill-label">Languages:</span> Albanian (Fluent) and English (Fluent)</li>
+    </ul>
   </div>
 
 </body>

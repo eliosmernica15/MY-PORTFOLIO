@@ -148,7 +148,7 @@ const Nav: React.FC = () => {
               whileTap={{ scale: 0.95 }}
               className="w-10 h-10 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-xl flex items-center justify-center font-bold text-xs shadow-accent"
             >
-              EM
+              RZ
             </motion.div>
           </MagneticButton>
         </Link>

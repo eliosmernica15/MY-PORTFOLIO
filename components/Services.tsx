@@ -26,7 +26,7 @@ const Services: React.FC = () => {
             Unique Web <span className="italic" style={{ color: 'var(--text-muted)' }}>Projects.</span>
           </h2>
           <p className="text-lg md:text-xl font-light max-w-2xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
-            We put your ideas and thus your wishes in the form of a unique web project that inspires you and your customers.
+            I put your ideas and thus your wishes in the form of a unique web project that inspires you and your customers.
           </p>
         </RevealSection>
 

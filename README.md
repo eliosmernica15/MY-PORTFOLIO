@@ -1,4 +1,4 @@
-# Elios Mernica — Portfolio
+# Rinor Zeqiri — Portfolio
 
 A modern, responsive portfolio site built with React, TypeScript, and Vite. Features a 3D Spline hero, dark/light theme, and smooth animations.
 
@@ -74,7 +74,7 @@ A modern, responsive portfolio site built with React, TypeScript, and Vite. Feat
 Place these in the `public/` folder so links and images resolve correctly:
 
 - **Hero images:** `forexpulse-hero.png` (included). For full project coverage, add `eltrix-cloud-hero.png` and `flixverse-hero.png` if you use those projects (or update `constants.ts` to use external URLs).
-- **Resume:** Add `Elios-Mernica-CV.pdf` to `public/` if you want the Resume section “Download CV” link to work; otherwise replace the link in `components/Resume.tsx` with your own URL.
+- **Resume:** Add `Rinor-Zeqiri-CV.pdf` to `public/` if you want the Resume section “Download CV” link to work; otherwise replace the link in `components/Resume.tsx` with your own URL.
 
 ## Deploy
 

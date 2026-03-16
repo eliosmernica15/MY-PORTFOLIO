@@ -76,7 +76,7 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured, index }: Pr
 const Projects: React.FC = () => {
   const [filter, setFilter] = useState('All');
   const categories = useMemo(
-    () => ['All', 'Web Design', 'Web Development', 'Applications'],
+    () => ['All', 'Web Development', 'Mobile Development'],
     []
   );
   const filteredProjects = useMemo(

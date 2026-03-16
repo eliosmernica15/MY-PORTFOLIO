@@ -55,7 +55,7 @@ const Resume: React.FC = () => {
             {/* Download CV Button */}
             <MagneticButton strength={0.15}>
               <motion.a
-                href="/Elios-Mernica-CV.pdf"
+                href="/Rinor-Zeqiri-CV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.03 }}

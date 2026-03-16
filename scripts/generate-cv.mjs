@@ -11,7 +11,7 @@ async function generateCV() {
   const htmlPath = path.resolve(__dirname, 'generate-cv.html');
   await page.goto(`file://${htmlPath}`, { waitUntil: 'networkidle0' });
 
-  const outputPath = path.resolve(__dirname, '..', 'public', 'Elios-Mernica-CV.pdf');
+  const outputPath = path.resolve(__dirname, '..', 'public', 'Rinor-Zeqiri-CV.pdf');
 
   await page.pdf({
     path: outputPath,
