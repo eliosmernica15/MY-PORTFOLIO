@@ -1,7 +1,7 @@
-import React, { useState, useMemo, memo } from 'react';
+import React, { useState, useMemo, memo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import RevealSection from './RevealSection';
 import TiltCard from './TiltCard';
@@ -73,8 +73,11 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured, index }: Pr
   );
 });
 
+const INITIAL_VISIBLE_COUNT = 4;
+
 const Projects: React.FC = () => {
   const [filter, setFilter] = useState('All');
+  const [showAll, setShowAll] = useState(false);
   const categories = useMemo(
     () => ['All', 'Web Development', 'Mobile Development'],
     []
@@ -83,6 +86,22 @@ const Projects: React.FC = () => {
     () => (filter === 'All' ? PROJECTS : PROJECTS.filter(p => p.category === filter)),
     [filter]
   );
+  const visibleProjects = useMemo(
+    () =>
+      filter === 'All' && !showAll
+        ? filteredProjects.slice(0, INITIAL_VISIBLE_COUNT)
+        : filteredProjects,
+    [filter, showAll, filteredProjects]
+  );
+  const hasMore =
+    filter === 'All' &&
+    !showAll &&
+    filteredProjects.length > INITIAL_VISIBLE_COUNT;
+  const remainingCount = filteredProjects.length - INITIAL_VISIBLE_COUNT;
+
+  useEffect(() => {
+    setShowAll(false);
+  }, [filter]);
 
   return (
     <section
@@ -135,7 +154,7 @@ const Projects: React.FC = () => {
 
       <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project, idx) => (
+          {visibleProjects.map((project, idx) => (
             <ProjectCard
               key={project.id}
               project={project}
@@ -145,6 +164,42 @@ const Projects: React.FC = () => {
           ))}
         </AnimatePresence>
       </motion.div>
+
+      {hasMore && (
+        <RevealSection className="mt-12 flex justify-center">
+          <MagneticButton strength={0.15}>
+            <motion.button
+              type="button"
+              onClick={() => setShowAll(true)}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="group px-8 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-300 flex items-center gap-3 hover:bg-[var(--accent)] hover:text-[var(--accent-contrast)] hover:border-[var(--accent)] hover:shadow-accent-hover shadow-accent"
+              style={{
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                color: 'var(--text-muted)',
+              }}
+              aria-label={`Load ${remainingCount} more projects`}
+            >
+              Load more
+              <span
+                className="transition-colors duration-300 group-hover:text-[var(--accent-contrast)]"
+                style={{ color: 'var(--accent-light)' }}
+              >
+                ({remainingCount})
+              </span>
+              <ChevronDown
+                size={16}
+                className="transition-transform duration-300 group-hover:translate-y-0.5"
+              />
+            </motion.button>
+          </MagneticButton>
+        </RevealSection>
+      )}
     </section>
   );
 };

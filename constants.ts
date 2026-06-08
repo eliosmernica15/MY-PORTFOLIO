@@ -7,6 +7,32 @@ export const PERSONAL_INFO = {
 
 export const PROJECTS = [
   {
+    id: 'esmp',
+    title: 'ESMP',
+    category: 'Web Development',
+    description: 'Enterprise marketplace OS — storefront, payments, invoicing, and analytics for modern business.',
+    longDescription:
+      'ESMP is the operating system for micro-businesses, agencies, and service providers. It unifies storefront management, payments, invoicing, and analytics into one fast, polished dashboard. The landing page and product UI feature a clean monochrome design with layered dashboard previews, theme switching, and enterprise-grade UX patterns built for speed.',
+    image: 'https://i.postimg.cc/YqJk7RvT/ESMP.png',
+    link: 'https://esmp-cloud.vercel.app/',
+    color: '#171717',
+    tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Vercel'],
+    year: '2026',
+  },
+  {
+    id: 'apl',
+    title: 'A++(APL)',
+    category: 'Web Development',
+    description: 'Albanian programming language with natural syntax — transpiles to Python, React, and FastAPI.',
+    longDescription:
+      'A++(APL) is a programming language written in Albanian that reads like natural language. The platform includes a live transpiler demo, interactive playground, CLI tooling, and full documentation. Developers write .apl files with plain Albanian syntax and compile to Python, React TSX, or FastAPI with a single command — supported by hot reload, a CIL architecture, and cross-platform installers.',
+    image: 'https://i.postimg.cc/52Vz0wGZ/A-APL-Gjuha-Programuese-Shqipe.png',
+    link: 'https://aplplus.vercel.app/',
+    color: '#e879f9',
+    tech: ['Python', 'React', 'FastAPI', 'TypeScript', 'Vite', 'CIL'],
+    year: '2026',
+  },
+  {
     id: 'em-motors',
     title: 'EM Motors',
     category: 'Web Development',
@@ -222,6 +248,26 @@ export const CONTACT_INFO = {
 };
 
 export const CASE_STUDIES = [
+  {
+    title: 'ESMP: The OS for Modern Business',
+    category: 'Web Development',
+    date: '2026',
+    challenge: 'Build an all-in-one marketplace platform for storefronts, payments, invoicing, and analytics.',
+    solution: 'Designed a premium SaaS landing page and dashboard preview with theme switching, responsive layouts, and a modular business hub UI.',
+    result: 'A polished enterprise marketplace OS that communicates product value instantly and scales across 120+ countries.',
+    tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS'],
+    img: 'https://i.postimg.cc/YqJk7RvT/ESMP.png',
+  },
+  {
+    title: 'A++(APL): Programming in Albanian',
+    category: 'Web Development',
+    date: '2026',
+    challenge: 'Make programming accessible with Albanian natural-language syntax and multi-target transpilation.',
+    solution: 'Built a marketing site with live transpiler demo, playground, CLI showcase, and documentation — powered by a CIL compiler pipeline.',
+    result: 'A full platform where developers write Albanian code and ship Python, React, and FastAPI apps from one toolchain.',
+    tech: ['Python', 'React', 'FastAPI', 'TypeScript', 'CIL'],
+    img: 'https://i.postimg.cc/52Vz0wGZ/A-APL-Gjuha-Programuese-Shqipe.png',
+  },
   {
     title: 'EM Motors: A Modern Car Presentation Platform',
     category: 'Web Development',
