@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Menu, X, Sparkles } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import MagneticButton from './MagneticButton';
+import AdvancedButton from './ui/AdvancedButton';
 import { useRafScroll } from '../hooks/useRafScroll';
 
 const navLinks = [
@@ -121,6 +122,15 @@ const Nav: React.FC = () => {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen]);
+
   return (
     <>
       <div className="fixed top-4 left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4 pt-[env(safe-area-inset-top)] sm:top-6">
@@ -176,15 +186,24 @@ const Nav: React.FC = () => {
 
           <ThemeToggle />
 
-          <MagneticButton strength={0.2}>
-            <button
-              type="button"
-              onClick={e => handleNavClick(e, { name: 'Hire', id: 'contact' })}
-              className="interactive-btn hidden lg:flex items-center gap-2 px-5 py-2.5 text-[10px] font-bold rounded-full uppercase tracking-widest bg-[var(--accent)] text-[var(--accent-contrast)] shadow-accent hover:shadow-accent-hover transition-all duration-300 hover:scale-105"
-            >
-              <Sparkles size={12} /> Hire Me
-            </button>
-          </MagneticButton>
+          <AdvancedButton
+            variant="primary"
+            size="sm"
+            icon={<Sparkles size={12} />}
+            onClick={() => {
+              setActiveTab('Hire');
+              if (pathname !== '/') {
+                navigate('/');
+                setTimeout(() => scrollToSection('contact'), 150);
+              } else {
+                scrollToSection('contact');
+              }
+              setIsOpen(false);
+            }}
+            className="hidden lg:inline-flex"
+          >
+            Hire Me
+          </AdvancedButton>
 
           <button
             type="button"

@@ -9,6 +9,7 @@ import { AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
+import AmbientBackground from './components/AmbientBackground';
 import Home from './pages/Home';
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -63,6 +64,7 @@ export default function App() {
             Skip to main content
           </a>
 
+          <AmbientBackground />
           <Nav />
 
           <main id="main-content" className="snap-container">

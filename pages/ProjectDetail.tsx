@@ -3,8 +3,9 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, LayoutGrid } from 'lucide-react';
 import { PROJECTS } from '../constants';
-import FloatingOrbs from '../components/FloatingOrbs';
 import RevealSection from '../components/RevealSection';
+import AdvancedButton from '../components/ui/AdvancedButton';
+import PremiumCard from '../components/ui/PremiumCard';
 
 const ProjectDetail: React.FC = () => {
   const { id } = useParams();
@@ -53,9 +54,8 @@ const ProjectDetail: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="pt-32 pb-24 px-6 max-w-6xl mx-auto relative"
+      className="pt-32 pb-24 px-6 max-w-6xl mx-auto relative z-[1]"
     >
-      <FloatingOrbs />
       <div className="mb-14 flex flex-wrap items-center gap-4 relative z-10">
         <button
           onClick={() => navigate(-1)}
@@ -174,12 +174,8 @@ const ProjectDetail: React.FC = () => {
           </RevealSection>
         </div>
         <div className="lg:col-span-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="p-8 rounded-[2.5rem] glass-accent sticky top-24 lg:top-28"
-          >
+          <PremiumCard glow padding={false} className="sticky top-24 lg:top-28">
+            <div className="p-8">
             <h3
               className="text-[10px] font-bold uppercase tracking-[0.4em] mb-6 pb-3"
               style={{
@@ -221,30 +217,24 @@ const ProjectDetail: React.FC = () => {
                 </p>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {project.tech.map(t => (
-                    <span
-                      key={t}
-                      className="px-3 py-1 rounded-lg text-[10px] font-bold"
-                      style={{
-                        backgroundColor: 'var(--glass-accent-bg)',
-                        border: '1px solid var(--glass-accent-border)',
-                        color: 'var(--accent-muted)',
-                      }}
-                    >
+                    <span key={t} className="project-tech-pill">
                       {t}
                     </span>
                   ))}
                 </div>
               </div>
             </div>
-            <a
+            <AdvancedButton
+              variant="primary"
+              size="lg"
               href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 w-full py-4 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-2xl flex items-center justify-center gap-3 font-bold hover:shadow-accent-hover shadow-accent transition-all"
+              iconRight={<ExternalLink size={16} />}
+              className="w-full mt-8"
             >
-              Visit Live <ExternalLink size={16} />
-            </a>
-          </motion.div>
+              Visit Live
+            </AdvancedButton>
+            </div>
+          </PremiumCard>
         </div>
       </div>
     </motion.div>

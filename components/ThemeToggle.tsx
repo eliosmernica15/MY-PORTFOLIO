@@ -8,10 +8,11 @@ const ThemeToggle: React.FC = () => {
 
   return (
     <motion.button
+      type="button"
       onClick={toggleTheme}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      className="w-10 h-10 rounded-xl flex items-center justify-center border transition-colors duration-300"
+      className="interactive-btn w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-300 nav-link hover:border-[var(--border-hover)]"
       style={{
         backgroundColor: 'var(--bg-card)',
         borderColor: 'var(--border)',
@@ -19,24 +20,24 @@ const ThemeToggle: React.FC = () => {
       }}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         {theme === 'dark' ? (
           <motion.div
             key="sun"
-            initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+            initial={{ rotate: -60, opacity: 0, scale: 0.6 }}
             animate={{ rotate: 0, opacity: 1, scale: 1 }}
-            exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
-            transition={{ duration: 0.2 }}
+            exit={{ rotate: 60, opacity: 0, scale: 0.6 }}
+            transition={{ duration: 0.22 }}
           >
             <Sun size={18} />
           </motion.div>
         ) : (
           <motion.div
             key="moon"
-            initial={{ rotate: 90, opacity: 0, scale: 0.5 }}
+            initial={{ rotate: 60, opacity: 0, scale: 0.6 }}
             animate={{ rotate: 0, opacity: 1, scale: 1 }}
-            exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
-            transition={{ duration: 0.2 }}
+            exit={{ rotate: -60, opacity: 0, scale: 0.6 }}
+            transition={{ duration: 0.22 }}
           >
             <Moon size={18} />
           </motion.div>

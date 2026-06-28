@@ -123,21 +123,27 @@ const Footer: React.FC = () => {
           </div>
 
           <div
-            className="flex flex-col md:flex-row items-center justify-between gap-4 py-6"
+            className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6"
             style={{ borderTop: '1px solid var(--border)' }}
           >
             <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
               &copy; {new Date().getFullYear()} {PERSONAL_INFO.name}. All rights reserved.
             </p>
-            <div
-              className="flex gap-3 text-[10px] font-medium uppercase tracking-[0.2em]"
-              style={{ color: 'var(--text-secondary)' }}
-            >
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <span className="status-live">
+                <span className="status-live-dot" aria-hidden />
+                Available for projects
+              </span>
+              <div
+                className="flex gap-3 text-[10px] font-medium uppercase tracking-[0.2em]"
+                style={{ color: 'var(--text-secondary)' }}
+              >
               <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">React</span>
               <span style={{ opacity: 0.3 }}>/</span>
               <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">TypeScript</span>
               <span style={{ opacity: 0.3 }}>/</span>
               <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">Vite</span>
+              </div>
             </div>
           </div>
         </div>

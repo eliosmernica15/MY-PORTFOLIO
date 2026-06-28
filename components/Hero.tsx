@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight, Globe, Zap, ArrowDown } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
 import AnimatedCounter from './AnimatedCounter';
-import MagneticButton from './MagneticButton';
+import AdvancedButton from './ui/AdvancedButton';
 import { useTypingEffect } from '../hooks/useTypingEffect';
 import { getDeviceProfile } from '../hooks/useDeviceProfile';
 
@@ -50,7 +50,7 @@ const Hero: React.FC = () => {
   return (
     <section
       id="home"
-      className="relative pt-28 sm:pt-32 md:pt-40 lg:pt-44 pb-16 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden min-h-[100dvh] sm:min-h-screen flex flex-col justify-center snap-section"
+      className="relative pt-28 sm:pt-32 md:pt-40 lg:pt-44 pb-16 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden min-h-[100dvh] sm:min-h-screen flex flex-col justify-center snap-section z-[1]"
     >
       {loadEffects && profile.enable3D && (
         <div className="absolute inset-0 z-0">
@@ -80,20 +80,9 @@ const Hero: React.FC = () => {
             border: '1px solid var(--border)',
           }}
         >
-          <div
-            className="absolute top-6 right-6 sm:top-10 sm:right-10 flex items-center gap-2 sm:gap-3 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full"
-            style={{
-              backgroundColor: 'var(--hero-card-bg)',
-              border: '1px solid var(--border)',
-            }}
-          >
-            <div className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_8px_var(--accent)]" />
-            <span
-              className="text-[10px] font-bold tracking-widest uppercase"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              Available for Work
-            </span>
+          <div className="absolute top-6 right-6 sm:top-10 sm:right-10 status-live">
+            <span className="status-live-dot" aria-hidden />
+            Available for Work
           </div>
 
           <div className="relative z-10">
@@ -127,34 +116,21 @@ const Hero: React.FC = () => {
             </p>
 
             <div className="flex flex-wrap gap-3 sm:gap-4 animate-fade-up" style={{ animationDelay: '0.55s' }}>
-              <MagneticButton strength={0.15}>
-                <button
-                  type="button"
-                  onClick={() =>
-                    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
-                  }
-                  className="interactive-btn px-6 py-3.5 sm:px-8 sm:py-4 bg-[var(--accent)] text-[var(--accent-contrast)] font-bold rounded-xl sm:rounded-2xl hover:shadow-accent-hover shadow-accent transition-shadow flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
-                >
-                  View Showcase <ArrowUpRight size={18} />
-                </button>
-              </MagneticButton>
-
-              <MagneticButton strength={0.15}>
-                <button
-                  type="button"
-                  onClick={() =>
-                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-                  }
-                  className="interactive-btn px-6 py-3.5 sm:px-8 sm:py-4 font-bold rounded-xl sm:rounded-2xl transition-all text-sm sm:text-base"
-                  style={{
-                    backgroundColor: 'var(--bg-card)',
-                    border: '1px solid var(--border)',
-                    color: 'var(--text-primary)',
-                  }}
-                >
-                  Contact Me
-                </button>
-              </MagneticButton>
+              <AdvancedButton
+                variant="primary"
+                size="lg"
+                iconRight={<ArrowUpRight size={18} />}
+                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                View Showcase
+              </AdvancedButton>
+              <AdvancedButton
+                variant="secondary"
+                size="lg"
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Contact Me
+              </AdvancedButton>
             </div>
           </div>
         </motion.div>
@@ -164,7 +140,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.55 }}
-            className="p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] flex flex-col justify-between transition-all duration-500 group"
+            className="p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] flex flex-col justify-between transition-all duration-500 group hover:shadow-accent"
             style={{
               backgroundColor: 'var(--hero-card-bg)',
               border: '1px solid var(--border)',

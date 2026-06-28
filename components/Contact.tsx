@@ -3,22 +3,9 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, CheckCircle2, Send, AlertCircle } from 'lucide-react';
 import { CONTACT_INFO } from '../constants';
 import RevealSection from './RevealSection';
-import FloatingOrbs from './FloatingOrbs';
-import MagneticButton from './MagneticButton';
-
-/*
-  EmailJS Setup:
-  1. Create a free account at https://www.emailjs.com/
-  2. Add an Email Service (e.g. Gmail) — copy the Service ID
-  3. Create an Email Template with variables: {{from_name}}, {{from_email}}, {{message}}
-     — copy the Template ID
-  4. Go to Account > General > copy your Public Key
-  5. Create a .env file in the project root with:
-     VITE_EMAILJS_SERVICE_ID=your_service_id
-     VITE_EMAILJS_TEMPLATE_ID=your_template_id
-     VITE_EMAILJS_PUBLIC_KEY=your_public_key
-  6. Restart the dev server — done!
-*/
+import SectionHeader from './ui/SectionHeader';
+import AdvancedButton from './ui/AdvancedButton';
+import PremiumCard from './ui/PremiumCard';
 
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || '';
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '';
@@ -52,14 +39,19 @@ const ContactForm: React.FC = () => {
     if (SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY) {
       try {
         const { default: emailjs } = await import('@emailjs/browser');
-        await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-          title: `Message from ${formData.name}`,
-          time: new Date().toLocaleString(),
-          reply_to: formData.email,
-        }, PUBLIC_KEY);
+        await emailjs.send(
+          SERVICE_ID,
+          TEMPLATE_ID,
+          {
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            title: `Message from ${formData.name}`,
+            time: new Date().toLocaleString(),
+            reply_to: formData.email,
+          },
+          PUBLIC_KEY
+        );
         setStatus('success');
         setFormData({ name: '', email: '', message: '' });
       } catch (err) {
@@ -68,10 +60,6 @@ const ContactForm: React.FC = () => {
       }
       setTimeout(() => setStatus('idle'), 5000);
     } else {
-      // Demo mode — no credentials configured
-      console.warn(
-        'EmailJS credentials not configured. Running in demo mode. See .env.example for setup instructions.'
-      );
       setTimeout(() => {
         setStatus('success');
         setFormData({ name: '', email: '', message: '' });
@@ -80,261 +68,135 @@ const ContactForm: React.FC = () => {
     }
   };
 
-  const inputClass = (hasErr: boolean) =>
-    `w-full rounded-2xl px-5 py-4 transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--glass-accent-border)] focus:shadow-accent placeholder:opacity-40 ${
-      hasErr ? 'border-red-500/50' : ''
-    }`;
-
   return (
-    <div
-      className="p-8 md:p-12 rounded-[2rem] backdrop-blur-xl shadow-2xl relative overflow-hidden"
-      style={{
-        backgroundColor: 'var(--bg-card)',
-        border: '1px solid var(--border)',
-        color: 'var(--text-primary)',
-      }}
-    >
-      <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[80px] pointer-events-none" style={{ background: 'var(--glass-accent-bg)' }} />
-      {status === 'success' ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center py-10"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', bounce: 0.5, delay: 0.1 }}
-            className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
-            style={{ backgroundColor: 'var(--glass-accent-bg)' }}
-          >
-            <CheckCircle2 size={32} className="text-[var(--accent)]" />
-          </motion.div>
-          <h3 className="text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
-            Sent!
-          </h3>
-          <p style={{ color: 'var(--text-secondary)' }} className="mb-6">
-            Thanks for reaching out. I'll be in touch soon.
-          </p>
-          <MagneticButton strength={0.1}>
-            <motion.button
-              type="button"
-              onClick={() => setStatus('idle')}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="px-6 py-3 rounded-xl text-sm font-bold transition-all"
-              style={{
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                color: 'var(--text-primary)',
-              }}
-            >
+    <PremiumCard glow padding={false}>
+      <div className="p-8 md:p-12 relative overflow-hidden">
+        <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[80px] pointer-events-none opacity-60" style={{ background: 'var(--glass-accent-bg)' }} />
+        {status === 'success' ? (
+          <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: 'var(--glass-accent-bg)' }}>
+              <CheckCircle2 size={32} className="text-[var(--accent)]" />
+            </div>
+            <h3 className="text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>Message sent</h3>
+            <p style={{ color: 'var(--text-secondary)' }} className="mb-6">
+              Thanks for reaching out. I'll respond within 24 hours.
+            </p>
+            <AdvancedButton variant="secondary" size="sm" onClick={() => setStatus('idle')}>
               Send another message
-            </motion.button>
-          </MagneticButton>
-        </motion.div>
-      ) : status === 'error' ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center py-10"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', bounce: 0.5, delay: 0.1 }}
-            className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6"
-          >
-            <AlertCircle size={32} className="text-red-400" />
+            </AdvancedButton>
           </motion.div>
-          <h3 className="text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
-            Oops!
-          </h3>
-          <p style={{ color: 'var(--text-secondary)' }} className="mb-6">
-            Something went wrong. Please try again or email me directly.
-          </p>
-          <MagneticButton strength={0.1}>
-            <motion.button
-              type="button"
-              onClick={() => setStatus('idle')}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="px-6 py-3 rounded-xl text-sm font-bold transition-all"
-              style={{
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                color: 'var(--text-primary)',
-              }}
-            >
+        ) : status === 'error' ? (
+          <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
+            <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
+              <AlertCircle size={32} className="text-red-400" />
+            </div>
+            <h3 className="text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>Something went wrong</h3>
+            <p style={{ color: 'var(--text-secondary)' }} className="mb-6">
+              Please try again or email me directly.
+            </p>
+            <AdvancedButton variant="secondary" size="sm" onClick={() => setStatus('idle')}>
               Try again
-            </motion.button>
-          </MagneticButton>
-        </motion.div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
-              Full Name
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={e => setFormData({ ...formData, name: e.target.value })}
-              className={inputClass(!!errors.name)}
-              style={{
-                backgroundColor: 'var(--input-bg)',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                borderColor: errors.name ? 'var(--text-primary)' : 'var(--border)',
-                color: 'var(--text-primary)',
-              }}
-              placeholder="Your Name"
-              aria-invalid={!!errors.name}
-              aria-describedby={errors.name ? 'name-error' : undefined}
-            />
-            {errors.name && (
-              <motion.p
-                id="name-error"
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-red-400 text-xs"
-                role="alert"
-              >
-                {errors.name}
-              </motion.p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
-              Email Address
-            </label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={e => setFormData({ ...formData, email: e.target.value })}
-              className={inputClass(!!errors.email)}
-              style={{
-                backgroundColor: 'var(--input-bg)',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                borderColor: errors.email ? 'var(--text-primary)' : 'var(--border)',
-                color: 'var(--text-primary)',
-              }}
-              placeholder="your@email.com"
-              aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? 'email-error' : undefined}
-            />
-            {errors.email && (
-              <motion.p
-                id="email-error"
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-red-400 text-xs"
-                role="alert"
-              >
-                {errors.email}
-              </motion.p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
-              Message
-            </label>
-            <textarea
-              rows={4}
-              value={formData.message}
-              onChange={e => setFormData({ ...formData, message: e.target.value })}
-              className={`${inputClass(!!errors.message)} resize-none`}
-              style={{
-                backgroundColor: 'var(--input-bg)',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                borderColor: errors.message ? 'var(--text-primary)' : 'var(--border)',
-                color: 'var(--text-primary)',
-              }}
-              placeholder="How can I help?"
-              aria-invalid={!!errors.message}
-              aria-describedby={errors.message ? 'message-error' : undefined}
-            />
-            {errors.message && (
-              <motion.p
-                id="message-error"
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-red-400 text-xs"
-                role="alert"
-              >
-                {errors.message}
-              </motion.p>
-            )}
-          </div>
-          <MagneticButton strength={0.1}>
-            <motion.button
+            </AdvancedButton>
+          </motion.div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
+            {[
+              { key: 'name', label: 'Full Name', type: 'text', placeholder: 'Your Name' },
+              { key: 'email', label: 'Email Address', type: 'email', placeholder: 'your@email.com' },
+            ].map(field => (
+              <div key={field.key} className="space-y-2">
+                <label htmlFor={field.key} className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+                  {field.label}
+                </label>
+                <input
+                  id={field.key}
+                  type={field.type}
+                  value={formData[field.key as keyof typeof formData]}
+                  onChange={e => setFormData({ ...formData, [field.key]: e.target.value })}
+                  className={`input-enterprise ${errors[field.key] ? 'input-error' : ''}`}
+                  placeholder={field.placeholder}
+                  aria-invalid={!!errors[field.key]}
+                />
+                {errors[field.key] && (
+                  <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-red-400 text-xs" role="alert">
+                    {errors[field.key]}
+                  </motion.p>
+                )}
+              </div>
+            ))}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between gap-4">
+                <label htmlFor="message" className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+                  Message
+                </label>
+                <span className="text-[10px] font-medium tabular-nums" style={{ color: 'var(--text-muted)' }}>
+                  {formData.message.length} chars
+                </span>
+              </div>
+              <textarea
+                id="message"
+                rows={4}
+                value={formData.message}
+                onChange={e => setFormData({ ...formData, message: e.target.value })}
+                className={`input-enterprise resize-none ${errors.message ? 'input-error' : ''}`}
+                placeholder="Tell me about your project, timeline, and goals..."
+                aria-invalid={!!errors.message}
+              />
+              {errors.message && (
+                <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-red-400 text-xs" role="alert">
+                  {errors.message}
+                </motion.p>
+              )}
+            </div>
+            <AdvancedButton
               type="submit"
-              disabled={status === 'loading'}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full py-4 bg-[var(--accent)] text-[var(--accent-contrast)] font-bold rounded-2xl hover:shadow-accent-hover shadow-accent transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              variant="primary"
+              size="lg"
+              loading={status === 'loading'}
+              icon={<Send size={16} />}
+              className="w-full"
             >
-              <Send size={16} /> {status === 'loading' ? 'Sending...' : 'Send Message'}
-            </motion.button>
-          </MagneticButton>
-        </form>
-      )}
-    </div>
+              {status === 'loading' ? 'Sending...' : 'Send Message'}
+            </AdvancedButton>
+          </form>
+        )}
+      </div>
+    </PremiumCard>
   );
 };
 
 const Contact: React.FC = () => {
   return (
-    <section className="py-20 sm:py-24 lg:py-32 px-4 sm:px-6 relative overflow-hidden snap-section">
-      <FloatingOrbs />
+    <section id="contact" className="py-20 sm:py-24 lg:py-32 px-4 sm:px-6 relative overflow-hidden snap-section content-auto z-[1]">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-center relative z-10">
         <RevealSection>
-          <span
-            className="font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block"
-            style={{ color: 'var(--accent-light)' }}
-          >
-            Get in Touch
-          </span>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 sm:mb-8 tracking-tighter text-gradient leading-none">
-            Craft the
-            <br />
-            Future.
-          </h2>
-          <p
-            className="text-lg md:text-xl mb-12 max-w-md font-light leading-relaxed"
-            style={{ color: 'var(--text-secondary)' }}
-          >
-            Architecting the next generation of digital excellence. Let's build
-            something remarkable together.
-          </p>
-          <div className="flex flex-wrap gap-3">
+          <SectionHeader
+            eyebrow="Get in Touch"
+            title={
+              <>
+                Craft the
+                <br />
+                <span className="text-gradient">Future.</span>
+              </>
+            }
+            subtitle="Architecting the next generation of digital excellence. Share your vision — I'll engineer the path from concept to production."
+          />
+          <div className="flex flex-wrap gap-3 -mt-4">
             <a
               href={`mailto:${CONTACT_INFO.email}`}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-all hover:text-[var(--accent-light)]"
-              style={{
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                color: 'var(--text-secondary)',
-              }}
+              className="interactive-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-all hover:text-[var(--accent-light)] chip-enterprise"
             >
               <Mail size={14} /> {CONTACT_INFO.email}
             </a>
             <a
               href={`tel:${CONTACT_INFO.phone}`}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-all hover:text-[var(--accent-light)]"
-              style={{
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                color: 'var(--text-secondary)',
-              }}
+              className="interactive-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-all hover:text-[var(--accent-light)] chip-enterprise"
             >
               <Phone size={14} /> {CONTACT_INFO.phone}
             </a>
           </div>
         </RevealSection>
-        <RevealSection delay={0.2}>
+        <RevealSection delay={0.15}>
           <ContactForm />
         </RevealSection>
       </div>
