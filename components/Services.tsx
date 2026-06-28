@@ -12,7 +12,7 @@ const iconMap: Record<string, React.ReactNode> = {
 
 const Services: React.FC = () => {
   return (
-    <section id="services" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 scroll-mt-24 snap-section relative overflow-hidden">
+    <section className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 scroll-mt-24 snap-section relative overflow-hidden content-auto">
       <div className="absolute top-0 right-1/4 w-96 h-96 blur-[120px] rounded-full pointer-events-none opacity-50" style={{ background: 'var(--glass-accent-bg)' }} />
       <div className="max-w-7xl mx-auto relative z-10">
         <RevealSection className="mb-16 md:mb-20 text-center">

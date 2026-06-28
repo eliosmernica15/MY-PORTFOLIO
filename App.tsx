@@ -15,7 +15,6 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 const CustomCursor = lazy(() => import('./components/CustomCursor'));
 const ScrollProgress = lazy(() => import('./components/ScrollProgress'));
 
-/* Scroll to top on route change */
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -24,11 +23,10 @@ const ScrollToTop = () => {
   return null;
 };
 
-/* Animated route transitions */
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="sync">
       <Suspense fallback={<div className="min-h-screen" style={{ background: 'var(--bg-primary)' }} />}>
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
@@ -41,6 +39,15 @@ const AnimatedRoutes = () => {
 };
 
 export default function App() {
+  useEffect(() => {
+    const loader = document.getElementById('app-loading');
+    if (loader) {
+      loader.style.opacity = '0';
+      loader.style.transition = 'opacity 0.35s ease';
+      window.setTimeout(() => loader.remove(), 380);
+    }
+  }, []);
+
   return (
     <ThemeProvider>
       <HashRouter>
@@ -48,22 +55,21 @@ export default function App() {
 
         <>
           <Suspense fallback={null}>
-              <CustomCursor />
-              <ScrollProgress />
-            </Suspense>
+            <CustomCursor />
+            <ScrollProgress />
+          </Suspense>
 
-            {/* Skip to content - Accessibility */}
-            <a href="#main-content" className="skip-link">
-              Skip to main content
-            </a>
+          <a href="#main-content" className="skip-link">
+            Skip to main content
+          </a>
 
-            <Nav />
+          <Nav />
 
-            <main id="main-content" className="snap-container">
-              <AnimatedRoutes />
-            </main>
+          <main id="main-content" className="snap-container">
+            <AnimatedRoutes />
+          </main>
 
-            <Footer />
+          <Footer />
         </>
       </HashRouter>
     </ThemeProvider>

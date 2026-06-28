@@ -184,12 +184,12 @@ a[href*="spline.tool"] {
    Marquee Animations
    ================================================================ */
 @keyframes marquee-left {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-100% / 3)); }
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(calc(-100% / 2), 0, 0); }
 }
 @keyframes marquee-right {
-  0% { transform: translateX(calc(-100% / 3)); }
-  100% { transform: translateX(0); }
+  0% { transform: translate3d(calc(-100% / 2), 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
 }
 
 /* ================================================================
@@ -338,4 +338,105 @@ a:focus-visible {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ================================================================
+   Performance & Interaction Utilities
+   ================================================================ */
+.gpu-layer {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
+.magnetic-wrap {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.tilt-card {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.interactive-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.interactive-btn:active {
+  transform: scale(0.98);
+}
+
+.nav-link-active {
+  background-color: var(--pill-bg);
+  border: 1px solid var(--pill-border);
+}
+
+.nav-blur {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@media (max-width: 1023px) {
+  .nav-blur,
+  .glass,
+  .glass-accent {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .noise::before {
+    opacity: 0.008;
+  }
+}
+
+.nav-overlay {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, 8px, 0); }
+}
+
+.scroll-indicator {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+.marquee-wrap:hover .marquee-row-left,
+.marquee-wrap:hover .marquee-row-right {
+  animation-play-state: paused;
+}
+
+.marquee-row-left {
+  width: max-content;
+  animation: marquee-left 36s linear infinite;
+}
+
+.marquee-row-right {
+  width: max-content;
+  animation: marquee-right 42s linear infinite;
 }

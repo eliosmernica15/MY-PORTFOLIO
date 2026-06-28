@@ -14,14 +14,13 @@ const Testimonials = lazy(() => import('../components/Testimonials'));
 const Contact = lazy(() => import('../components/Contact'));
 const sectionFallback = <div className="min-h-[200px]" aria-hidden="true" />;
 
-
 const Home: React.FC = () => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
     >
       <Hero />
       <About />
@@ -41,8 +40,7 @@ const Home: React.FC = () => {
         <Resume />
       </LazySection>
 
-      {/* Skills Marquee */}
-      <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 max-w-7xl mx-auto snap-section">
+      <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 max-w-7xl mx-auto snap-section content-auto">
         <RevealSection className="text-center mb-12">
           <span
             className="font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block"

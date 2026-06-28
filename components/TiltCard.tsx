@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, memo } from 'react';
+import { getDeviceProfile } from '../hooks/useDeviceProfile';
 
 interface TiltCardProps {
   children: React.ReactNode;
@@ -7,54 +7,68 @@ interface TiltCardProps {
   tiltStrength?: number;
 }
 
-const TiltCard: React.FC<TiltCardProps> = ({
+const profile = getDeviceProfile();
+
+const TiltCard = memo(function TiltCard({
   children,
   className = '',
   tiltStrength = 6,
-}) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
-  const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
+}: TiltCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const glareRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<number | null>(null);
 
-  const isTouchDevice =
-    typeof window !== 'undefined' && 'ontouchstart' in window;
+  if (!profile.enableMagnetic) {
+    return <div className={`relative ${className}`}>{children}</div>;
+  }
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (isTouchDevice || !ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const xPos = (e.clientX - rect.left) / rect.width;
-    const yPos = (e.clientY - rect.top) / rect.height;
-    setTilt({
-      rotateX: (yPos - 0.5) * -tiltStrength,
-      rotateY: (xPos - 0.5) * tiltStrength,
+    const card = cardRef.current;
+    const glare = glareRef.current;
+    if (!card) return;
+
+    if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+    frameRef.current = requestAnimationFrame(() => {
+      frameRef.current = null;
+      const rect = card.getBoundingClientRect();
+      const xPos = (e.clientX - rect.left) / rect.width;
+      const yPos = (e.clientY - rect.top) / rect.height;
+      const rotateX = (yPos - 0.5) * -tiltStrength;
+      const rotateY = (xPos - 0.5) * tiltStrength;
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      if (glare) {
+        glare.style.background = `radial-gradient(circle at ${xPos * 100}% ${yPos * 100}%, rgba(255,255,255,0.12), transparent 60%)`;
+        glare.style.opacity = '1';
+      }
     });
-    setGlare({ x: xPos * 100, y: yPos * 100, opacity: 0.12 });
   };
 
   const handleMouseLeave = () => {
-    setTilt({ rotateX: 0, rotateY: 0 });
-    setGlare({ x: 50, y: 50, opacity: 0 });
+    const card = cardRef.current;
+    const glare = glareRef.current;
+    if (frameRef.current !== null) {
+      cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+    }
+    if (card) card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+    if (glare) glare.style.opacity = '0';
   };
 
   return (
-    <motion.div
-      ref={ref}
+    <div
+      ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      animate={tilt}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      style={{ perspective: 1000, transformStyle: 'preserve-3d' }}
-      className={`relative ${className}`}
+      className={`tilt-card relative ${className}`}
     >
       {children}
       <div
-        className="absolute inset-0 rounded-[2rem] pointer-events-none transition-opacity duration-300"
-        style={{
-          background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255,255,255,${glare.opacity}), transparent 60%)`,
-        }}
+        ref={glareRef}
+        className="absolute inset-0 rounded-[2rem] pointer-events-none opacity-0 transition-opacity duration-300"
+        aria-hidden
       />
-    </motion.div>
+    </div>
   );
-};
+});
 
 export default TiltCard;

@@ -1,26 +1,16 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { SKILLS } from '../constants';
 
 const SkillMarquee: React.FC = () => {
-  const row1 = [...SKILLS, ...SKILLS, ...SKILLS];
-  const row2 = [
-    ...[...SKILLS].reverse(),
-    ...[...SKILLS].reverse(),
-    ...[...SKILLS].reverse(),
-  ];
+  const row1 = [...SKILLS, ...SKILLS];
+  const row2 = [...[...SKILLS].reverse(), ...[...SKILLS].reverse()];
 
   const pillClass =
     'shrink-0 px-5 py-2.5 rounded-xl border text-sm font-medium transition-colors duration-300 cursor-default whitespace-nowrap select-none hover:bg-[var(--accent)] hover:text-[var(--accent-contrast)]';
 
   return (
-    <div className="space-y-3 overflow-hidden py-2 [&:hover_div]:![animation-play-state:paused]">
-      <div
-        className="flex gap-3"
-        style={{
-          animation: 'marquee-left 40s linear infinite',
-          width: 'max-content',
-        }}
-      >
+    <div className="space-y-3 overflow-hidden py-2 marquee-wrap">
+      <div className="flex gap-3 marquee-row-left gpu-layer">
         {row1.map((skill, i) => (
           <div
             key={`a-${i}`}
@@ -35,13 +25,7 @@ const SkillMarquee: React.FC = () => {
           </div>
         ))}
       </div>
-      <div
-        className="flex gap-3"
-        style={{
-          animation: 'marquee-right 45s linear infinite',
-          width: 'max-content',
-        }}
-      >
+      <div className="flex gap-3 marquee-row-right gpu-layer">
         {row2.map((skill, i) => (
           <div
             key={`b-${i}`}
@@ -60,4 +44,4 @@ const SkillMarquee: React.FC = () => {
   );
 };
 
-export default SkillMarquee;
+export default memo(SkillMarquee);

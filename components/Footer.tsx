@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { memo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, Instagram, Linkedin, Mail, ArrowUp } from 'lucide-react';
 import { SOCIALS, CONTACT_INFO, PERSONAL_INFO } from '../constants';
 import MagneticButton from './MagneticButton';
+import { useRafScroll } from '../hooks/useRafScroll';
+
+const quickLinks = [
+  { name: 'Projects', id: 'projects' },
+  { name: 'Services', id: 'services' },
+  { name: 'Resume', id: 'resume' },
+  { name: 'About', id: 'about' },
+  { name: 'Contact', id: 'contact' },
+];
 
 const Footer: React.FC = () => {
-  const [showBackToTop, setShowBackToTop] = useState(false);
+  const { showBackToTop } = useRafScroll(50, 250);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
-  useEffect(() => {
-    const onScroll = () => setShowBackToTop(window.scrollY > 250);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -27,25 +30,15 @@ const Footer: React.FC = () => {
     }
   };
 
-  const quickLinks = [
-    { name: 'Projects', id: 'projects' },
-    { name: 'Resume', id: 'resume' },
-    { name: 'About', id: 'about' },
-    { name: 'Case Studies', id: 'case-studies' },
-    { name: 'Contact', id: 'contact' },
-  ];
-
   return (
     <>
-      <footer className="relative overflow-hidden" style={{ borderTop: '1px solid var(--border)' }}>
-        {/* Gradient divider */}
+      <footer className="relative overflow-hidden content-auto" style={{ borderTop: '1px solid var(--border)' }}>
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-50" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-12 mb-12 sm:mb-16">
-            {/* Brand */}
             <div>
-              <Link to="/" className="flex items-center gap-3 group mb-6">
+              <Link to="/" className="flex items-center gap-3 group mb-6 interactive-btn">
                 <div className="w-10 h-10 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-xl flex items-center justify-center font-bold text-sm shadow-accent">
                   EM
                 </div>
@@ -65,7 +58,6 @@ const Footer: React.FC = () => {
               </p>
             </div>
 
-            {/* Quick Links */}
             <div>
               <h4
                 className="text-[10px] font-bold uppercase tracking-[0.4em] mb-6"
@@ -77,8 +69,9 @@ const Footer: React.FC = () => {
                 {quickLinks.map(link => (
                   <button
                     key={link.name}
+                    type="button"
                     onClick={() => handleNavClick(link.id)}
-                    className="text-sm text-left transition-colors hover:text-[var(--accent-light)]"
+                    className="interactive-btn text-sm text-left transition-colors hover:text-[var(--accent-light)]"
                     style={{ color: 'var(--text-secondary)' }}
                     aria-label={`Go to ${link.name} section`}
                   >
@@ -88,7 +81,6 @@ const Footer: React.FC = () => {
               </nav>
             </div>
 
-            {/* Connect */}
             <div>
               <h4
                 className="text-[10px] font-bold uppercase tracking-[0.4em] mb-6"
@@ -99,7 +91,7 @@ const Footer: React.FC = () => {
               <div className="flex flex-col gap-3 mb-6">
                 <a
                   href={`mailto:${CONTACT_INFO.email}`}
-                  className="text-sm flex items-center gap-2 transition-colors hover:text-[var(--accent-light)]"
+                  className="interactive-btn text-sm flex items-center gap-2 transition-colors hover:text-[var(--accent-light)]"
                   style={{ color: 'var(--text-secondary)' }}
                 >
                   <Mail size={14} /> {CONTACT_INFO.email}
@@ -108,12 +100,11 @@ const Footer: React.FC = () => {
               <div className="flex gap-3">
                 {SOCIALS.map(s => (
                   <MagneticButton key={s.name} strength={0.2}>
-                    <motion.a
+                    <a
                       href={s.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      whileHover={{ scale: 1.1 }}
-                      className="w-10 h-10 flex items-center justify-center rounded-xl border transition-all duration-300"
+                      className="interactive-btn w-10 h-10 flex items-center justify-center rounded-xl border transition-all duration-300 hover:scale-105"
                       style={{
                         backgroundColor: 'var(--bg-card)',
                         borderColor: 'var(--border)',
@@ -124,14 +115,13 @@ const Footer: React.FC = () => {
                       {s.icon === 'Github' && <Github size={18} />}
                       {s.icon === 'Instagram' && <Instagram size={18} />}
                       {s.icon === 'Linkedin' && <Linkedin size={18} />}
-                    </motion.a>
+                    </a>
                   </MagneticButton>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Bottom bar */}
           <div
             className="flex flex-col md:flex-row items-center justify-between gap-4 py-6"
             style={{ borderTop: '1px solid var(--border)' }}
@@ -139,36 +129,38 @@ const Footer: React.FC = () => {
             <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
               &copy; {new Date().getFullYear()} {PERSONAL_INFO.name}. All rights reserved.
             </p>
-            <div className="flex gap-3 text-[10px] font-medium uppercase tracking-[0.2em]" style={{ color: 'var(--text-secondary)' }}>
+            <div
+              className="flex gap-3 text-[10px] font-medium uppercase tracking-[0.2em]"
+              style={{ color: 'var(--text-secondary)' }}
+            >
               <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">React</span>
               <span style={{ opacity: 0.3 }}>/</span>
               <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">TypeScript</span>
               <span style={{ opacity: 0.3 }}>/</span>
-              <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">Framer Motion</span>
+              <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">Vite</span>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* Back to Top Button */}
       <AnimatePresence>
         {showBackToTop && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.2 }}
             className="fixed z-40 right-[max(2rem,env(safe-area-inset-right))] bottom-[max(2rem,env(safe-area-inset-bottom))]"
           >
             <MagneticButton strength={0.3}>
-              <motion.button
+              <button
+                type="button"
                 onClick={scrollToTop}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-12 h-12 rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] flex items-center justify-center shadow-accent hover:shadow-accent-hover transition-shadow"
+                className="interactive-btn w-12 h-12 rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] flex items-center justify-center shadow-accent hover:shadow-accent-hover transition-transform hover:scale-105 active:scale-95"
                 aria-label="Back to top"
               >
                 <ArrowUp size={20} />
-              </motion.button>
+              </button>
             </MagneticButton>
           </motion.div>
         )}
@@ -177,4 +169,4 @@ const Footer: React.FC = () => {
   );
 };
 
-export default Footer;
+export default memo(Footer);

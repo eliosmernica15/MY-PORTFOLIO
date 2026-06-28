@@ -27,7 +27,10 @@ const LazySection: React.FC<LazySectionProps> = ({
     if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setInView(true);
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
       },
       { rootMargin }
     );

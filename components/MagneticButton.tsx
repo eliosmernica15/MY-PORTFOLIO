@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import React, { useRef, memo } from 'react';
+import { getDeviceProfile } from '../hooks/useDeviceProfile';
 
 interface MagneticButtonProps {
   children: React.ReactNode;
@@ -7,45 +7,44 @@ interface MagneticButtonProps {
   strength?: number;
 }
 
-const MagneticButton: React.FC<MagneticButtonProps> = ({
+const profile = getDeviceProfile();
+
+const MagneticButton = memo(function MagneticButton({
   children,
   className = '',
   strength = 0.3,
-}) => {
+}: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 300, damping: 20 });
-  const springY = useSpring(y, { stiffness: 300, damping: 20 });
 
-  const isTouchDevice =
-    typeof window !== 'undefined' && 'ontouchstart' in window;
+  if (!profile.enableMagnetic) {
+    return <div className={className}>{children}</div>;
+  }
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (isTouchDevice || !ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    x.set((e.clientX - centerX) * strength);
-    y.set((e.clientY - centerY) * strength);
+    const node = ref.current;
+    if (!node) return;
+    const rect = node.getBoundingClientRect();
+    const x = (e.clientX - (rect.left + rect.width / 2)) * strength;
+    const y = (e.clientY - (rect.top + rect.height / 2)) * strength;
+    node.style.transform = `translate3d(${x}px, ${y}px, 0)`;
   };
 
   const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
+    const node = ref.current;
+    if (!node) return;
+    node.style.transform = 'translate3d(0, 0, 0)';
   };
 
   return (
-    <motion.div
+    <div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ x: springX, y: springY }}
-      className={className}
+      className={`magnetic-wrap ${className}`.trim()}
     >
       {children}
-    </motion.div>
+    </div>
   );
-};
+});
 
 export default MagneticButton;
