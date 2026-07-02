@@ -1,6 +1,5 @@
 import React, { useState, useMemo, memo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import RevealSection from './RevealSection';
@@ -13,17 +12,11 @@ type Project = (typeof PROJECTS)[number];
 interface ProjectCardProps {
   project: Project;
   isFeatured: boolean;
-  index: number;
 }
 
-const ProjectCard = memo(function ProjectCard({ project, isFeatured, index }: ProjectCardProps) {
+const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCardProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.2) }}
-      className={isFeatured ? 'md:col-span-2' : ''}
-    >
+    <div className={isFeatured ? 'md:col-span-2' : ''}>
       <TiltCard>
         <Link
           to={`/project/${project.id}`}
@@ -79,7 +72,7 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured, index }: Pr
           </div>
         </Link>
       </TiltCard>
-    </motion.div>
+    </div>
   );
 });
 
@@ -114,7 +107,7 @@ const Projects: React.FC = () => {
   }, [filter]);
 
   return (
-    <section className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto snap-section content-auto relative z-[1]">
+    <section className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto content-auto relative z-[1]">
       <RevealSection className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
         <SectionHeader
           eyebrow="Portfolio"
@@ -161,7 +154,6 @@ const Projects: React.FC = () => {
             key={project.id}
             project={project}
             isFeatured={idx === 0 && filter === 'All'}
-            index={idx}
           />
         ))}
       </div>

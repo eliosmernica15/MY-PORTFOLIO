@@ -9,7 +9,7 @@ import PremiumCard from './ui/PremiumCard';
 
 const Resume: React.FC = () => {
   return (
-    <section id="resume" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 relative snap-section content-auto z-[1]">
+    <section id="resume" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 relative content-auto z-[1]">
       <div className="max-w-7xl mx-auto relative z-10">
         <RevealSection className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           <div className="lg:col-span-4 space-y-10">

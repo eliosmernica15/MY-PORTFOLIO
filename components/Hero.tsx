@@ -1,5 +1,4 @@
 import React, { useState, useEffect, lazy, Suspense, useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { ArrowUpRight, Globe, Zap, ArrowDown } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
 import AnimatedCounter from './AnimatedCounter';
@@ -8,7 +7,6 @@ import { useTypingEffect } from '../hooks/useTypingEffect';
 import { getDeviceProfile } from '../hooks/useDeviceProfile';
 
 const LazySplineScene = lazy(() => import('./SplineScene'));
-const LazyFloatingOrbs = lazy(() => import('./FloatingOrbs'));
 const LazyParticleCanvas = lazy(() => import('./ParticleCanvas'));
 
 const profile = getDeviceProfile();
@@ -23,10 +21,10 @@ const Hero: React.FC = () => {
     const run = () => {
       if (!cancelled) setLoadEffects(true);
     };
-    const delay = profile.enable3D ? 400 : 700;
+    const delay = profile.enable3D ? 500 : 900;
     const id =
       typeof requestIdleCallback !== 'undefined'
-        ? requestIdleCallback(run, { timeout: delay + 300 })
+        ? requestIdleCallback(run, { timeout: delay + 400 })
         : window.setTimeout(run, delay);
 
     return () => {
@@ -50,7 +48,7 @@ const Hero: React.FC = () => {
   return (
     <section
       id="home"
-      className="relative pt-28 sm:pt-32 md:pt-40 lg:pt-44 pb-16 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden min-h-[100dvh] sm:min-h-screen flex flex-col justify-center snap-section z-[1]"
+      className="relative pt-28 sm:pt-32 md:pt-40 lg:pt-44 pb-16 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden min-h-[100dvh] sm:min-h-screen flex flex-col justify-center z-[1]"
     >
       {loadEffects && profile.enable3D && (
         <div className="absolute inset-0 z-0">
@@ -61,20 +59,16 @@ const Hero: React.FC = () => {
       )}
 
       {loadEffects && profile.enableHeavyEffects && (
-        <Suspense fallback={null}>
-          <LazyFloatingOrbs />
-          <div className="absolute inset-0 pointer-events-none z-[1]">
+        <div className="absolute inset-0 pointer-events-none z-[1]">
+          <Suspense fallback={null}>
             <LazyParticleCanvas />
-          </div>
-        </Suspense>
+          </Suspense>
+        </div>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 36 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="lg:col-span-8 p-6 sm:p-10 md:p-14 lg:p-16 rounded-[2rem] sm:rounded-[2.5rem] lg:rounded-[3rem] relative overflow-hidden flex flex-col justify-end min-h-[360px] sm:min-h-[420px] md:min-h-[480px] lg:min-h-[520px]"
+        <div
+          className="lg:col-span-8 p-6 sm:p-10 md:p-14 lg:p-16 rounded-[2rem] sm:rounded-[2.5rem] lg:rounded-[3rem] relative overflow-hidden flex flex-col justify-end min-h-[360px] sm:min-h-[420px] md:min-h-[480px] lg:min-h-[520px] animate-fade-up"
           style={{
             backgroundColor: 'var(--hero-card-bg)',
             border: '1px solid var(--border)',
@@ -87,19 +81,15 @@ const Hero: React.FC = () => {
 
           <div className="relative z-10">
             <p
-              className="text-xs font-bold uppercase tracking-[0.3em] mb-6 animate-fade-up"
-              style={{ color: 'var(--accent-light)', animationDelay: '0.15s' }}
+              className="text-xs font-bold uppercase tracking-[0.3em] mb-6"
+              style={{ color: 'var(--accent-light)' }}
             >
               Software Engineer
             </p>
 
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter mb-6 sm:mb-8 leading-[0.9]">
               {PERSONAL_INFO.name.split(' ').map((word, i) => (
-                <span
-                  key={word + i}
-                  className="text-gradient inline-block mr-4 animate-fade-up"
-                  style={{ animationDelay: `${0.25 + i * 0.1}s` }}
-                >
+                <span key={word + i} className="text-gradient inline-block mr-4">
                   {word}
                   {i === PERSONAL_INFO.name.split(' ').length - 1 ? '.' : ''}
                 </span>
@@ -107,15 +97,15 @@ const Hero: React.FC = () => {
             </h1>
 
             <p
-              className="max-w-lg text-base sm:text-lg md:text-xl leading-relaxed mb-8 sm:mb-10 font-light animate-fade-up"
-              style={{ color: 'var(--text-secondary)', animationDelay: '0.45s' }}
+              className="max-w-lg text-base sm:text-lg md:text-xl leading-relaxed mb-8 sm:mb-10 font-light"
+              style={{ color: 'var(--text-secondary)' }}
             >
               Specializing in{' '}
               <span className="text-[var(--accent-light)] font-medium">{typedText}</span>
               <span className="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 animate-pulse align-middle" />
             </p>
 
-            <div className="flex flex-wrap gap-3 sm:gap-4 animate-fade-up" style={{ animationDelay: '0.55s' }}>
+            <div className="flex flex-wrap gap-3 sm:gap-4">
               <AdvancedButton
                 variant="primary"
                 size="lg"
@@ -133,21 +123,19 @@ const Hero: React.FC = () => {
               </AdvancedButton>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.55 }}
-            className="p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] flex flex-col justify-between transition-all duration-500 group hover:shadow-accent"
+          <div
+            className="p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] flex flex-col justify-between group hover:shadow-accent animate-fade-up"
             style={{
+              animationDelay: '0.1s',
               backgroundColor: 'var(--hero-card-bg)',
               border: '1px solid var(--border)',
             }}
           >
             <div
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all shadow-accent"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-accent"
               style={{ backgroundColor: 'var(--glass-accent-bg)', color: 'var(--accent)' }}
             >
               <Globe size={22} className="sm:w-6 sm:h-6" />
@@ -160,13 +148,11 @@ const Hero: React.FC = () => {
                 Available for remote engineering and digital missions.
               </p>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.28, duration: 0.55 }}
-            className="p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] bg-[var(--accent)] text-[var(--accent-contrast)] flex flex-col justify-between shadow-accent overflow-hidden relative group"
+          <div
+            className="p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] bg-[var(--accent)] text-[var(--accent-contrast)] flex flex-col justify-between shadow-accent overflow-hidden relative group animate-fade-up"
+            style={{ animationDelay: '0.18s' }}
           >
             <div className="relative z-10">
               <h3 className="text-5xl sm:text-6xl font-black tracking-tighter">
@@ -181,11 +167,11 @@ const Hero: React.FC = () => {
               className="absolute -bottom-6 -right-6 sm:-bottom-8 sm:-right-8 opacity-10 group-hover:rotate-12 transition-transform duration-1000 w-[100px] h-[100px] sm:w-[140px] sm:h-[140px] lg:w-[180px] lg:h-[180px]"
               fill="currentColor"
             />
-          </motion.div>
+          </div>
         </div>
       </div>
 
-      <div className="flex justify-center mt-12 relative z-10 animate-fade-up" style={{ animationDelay: '0.75s' }}>
+      <div className="flex justify-center mt-12 relative z-10">
         <div
           className="scroll-indicator w-8 h-12 rounded-full flex items-center justify-center"
           style={{ border: '1px solid var(--border)' }}

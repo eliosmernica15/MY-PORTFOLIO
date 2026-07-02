@@ -1,10 +1,9 @@
 import React, { memo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Github, Instagram, Linkedin, Mail, ArrowUp } from 'lucide-react';
 import { SOCIALS, CONTACT_INFO, PERSONAL_INFO } from '../constants';
 import MagneticButton from './MagneticButton';
-import { useRafScroll } from '../hooks/useRafScroll';
+import { useScrollState } from '../context/ScrollContext';
 
 const quickLinks = [
   { name: 'Projects', id: 'projects' },
@@ -15,7 +14,7 @@ const quickLinks = [
 ];
 
 const Footer: React.FC = () => {
-  const { showBackToTop } = useRafScroll(50, 250);
+  const { showBackToTop } = useScrollState();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -149,28 +148,20 @@ const Footer: React.FC = () => {
         </div>
       </footer>
 
-      <AnimatePresence>
-        {showBackToTop && (
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: 0.2 }}
-            className="fixed z-40 right-[max(2rem,env(safe-area-inset-right))] bottom-[max(2rem,env(safe-area-inset-bottom))]"
-          >
-            <MagneticButton strength={0.3}>
-              <button
-                type="button"
-                onClick={scrollToTop}
-                className="interactive-btn w-12 h-12 rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] flex items-center justify-center shadow-accent hover:shadow-accent-hover transition-transform hover:scale-105 active:scale-95"
-                aria-label="Back to top"
-              >
-                <ArrowUp size={20} />
-              </button>
-            </MagneticButton>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {showBackToTop && (
+        <div className="fixed z-40 right-[max(2rem,env(safe-area-inset-right))] bottom-[max(2rem,env(safe-area-inset-bottom))] back-to-top-enter">
+          <MagneticButton strength={0.3}>
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="interactive-btn w-12 h-12 rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] flex items-center justify-center shadow-accent hover:shadow-accent-hover transition-transform hover:scale-105 active:scale-95"
+              aria-label="Back to top"
+            >
+              <ArrowUp size={20} />
+            </button>
+          </MagneticButton>
+        </div>
+      )}
     </>
   );
 };

@@ -16,7 +16,7 @@ const CAPABILITIES = [
 
 const About: React.FC = () => {
   return (
-    <section id="about" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 scroll-mt-24 snap-section content-auto relative z-[1]">
+    <section id="about" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 scroll-mt-24 content-auto relative z-[1]">
       <div className="max-w-7xl mx-auto">
         <RevealSection>
           <PremiumCard glow className="overflow-hidden">

@@ -95,7 +95,12 @@ body {
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+[id] {
+  scroll-margin-top: 6rem;
 }
 
 /* Hide Spline "Build with Spline" watermark */
@@ -317,18 +322,75 @@ a:focus-visible {
 }
 
 /* ================================================================
-   Scroll Snap (Desktop Only)
+   Scroll & Navigation
    ================================================================ */
-@media (min-width: 1024px) {
-  .snap-container {
-    scroll-snap-type: y proximity;
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 100;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent-dark));
+  pointer-events: none;
+  contain: strict;
+}
+
+.nav-floating {
+  transition: transform 0.28s ease, opacity 0.28s ease;
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  will-change: transform, opacity;
+}
+
+.nav-floating-hidden {
+  transform: translate3d(0, -110%, 0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav-menu-enter {
+  animation: menu-fade-in 0.22s ease both;
+}
+
+.back-to-top-enter {
+  animation: fade-up 0.25s ease both;
+}
+
+@keyframes menu-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.reveal-section {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  contain: layout style;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
-  .snap-section {
-    scroll-snap-align: start;
+  .nav-floating,
+  .nav-floating-hidden {
+    transition: none;
+    transform: none;
+    opacity: 1;
   }
-  /* Disable scroll-snap during nav-driven smooth scroll so we land on the target section */
-  html[data-nav-scrolling] .snap-container {
-    scroll-snap-type: none;
+  .ambient-orb-a,
+  .ambient-orb-b {
+    animation: none !important;
   }
 }
 
@@ -351,8 +413,12 @@ a:focus-visible {
    ================================================================ */
 .gpu-layer {
   transform: translateZ(0);
-  will-change: transform;
   backface-visibility: hidden;
+}
+
+.marquee-row-left,
+.marquee-row-right {
+  will-change: transform;
 }
 
 .content-auto {
@@ -362,7 +428,6 @@ a:focus-visible {
 
 .magnetic-wrap {
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
   display: inline-flex;
 }
 
@@ -378,7 +443,6 @@ a:focus-visible {
 .tilt-card {
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   transform-style: preserve-3d;
-  will-change: transform;
 }
 
 .interactive-btn {

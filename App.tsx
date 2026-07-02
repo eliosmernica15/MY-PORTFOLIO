@@ -1,20 +1,15 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import { 
-  HashRouter, 
-  Routes, 
-  Route, 
-  useLocation,
-} from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
+import { ScrollProvider } from './context/ScrollContext';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import AmbientBackground from './components/AmbientBackground';
 import Home from './pages/Home';
+
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const CustomCursor = lazy(() => import('./components/CustomCursor'));
-const ScrollProgress = lazy(() => import('./components/ScrollProgress'));
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -24,20 +19,15 @@ const ScrollToTop = () => {
   return null;
 };
 
-const AnimatedRoutes = () => {
-  const location = useLocation();
-  return (
-    <AnimatePresence mode="sync">
-      <Suspense fallback={<div className="min-h-screen" style={{ background: 'var(--bg-primary)' }} />}>
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Home />} />
-          <Route path="/project/:id" element={<ProjectDetail />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-    </AnimatePresence>
-  );
-};
+const AppRoutes = () => (
+  <Suspense fallback={<div className="min-h-screen" style={{ background: 'var(--bg-primary)' }} />}>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/project/:id" element={<ProjectDetail />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </Suspense>
+);
 
 export default function App() {
   useEffect(() => {
@@ -52,12 +42,11 @@ export default function App() {
   return (
     <ThemeProvider>
       <HashRouter>
-        <ScrollToTop />
+        <ScrollProvider>
+          <ScrollToTop />
 
-        <>
           <Suspense fallback={null}>
             <CustomCursor />
-            <ScrollProgress />
           </Suspense>
 
           <a href="#main-content" className="skip-link">
@@ -67,12 +56,12 @@ export default function App() {
           <AmbientBackground />
           <Nav />
 
-          <main id="main-content" className="snap-container">
-            <AnimatedRoutes />
+          <main id="main-content">
+            <AppRoutes />
           </main>
 
           <Footer />
-        </>
+        </ScrollProvider>
       </HashRouter>
     </ThemeProvider>
   );

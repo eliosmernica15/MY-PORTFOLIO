@@ -141,7 +141,7 @@ const TestimonialCarousel: React.FC = () => {
 
 const Testimonials: React.FC = () => {
   return (
-    <section className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto snap-section content-auto relative z-[1]">
+    <section className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto content-auto relative z-[1]">
       <RevealSection>
         <SectionHeader
           align="center"

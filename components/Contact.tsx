@@ -167,7 +167,7 @@ const ContactForm: React.FC = () => {
 
 const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-20 sm:py-24 lg:py-32 px-4 sm:px-6 relative overflow-hidden snap-section content-auto z-[1]">
+    <section id="contact" className="py-20 sm:py-24 lg:py-32 px-4 sm:px-6 relative overflow-hidden content-auto z-[1]">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-center relative z-10">
         <RevealSection>
           <SectionHeader

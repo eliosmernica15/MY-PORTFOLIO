@@ -42,7 +42,7 @@ const LazySection: React.FC<LazySectionProps> = ({
     <div
       ref={ref}
       id={id}
-      className={id ? 'scroll-mt-24 snap-section' : undefined}
+      className={id ? 'scroll-mt-24' : undefined}
     >
       {inView ? <Suspense fallback={fallback}>{children}</Suspense> : fallback}
     </div>

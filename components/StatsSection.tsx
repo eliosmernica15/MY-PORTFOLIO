@@ -6,7 +6,7 @@ import RevealSection from './RevealSection';
 
 const StatsSection: React.FC = () => {
   return (
-    <section className="py-16 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto snap-section content-auto relative z-[1]">
+    <section className="py-16 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto content-auto relative z-[1]">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
         {STATS.map((stat, idx) => (
           <RevealSection key={stat.label} delay={idx * 0.08}>
