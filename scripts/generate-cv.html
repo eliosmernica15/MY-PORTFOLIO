@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
 
   @page { size: A4; margin: 0; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -11,88 +11,105 @@
   body {
     font-family: 'Inter', 'Calibri', 'Segoe UI', system-ui, sans-serif;
     color: #1a1a1a;
-    line-height: 1.4;
-    font-size: 9.5pt;
+    line-height: 1.3;
+    font-size: 8.5pt;
     width: 210mm;
     height: 297mm;
-    padding: 15mm 19mm 15mm 19mm;
-    margin: 0;
+    max-height: 297mm;
+    overflow: hidden;
+    padding: 11mm 15mm 10mm 15mm;
   }
 
   a { color: #1a5fb4; text-decoration: none; }
 
-  /* ========== HEADER ========== */
-  .header { text-align: center; margin-bottom: 2.5mm; }
+  .header { text-align: center; margin-bottom: 2mm; }
   .header h1 {
     font-family: 'EB Garamond', 'Georgia', serif;
-    font-size: 28pt;
+    font-size: 24pt;
     font-weight: 400;
-    color: #1a1a1a;
-    letter-spacing: 0.5px;
-    margin-bottom: 1.5mm;
+    letter-spacing: 0.4px;
+    margin-bottom: 1mm;
   }
   .header .contact-row {
-    font-size: 9pt;
+    font-size: 8pt;
     color: #333;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 1mm;
+    gap: 0.5mm;
     align-items: center;
   }
-  .header .contact-row .sep { color: #999; margin: 0 1.5mm; }
-  .header .contact-row a { color: #1a5fb4; }
+  .header .contact-row .sep { color: #999; margin: 0 1mm; }
 
   .header-divider {
     border: none;
     border-top: 1.5px solid #333;
-    margin: 3mm 0 4mm 0;
+    margin: 2mm 0 3mm 0;
   }
 
-  /* ========== SUMMARY ========== */
   .summary {
     text-align: center;
-    font-size: 9pt;
+    font-size: 8.5pt;
     color: #333;
-    line-height: 1.45;
-    margin-bottom: 5.5mm;
+    line-height: 1.35;
+    margin-bottom: 3.5mm;
   }
 
-  /* ========== SECTIONS ========== */
-  .section { margin-bottom: 5.5mm; }
+  .section { margin-bottom: 3.5mm; }
   .section-title {
-    font-size: 11.5pt;
-    font-weight: 400;
+    font-size: 10pt;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #1a1a1a;
-    padding-bottom: 1mm;
-    margin-bottom: 3mm;
+    letter-spacing: 0.8px;
+    padding-bottom: 0.5mm;
+    margin-bottom: 2mm;
     border-bottom: 0.5px solid #bbb;
   }
 
-  /* ========== ITEMS ========== */
-  .item { margin-bottom: 3mm; }
+  .item { margin-bottom: 2mm; }
   .item-header {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    gap: 3mm;
   }
-  .item-title { font-weight: 700; font-size: 10pt; color: #1a1a1a; }
-  .item-role  { font-size: 9.5pt; color: #1a1a1a; margin-top: 0; }
-  .item-period { font-size: 9.5pt; font-weight: 700; color: #1a1a1a; white-space: nowrap; }
-  .item p { margin-top: 1mm; color: #333; font-size: 9pt; line-height: 1.4; }
-  .item ul { margin-top: 1mm; padding-left: 5mm; color: #333; font-size: 9pt; line-height: 1.45; }
-  .item li { margin-bottom: 0.5mm; }
+  .item-title { font-weight: 700; font-size: 9pt; }
+  .item-role { font-size: 8.5pt; color: #333; }
+  .item-period { font-size: 8.5pt; font-weight: 700; white-space: nowrap; }
+  .item ul {
+    margin-top: 0.5mm;
+    padding-left: 4.5mm;
+    font-size: 8.5pt;
+    color: #333;
+    line-height: 1.32;
+  }
+  .item li { margin-bottom: 0.3mm; }
 
-  /* ========== PROJECTS ========== */
-  .project-item { margin-bottom: 1.8mm; font-size: 9pt; color: #333; line-height: 1.4; }
+  .edu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5mm 6mm;
+  }
+  .edu-item .item-header { margin-bottom: 0; }
+  .edu-item .item-role { font-size: 8pt; }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1mm 5mm;
+    font-size: 8pt;
+    color: #333;
+    line-height: 1.28;
+  }
   .project-item .project-name { font-weight: 700; color: #1a1a1a; }
 
-  /* ========== SKILLS ========== */
-  .skills-list { padding-left: 5mm; font-size: 9pt; color: #333; line-height: 1.45; }
-  .skills-list li { margin-bottom: 1.2mm; }
-  .skills-list .skill-label { font-weight: 700; color: #1a1a1a; }
+  .skills-block {
+    font-size: 8pt;
+    color: #333;
+    line-height: 1.35;
+  }
+  .skills-block p { margin-bottom: 1mm; }
+  .skills-block .skill-label { font-weight: 700; color: #1a1a1a; }
 </style>
 </head>
 <body>
@@ -106,108 +123,102 @@
       <span class="sep">|</span>
       <a href="mailto:eliosmernica@gmail.com">eliosmernica@gmail.com</a>
       <span class="sep">|</span>
-      <a href="https://github.com/eliosmernica15" target="_blank">github.com/eliosmernica15</a>
+      <a href="https://github.com/eliosmernica15">github.com/eliosmernica15</a>
       <span class="sep">|</span>
-      <a href="https://www.linkedin.com/in/elios-mernica-880562204/" target="_blank">linkedin.com/in/elios-mernica</a>
+      <a href="https://www.linkedin.com/in/elios-mernica-880562204/">linkedin.com/in/elios-mernica</a>
     </div>
   </div>
 
   <hr class="header-divider">
 
   <div class="summary">
-    Software engineer specializing in web development, system design, and network infrastructure. Experienced in crafting high-performance digital experiences with modern frameworks and tools. Based in Kosovo, available worldwide.
+    Software engineer specializing in web development, system design, and network infrastructure. Experienced in building high-performance, production-ready applications with modern frameworks. Based in Kosovo, available worldwide.
   </div>
 
-  <!-- PROFESSIONAL EXPERIENCE -->
   <div class="section">
-    <div class="section-title">PROFESSIONAL EXPERIENCE</div>
+    <div class="section-title">Professional Experience</div>
     <div class="item">
       <div class="item-header">
-        <div><span class="item-title">Linkify</span></div>
+        <div><span class="item-title">Linkify</span> <span class="item-role">&mdash; English Speaking Support</span></div>
         <span class="item-period">2024</span>
       </div>
-      <div class="item-role">English Speaking Support</div>
       <ul>
-        <li>Provided high-level English language support for international communication and system interactions.</li>
-        <li>Assisted in technical documentation and client-facing infrastructure optimization.</li>
-        <li>Collaborated with cross-functional teams to deliver timely and precise language solutions.</li>
+        <li>Delivered English language support for international clients and technical documentation.</li>
+        <li>Collaborated with cross-functional teams on client-facing communication and process optimization.</li>
       </ul>
     </div>
   </div>
 
-  <!-- EDUCATION -->
   <div class="section">
-    <div class="section-title">EDUCATION</div>
-    <div class="item">
-      <div class="item-header">
-        <div><span class="item-title">Unity Tech Hub</span></div>
-        <span class="item-period">2025 &ndash; Present</span>
+    <div class="section-title">Education</div>
+    <div class="edu-grid">
+      <div class="edu-item item">
+        <div class="item-header">
+          <span class="item-title">Unity Tech Hub</span>
+          <span class="item-period">2025 &ndash; Present</span>
+        </div>
+        <div class="item-role">Web Development</div>
       </div>
-      <div class="item-role">Web Development</div>
-    </div>
-    <div class="item">
-      <div class="item-header">
-        <div><span class="item-title">Isa Boletini &ndash; UBMI</span></div>
-        <span class="item-period">2025 &ndash; Present</span>
+      <div class="edu-item item">
+        <div class="item-header">
+          <span class="item-title">Isa Boletini &ndash; UBMI</span>
+          <span class="item-period">2025 &ndash; Present</span>
+        </div>
+        <div class="item-role">Computer Science</div>
       </div>
-      <div class="item-role">Computer Science</div>
-    </div>
-    <div class="item">
-      <div class="item-header">
-        <div><span class="item-title">Innovation Academy</span></div>
-        <span class="item-period">2024 &ndash; 2026</span>
+      <div class="edu-item item">
+        <div class="item-header">
+          <span class="item-title">Innovation Academy</span>
+          <span class="item-period">2024 &ndash; 2026</span>
+        </div>
+        <div class="item-role">Web &amp; Design Developer</div>
       </div>
-      <div class="item-role">Course of Web and Design Developer</div>
-      <p>Web development directions including frontend, backend, and modern design principles.</p>
-    </div>
-    <div class="item">
-      <div class="item-header">
-        <div><span class="item-title">High School &ldquo;Eqrem &Ccedil;abej&rdquo;</span></div>
-        <span class="item-period">2022 &ndash; 2025</span>
+      <div class="edu-item item">
+        <div class="item-header">
+          <span class="item-title">The Cambridge School</span>
+          <span class="item-period">2015 &ndash; 2024</span>
+        </div>
+        <div class="item-role">Native American English</div>
       </div>
-      <div class="item-role">Natural Science</div>
-    </div>
-    <div class="item">
-      <div class="item-header">
-        <div><span class="item-title">&ldquo;The Cambridge School&rdquo;</span></div>
-        <span class="item-period">2015 &ndash; 2024</span>
-      </div>
-      <div class="item-role">Speaking Development &mdash; Native Speaking &ldquo;American English&rdquo;</div>
     </div>
   </div>
 
-  <!-- PROJECTS -->
   <div class="section">
-    <div class="section-title">PROJECTS</div>
-    <div class="project-item">
-      &bull; <span class="project-name">EM Motors</span> &mdash; Modern, interactive car presentation and dealership website built with HTML, CSS, JavaScript, and Bootstrap.
-    </div>
-    <div class="project-item">
-      &bull; <span class="project-name">ForexPulse</span> &mdash; Trading platform for forex and prop with live rates, charts, pip calculators, and portfolio dashboard.
-    </div>
-    <div class="project-item">
-      &bull; <span class="project-name">Eltrix Cloud</span> &mdash; AI-powered creative platform for content creation, file sharing, and digital asset management.
-    </div>
-    <div class="project-item">
-      &bull; <span class="project-name">FlixVerse</span> &mdash; Premium streaming platform with real-time content discovery, dynamic carousels, and immersive UI.
-    </div>
-    <div class="project-item">
-      &bull; <span class="project-name">Foodery</span> &mdash; High-performance food delivery ecosystem with real-time GPS tracking and reactive dashboards.
-    </div>
-    <div class="project-item">
-      &bull; <span class="project-name">Calista</span> &mdash; Luxury e-commerce storefront with micro-interactions, Three.js 3D elements, and GSAP animations.
+    <div class="section-title">Projects</div>
+    <div class="projects-grid">
+      <div class="project-item">
+        <span class="project-name">ESMP</span> &mdash; Enterprise marketplace OS: storefront, payments, invoicing &amp; analytics. <em>React, TypeScript, Vite</em>
+      </div>
+      <div class="project-item">
+        <span class="project-name">A++(APL)</span> &mdash; Albanian programming language with live transpiler, playground &amp; CLI. <em>Python, React, FastAPI</em>
+      </div>
+      <div class="project-item">
+        <span class="project-name">EM Motors</span> &mdash; Interactive car dealership website with responsive listings. <em>HTML, CSS, JavaScript</em>
+      </div>
+      <div class="project-item">
+        <span class="project-name">ForexPulse</span> &mdash; Forex trading platform with live rates, charts &amp; calculators. <em>JavaScript, Tailwind CSS</em>
+      </div>
+      <div class="project-item">
+        <span class="project-name">Eltrix Cloud</span> &mdash; AI-powered creative platform for content &amp; asset management. <em>React, TypeScript, AI</em>
+      </div>
+      <div class="project-item">
+        <span class="project-name">FlixVerse</span> &mdash; Streaming platform with content discovery &amp; cinematic UI. <em>React, TypeScript, TMDB API</em>
+      </div>
+      <div class="project-item">
+        <span class="project-name">Foodery</span> &mdash; Food delivery ecosystem with GPS tracking &amp; dashboards. <em>Next.js, Supabase</em>
+      </div>
+      <div class="project-item">
+        <span class="project-name">Calista</span> &mdash; Luxury e-commerce with micro-interactions &amp; 3D elements. <em>React, Three.js, GSAP</em>
+      </div>
     </div>
   </div>
 
-  <!-- ADDITIONAL SKILLS -->
   <div class="section" style="margin-bottom: 0;">
-    <div class="section-title">ADDITIONAL SKILLS</div>
-    <ul class="skills-list">
-      <li><span class="skill-label">Technical Skills:</span> .NET, React.Js, Node.Js, Nest Js, Angular, React Native, MySQL, JavaScript, TypeScript, MongoDB, MSSQL, WordPress, Firebase, CSS, HTML, Tailwind CSS, Framer Motion</li>
-      <li><span class="skill-label">Tools:</span> Git, GitHub, Docker, Postman, Figma, Vercel, Netlify</li>
-      <li><span class="skill-label">Soft Skills:</span> System Design, Network Infrastructure, Technical Problem Solving, Communication</li>
-      <li><span class="skill-label">Languages:</span> Albanian (Native) and English (Fluent)</li>
-    </ul>
+    <div class="section-title">Skills</div>
+    <div class="skills-block">
+      <p><span class="skill-label">Technical:</span> React, Next.js, TypeScript, Node.js, Python, .NET, Angular, React Native, MySQL, MongoDB, Tailwind CSS, Framer Motion, WordPress, Firebase</p>
+      <p><span class="skill-label">Tools:</span> Git, GitHub, Docker, Postman, Figma, Vercel, Netlify &nbsp;&bull;&nbsp; <span class="skill-label">Languages:</span> Albanian (Native), English (Fluent)</p>
+    </div>
   </div>
 
 </body>
