@@ -61,6 +61,7 @@ function renderCard(card: Card, onAction: (kind: 'open' | 'scroll', target: stri
         className="mt-2 rounded-xl border overflow-hidden"
         style={{ borderColor: 'var(--border)', background: 'var(--bg-card)' }}
       >
+        {/* Project hero URLs can point at prod.spline.design, which the Next/Image optimizer cannot reach — keep as a plain <img>. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={p.image}

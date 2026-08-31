@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo, lazy, Suspense } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -20,13 +21,14 @@ import { SOCIALS } from '@/data/socials';
 import { NOW } from '@/data/now';
 import { useTheme } from '../context/ThemeContext';
 import { useDeviceProfile } from '@/hooks/useDeviceProfile';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { getDeviceProfile } from '@/hooks/useDeviceProfile';
 import { StackMap } from './StackMap';
 import { GitHubActivity } from './GitHubActivity';
 import { NotesTeaser } from './NotesTeaser';
-import { Now } from './Now';
 import { NowWidget } from './NowWidget';
+import { AboutTimeline } from './AboutTimeline';
 import { SoundToggle } from './SoundToggle';
+import Brand from './ui/Brand';
 import ThemeToggle from './ThemeToggle';
 import AdvancedButton from './ui/AdvancedButton';
 import PremiumCard from './ui/PremiumCard';
@@ -34,7 +36,6 @@ import SectionHeader from './ui/SectionHeader';
 import Chip from './ui/Chip';
 import RevealSection from './RevealSection';
 import AnimatedCounter from './AnimatedCounter';
-import { getDeviceProfile } from '@/hooks/useDeviceProfile';
 
 // Lazy-load heavy 3D.
 const ParticleField = lazy(() => import('./ParticleField'));
@@ -144,6 +145,7 @@ function Hero() {
             <span
               className="inline-block w-[2px] h-[0.9em] align-middle ml-1"
               style={{ background: 'var(--accent)', animation: 'caret-blink 1s steps(2) infinite' }}
+              aria-hidden
             />
           </span>
         </motion.h1>
@@ -199,6 +201,8 @@ function About() {
         }
         subtitle={`${SITE.name} — ${SITE.title}. ${SITE.summary}`}
       />
+
+      <AboutTimeline />
 
       <RevealSection className="mt-12">
         <PremiumCard hover glow>
@@ -327,7 +331,7 @@ function Projects() {
       <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-5">
         {PROJECTS.slice(0, count).map((p, i) => (
           <RevealSection key={p.id} delay={i * 0.05}>
-            <ProjectCard project={p} featured={i === 0} />
+            <ProjectCard project={p} featured={i === 0} priority={i === 0} />
           </RevealSection>
         ))}
       </div>
@@ -349,7 +353,7 @@ function Projects() {
 
 type Project = (typeof PROJECTS)[number];
 
-function ProjectCard({ project, featured }: { project: Project; featured?: boolean }) {
+function ProjectCard({ project, featured, priority }: { project: Project; featured?: boolean; priority?: boolean }) {
   return (
     <Link
       href={`/project/${project.id}`}
@@ -375,14 +379,17 @@ function ProjectCard({ project, featured }: { project: Project; featured?: boole
             </span>
           </div>
 
-          <div className="aspect-[16/9] rounded-xl overflow-hidden mb-5" style={{ border: '1px solid var(--border)' }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+          <div
+            className="aspect-[16/9] rounded-xl overflow-hidden mb-5 relative"
+            style={{ border: '1px solid var(--border)' }}
+          >
+            <Image
               src={project.image}
               alt={project.title}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              priority={priority}
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
           </div>
 
@@ -470,7 +477,7 @@ function Stats() {
         {stats.map((s, i) => (
           <RevealSection key={s.label} delay={i * 0.06}>
             <div
-              className="stat-card-enterprise p-5 sm:p-7 md:p-8 rounded-2xl border text-center transition-all hover:-translate-y-1"
+              className="stat-card-enterprise p-5 sm:p-7 md:p-8 rounded-2xl border text-center transition-all motion-reduce:transform-none hover:-translate-y-1"
               style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
             >
               <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-gradient-accent mb-2">
@@ -591,7 +598,11 @@ function Testimonials() {
       />
       <RevealSection className="mt-12">
         <PremiumCard hover>
-          <div className="p-8 sm:p-12 relative">
+          <div
+            className="p-8 sm:p-12 relative"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             <Quote size={40} className="absolute top-6 left-6 opacity-20" style={{ color: 'var(--accent)' }} />
             <AnimatePresence mode="wait">
               <motion.div
@@ -606,11 +617,12 @@ function Testimonials() {
                   &ldquo;{t.text}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={t.avatar}
                     alt={t.name}
-                    className="w-12 h-12 rounded-full object-cover"
+                    width={48}
+                    height={48}
+                    className="rounded-full object-cover"
                     loading="lazy"
                   />
                   <div>
@@ -646,6 +658,7 @@ function Testimonials() {
                       background: i === idx ? 'var(--accent)' : 'var(--border)',
                     }}
                     aria-label={`Go to testimonial ${i + 1}`}
+                    aria-current={i === idx ? 'true' : undefined}
                   />
                 ))}
               </div>
@@ -859,6 +872,7 @@ function Contact() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
+                aria-busy={status === 'loading'}
                 className="btn-enterprise btn-enterprise-lg btn-enterprise-primary w-full disabled:opacity-60"
                 data-cursor-hover
               >
@@ -872,7 +886,7 @@ function Contact() {
               </button>
 
               <p className="text-[11px] text-center" style={{ color: 'var(--text-muted)' }}>
-                Protected against bots with honeypot + behavioral heuristics.
+                Protected against bots. I read every message myself.
               </p>
             </form>
           </PremiumCard>
@@ -899,7 +913,7 @@ function Nav() {
   }, []);
 
   useEffect(() => {
-    const ids = ['home', 'about', 'services', 'projects', 'resume', 'testimonials', 'stack', 'github', 'contact'];
+    const ids = ['home', 'about', 'services', 'projects', 'stack', 'notes', 'github', 'resume', 'testimonials', 'contact'];
     const observer = new IntersectionObserver(
       entries => {
         const visible = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
@@ -920,6 +934,8 @@ function Nav() {
     { id: 'services', label: 'Services' },
     { id: 'projects', label: 'Projects' },
     { id: 'stack', label: 'Stack' },
+    { id: 'notes', label: 'Notes' },
+    { id: 'github', label: 'GitHub' },
     { id: 'resume', label: 'Resume' },
     { id: 'testimonials', label: 'Testimonials' },
     { id: 'contact', label: 'Contact' },
@@ -936,24 +952,25 @@ function Nav() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group" data-cursor-hover>
-          <div
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-black transition-transform group-hover:rotate-6"
-            style={{ background: 'var(--accent)', color: 'var(--text-on-accent, #fff)' }}
+          <span
+            className="w-9 h-9 rounded-lg flex items-center justify-center transition-transform group-hover:rotate-6"
+            style={{ background: 'var(--surface-elevated)', border: '1px solid var(--border)' }}
           >
-            EM
-          </div>
+            <Brand size={22} />
+          </span>
           <div className="hidden sm:block">
             <div className="text-sm font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>{SITE.name}</div>
             <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>{SITE.title}</div>
           </div>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
           {links.map(l => (
             <a
               key={l.id}
               href={`#${l.id}`}
               className={`nav-link px-3 py-2 text-xs font-bold uppercase tracking-widest transition-colors ${active === l.id ? 'nav-link-active' : ''}`}
+              aria-current={active === l.id ? 'true' : undefined}
             >
               {l.label}
             </a>
@@ -982,7 +999,8 @@ function Nav() {
             onClick={() => setOpen(v => !v)}
             className="lg:hidden w-9 h-9 rounded-lg flex items-center justify-center border"
             style={{ borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
-            aria-label="Open menu"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
           >
             {open ? <X size={16} /> : <Menu size={16} />}
           </button>
@@ -1023,12 +1041,12 @@ function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
           <div className="flex items-center gap-2 mb-3">
-            <div
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-black"
-              style={{ background: 'var(--accent)', color: 'var(--text-on-accent, #fff)' }}
+            <span
+              className="w-9 h-9 rounded-lg flex items-center justify-center"
+              style={{ background: 'var(--surface-elevated)', border: '1px solid var(--border)' }}
             >
-              EM
-            </div>
+              <Brand size={22} />
+            </span>
             <div>
               <div className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{SITE.name}</div>
               <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
@@ -1154,21 +1172,19 @@ export default function Home() {
     <>
       <CustomCursor />
       <Nav />
-      <main>
+      <main id="main-content">
         <Hero />
         <Stats />
         <About />
         <Services />
         <Projects />
         <StackSection />
-        <Resume />
-        <RevealSection>
-          <GitHubActivity />
-        </RevealSection>
-        <Testimonials />
         <RevealSection>
           <NotesTeaser />
         </RevealSection>
+        <GitHubActivity />
+        <Resume />
+        <Testimonials />
         <Contact />
       </main>
       <Footer />

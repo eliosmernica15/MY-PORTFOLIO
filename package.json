@@ -2,6 +2,7 @@
   "name": "elios-mernica-portfolio",
   "version": "2.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "predev": "node scripts/build-knowledge.mjs",
     "dev": "next dev --port 3000",

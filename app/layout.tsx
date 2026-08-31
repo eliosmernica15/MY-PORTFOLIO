@@ -4,6 +4,7 @@ import { headers } from 'next/headers';
 import './globals.css';
 import { SITE } from '@/data/site';
 import { Providers } from './Providers';
+import { SwRegister } from './sw-register';
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -129,7 +130,26 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className="noise">
         <a href="#main-content" className="skip-link">Skip to main content</a>
+        <noscript>
+          <div
+            style={{
+              padding: '12px 16px',
+              background: 'var(--surface-elevated)',
+              borderBottom: '1px solid var(--border)',
+              textAlign: 'center',
+              fontSize: 13,
+              color: 'var(--text-secondary)',
+            }}
+          >
+            JavaScript is off — the site still works, but a few interactive features (the assistant, terminal, particle field) are disabled. Reach me at{' '}
+            <a href={`mailto:${SITE.email}`} style={{ color: 'var(--accent-light)' }}>
+              {SITE.email}
+            </a>
+            .
+          </div>
+        </noscript>
         <Providers>{children}</Providers>
+        <SwRegister />
 
         <script
           type="application/ld+json"

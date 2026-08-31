@@ -36,15 +36,19 @@ export function middleware(req: NextRequest) {
 }
 
 function buildCsp(nonce: string): string {
+  // `'strict-dynamic'` is intentional: it lets the nonce-validated
+  // `<script>` tags bootstrap the Spline runtime (which then loads
+  // further scripts from `prod.spline.design`).
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://prod.spline.design`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' data: https://fonts.gstatic.com",
     "img-src 'self' data: blob: https:",
-    "connect-src 'self' https://api.emailjs.com https://api.github.com https://prod.spline.design",
-    "frame-src 'self' https://my.spline.design",
+    "connect-src 'self' https://api.emailjs.com https://api.github.com https://prod.spline.design https://*.spline.design",
+    "frame-src 'self' https://my.spline.design https://*.spline.design",
     "worker-src 'self' blob:",
+    "manifest-src 'self'",
     "media-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",

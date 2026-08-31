@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PROJECTS } from '@/data/projects';
 import { SITE } from '@/data/site';
+import { buildBreadcrumbs } from '@/lib/breadcrumbs';
 import ProjectDetail from '@/components/ProjectDetail';
 
 export const dynamicParams = false;
@@ -44,5 +45,14 @@ export default async function ProjectPage(
   const { id } = await params;
   const project = PROJECTS.find(p => p.id === id);
   if (!project) notFound();
-  return <ProjectDetail project={project} />;
+  const breadcrumbs = buildBreadcrumbs(`/project/${id}`);
+  return (
+    <>
+      <ProjectDetail project={project} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+    </>
+  );
 }

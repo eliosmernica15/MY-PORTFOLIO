@@ -1,257 +1,246 @@
 # Elios Mernica — Portfolio
 
-A high-performance, content-first portfolio for a software engineer specializing in AI systems, full-stack web platforms, and network infrastructure. Built on **Next.js 15 (App Router) + TypeScript + Tailwind CSS + framer-motion**.
+A high-performance, content-first portfolio for a software engineer specializing in AI systems, full-stack web platforms, compilers, and network infrastructure.
 
-The portfolio includes several signature features designed to make the work stand out:
-
-- **Live interactive terminal** — open with `` ` ``, run commands like `projects`, `theme dark`, `matrix`.
-- **Scripted AI assistant** ("Elios AI") — a knowledge-base-driven chat panel that knows everything on the site. **Auto-synced**: edit any file in `src/data/` and the assistant knows about it.
-- **Custom WebGL2 particle field** layered over Spline 3D in the hero.
-- **Project case-study deep-dive pages** with per-project metrics, architecture rationale, and dynamic Open Graph images.
-- **Writing / Notes** section.
-- **GitHub activity widget** (ISR, with curated fallback).
-- **Stack Map** categorized skill tree.
-- **Dark / light theme** with SSR-aware cookie, no FOUC.
+**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS v3 · framer-motion · WebGL2 (vanilla) · Spline · zod · nodemailer (optional)
 
 ---
 
-## Tech stack
+## What's in it
 
-- **Next.js 15** (App Router) — file-based routing, RSC, server actions, `<Image>`, `next/og`, edge runtime.
-- **React 19** + **TypeScript** (strict mode).
-- **Tailwind CSS 3** — utility-first styling, with a complete custom design-token system in `app/globals.css`.
-- **framer-motion** — animations.
-- **lucide-react** — icons.
-- **@splinetool/react-spline** — 3D hero fallback.
-- **zod** + **nodemailer** (server-only) — contact form validation and delivery.
-- **WebGL2** — custom particle field, no three.js.
-- **Web Audio API** — procedural sound design.
-- **Web Speech API** — assistant voice input (best-effort, degrades gracefully).
-
-Zero new runtime services required. The portfolio is self-contained.
-
----
-
-## Project structure
-
-```
-.
-├── app/                              # Next.js App Router
-│   ├── layout.tsx                    # Root layout, theme init, JSON-LD
-│   ├── page.tsx                      # Home
-│   ├── globals.css                   # Design system (CSS variables, components)
-│   ├── loading.tsx
-│   ├── error.tsx
-│   ├── not-found.tsx
-│   ├── offline/page.tsx
-│   ├── sitemap.ts
-│   ├── robots.ts
-│   ├── icon.tsx                      # Favicon (next/og, edge)
-│   ├── og-image.tsx                  # Root OG (next/og, edge)
-│   ├── manifest.ts
-│   ├── actions/contact.ts            # Server Action with zod + rate limit + honeypot
-│   ├── project/[id]/                 # Case study
-│   │   ├── page.tsx
-│   │   ├── opengraph-image.tsx       # Per-project dynamic OG (edge)
-│   │   └── not-found.tsx
-│   └── notes/                        # Writing section
-│       ├── page.tsx
-│       └── [slug]/
-│           ├── page.tsx
-│           └── not-found.tsx
-├── components/                       # React components
-│   ├── ui/                           # Primitives: Brand, AdvancedButton, PremiumCard, SectionHeader, Chip, SEO
-│   ├── assistant/                    # AssistantChat sub-components
-│   ├── case-study/                   # Overview, Architecture, Gallery
-│   ├── particle/                     # WebGL shaders
-│   ├── terminal/                     # Terminal sub-components
-│   ├── notes/                        # Note renderer
-│   ├── Home.tsx, Hero.tsx, About.tsx, Nav.tsx, Footer.tsx, Contact.tsx,
-│   ├── AmbientBackground.tsx, CustomCursor.tsx, ParticleField.tsx,
-│   ├── RevealSection.tsx, AnimatedCounter.tsx, MagneticButton.tsx, TiltCard.tsx,
-│   ├── AssistantChat.tsx, Terminal.tsx, NowWidget.tsx, StackMap.tsx,
-│   ├── GitHubActivity.tsx, ThemeToggle.tsx, ThemeContext.tsx, SoundToggle.tsx
-├── src/
-│   ├── data/                         # Single source of truth for content
-│   │   ├── site.ts                   # Site-wide config
-│   │   ├── projects.ts               # 8 projects (with highlights, metrics, rationale)
-│   │   ├── services.ts
-│   │   ├── education.ts
-│   │   ├── experience.ts
-│   │   ├── socials.ts
-│   │   ├── testimonials.ts
-│   │   ├── skills.ts                 # Categorized skill tree
-│   │   ├── now.ts                    # "Now" widget content
-│   │   ├── notes.ts                  # 3 starter posts (typed block bodies)
-│   │   ├── featuredRepos.ts          # GitHub widget fallback
-│   │   ├── caseStudies.ts
-│   │   ├── knowledge.static.ts       # Hand-written assistant entries
-│   │   └── knowledge.generated.ts    # Auto-generated; gitignored
-│   ├── hooks/                        # React hooks
-│   └── lib/                          # Utilities (cn, format, ratelimit, sound, blurDataURL, matchKnowledge, buildKnowledge)
-├── scripts/
-│   └── build-knowledge.mjs           # Generates knowledge.generated.ts from src/data/*
-├── public/
-│   ├── sw.js                         # Hand-rolled service worker
-│   ├── manifest.webmanifest
-│   └── Elios-Mernica-CV.pdf          # The resume PDF
-├── middleware.ts                     # CSP nonce, theme cookie, UA blocklist
-├── next.config.mjs                   # CSP headers, image domains, bundle analyzer
-├── tailwind.config.ts
-├── tsconfig.json
-└── package.json
-```
+| Section | Notes |
+|---|---|
+| **Hero** | Custom typing carousel, WebGL particle field layered over a Spline scene, custom cursor, "Now" pill (dismissible, persisted). |
+| **About** | Capability grid + a 5-stop horizontal timeline (Now → 2023) with hover/focus reveals. |
+| **Services** | 4-card grid driven by `src/data/services.ts`. |
+| **Projects** | 2-column grid with "Load more" pagination, link-out to a per-project case study. |
+| **Stack Map** | Categorized skills with 1–5 confidence dots. |
+| **Skill marquee** | Infinite horizontal scroller. |
+| **Notes (writing)** | Markdown-lite posts at `/notes` and `/notes/[slug]`, rendered from typed block arrays. |
+| **GitHub activity** | Server component with ISR (1h), curated fallback from `featuredRepos`. |
+| **Resume** | Education + experience + CV download. |
+| **Testimonials** | Auto-rotating carousel with `aria-live`. |
+| **Contact** | Server action, zod-validated, honeypot + behavioral heuristic + per-IP rate limit. |
+| **Terminal** | Floating, draggable, focus-trapped, persisted history, 18+ commands. |
+| **Elios AI** | Floating, scripted assistant — quick prompts, free chat, voice input, copy-transcript. Knowledge base auto-synced from the data layer. |
+| **Service worker** | Cache-first for `_next/static` and images, stale-while-revalidate for HTML, offline fallback at `/offline`. |
 
 ---
 
-## Data flow — the single source of truth
-
-Every piece of content lives in `src/data/*.ts`. The rest of the site consumes that data:
+## Architecture
 
 ```
-src/data/projects.ts ──┬──> components/Projects.tsx (UI)
-                       ├──> app/project/[id]/page.tsx (case study)
-                       ├──> app/project/[id]/opengraph-image.tsx (per-project OG)
-                       ├──> app/sitemap.ts (URLs)
-                       ├──> scripts/build-knowledge.mjs ──> src/data/knowledge.generated.ts ──> components/AssistantChat.tsx (assistant)
-                       └──> components/Terminal.tsx (`projects` command)
+app/                      Next.js App Router
+  layout.tsx              Root layout · theme-init script · JSON-LD Person + WebSite · <SwRegister/>
+  page.tsx                /               · composes <Home /> + BreadcrumbList JSON-LD
+  project/[id]/page.tsx   /project/<id>   · generateStaticParams, generateMetadata, BreadcrumbList
+  notes/...               Notes index + slug pages
+  actions/contact.ts      Server action (zod + rate limit + honeypot)
+  sw-register.tsx         Client-only SW registration
+  loading.tsx / error.tsx Branded <Brand> on the fallback screens
+  sitemap.ts / robots.ts  Auto-generated
+  icon.tsx / og-image.tsx Build-time ImageResponse
+  middleware.ts           Per-request CSP nonce, theme forwarding, UA blocklist
+
+src/
+  data/                   Typed source of truth — projects, services, notes, testimonials, knowledge…
+  hooks/                  useLocalStorage, useDeviceProfile, useFocusTrap, useTypewriter, …
+  lib/                    matchKnowledge, buildKnowledge, ratelimit, blurDataURL, format, sound, breadcrumbs
+
+components/
+  Home.tsx                Composes the home page
+  Terminal.tsx            Floating interactive terminal
+  AssistantChat.tsx       Elios AI panel
+  ParticleField.tsx       WebGL2 particle field (1500–3000 particles)
+  SplineScene.tsx         Ambient Spline base layer
+  AboutTimeline.tsx       5-stop dot timeline
+  Brand.tsx (in ui/)      Custom SVG monogram (E + M with accent dot)
+  case-study/             Overview / Architecture / Gallery
+  notes/Renderer.tsx      Block-based note renderer
+  ui/                     AdvancedButton, PremiumCard, SectionHeader, Chip, SEO
+
+public/
+  sw.js                   Hand-rolled service worker
+  Elios-Mernica-CV.pdf    Static CV
+  *.png                   Per-project hero art
+
+scripts/
+  build-knowledge.mjs     Generates src/data/knowledge.generated.ts at predev/prebuild
+middleware.ts             CSP nonce + theme forwarding + UA blocklist
 ```
 
-**Editing content is a one-file change**: edit `src/data/projects.ts`, run `npm run dev`, and the home page, case study, OG image, sitemap, and assistant all reflect the update. The `predev` and `prebuild` scripts regenerate `src/data/knowledge.generated.ts` automatically.
+### RSC vs client components
+
+- Server components by default for everything that doesn't need interactivity (data files, case-study sections, layout).
+- `'use client'` only where the component reads state, refs, effects, or events: `Home.tsx`, `Terminal.tsx`, `AssistantChat.tsx`, `ParticleField.tsx`, `NowWidget.tsx`, the form, the nav, the cursor, the toggle, etc.
+- The contact form is a client component but calls a **server action** (`app/actions/contact.ts`) — zod validation, SMTP via nodemailer (when configured), or a server-side EmailJS fallback. The public EmailJS key is no longer exposed to the browser.
+
+### CSP
+
+Strict Content-Security-Policy is set per request in `middleware.ts`:
+- `script-src 'self' 'nonce-<random>' 'strict-dynamic' https://prod.spline.design`
+- `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com` (inline styles are used heavily for theming)
+- `frame-src 'self' https://*.spline.design`, `connect-src` includes `https://api.github.com` and `https://*.spline.design`
+- `worker-src 'self' blob:`, `manifest-src 'self'`
+- `frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`, `upgrade-insecure-requests`
+
+The nonce is generated per request, attached to the response as a header, and consumed by the theme-init script in `<head>` (no `unsafe-inline` on scripts).
+
+### Service worker
+
+`public/sw.js` is a hand-rolled 76-line worker (no Workbox). It is registered by `app/sw-register.tsx` only in production. Strategies:
+
+- **Cache-first** for `/_next/static/*`, `/_next/image*`, and image/font extensions.
+- **Stale-while-revalidate** for HTML navigations (falls back to `/offline` on network failure).
+- **Network-first** with cache fallback for everything else.
+
+The offline fallback page is at `app/offline/page.tsx` with a "Retry" button.
 
 ---
 
-## Setup
+## Data flow
 
-```bash
-# Node 20+ recommended
-git clone https://github.com/eliosmernica15/MY-PORTFOLIO.git
-cd MY-PORTFOLIO
-npm install
-
-# Optional: configure environment for the contact form
-cp .env.example .env.local
-# Edit .env.local with SMTP_* or EmailJS keys
-
-npm run dev
+```
+Edit any of these                         Live everywhere
+─────────────────────                     ──────────────
+src/data/site.ts                  ───►   Title, tagline, socials
+src/data/projects.ts              ───►   Home projects grid, case studies, /project/[id] page, OG image
+                                          ➜ Assistant "project:<id>" knowledge entries
+src/data/services.ts              ───►   Services grid
+                                          ➜ Assistant "service:<id>" knowledge entries
+src/data/skills.ts                ───►   Stack map + skill marquee
+                                          ➜ Assistant "skill:<name>" knowledge entries
+src/data/testimonials.ts          ───►   Testimonials carousel
+src/data/notes.ts                 ───►   /notes index + /notes/[slug]
+                                          ➜ Assistant "note:<slug>" knowledge entries
+src/data/now.ts                   ───►   "Now" pill in hero
+src/data/featuredRepos.ts         ───►   GitHub widget fallback (when API rate-limits)
+src/data/education.ts             ───►   Resume education list
+src/data/experience.ts            ───►   Resume experience list
+src/data/socials.ts               ───►   Footer social row
+src/data/knowledge.static.ts      ───►   Assistant static entries (about, contact, easter eggs, fallback)
 ```
 
-Open http://localhost:3000.
-
-### Scripts
-
-| Command                 | Description                                              |
-|-------------------------|----------------------------------------------------------|
-| `npm run dev`           | Dev server (regenerates knowledge base, hot-reload)      |
-| `npm run build`         | Production build                                         |
-| `npm run start`         | Run the production build                                 |
-| `npm run typecheck`     | TypeScript strict check                                  |
-| `npm run lint`          | ESLint                                                   |
-| `npm run analyze`       | Bundle analyzer                                          |
-| `npm run sync:kb`       | Regenerate the assistant knowledge base                  |
+`scripts/build-knowledge.mjs` runs at `predev` and `prebuild`. It reads every typed data file and writes `src/data/knowledge.generated.ts`. The assistant's matcher unions that with the static entries. **Edit a project, run the dev server, the assistant immediately knows about it.** No separate config to maintain.
 
 ---
 
 ## Editing content
 
-**Add a project**: edit `src/data/projects.ts`, append a new object to the array, save. The home page grid, case-study page, OG image, sitemap, and assistant all update.
+1. Add or edit a project in `src/data/projects.ts`.
+2. Save.
+3. The dev server regenerates `src/data/knowledge.generated.ts` (via `predev`).
+4. Refresh — the home grid, the case-study page, the sitemap, and the assistant all reflect the change.
 
-**Add a note**: edit `src/data/notes.ts`, append a new `Note` object, save. The notes index, note page, and assistant all update.
+Same for notes, services, skills, testimonials, and the "now" line.
 
-**Update "Now" widget**: edit `src/data/now.ts`, change the `line` field, save.
+To add a new page route, create a folder under `app/` and a `page.tsx`. To exclude a route from the sitemap, edit `app/sitemap.ts`. To customize the OG image for a project, edit `app/project/[id]/opengraph-image.tsx`.
 
-**Add assistant knowledge (without code generation)**: edit `src/data/knowledge.static.ts` and append a `KnowledgeEntry`. Useful for entries that don't correspond to data files (greetings, easter eggs, fallback copy).
+---
 
-**Update contact info**: edit `src/data/site.ts` (email, phone, location).
+## Environment variables
+
+| Variable | Purpose | Default |
+|---|---|---|
+| `SMTP_HOST` | SMTP server hostname (optional) | none — contact form falls back to EmailJS server-side |
+| `SMTP_PORT` | SMTP port (typically 587) | unset |
+| `SMTP_USER` | SMTP username | unset |
+| `SMTP_PASS` | SMTP password | unset |
+| `SMTP_TO` | Destination address | `SITE.email` |
+| `EMAILJS_SERVICE_ID` | EmailJS service id (fallback transport) | unset |
+| `EMAILJS_TEMPLATE_ID` | EmailJS template id | unset |
+| `EMAILJS_PUBLIC_KEY` | EmailJS public key | unset |
+| `EMAILJS_PRIVATE_KEY` | EmailJS private key (server-only) | unset |
+| `NEXT_PUBLIC_CSP_REPORT` | Optional CSP report-uri | unset |
+
+No variables are required for the dev server to start.
+
+---
+
+## Scripts
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Regenerate the knowledge base, then start Next dev on port 3000 |
+| `npm run build` | Regenerate the knowledge base, then `next build` |
+| `npm run start` | Run the production build |
+| `npm run lint` | ESLint with the flat config |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run analyze` | Bundle analyzer report (`@next/bundle-analyzer`) |
+| `npm run sync:kb` | Manually regenerate the assistant's knowledge base |
 
 ---
 
 ## Terminal commands
 
-Press `` ` `` (backtick) or click the floating terminal button. Commands:
+The floating terminal (open with `` ` ``) supports:
 
 ```
-help              List all commands
-about             Short bio
-projects          List all projects
-skills            List skill categories
-services          List services offered
-contact           Open the contact form
-cv                Download the CV
-theme dark|light  Toggle theme
-whoami            elios@worldwide
-clear             Clear the buffer
-history           Show recent commands
-matrix            "There is no spoon."
-coffee            Espresso + well-named variables
-github            GitHub profile
-repo <id>         Open a project (e.g. repo esmp)
-note <slug>       Open a note (e.g. note designing-a-60fps-particle-field)
+help            List commands
+about           Short bio
+projects        List projects with categories
+skills          List skills
+services        List services
+now             What I'm working on right now
+contact         Open the contact section
+cv              Trigger CV download
+theme <mode>    dark | light | toggle
+whoami          Easter egg
+clear           Clear the buffer
+history         Show recent commands
+matrix          Particle-rain easter egg
+sudo <cmd>      "Permission denied."
+github          Open GitHub profile
+repo <name>     Search the knowledge base for a project
+note <slug>     Open a note
+open <url>      Open a URL
+coffee          "I run on espresso and well-named variables."
 ```
 
-Up/Down: navigate history. Tab: complete commands. Esc: close.
+Up/down arrow: history. `Tab`: completion. `Esc`: close.
 
 ---
 
-## Assistant
+## Assistant (Elios AI) commands
 
-Press `Cmd/Ctrl+K` or click the floating "Ask Elios AI" button. The assistant is a scripted knowledge-base matcher:
+The floating assistant (open with `Cmd/Ctrl+K` or the bottom-right button) supports quick chips and free text. The matcher scores token overlap + synonym map + intent classifier against the live knowledge base. Intents include `greeting`, `availability`, `pricing`, `ai`, `frontend`, `backend`, `contact`, `resume`, `project:<id>`, `skill:<name>`, `location`, `process`, `timeline`, `rates`, `stack`, `rate_card`, `case_study`, `easter_egg`, `fallback`. Voice input is feature-detected and degrades silently.
 
-- It knows everything in `src/data/` (auto-generated, no manual sync).
-- Quick-prompt chips for common questions.
-- Free-text chat with intent matching and a synonym map.
-- Card responses (project cards, skill lists) for richer answers.
-- Action responses (theme change, scroll-to, open-link) that drive the UI.
-- Voice input (where Web Speech API is supported).
-- Conversation history persisted in `localStorage`.
-- Dev-only debug panel shows which entries fired and their scores.
-
-**Honest copy**: the assistant is a scripted knowledge base, not an LLM. Replies are generated from portfolio data only. No data leaves the browser.
-
----
-
-## Security
-
-- **Strict CSP** via `next.config.mjs` headers and per-request nonce via `middleware.ts`.
-- **HSTS**, **X-Frame-Options: DENY**, **X-Content-Type-Options: nosniff**, **Referrer-Policy: strict-origin-when-cross-origin**, **Permissions-Policy** (camera/mic/geolocation disabled).
-- **Honeypot** + **behavioral heuristic** + **rate limit** (1 / 30s, 5 / hour per IP) on the contact Server Action.
-- **Server-side delivery**: EmailJS is called from the Server Action, not the client — the public key never reaches the browser when SMTP is the primary path.
-- **UA blocklist** in middleware for known referrer-spam crawlers.
-- **Zod validation** on every form input.
-
----
-
-## Performance
-
-- **RSC by default**: only interactive components ship JS. Static sections are zero-JS.
-- **`<Image>` everywhere** with AVIF/WebP, responsive `srcset`, blur placeholders, `priority` on LCP.
-- **Code splitting**: Next 15 automatically splits `app/` routes. The Spline scene and the framer-motion library are isolated into separate chunks.
-- **Font self-hosting** via `next/font` — no third-party requests, no FOUT.
-- **Hand-rolled service worker**: cache-first for hashed assets, stale-while-revalidate for HTML, offline fallback.
-- **Particle field** gated by `useDeviceProfile` and `prefers-reduced-motion`; pauses when the hero is out of view or the tab is hidden.
-- **Bundle analyzer** via `npm run analyze` to keep the budget honest.
+A small debug panel is wired in development only (`NODE_ENV === 'development'`) to surface which entries fired for a given input.
 
 ---
 
 ## Accessibility
 
-- Skip link, focus-visible, focus trap in modal panels.
-- `role="progressbar"` + `aria-valuenow` on the scroll progress bar.
-- `aria-live="polite"` on the typing hero.
-- `prefers-reduced-motion` short-circuits every animation.
-- Semantic HTML throughout: `<ol>` for timelines, `<nav>` for navigation, `<header>` for sections, `<article>` for notes.
-- Keyboard shortcuts: `` ` `` (terminal), `Cmd/Ctrl+K` (assistant), `Esc` (close any panel).
+- Skip link to `#main-content` in the root layout.
+- `aria-live` on the hero typing phrase, the Now widget, the testimonials carousel, and the assistant message stream.
+- `aria-busy` on the contact submit button while loading.
+- `aria-current` on the active nav link.
+- Focus trap in the terminal and the assistant panel.
+- `prefers-reduced-motion` carve-outs in `app/globals.css` and on key components.
+- `<noscript>` block in the root layout with a `mailto:` fallback.
 
 ---
 
-## Deploy
+## Deployment
 
-The project is set up for [Vercel](https://vercel.com). Push to `main` to trigger a deploy. Set the env vars from `.env.example` in the Vercel project settings.
+The site is a standard Next.js 15 app. Build and run anywhere Node 20+ runs.
 
-For other platforms: `npm run build` produces a Next.js app in `.next/`. Use `npm run start` to serve it.
+```bash
+npm install
+npm run build
+npm run start
+```
+
+On Vercel, no extra config is required — the build, env, and ISR (revalidate 1h on `api.github.com`) work out of the box.
 
 ---
 
-## License
+## Roadmap
 
-Private. All rights reserved.
+- Real LLM-backed assistant (the scripted matcher is the floor, not the ceiling).
+- MDX-based notes (the current block renderer is intentionally dependency-free).
+- Comments on notes.
+- Real CMS for the project entries (or a Notion/Obsidian sync).
+- A blog with RSS.
+- Real Captcha (no keys available; current honeypot + rate-limit + behavioral heuristic is the best honest layer).
+- i18n.

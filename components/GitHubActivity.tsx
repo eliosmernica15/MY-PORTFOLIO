@@ -36,7 +36,7 @@ export async function GitHubActivity({ username = 'eliosmernica15' }: { username
   }));
 
   return (
-    <div>
+    <section id="github" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto content-auto relative z-[1]">
       <RevealSection>
         <SectionHeader
           eyebrow="Open Source"
@@ -88,7 +88,7 @@ export async function GitHubActivity({ username = 'eliosmernica15' }: { username
           </RevealSection>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 

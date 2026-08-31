@@ -1,3 +1,5 @@
+'use client';
+
 import { ArrowLeft, Home } from 'lucide-react';
 import { AdvancedButton } from '@/components/ui/AdvancedButton';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -23,7 +25,7 @@ export default function NotFound() {
           align="center"
           eyebrow="Page not found"
           title="This route doesn't exist."
-          subtitle="The page you're looking for may have moved or never existed. Try one of these instead, or head home."
+          subtitle="The page may have moved or never existed. Try one of these instead, or head home."
           className="!mb-10"
         />
 

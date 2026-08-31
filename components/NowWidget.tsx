@@ -20,11 +20,11 @@ export function NowWidget() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="status-live"
+          className="status-live now-widget"
           role="status"
           aria-live="polite"
         >
-          <Sparkles size={12} className="text-[var(--accent)]" aria-hidden />
+          <Sparkles size={12} className="text-[var(--accent)] pulse-icon" aria-hidden />
           <span className="text-[10px] font-bold uppercase tracking-[0.18em]">
             <span className="opacity-60 mr-1.5">Now:</span>
             {NOW.line}

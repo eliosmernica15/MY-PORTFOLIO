@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Home from '@/components/Home';
 import { SITE } from '@/data/site';
+import { buildBreadcrumbs } from '@/lib/breadcrumbs';
 
 export const metadata: Metadata = {
   title: { default: `${SITE.name} — ${SITE.title}`, template: `%s · ${SITE.name}` },
@@ -9,5 +10,14 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <Home />;
+  const breadcrumbs = buildBreadcrumbs('/');
+  return (
+    <>
+      <Home />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+    </>
+  );
 }

@@ -9,7 +9,7 @@ export function NotesTeaser() {
   const latest = NOTES.slice(0, 3);
 
   return (
-    <section className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto content-auto relative z-[1]">
+    <section id="notes" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto content-auto relative z-[1]">
       <RevealSection>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <SectionHeader

@@ -880,6 +880,23 @@ a:focus-visible {
   50% { opacity: 0.55; transform: scale(0.85); }
 }
 
+@keyframes accent-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  50% { opacity: 0.7; transform: scale(1.08); filter: drop-shadow(0 0 6px var(--accent)); }
+}
+
+.now-widget .pulse-icon {
+  animation: accent-pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .now-widget .pulse-icon,
+  .stat-card-enterprise {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 .progress-enterprise {
   height: 2px;
   width: 100%;

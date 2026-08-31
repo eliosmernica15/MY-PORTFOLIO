@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { AdvancedButton } from '@/components/ui/AdvancedButton';
+import Brand from '@/components/ui/Brand';
 
 export default function GlobalError({
   error,
@@ -20,6 +21,9 @@ export default function GlobalError({
       style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}
     >
       <div className="max-w-md text-center space-y-6">
+        <div className="flex justify-center">
+          <Brand size={48} />
+        </div>
         <p
           className="text-[10px] font-bold uppercase tracking-[0.4em]"
           style={{ color: 'var(--accent-light)' }}
