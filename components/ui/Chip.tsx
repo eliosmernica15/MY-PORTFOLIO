@@ -1,12 +1,25 @@
-import React, { memo } from 'react';
+import * as React from 'react';
+import { cn } from '@/lib/cn';
 
-interface ChipProps {
+export interface ChipProps {
   children: React.ReactNode;
   className?: string;
+  /** Render as a different tag (e.g. `<button>`). */
+  as?: keyof React.JSX.IntrinsicElements;
+  id?: string;
 }
 
-const Chip = memo(function Chip({ children, className = '' }: ChipProps) {
-  return <span className={`chip-enterprise ${className}`.trim()}>{children}</span>;
-});
+/**
+ * Chip — server-component compatible small pill. All colors come from
+ * the design-system variables in `app/globals.css` (`.chip-enterprise`).
+ */
+export default function Chip({ children, className, as: Tag = 'span', id }: ChipProps) {
+  const Component = Tag as React.ElementType;
+  return (
+    <Component id={id} className={cn('chip-enterprise', className)}>
+      {children}
+    </Component>
+  );
+}
 
-export default Chip;
+export { Chip };

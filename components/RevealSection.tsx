@@ -1,3 +1,5 @@
+'use client';
+
 import React, { memo, useEffect, useRef, useState } from 'react';
 
 interface RevealSectionProps {
@@ -47,3 +49,4 @@ const RevealSection = memo(function RevealSection({
 });
 
 export default RevealSection;
+export { RevealSection };

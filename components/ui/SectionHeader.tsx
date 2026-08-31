@@ -1,33 +1,50 @@
-import React, { memo } from 'react';
+import * as React from 'react';
+import { cn } from '@/lib/cn';
 
-interface SectionHeaderProps {
+export interface SectionHeaderProps {
   eyebrow: string;
   title: React.ReactNode;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   align?: 'left' | 'center';
   className?: string;
+  id?: string;
 }
 
-const SectionHeader = memo(function SectionHeader({
+/**
+ * SectionHeader — server-component compatible. Renders an
+ * eyebrow + title + subtitle block used at the top of every section.
+ */
+export default function SectionHeader({
   eyebrow,
   title,
   subtitle,
   align = 'left',
-  className = '',
+  className,
+  id,
 }: SectionHeaderProps) {
-  const alignClass = align === 'center' ? 'text-center mx-auto' : '';
-
   return (
-    <header className={`section-header ${alignClass} ${className}`.trim()}>
+    <header
+      id={id}
+      className={cn(
+        'section-header',
+        align === 'center' && 'text-center mx-auto',
+        className,
+      )}
+    >
       <span className="section-eyebrow">{eyebrow}</span>
       <h2 className="section-title">{title}</h2>
       {subtitle && (
-        <p className={`section-subtitle ${align === 'center' ? 'max-w-2xl mx-auto' : 'max-w-2xl'}`}>
+        <p
+          className={cn(
+            'section-subtitle',
+            align === 'center' ? 'max-w-2xl mx-auto' : 'max-w-2xl',
+          )}
+        >
           {subtitle}
         </p>
       )}
     </header>
   );
-});
+}
 
-export default SectionHeader;
+export { SectionHeader };
