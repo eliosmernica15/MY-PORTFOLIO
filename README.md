@@ -162,12 +162,19 @@ No variables are required for the dev server to start.
 | Command | What it does |
 |---|---|
 | `npm run dev` | Regenerate the knowledge base, then start Next dev on port 3000 |
-| `npm run build` | Regenerate the knowledge base, then `next build` |
+| `npm run build` | Regenerate the knowledge base, then `next build` (with IPv4-first DNS preload) |
+| `npm run build:direct` | Same as `build` but without the IPv4-first preload (for non-Windows hosts) |
 | `npm run start` | Run the production build |
 | `npm run lint` | ESLint with the flat config |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run analyze` | Bundle analyzer report (`@next/bundle-analyzer`) |
 | `npm run sync:kb` | Manually regenerate the assistant's knowledge base |
+
+### Windows-only build scripts
+
+`scripts/ipv4-first.cjs` — loaded by the `build` script via `node --require`. It monkey-patches `dns.lookup` to prefer IPv4, because on this Windows host `fonts.googleapis.com` and `fonts.gstatic.com` resolve to both A and AAAA records and `next/font/google`'s bundled `node-fetch` follows the OS resolver order, hitting the broken IPv6 path and timing out. Drop the preload on a host where IPv6 works and the build will succeed without it.
+
+`scripts/patch-vercel-og.cjs` — runs on `postinstall`. It rewrites three lines in `node_modules/next/dist/compiled/@vercel/og/index.node.js` from `fileURLToPath(join(import.meta.url, "../…"))` to `fileURLToPath(new URL("./…", import.meta.url))`. The original lines crash on Windows when prerendering dynamic `opengraph-image` routes with `TypeError: Invalid URL`. The fix was upstreamed in `vercel/next.js#77650` and released in Next.js 15.3.0; this patch keeps it working on 15.1.6. The patch is idempotent.
 
 ---
 

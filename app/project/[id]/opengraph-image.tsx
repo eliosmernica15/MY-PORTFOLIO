@@ -6,13 +6,10 @@ export const alt = 'Project case study';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-export async function generateImageMetadata(
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params;
-  return [{ id, alt: PROJECTS.find(p => p.id === id)?.title ?? 'Project', contentType, size }];
-}
-
+// Note: `generateImageMetadata` is for static-image file conventions (opengraph-image.png/jpg/svg).
+// It does NOT work with `opengraph-image.tsx` + `ImageResponse` in Next.js 15 — the dynamic
+// sub-routes return 404. The default export below already reads `params` and renders per-id,
+// so we rely on `generateStaticParams` to enumerate the project ids at build time.
 export async function generateStaticParams() {
   return PROJECTS.map(p => ({ id: p.id }));
 }

@@ -7,12 +7,14 @@
     "predev": "node scripts/build-knowledge.mjs",
     "dev": "next dev --port 3000",
     "prebuild": "node scripts/build-knowledge.mjs",
-    "build": "next build",
+    "build": "node --require ./scripts/ipv4-first.cjs node_modules/next/dist/bin/next build",
+    "build:direct": "next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "analyze": "ANALYZE=true next build",
-    "sync:kb": "node scripts/build-knowledge.mjs"
+    "sync:kb": "node scripts/build-knowledge.mjs",
+    "postinstall": "node scripts/patch-vercel-og.cjs"
   },
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",
