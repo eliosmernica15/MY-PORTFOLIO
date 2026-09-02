@@ -460,10 +460,13 @@ export default function Terminal({}: TerminalProps = {}) {
       if (!dragRef.current.active) return;
       const dx = e.clientX - dragRef.current.startX;
       const dy = e.clientY - dragRef.current.startY;
-      const maxX = window.innerWidth - 200;
+      // Panel width on desktop is min(560px, 90vw). Mirror that math so the
+      // panel can't slide past the right edge of the viewport.
+      const panelW = Math.min(560, window.innerWidth * 0.9);
+      const maxX = Math.max(0, window.innerWidth - panelW);
       const maxY = window.innerHeight - 80;
       setPosition({
-        x: Math.max(0, Math.min(maxX, dragRef.current.baseX - dx)),
+        x: Math.max(0, Math.min(maxX, dragRef.current.baseX + dx)),
         y: Math.max(0, Math.min(maxY, dragRef.current.baseY - dy)),
       });
     };

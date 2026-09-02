@@ -152,7 +152,7 @@ function renderCard(card: Card, onAction: (kind: 'open' | 'scroll', target: stri
           className="mt-1 w-full text-[11px] font-bold uppercase tracking-widest py-2 rounded-lg transition-colors"
           style={{
             background: 'var(--accent)',
-            color: 'var(--text-on-accent, #fff)',
+            color: 'var(--accent-contrast)',
           }}
         >
           Open contact form
@@ -493,10 +493,10 @@ export default function AssistantChat() {
             <div className="flex items-center gap-2.5 min-w-0">
               <div
                 className="w-7 h-7 rounded-lg flex items-center justify-center"
-                style={{ background: 'var(--accent)', color: 'var(--text-on-accent, #fff)' }}
+                style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}
                 aria-hidden
               >
-                <Sparkles size={14} />
+                <Sparkles size={14} style={{ color: 'var(--accent-contrast)' }} />
               </div>
               <div className="min-w-0">
                 <div className="text-sm font-bold flex items-center gap-2"
@@ -608,7 +608,7 @@ export default function AssistantChat() {
                       }`}
                       style={
                         m.role === 'user'
-                          ? { background: 'var(--accent)', color: 'var(--text-on-accent, #fff)' }
+                          ? { background: 'var(--accent)', color: 'var(--accent-contrast)' }
                           : {
                               background: 'var(--surface-elevated)',
                               color: 'var(--text-primary)',
@@ -665,7 +665,7 @@ export default function AssistantChat() {
                     className="p-2 rounded-lg flex-shrink-0"
                     style={{
                       background: isListening ? 'var(--accent)' : 'var(--surface-elevated)',
-                      color: isListening ? 'var(--text-on-accent, #fff)' : 'var(--text-secondary)',
+                      color: isListening ? 'var(--accent-contrast)' : 'var(--text-secondary)',
                       border: '1px solid var(--border)',
                     }}
                     aria-label={isListening ? 'Stop voice input' : 'Start voice input'}
@@ -712,7 +712,7 @@ export default function AssistantChat() {
                   className="p-2 rounded-lg flex-shrink-0 transition-opacity disabled:opacity-40"
                   style={{
                     background: 'var(--accent)',
-                    color: 'var(--text-on-accent, #fff)',
+                    color: 'var(--accent-contrast)',
                   }}
                   aria-label="Send"
                 >

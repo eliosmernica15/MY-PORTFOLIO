@@ -14,9 +14,10 @@ export interface BrandProps {
 /**
  * Brand — the Elios Mernica custom SVG monogram.
  *
- * A thin-stroke geometric "E" overlapped by a tilted "M", with a single
- * filled accent dot at the intersection. Used in the nav, footer,
- * OG image, and favicon (`app/icon.tsx`).
+ * Two thin-stroke geometric letters ("E" + "M") sitting side-by-side
+ * with a single filled accent dot at their midpoint. Both letters are
+ * upright (no rotation) so they stay legible at favicon size. Used in
+ * the nav, footer, OG image, and favicon (`app/icon.tsx`).
  *
  * Strokes use `currentColor`; the dot uses `var(--accent)`.
  */
@@ -40,29 +41,31 @@ export default function Brand({
     >
       {title ? <title>{title}</title> : null}
 
-      {/* Monogram group: E (vertical + 3 arms) overlapped by a tilted M. */}
+      {/* Monogram: an "E" on the left half and an "M" on the right half,
+          separated by a small gap and joined by a single accent dot.
+          Both letters are upright (no rotation) so each stays legible at
+          favicon size (16px). The M is slightly narrower than the E for
+          optical balance. */}
       <g
         stroke="currentColor"
         strokeWidth="1.75"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        {/* "E" — upright, anchored on the left half */}
-        <line x1="12" y1="8" x2="12" y2="40" />
-        <line x1="12" y1="8" x2="22" y2="8" />
-        <line x1="12" y1="24" x2="20" y2="24" />
-        <line x1="12" y1="40" x2="22" y2="40" />
+        {/* "E" — left half: vertical spine at x=10, three arms to x=20 */}
+        <line x1="10" y1="8" x2="10" y2="40" />
+        <line x1="10" y1="8" x2="20" y2="8" />
+        <line x1="10" y1="24" x2="18" y2="24" />
+        <line x1="10" y1="40" x2="20" y2="40" />
 
-        {/* "M" — tilted ~12deg clockwise so it visually weaves through the E */}
-        <g transform="rotate(12 30 24)">
-          <line x1="22" y1="10" x2="22" y2="38" />
-          <line x1="22" y1="10" x2="30" y2="22" />
-          <line x1="30" y1="22" x2="38" y2="10" />
-          <line x1="38" y1="10" x2="38" y2="38" />
-        </g>
+        {/* "M" — right half: two verticals at x=28 and x=38, V meeting at (33, 24) */}
+        <line x1="28" y1="10" x2="28" y2="38" />
+        <line x1="28" y1="10" x2="33" y2="24" />
+        <line x1="33" y1="24" x2="38" y2="10" />
+        <line x1="38" y1="10" x2="38" y2="38" />
       </g>
 
-      {/* Accent dot at the intersection of the E's middle arm and the M's center. */}
+      {/* Accent dot at the midpoint between the E and the M. */}
       {accent && (
         <circle
           cx="24"
