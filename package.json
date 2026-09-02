@@ -3,6 +3,10 @@
   "version": "2.0.0",
   "private": true,
   "type": "module",
+  "allowedBuiltDependencies": [
+    "sharp",
+    "unrs-resolver"
+  ],
   "scripts": {
     "predev": "node scripts/build-knowledge.mjs",
     "dev": "next dev --port 3000",
@@ -21,21 +25,21 @@
     "@splinetool/runtime": "^1.12.58",
     "framer-motion": "^12.34.0",
     "lucide-react": "^0.563.0",
-    "next": "15.1.6",
-    "nodemailer": "^6.9.16",
+    "next": "^15.5.25",
+    "nodemailer": "^9.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^15.1.6",
+    "@next/bundle-analyzer": "^15.5.25",
     "@types/node": "^22.14.0",
     "@types/nodemailer": "^6.4.17",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.4.24",
     "eslint": "^9.18.0",
-    "eslint-config-next": "15.1.6",
+    "eslint-config-next": "^15.5.25",
     "postcss": "^8.5.6",
     "tailwindcss": "3.4",
     "typescript": "~5.8.2"
