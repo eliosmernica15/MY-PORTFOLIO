@@ -90,7 +90,10 @@ const themeInitScript = `
 (function() {
   try {
     var t = document.cookie.match(/(?:^|; )theme=(dark|light)/);
-    var theme = t ? t[1] : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'dark');
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch (e) {}
+    var pref = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var theme = t ? t[1] : (stored === 'dark' || stored === 'light' ? stored : pref);
     document.documentElement.setAttribute('data-theme', theme);
   } catch(e) {
     document.documentElement.setAttribute('data-theme', 'dark');
@@ -99,9 +102,13 @@ const themeInitScript = `
 `;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // Read theme forwarded by middleware; falls back to dark
+  // Read theme and CSP nonce forwarded by middleware; fall back to dark
+  // and an empty nonce (the empty nonce is enough for `'strict-dynamic'`
+  // to permit the inline theme-init script; the CSP itself sets `'self'`
+  // + nonce + `https://prod.spline.design`).
   const h = await headers();
   const theme = (h.get('x-theme') as 'dark' | 'light' | null) ?? 'dark';
+  const nonce = h.get('x-nonce') ?? '';
 
   const personJsonLd = {
     '@context': 'https://schema.org',
@@ -139,7 +146,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://i.postimg.cc" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.github.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.emailjs.com" />
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="noise">
         <a href="#main-content" className="skip-link">Skip to main content</a>
