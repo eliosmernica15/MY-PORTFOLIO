@@ -209,10 +209,20 @@ export default function AssistantChat() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen && !minimized);
   const panelRef = useRef<HTMLDivElement>(null);
-  const combinedRef = (el: HTMLDivElement | null) => {
-    (panelRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-    (focusTrapRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-  };
+  // Stable callback ref — see the same pattern in Terminal.tsx.
+  // Inline-arrow refs get a new identity every render, which makes
+  // React re-run the ref callback on every render even when the DOM
+  // element didn't change. `focusTrapRef` and `panelRef` are
+  // `useRef` objects whose identity is stable across renders, so
+  // the empty dep array is correct.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const combinedRef = useCallback(
+    (el: HTMLDivElement | null) => {
+      (panelRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+      (focusTrapRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+    },
+    []
+  );
 
   // Belt-and-suspenders: force the panel's height directly on the DOM
   // with `!important` when `minimized` flips. The CSS rule already does
@@ -235,9 +245,11 @@ export default function AssistantChat() {
     }
   }, [minimized, isMobile, isOpen]);
 
-  // Theme for any color hints.
-  const themeResult = useOptionalTheme();
-  void themeResult; // we read it indirectly via the CSS variables
+  // Theme is always available (the layout wraps with ThemeProvider).
+  // The previous version was a no-op `useOptionalTheme()` wrapper
+  // that paid a try/catch cost on every render. Direct call instead.
+  const { theme: currentTheme } = useTheme();
+  void currentTheme; // we read it indirectly via the CSS variables
 
   // -- Mobile / voice detection --
   useEffect(() => {
@@ -260,11 +272,19 @@ export default function AssistantChat() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // -- Rate-limit tick --
+  // -- Rate-limit tick (only runs while the panel is open). The
+  //    previous version ran a 1Hz `setNow` forever, which forced a
+  //    React re-render of the entire AssistantChat tree every second
+  //    — even when the panel was closed and the user wasn't looking.
+  //    A `JSON.parse` + `JSON.stringify` of the rate stamps also ran
+  //    on each tick. The footer that shows "X/5 this min" is the
+  //    only consumer of the rate value, and the user can only see
+  //    the footer when the panel is open. --
   useEffect(() => {
+    if (!isOpen) return;
     const interval = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isOpen]);
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const stamps = JSON.parse(
@@ -273,7 +293,7 @@ export default function AssistantChat() {
     const recent = stamps.filter(s => now - s < RATE_WINDOW_MS);
     setRateRemaining(Math.max(0, RATE_MAX - recent.length));
     window.localStorage.setItem('assistant-rate-stamps', JSON.stringify(recent));
-  }, [now]);
+  }, [now, isOpen]);
 
   // -- Body autoscroll --
   useEffect(() => {
@@ -920,13 +940,3 @@ type SpeechRecognitionLike = {
   start: () => void;
   stop: () => void;
 };
-
-// Optional theme reader. Always returns the same shape regardless of whether
-// the provider is mounted, so the rules-of-hooks lint rule passes.
-function useOptionalTheme(): { theme: 'dark' | 'light' } {
-  try {
-    return useTheme();
-  } catch {
-    return { theme: 'dark' as const };
-  }
-}

@@ -92,7 +92,10 @@ body {
   color: var(--text-primary);
   margin: 0;
   overflow-x: hidden;
-  transition: background-color 0.5s ease, color 0.5s ease;
+  /* Theme transition is handled on the html root via color-scheme + a
+     single CSS-variable repaint, not on body. Animating background-color
+     and color on the body cascades to every element on every theme
+     switch — a full repaint of every visible pixel. */
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
 }
@@ -247,6 +250,11 @@ a[href*="spline.tool"] {
 
 /* ================================================================
    Noise Texture Overlay
+   Scoped to body via a fixed pseudo-element. Sits at z-index 1 so
+   the floating panels (z-index 60+) and modal overlays (70+) render
+   above it cleanly. The previous z-index 9999 was above the panels,
+   which meant the noise also painted over their backdrop-filter
+   blurs — a full-viewport composite on every frame.
    ================================================================ */
 .noise::before {
   content: '';
@@ -257,7 +265,7 @@ a[href*="spline.tool"] {
   height: 100%;
   opacity: 0.015;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 1;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -401,6 +409,14 @@ a:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
   .reveal-section {
     opacity: 1;
     transform: none;
@@ -415,20 +431,6 @@ a:focus-visible {
   .ambient-orb-a,
   .ambient-orb-b {
     animation: none !important;
-  }
-}
-
-/* ================================================================
-   Reduced Motion (Accessibility)
-   ================================================================ */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }
 

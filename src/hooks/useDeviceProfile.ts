@@ -47,6 +47,13 @@ export function readDeviceProfile(): DeviceProfile {
 }
 
 export function getDeviceProfile(): DeviceProfile {
+  // No cache — the profile depends on viewport size and matchMedia
+  // state, which can change at runtime (orientation, window resize,
+  // user toggling system reduced motion). The call is cheap (a few
+  // matchMedia + a few property reads), so re-deriving on every call
+  // is the correct trade-off. The previous module-level cache froze
+  // the profile at first import, so a tablet rotated after page load
+  // would stay in its original `enable3D` bucket until full reload.
   return readDeviceProfile();
 }
 

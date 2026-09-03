@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { getDeviceProfile } from '../hooks/useDeviceProfile';
-
-const profile = getDeviceProfile();
+import { useDeviceProfile } from '../hooks/useDeviceProfile';
 
 const CustomCursor: React.FC = () => {
+  const profile = useDeviceProfile();
   const [mounted, setMounted] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const visibleRef = useRef(false);
@@ -19,7 +18,14 @@ const CustomCursor: React.FC = () => {
   const dotY = useTransform(rawY, v => v - 4);
   const ringXCentered = useTransform(ringX, v => v - 20);
   const ringYCentered = useTransform(ringY, v => v - 20);
-  const [isVisible, setIsVisible] = useState(false);
+  // Opacity is a motion value rather than React state — flipping
+  // it on `mouseenter` / `mouseleave` doesn't trigger a re-render
+  // of the cursor tree. The previous version held `isVisible` as
+  // `useState`, so every visibility flip re-rendered the entire
+  // `<CustomCursor />` component. With ~120 mouseenter/leave events
+  // per minute on a typical page, that was ~120 re-renders/min
+  // for a component that should be a pure transform.
+  const opacityMV = useMotionValue(0);
 
   useEffect(() => setMounted(true), []);
 
@@ -34,7 +40,7 @@ const CustomCursor: React.FC = () => {
       rawY.set(pendingRef.current.y);
       if (!visibleRef.current) {
         visibleRef.current = true;
-        setIsVisible(true);
+        opacityMV.set(1);
       }
     };
 
@@ -47,11 +53,11 @@ const CustomCursor: React.FC = () => {
 
     const handleLeave = () => {
       visibleRef.current = false;
-      setIsVisible(false);
+      opacityMV.set(0);
     };
     const handleEnter = () => {
       visibleRef.current = true;
-      setIsVisible(true);
+      opacityMV.set(1);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -83,7 +89,7 @@ const CustomCursor: React.FC = () => {
     <>
       <motion.div
         className="custom-cursor-dot"
-        style={{ x: dotX, y: dotY, opacity: isVisible ? 1 : 0, pointerEvents: 'none' }}
+        style={{ x: dotX, y: dotY, opacity: opacityMV, pointerEvents: 'none' }}
         animate={{ scale: isHovering ? 0.4 : 1 }}
         transition={{ type: 'spring', stiffness: 500, damping: 28 }}
       />
@@ -92,7 +98,7 @@ const CustomCursor: React.FC = () => {
         style={{
           x: ringXCentered,
           y: ringYCentered,
-          opacity: isVisible ? 1 : 0,
+          opacity: opacityMV,
           pointerEvents: 'none',
         }}
         animate={{

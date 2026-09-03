@@ -30,13 +30,24 @@ const SplineScene: React.FC = () => {
     if (!root) return;
 
     hideSplineWatermark(root);
-    const observer = new MutationObserver(() => hideSplineWatermark(root));
-    observer.observe(root, { childList: true, subtree: true });
 
-    const stopAt = window.setTimeout(() => observer.disconnect(), 8000);
+    // Spline injects its watermark lazily as the WebGL scene boots
+    // and the runtime progressively hydrates. The previous
+    // implementation used a `MutationObserver` watching the whole
+    // subtree for 8 seconds — which fired constantly because the
+    // runtime mutates the scene every frame as it streams. The
+    // observer is removed entirely; a small setTimeout chain
+    // re-hides the watermark at staggered intervals instead, which
+    // is enough in practice.
+    const timers: number[] = [];
+    [0, 200, 800, 2000, 4000].forEach(delay => {
+      timers.push(window.setTimeout(() => {
+        if (containerRef.current) hideSplineWatermark(containerRef.current);
+      }, delay));
+    });
+
     return () => {
-      clearTimeout(stopAt);
-      observer.disconnect();
+      timers.forEach(t => clearTimeout(t));
     };
   }, []);
 

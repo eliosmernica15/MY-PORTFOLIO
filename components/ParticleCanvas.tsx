@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import { getDeviceProfile } from '../hooks/useDeviceProfile';
+import { useDeviceProfile } from '../hooks/useDeviceProfile';
 
 interface Particle {
   x: number;
@@ -10,9 +10,8 @@ interface Particle {
   size: number;
 }
 
-const profile = getDeviceProfile();
-
 const ParticleCanvas: React.FC = () => {
+  const profile = useDeviceProfile();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { theme } = useTheme();
   const isDark = theme === 'dark';
@@ -29,6 +28,7 @@ const ParticleCanvas: React.FC = () => {
     let width = 0;
     let height = 0;
     let visible = document.visibilityState === 'visible';
+    let inViewport = true;
     const particles: Particle[] = [];
 
     const particleColor = isDark ? 'rgba(255, 255, 255, 0.35)' : 'rgba(0, 0, 0, 0.2)';
@@ -45,7 +45,15 @@ const ParticleCanvas: React.FC = () => {
       return { numParticles: 36, connectionDistance: 120 };
     };
 
-    const { numParticles, connectionDistance } = getParticleConfig();
+    // Bucket the current breakpoint so we can detect when the user
+    // crosses a width threshold at runtime and need to re-seed the
+    // particle count. Without this, a user resizing the window from
+    // 800px to 1100px would stay stuck on the `< 1024` config.
+    const currentBucket = (w: number) =>
+      w < 640 ? 0 : w < 1024 ? 1 : 2;
+
+    let { numParticles, connectionDistance } = getParticleConfig();
+    let lastBucket = currentBucket(window.innerWidth);
 
     const resize = () => {
       width = canvas.offsetWidth;
@@ -54,6 +62,18 @@ const ParticleCanvas: React.FC = () => {
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // If the user crossed a width bucket, re-seed with the new
+      // particle count. Cheap (just a few Math.random calls) and
+      // keeps the field's density matched to the new viewport.
+      const bucket = currentBucket(window.innerWidth);
+      if (bucket !== lastBucket) {
+        lastBucket = bucket;
+        const cfg = getParticleConfig();
+        numParticles = cfg.numParticles;
+        connectionDistance = cfg.connectionDistance;
+        seedParticles();
+      }
     };
 
     const seedParticles = () => {
@@ -74,11 +94,13 @@ const ParticleCanvas: React.FC = () => {
 
     const onVisibility = () => {
       visible = document.visibilityState === 'visible';
-      if (visible && animationId === 0) animationId = requestAnimationFrame(animate);
+      if (visible && inViewport && animationId === 0) {
+        animationId = requestAnimationFrame(animate);
+      }
     };
 
     const animate = () => {
-      if (!visible) {
+      if (!visible || !inViewport) {
         animationId = 0;
         return;
       }
@@ -124,10 +146,31 @@ const ParticleCanvas: React.FC = () => {
     window.addEventListener('resize', resize, { passive: true });
     document.addEventListener('visibilitychange', onVisibility);
 
+    // Pause the loop when the canvas scrolls out of view. The hero
+    // is min-h-[100dvh] and the canvas covers the whole hero, so
+    // once the user scrolls past the hero there's no visible work
+    // for the loop to do — but it still costs ~16ms/frame of CPU
+    // and battery. The IntersectionObserver resumes the loop on
+    // scroll-back. `rootMargin: 50px` keeps a small buffer so
+    // particles don't pop out mid-scroll.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          inViewport = entry.isIntersecting;
+          if (inViewport && visible && animationId === 0) {
+            animationId = requestAnimationFrame(animate);
+          }
+        }
+      },
+      { rootMargin: '50px' }
+    );
+    io.observe(canvas);
+
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
       document.removeEventListener('visibilitychange', onVisibility);
+      io.disconnect();
     };
   }, [isDark]);
 

@@ -21,7 +21,7 @@ type TerminalAction =
   | { type: 'scroll_to'; target: string }
   | { type: 'open_link'; target: string }
   | { type: 'open_route'; target: string }
-  | { type: 'set_theme'; theme: 'dark' | 'light' }
+  | { type: 'set_theme'; theme: 'dark' | 'light' | 'toggle' }
   | { type: 'clear' };
 
 type CommandOutput = string | { output: string; action?: TerminalAction };
@@ -121,7 +121,12 @@ const COMMANDS: Record<string, { description: string; run: (args: string[]) => C
         return { output: `Switching to ${arg}…`, action: { type: 'set_theme', theme: arg } };
       }
       if (arg === 'toggle' || arg === '') {
-        return { output: 'Toggling theme…', action: { type: 'set_theme', theme: 'dark' } }; // ThemeProvider applies the toggle effect
+        // The previous version hard-coded `theme: 'dark'`, so
+        // `theme toggle` always switched to dark regardless of the
+        // current state. Now we send `theme: 'toggle'` and let
+        // `executeAction` invoke the provider's toggleTheme(), which
+        // flips based on the current value.
+        return { output: 'Toggling theme…', action: { type: 'set_theme', theme: 'toggle' } };
       }
       return 'Usage: theme dark | light | toggle';
     },
@@ -234,30 +239,56 @@ function longestCommonPrefix(items: string[]): string {
   return prefix;
 }
 
-// Optional theme reader. Always returns the same shape regardless of whether
-// the provider is mounted, so the rules-of-hooks lint rule passes.
-function useOptionalTheme(): { theme: 'dark' | 'light'; toggleTheme?: () => void } {
-  try {
-    return useTheme();
-  } catch {
-    return { theme: 'dark' as const };
-  }
+// Theme reader. The layout always wraps the tree with `<ThemeProvider>`
+// (see app/Providers.tsx), so `useTheme()` is guaranteed to be in
+// context. The previous `try/catch` was a defensive wrapper that
+// violated the rules of hooks (a thrown `useContext` meant some
+// hooks were called less often than expected) and paid a try/catch
+// cost on every render of every Terminal instance.
+function useOptionalTheme() {
+  return useTheme();
 }
 
 // ---------- Component ----------
 
 export default function Terminal({}: TerminalProps = {}) {
-  // Optional theme — if the provider isn't mounted we just no-op the theme command.
-  const themeResult = useOptionalTheme();
-  const currentTheme: 'dark' | 'light' = themeResult.theme;
-  const setTheme = useCallback((next: 'dark' | 'light') => {
-    if (themeResult.theme !== next) themeResult.toggleTheme?.();
-  }, [themeResult]);
+  // Theme is always available (the layout wraps with ThemeProvider).
+  const { theme: currentTheme, toggleTheme } = useOptionalTheme();
+  // Set a specific theme value, or toggle. `toggleTheme` flips based
+  // on the current state and is what the `theme toggle` command uses
+  // (the previous version always set theme to 'dark', which was a
+  // bug — toggle from light should go to dark, toggle from dark
+  // should go to light).
+  const setTheme = useCallback(
+    (next: 'dark' | 'light' | 'toggle') => {
+      if (next === 'toggle') {
+        toggleTheme();
+        return;
+      }
+      if (currentTheme !== next) toggleTheme();
+    },
+    [currentTheme, toggleTheme]
+  );
 
   const reduced = usePrefersReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [minimized, setMinimized] = useState(false);
-  const [position, setPosition] = useLocalStorage<{ x: number; y: number }>('terminal-pos', { x: 24, y: 24 });
+  // `position` is the source of truth for what's rendered; the
+  // localStorage-backed state is only written on drag END (mouseup).
+  // The previous implementation passed `setPosition` into the
+  // mousemove handler, which meant a synchronous
+  // `JSON.stringify` + `localStorage.setItem` on every frame of
+  // the drag (potentially 60+/sec). That's a measurable hitch on
+  // mobile and a battery sink on desktop. The `committedPosition`
+  // ref tracks the last value that was actually persisted so a
+  // later resize-clamp knows what's "live" without re-reading
+  // localStorage.
+  const [committedPosition, setCommittedPosition] = useLocalStorage<{ x: number; y: number }>(
+    'terminal-pos',
+    { x: 24, y: 24 }
+  );
+  const [position, setPosition] = useState(committedPosition);
+  const positionRef = useRef(committedPosition);
   const [history, setHistory] = useLocalStorage<string[]>('terminal-history', []);
   const [messages, setMessages] = useState<TerminalMessage[]>([]);
   const [input, setInput] = useState('');
@@ -279,9 +310,13 @@ export default function Terminal({}: TerminalProps = {}) {
       // Reset stale desktop drag position when entering mobile width — the
       // `position.x/y` from a 1920×1080 drag would push the panel off-screen
       // on a 375×667 phone. Mobile uses full-bleed `inset: 0` anyway, so the
-      // stale coords are pure dead weight.
-      if (mobile && (position.x !== 24 || position.y !== 24)) {
+      // stale coords are pure dead weight. We update both the local
+      // `position` state and the persisted localStorage value so the
+      // snap-back survives a reload.
+      if (mobile) {
+        positionRef.current = { x: 24, y: 24 };
         setPosition({ x: 24, y: 24 });
+        setCommittedPosition({ x: 24, y: 24 });
       }
       // On mobile, `minimized` is meaningless (the panel is fullscreen), so
       // force it off — otherwise a resize that crosses the 640px boundary
@@ -296,8 +331,11 @@ export default function Terminal({}: TerminalProps = {}) {
         const panelH = Math.min(420, window.innerHeight * 0.7);
         const maxX = Math.max(0, window.innerWidth - panelW);
         const maxY = Math.max(0, window.innerHeight - 80 - panelH - 16);
-        if (position.x > maxX || position.y > maxY) {
-          setPosition({ x: 24, y: 24 });
+        if (positionRef.current.x > maxX || positionRef.current.y > maxY) {
+          const reset = { x: 24, y: 24 };
+          positionRef.current = reset;
+          setPosition(reset);
+          setCommittedPosition(reset);
         }
       }
     };
@@ -404,10 +442,21 @@ export default function Terminal({}: TerminalProps = {}) {
       el.style.removeProperty('max-height');
     }
   }, [minimized, isMobile, isOpen]);
-  const combinedRef = (el: HTMLDivElement | null) => {
-    (panelRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-    (focusTrapRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-  };
+  // Stable callback ref that writes to both the panel ref and the
+  // focus-trap ref. Using a single `useCallback` (rather than a fresh
+  // function inline) means React doesn't see a new ref identity on
+  // every render — which prevents the ref-callback from being
+  // invoked on every render and re-asserting the focus trap.
+  // `focusTrapRef` and `panelRef` are `useRef` objects whose identity
+  // is stable across renders, so the empty dep array is correct.
+  const combinedRef = useCallback(
+    (el: HTMLDivElement | null) => {
+      (panelRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+      (focusTrapRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   const runClear = useCallback(() => {
     setMessages([{ id: String(Date.now()), prompt: 'elios', text: 'Buffer cleared.', ts: Date.now() }]);
@@ -430,7 +479,7 @@ export default function Terminal({}: TerminalProps = {}) {
         runClear();
         break;
       case 'set_theme':
-        if (setTheme) setTheme(action.theme);
+        setTheme(action.theme);
         break;
     }
   }, [runClear, setTheme]);
@@ -529,8 +578,8 @@ export default function Terminal({}: TerminalProps = {}) {
       active: true,
       startX: e.clientX,
       startY: e.clientY,
-      baseX: position.x,
-      baseY: position.y,
+      baseX: positionRef.current.x,
+      baseY: positionRef.current.y,
     };
     document.body.style.userSelect = 'none';
   };
@@ -551,15 +600,24 @@ export default function Terminal({}: TerminalProps = {}) {
       // `y <= innerHeight - 80 - panelH - 16`.
       const panelH = Math.min(420, window.innerHeight * 0.7);
       const maxY = Math.max(0, window.innerHeight - 80 - panelH - 16);
-      setPosition({
+      const next = {
         x: Math.max(0, Math.min(maxX, dragRef.current.baseX + dx)),
         y: Math.max(0, Math.min(maxY, dragRef.current.baseY + dy)),
-      });
+      };
+      // Update the in-memory ref + render state on every move so
+      // the panel tracks the cursor, but DO NOT persist to
+      // localStorage here. Persistence happens on `mouseup` below.
+      positionRef.current = next;
+      setPosition(next);
     };
     const onUp = () => {
       if (dragRef.current.active) {
         dragRef.current.active = false;
         document.body.style.userSelect = '';
+        // Commit the final position to localStorage now that the
+        // drag is over. One write per drag instead of one per
+        // frame.
+        setCommittedPosition(positionRef.current);
       }
     };
     window.addEventListener('mousemove', onMove);
@@ -568,7 +626,7 @@ export default function Terminal({}: TerminalProps = {}) {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
     };
-  }, [setPosition]);
+  }, [setPosition, setCommittedPosition]);
 
   // Build style based on mobile vs. floating.
   const panelStyle = useMemo<React.CSSProperties>(() => {

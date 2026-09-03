@@ -1,5 +1,5 @@
 import React, { useRef, memo } from 'react';
-import { getDeviceProfile } from '../hooks/useDeviceProfile';
+import { useDeviceProfile } from '../hooks/useDeviceProfile';
 
 interface TiltCardProps {
   children: React.ReactNode;
@@ -7,13 +7,12 @@ interface TiltCardProps {
   tiltStrength?: number;
 }
 
-const profile = getDeviceProfile();
-
 const TiltCard = memo(function TiltCard({
   children,
   className = '',
   tiltStrength = 6,
 }: TiltCardProps) {
+  const profile = useDeviceProfile();
   const cardRef = useRef<HTMLDivElement>(null);
   const glareRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number | null>(null);

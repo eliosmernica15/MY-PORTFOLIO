@@ -1,5 +1,5 @@
 import React, { useRef, memo } from 'react';
-import { getDeviceProfile } from '../hooks/useDeviceProfile';
+import { useDeviceProfile } from '../hooks/useDeviceProfile';
 
 interface MagneticButtonProps {
   children: React.ReactNode;
@@ -7,13 +7,12 @@ interface MagneticButtonProps {
   strength?: number;
 }
 
-const profile = getDeviceProfile();
-
 const MagneticButton = memo(function MagneticButton({
   children,
   className = '',
   strength = 0.3,
 }: MagneticButtonProps) {
+  const profile = useDeviceProfile();
   const ref = useRef<HTMLDivElement>(null);
 
   if (!profile.enableMagnetic) {

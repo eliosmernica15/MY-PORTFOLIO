@@ -6,13 +6,13 @@ import { SITE } from '@/data/site';
 import AnimatedCounter from './AnimatedCounter';
 import AdvancedButton from './ui/AdvancedButton';
 import { useTypingEffect } from '../hooks/useTypingEffect';
-import { getDeviceProfile } from '../hooks/useDeviceProfile';
+import { useDeviceProfile } from '../hooks/useDeviceProfile';
 
 const LazySplineScene = lazy(() => import('./SplineScene'));
 const LazyParticleCanvas = lazy(() => import('./ParticleCanvas'));
 
 const Hero: React.FC = () => {
-  const profile = getDeviceProfile();
+  const profile = useDeviceProfile();
   const [loadEffects, setLoadEffects] = useState(false);
 
   useEffect(() => {
