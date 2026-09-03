@@ -303,25 +303,11 @@ export default function AssistantChat() {
     return () => window.removeEventListener('keydown', onKey);
   }, [isOpen, isMobile]);
 
-  // -- Click outside (desktop only) minimizes rather than closes. --
-  useEffect(() => {
-    if (!isOpen || isMobile || minimized) return;
-    const onDocPointer = (e: MouseEvent) => {
-      const target = e.target as Node | null;
-      if (!target) return;
-      if (panelRef.current?.contains(target)) return;
-      const trigger = (target as HTMLElement).closest?.('[data-floating-trigger]');
-      if (trigger) return;
-      setMinimized(true);
-    };
-    const t = setTimeout(() => {
-      document.addEventListener('mousedown', onDocPointer);
-    }, 0);
-    return () => {
-      clearTimeout(t);
-      document.removeEventListener('mousedown', onDocPointer);
-    };
-  }, [isOpen, isMobile, minimized]);
+  // Note: we intentionally do NOT auto-minimize on click-outside. The
+  // user explicitly minimizes via the header dot, the trigger button, or
+  // Esc. Auto-minimizing on every outside click interferes with normal
+  // page interaction (clicking a project link, a card, etc.) and the
+  // session is already preserved by the explicit minimize affordances.
 
   // -- Seed greeting on first open --
   const seededRef = useRef(false);
@@ -499,17 +485,29 @@ export default function AssistantChat() {
         paddingTop: 'env(safe-area-inset-top)',
         paddingBottom: 'env(safe-area-inset-bottom)',
       }
-    : {
-        position: 'fixed',
-        right: 24,
-        bottom: 88,
-        zIndex: 80,
-        width: 'min(420px, 92vw)',
-        // Animated height: explicit pixel max so the CSS
-        // `transition: max-height` can play. `auto` doesn't transition.
-        maxHeight: minimized ? 60 : 'min(560px, 80vh)',
-        height: minimized ? 60 : 'min(560px, 80vh)',
-      };
+    : (minimized
+      // When minimized, pin the panel to the same place as the trigger
+      // button (bottom-right) and shrink it to a 52px header strip. The
+      // user can click anywhere on the strip to re-expand.
+      ? {
+          position: 'fixed',
+          right: 16,
+          bottom: 16,
+          zIndex: 80,
+          width: 'min(280px, 60vw)',
+          height: 52,
+          maxHeight: 52,
+        }
+      : {
+          position: 'fixed',
+          right: 24,
+          bottom: 88,
+          zIndex: 80,
+          width: 'min(420px, 92vw)',
+          height: 'min(560px, 80vh)',
+          maxHeight: '80vh',
+        }
+    );
 
   // Trigger button click — closed → open; open & expanded → minimize
   // (desktop) or close (mobile); open & minimized → expand.
@@ -587,59 +585,87 @@ export default function AssistantChat() {
           aria-modal={isMobile ? 'true' : 'false'}
           aria-label="Elios AI assistant"
         >
-          {/* Header */}
+          {/* Header — also acts as the click target to expand when minimized */}
           <div
-            className="flex items-center justify-between px-4 py-3 border-b"
+            onClick={minimized ? () => setMinimized(false) : undefined}
+            role={minimized ? 'button' : undefined}
+            aria-label={minimized ? 'Expand assistant' : undefined}
+            className={`flex items-center justify-between border-b select-none transition-colors ${
+              minimized ? 'px-3 py-2 cursor-pointer hover:bg-[var(--surface-elevated)]' : 'px-4 py-3'
+            }`}
             style={{
               background: 'var(--bg-elevated, var(--bg-card))',
               borderColor: 'var(--border)',
+              cursor: minimized ? 'pointer' : undefined,
+              userSelect: 'none',
+              height: '100%',
             }}
           >
             <div className="flex items-center gap-2.5 min-w-0">
               <div
-                className="w-7 h-7 rounded-lg flex items-center justify-center"
+                className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
                 style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}
                 aria-hidden
               >
                 <Sparkles size={14} style={{ color: 'var(--accent-contrast)' }} />
               </div>
-              <div className="min-w-0">
-                <div className="text-sm font-bold flex items-center gap-2"
+              {minimized ? (
+                <span className="flex items-center gap-2 text-sm font-bold truncate"
                   style={{ color: 'var(--text-primary)' }}>
                   Elios AI
-                  <span className="status-live">
-                    <span className="status-live-dot" />
-                    <span className="text-[10px] uppercase tracking-widest font-bold">Online</span>
-                  </span>
+                  <span
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{
+                      background: 'var(--accent)',
+                      boxShadow: '0 0 8px var(--shadow-accent)',
+                      animation: 'pulse-live 2s ease-in-out infinite',
+                    }}
+                    aria-hidden
+                  />
+                </span>
+              ) : (
+                <div className="min-w-0">
+                  <div className="text-sm font-bold flex items-center gap-2"
+                    style={{ color: 'var(--text-primary)' }}>
+                    Elios AI
+                    <span className="status-live">
+                      <span className="status-live-dot" />
+                      <span className="text-[10px] uppercase tracking-widest font-bold">Online</span>
+                    </span>
+                  </div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest"
+                    style={{ color: 'var(--text-muted)' }}>
+                    Offline-ready
+                  </div>
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-widest"
-                  style={{ color: 'var(--text-muted)' }}>
-                  Offline-ready
-                </div>
-              </div>
+              )}
             </div>
             <div className="flex items-center gap-1">
-              <button
-                onClick={copyTranscript}
-                className="p-1.5 rounded opacity-70 hover:opacity-100"
-                style={{ color: 'var(--text-secondary)' }}
-                aria-label="Copy transcript"
-                title="Copy transcript"
-              >
-                <Copy size={14} />
-              </button>
-              <button
-                onClick={() => setShowInfo(v => !v)}
-                className="p-1.5 rounded opacity-70 hover:opacity-100 transition-colors"
-                style={{ color: 'var(--text-secondary)' }}
-                aria-label="About this assistant"
-                title="About this assistant"
-              >
-                <Info size={14} />
-              </button>
+              {!minimized && (
+                <>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); copyTranscript(); }}
+                    className="p-1.5 rounded opacity-70 hover:opacity-100"
+                    style={{ color: 'var(--text-secondary)' }}
+                    aria-label="Copy transcript"
+                    title="Copy transcript"
+                  >
+                    <Copy size={14} />
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setShowInfo(v => !v); }}
+                    className="p-1.5 rounded opacity-70 hover:opacity-100 transition-colors"
+                    style={{ color: 'var(--text-secondary)' }}
+                    aria-label="About this assistant"
+                    title="About this assistant"
+                  >
+                    <Info size={14} />
+                  </button>
+                </>
+              )}
               {!isMobile && (
                 <button
-                  onClick={() => setMinimized(v => !v)}
+                  onClick={(e) => { e.stopPropagation(); setMinimized(v => !v); }}
                   className="p-1.5 rounded opacity-70 hover:opacity-100 transition-colors"
                   style={{ color: 'var(--text-secondary)' }}
                   aria-label={minimized ? 'Expand' : 'Minimize'}
@@ -649,7 +675,7 @@ export default function AssistantChat() {
                 </button>
               )}
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
                 className="p-1.5 rounded opacity-70 hover:opacity-100 transition-colors"
                 style={{ color: 'var(--text-secondary)' }}
                 aria-label="Close"

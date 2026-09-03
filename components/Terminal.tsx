@@ -287,6 +287,17 @@ export default function Terminal({}: TerminalProps = {}) {
       // force it off — otherwise a resize that crosses the 640px boundary
       // would leave the panel as a 100dvh strip with only the header.
       if (mobile) setMinimized(false);
+      // If a desktop user shrank the window so the dragged position would
+      // push the panel off-screen, snap it back to the default corner.
+      if (!mobile) {
+        const panelW = Math.min(560, window.innerWidth * 0.9);
+        const panelH = Math.min(420, window.innerHeight * 0.7);
+        const maxX = Math.max(0, window.innerWidth - panelW);
+        const maxY = Math.max(0, window.innerHeight - panelH - 16);
+        if (position.x > maxX || position.y > maxY) {
+          setPosition({ x: 24, y: 24 });
+        }
+      }
     };
     check();
     window.addEventListener('resize', check);
@@ -361,33 +372,11 @@ export default function Terminal({}: TerminalProps = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, isMobile]);
 
-  // Click outside (desktop only) minimizes the panel rather than
-  // closing it — the user keeps their session. We do this by listening
-  // for mousedown on the document and checking whether the target is
-  // outside the panel and outside the trigger button.
-  useEffect(() => {
-    if (!isOpen || isMobile) return;
-    if (minimized) return;
-    const onDocPointer = (e: MouseEvent) => {
-      const target = e.target as Node | null;
-      if (!target) return;
-      if (panelRef.current?.contains(target)) return;
-      // The trigger button lives at the same root as the panel — guard
-      // against it by checking the [data-floating-trigger] attribute.
-      const trigger = (target as HTMLElement).closest?.('[data-floating-trigger]');
-      if (trigger) return;
-      setMinimized(true);
-    };
-    // Defer attaching so the click that opened the panel doesn't immediately
-    // minimize it on the same event.
-    const t = setTimeout(() => {
-      document.addEventListener('mousedown', onDocPointer);
-    }, 0);
-    return () => {
-      clearTimeout(t);
-      document.removeEventListener('mousedown', onDocPointer);
-    };
-  }, [isOpen, isMobile, minimized]);
+  // Note: we intentionally do NOT auto-minimize on click-outside. The
+  // user explicitly minimizes via the header dot, the trigger button, or
+  // Esc. Auto-minimizing on every outside click interferes with normal
+  // page interaction (clicking a project link, a card, etc.) and the
+  // session is already preserved by the explicit minimize affordances.
 
   const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen && !minimized);
   const combinedRef = (el: HTMLDivElement | null) => {
@@ -510,6 +499,7 @@ export default function Terminal({}: TerminalProps = {}) {
   // ---- Drag handling ----
   const onHeaderMouseDown = (e: React.MouseEvent) => {
     if (isMobile) return;
+    if (minimized) return; // No drag on a minimized panel — it's a small bar
     dragRef.current = {
       active: true,
       startX: e.clientX,
@@ -528,7 +518,11 @@ export default function Terminal({}: TerminalProps = {}) {
       // panel can't slide past the right edge of the viewport.
       const panelW = Math.min(560, window.innerWidth * 0.9);
       const maxX = Math.max(0, window.innerWidth - panelW);
-      const maxY = window.innerHeight - 80;
+      // Clamp y so the panel's top edge stays at least 16px below the
+      // viewport top. Without this, dragging too far up strands the panel
+      // above the visible area (bottom becomes very negative).
+      const panelH = Math.min(420, window.innerHeight * 0.7);
+      const maxY = Math.max(0, window.innerHeight - panelH - 16);
       setPosition({
         x: Math.max(0, Math.min(maxX, dragRef.current.baseX + dx)),
         y: Math.max(0, Math.min(maxY, dragRef.current.baseY - dy)),
@@ -566,18 +560,30 @@ export default function Terminal({}: TerminalProps = {}) {
         borderRadius: 0,
       };
     }
+    // When minimized, ignore the dragged position and pin the panel to the
+    // same place as the trigger button (bottom-left). This is what the user
+    // expects — a small bar at the corner they can click to re-expand.
+    // Without this, a user who dragged the panel up sees the "minimized"
+    // header stranded somewhere in the middle of the screen.
+    if (minimized) {
+      return {
+        position: 'fixed',
+        left: 16,
+        bottom: 16,
+        zIndex: 80,
+        width: 'min(360px, 80vw)',
+        height: 52,
+        maxHeight: 52,
+      };
+    }
     return {
       position: 'fixed',
       bottom: `calc(80px - ${position.y}px)`,
       left: `${position.x}px`,
       zIndex: 80,
       width: 'min(560px, 90vw)',
-      // Animated height: explicit pixel max so the CSS `transition: max-height`
-      // can play. `auto` doesn't transition. We set a generous max (the same
-      // value the unminimized state uses) and let the inner body use
-      // `flex-1` to absorb the rest.
-      maxHeight: minimized ? 56 : 'min(420px, 70vh)',
-      height: minimized ? 56 : 'min(420px, 70vh)',
+      height: 'min(420px, 70vh)',
+      maxHeight: '70vh',
     };
   }, [isMobile, position, minimized]);
 
@@ -660,38 +666,63 @@ export default function Terminal({}: TerminalProps = {}) {
           aria-modal={isMobile ? 'true' : 'false'}
           aria-label="Terminal"
         >
-          {/* Header / drag handle */}
+          {/* Header / drag handle (or expand button when minimized) */}
           <div
             onMouseDown={onHeaderMouseDown}
-            className="flex items-center justify-between px-4 py-2.5 border-b select-none"
+            onClick={minimized ? () => setMinimized(false) : undefined}
+            role={minimized ? 'button' : undefined}
+            aria-label={minimized ? 'Expand terminal' : undefined}
+            className={`flex items-center justify-between border-b select-none transition-colors ${
+              minimized ? 'px-3 py-2 cursor-pointer hover:bg-[var(--surface-elevated)]' : 'px-4 py-2.5'
+            }`}
             style={{
               background: 'var(--bg-elevated, var(--bg-card))',
               borderColor: 'var(--border)',
-              cursor: isMobile ? 'default' : 'move',
+              cursor: isMobile ? 'default' : (minimized ? 'pointer' : 'move'),
               userSelect: 'none',
+              height: '100%',
             }}
           >
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="flex gap-1.5">
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="w-2.5 h-2.5 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors"
-                  aria-label="Close terminal"
-                />
-                <button
-                  onClick={() => isMobile ? setIsOpen(false) : setMinimized(v => !v)}
-                  className="w-2.5 h-2.5 rounded-full bg-amber-500/80 hover:bg-amber-500 transition-colors"
-                  aria-label={minimized ? 'Expand terminal' : 'Minimize terminal'}
-                />
-                <span
-                  className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 transition-colors"
-                  aria-hidden
-                />
-              </div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] ml-2 truncate"
-                style={{ color: 'var(--text-muted)' }}>
-                elios@portfolio: ~$
-              </span>
+              {!minimized && (
+                <div className="flex gap-1.5">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
+                    className="w-2.5 h-2.5 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors"
+                    aria-label="Close terminal"
+                  />
+                  <button
+                    onClick={(e) => { e.stopPropagation(); isMobile ? setIsOpen(false) : setMinimized(v => !v); }}
+                    className="w-2.5 h-2.5 rounded-full bg-amber-500/80 hover:bg-amber-500 transition-colors"
+                    aria-label={minimized ? 'Expand terminal' : 'Minimize terminal'}
+                  />
+                  <span
+                    className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 transition-colors"
+                    aria-hidden
+                  />
+                </div>
+              )}
+              {minimized ? (
+                <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] truncate"
+                  style={{ color: 'var(--text-primary)' }}>
+                  <TerminalIcon size={14} style={{ color: 'var(--accent)' }} />
+                  Terminal
+                  <span
+                    className="ml-1 w-1.5 h-1.5 rounded-full"
+                    style={{
+                      background: 'var(--accent)',
+                      boxShadow: '0 0 8px var(--shadow-accent)',
+                      animation: 'pulse-live 2s ease-in-out infinite',
+                    }}
+                    aria-hidden
+                  />
+                </span>
+              ) : (
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em] ml-2 truncate"
+                  style={{ color: 'var(--text-muted)' }}>
+                  elios@portfolio: ~$
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-1">
               {isOpen && !minimized && (
@@ -702,7 +733,7 @@ export default function Terminal({}: TerminalProps = {}) {
               )}
               {!isMobile && (
                 <button
-                  onClick={() => setMinimized(v => !v)}
+                  onClick={(e) => { e.stopPropagation(); setMinimized(v => !v); }}
                   className="p-1 rounded opacity-70 hover:opacity-100 transition-colors"
                   style={{ color: 'var(--text-secondary)' }}
                   aria-label={minimized ? 'Expand' : 'Minimize'}
@@ -712,7 +743,7 @@ export default function Terminal({}: TerminalProps = {}) {
                 </button>
               )}
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
                 className="p-1 rounded opacity-70 hover:opacity-100 transition-colors"
                 style={{ color: 'var(--text-secondary)' }}
                 aria-label="Close"
