@@ -379,6 +379,29 @@ export default function Terminal({}: TerminalProps = {}) {
   // session is already preserved by the explicit minimize affordances.
 
   const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen && !minimized);
+
+  // Belt-and-suspenders: when `minimized` flips, force the panel's height
+  // directly on the DOM element with `!important`. The CSS rule already
+  // does this, but some devices / browsers intermittently ignore the
+  // attribute-driven `!important` (especially right after a state flip
+  // when the previous frame's height transition is still resolving).
+  // Setting the property with `important` priority from JS guarantees
+  // the panel collapses to a 44px bar on every device.
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return;
+    if (!isMobile && minimized) {
+      el.style.setProperty('height', '44px', 'important');
+      el.style.setProperty('min-height', '44px', 'important');
+      el.style.setProperty('max-height', '44px', 'important');
+    } else if (!isMobile && !minimized) {
+      // Clear the `!important` overrides so the React inline style and
+      // the expanded CSS can take over again.
+      el.style.removeProperty('height');
+      el.style.removeProperty('min-height');
+      el.style.removeProperty('max-height');
+    }
+  }, [minimized, isMobile, isOpen]);
   const combinedRef = (el: HTMLDivElement | null) => {
     (panelRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
     (focusTrapRef as React.MutableRefObject<HTMLDivElement | null>).current = el;

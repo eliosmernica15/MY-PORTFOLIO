@@ -214,6 +214,27 @@ export default function AssistantChat() {
     (focusTrapRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
   };
 
+  // Belt-and-suspenders: force the panel's height directly on the DOM
+  // with `!important` when `minimized` flips. The CSS rule already does
+  // this, but some devices intermittently ignore attribute-driven
+  // `!important` right after a state flip (when the previous frame's
+  // height transition is still resolving). Setting the property with
+  // `important` priority from JS guarantees the panel collapses on
+  // every device.
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return;
+    if (!isMobile && minimized) {
+      el.style.setProperty('height', '44px', 'important');
+      el.style.setProperty('min-height', '44px', 'important');
+      el.style.setProperty('max-height', '44px', 'important');
+    } else if (!isMobile && !minimized) {
+      el.style.removeProperty('height');
+      el.style.removeProperty('min-height');
+      el.style.removeProperty('max-height');
+    }
+  }, [minimized, isMobile, isOpen]);
+
   // Theme for any color hints.
   const themeResult = useOptionalTheme();
   void themeResult; // we read it indirectly via the CSS variables
