@@ -1072,15 +1072,27 @@ a:focus-visible {
 
 .terminal-floating[data-state="open"],
 .assistant-floating[data-state="open"] {
-  animation: panel-enter 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* No `both` fill mode — leaving it would pin the open transform
+     even after the element switches to `data-state="minimized"`. */
+  animation: panel-enter 0.26s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .terminal-floating[data-state="minimized"],
 .assistant-floating[data-state="minimized"] {
-  /* The component owns the JS height — we just give it a transition
-     when the height changes, plus a soft exit-style animation on the
-     body region. */
-  transition: max-height 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Force the collapsed size from CSS so the component can never end
+     up "stranded" full-height with an empty body. Inline style sets
+     the same values, but `!important` is the last line of defence in
+     case the inline style is overridden or not flushed. */
+  height: 52px !important;
+  min-height: 52px !important;
+  max-height: 52px !important;
+  overflow: hidden;
+  /* Animate both `height` and `max-height` so the shrink looks smooth
+     even if the inline `height` lands before `max-height` does. */
+  transition:
+    height 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    max-height 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    min-height 0.32s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes panel-enter {

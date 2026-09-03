@@ -598,7 +598,10 @@ export default function AssistantChat() {
               borderColor: 'var(--border)',
               cursor: minimized ? 'pointer' : undefined,
               userSelect: 'none',
-              height: '100%',
+              // Auto height from padding + content, not `height: 100%` —
+              // the latter would make the header fill the whole panel
+              // when expanded and crush the body to 0px.
+              flexShrink: 0,
             }}
           >
             <div className="flex items-center gap-2.5 min-w-0">

@@ -680,7 +680,10 @@ export default function Terminal({}: TerminalProps = {}) {
               borderColor: 'var(--border)',
               cursor: isMobile ? 'default' : (minimized ? 'pointer' : 'move'),
               userSelect: 'none',
-              height: '100%',
+              // The header shrinks to its content height (py-2 + buttons).
+              // Critically, NOT `height: 100%` — that would make the header
+              // fill the whole panel and push the body to 0px.
+              flexShrink: 0,
             }}
           >
             <div className="flex items-center gap-2.5 min-w-0">
