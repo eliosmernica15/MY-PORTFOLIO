@@ -23,11 +23,12 @@ const StarRating: React.FC<{ count?: number }> = ({ count = 5 }) => (
 const TestimonialSlide = memo<{ testimonial: Testimonial }>(function TestimonialSlide({ testimonial }) {
   return (
     <>
-      <Quote size={60} className="absolute top-6 left-8 opacity-[0.08]" style={{ color: 'var(--accent)' }} />
+      <Quote size={48} className="sm:hidden absolute top-4 left-4 opacity-[0.08]" style={{ color: 'var(--accent)' }} />
+      <Quote size={60} className="hidden sm:block absolute top-6 left-8 opacity-[0.08]" style={{ color: 'var(--accent)' }} />
       <div className="flex justify-center mb-6">
         <StarRating />
       </div>
-      <p className="text-lg md:text-2xl font-medium leading-relaxed mb-8" style={{ color: 'var(--text-secondary)' }}>
+      <p className="text-base sm:text-lg md:text-2xl font-medium leading-relaxed mb-8" style={{ color: 'var(--text-secondary)' }}>
         &ldquo;{testimonial.text}&rdquo;
       </p>
       <div className="flex flex-col items-center">
@@ -74,7 +75,7 @@ const TestimonialCarousel: React.FC = () => {
 
   return (
     <div className="relative" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
-      <div className="flex items-center justify-center min-h-[420px]">
+      <div className="flex items-center justify-center min-h-[440px] sm:min-h-[420px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={index}
@@ -85,7 +86,7 @@ const TestimonialCarousel: React.FC = () => {
             className="max-w-3xl w-full text-center relative"
           >
             <div className="premium-card premium-card-glow">
-              <div className="premium-card-inner p-10 md:p-14 relative overflow-hidden">
+              <div className="premium-card-inner p-6 sm:p-10 md:p-14 relative overflow-hidden">
                 <TestimonialSlide testimonial={TESTIMONIALS[index]} />
               </div>
             </div>

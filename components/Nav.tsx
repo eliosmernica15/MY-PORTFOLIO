@@ -129,9 +129,9 @@ const Nav: React.FC = () => {
 
   return (
     <>
-      <div className="fixed top-4 left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4 pt-[env(safe-area-inset-top)] sm:top-6">
+      <div className="fixed top-3 sm:top-4 left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4 pt-[env(safe-area-inset-top)] sm:top-6">
         <nav
-          className={`nav-floating pointer-events-auto max-w-fit px-3 py-2 rounded-full flex items-center justify-center gap-2 nav-blur ${
+          className={`nav-floating pointer-events-auto max-w-fit px-2.5 sm:px-3 py-2 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 nav-blur ${
             navVisible ? '' : 'nav-floating-hidden'
           }`}
           style={{
@@ -217,8 +217,8 @@ const Nav: React.FC = () => {
           aria-modal="true"
           aria-label="Navigation menu"
         >
-          <div className="flex flex-col justify-center h-full px-10">
-            <div className="flex flex-col gap-6">
+          <div className="flex flex-col justify-center h-full px-6 sm:px-10">
+            <div className="flex flex-col gap-4 sm:gap-6">
               {navLinks.map(link => {
                 const isActive = activeTab === link.name;
                 return (
@@ -231,7 +231,7 @@ const Nav: React.FC = () => {
                       color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
                     }}
                   >
-                    <span className="flex items-center gap-4 text-3xl font-bold">
+                    <span className="flex items-center gap-3 sm:gap-4 text-2xl sm:text-3xl font-bold">
                       {isActive && (
                         <span className="w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_12px_var(--accent)]" />
                       )}
@@ -248,7 +248,7 @@ const Nav: React.FC = () => {
             <button
               type="button"
               onClick={e => handleNavClick(e, { name: 'Hire', id: 'contact' })}
-              className="interactive-btn mt-12 w-full py-4 bg-[var(--accent)] text-[var(--accent-contrast)] font-bold rounded-2xl text-center text-sm uppercase tracking-widest"
+              className="interactive-btn mt-10 sm:mt-12 w-full py-4 bg-[var(--accent)] text-[var(--accent-contrast)] font-bold rounded-2xl text-center text-sm uppercase tracking-widest"
             >
               Get in Touch
             </button>

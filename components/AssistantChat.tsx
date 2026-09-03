@@ -436,7 +436,20 @@ export default function AssistantChat() {
   // ---------- Layout ----------
 
   const panelStyle: React.CSSProperties = isMobile
-    ? { position: 'fixed', inset: 0, zIndex: 80, width: '100vw', height: '100dvh', borderRadius: 0, margin: 0 }
+    ? {
+        position: 'fixed',
+        inset: 0,
+        zIndex: 80,
+        width: '100vw',
+        height: '100dvh',
+        borderRadius: 0,
+        margin: 0,
+        // iPhone notch + home indicator: pad interactive surfaces so the
+        // close button stays reachable and the input isn't hidden behind
+        // the indicator when the on-screen keyboard is open.
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      }
     : {
         position: 'fixed',
         right: 24,
@@ -455,19 +468,20 @@ export default function AssistantChat() {
       <button
         type="button"
         onClick={() => setIsOpen(v => !v)}
-        className="group fixed right-6 bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-4 py-3 transition-all duration-300"
+        className="group fixed right-4 sm:right-6 bottom-4 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
         style={{
           background: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
           backdropFilter: 'blur(16px)',
           color: 'var(--text-secondary)',
           boxShadow: '0 10px 40px -10px var(--shadow-accent)',
+          marginBottom: 'env(safe-area-inset-bottom)',
         }}
         aria-label="Open Elios AI assistant"
         data-cursor-hover
       >
         <Sparkles size={18} style={{ color: 'var(--accent)' }} />
-        <span className="text-xs font-bold uppercase tracking-widest opacity-80 group-hover:opacity-100">
+        <span className="hidden sm:inline text-xs font-bold uppercase tracking-widest opacity-80 group-hover:opacity-100">
           Ask Elios AI
         </span>
       </button>
@@ -603,7 +617,7 @@ export default function AssistantChat() {
                     className={`group flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}
                   >
                     <div
-                      className={`relative max-w-[85%] px-3.5 py-2.5 rounded-2xl text-[12.5px] leading-relaxed ${
+                      className={`relative max-w-[85%] px-3.5 py-2.5 rounded-2xl text-sm sm:text-[12.5px] leading-relaxed ${
                         m.role === 'user' ? 'assistant-message-user' : 'assistant-message-bot'
                       }`}
                       style={
@@ -698,7 +712,7 @@ export default function AssistantChat() {
                   }}
                   placeholder="Ask me anything…"
                   rows={1}
-                  className="flex-1 resize-none bg-transparent border-0 outline-none text-[13px]"
+                  className="flex-1 resize-none bg-transparent border-0 outline-none text-base sm:text-[13px]"
                   style={{
                     color: 'var(--text-primary)',
                     maxHeight: 84,

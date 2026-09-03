@@ -75,7 +75,7 @@ const Hero: React.FC = () => {
             border: '1px solid var(--border)',
           }}
         >
-          <div className="absolute top-6 right-6 sm:top-10 sm:right-10 status-live">
+          <div className="absolute top-4 right-4 sm:top-10 sm:right-10 status-live whitespace-nowrap">
             <span className="status-live-dot" aria-hidden />
             Available for Work
           </div>
@@ -90,7 +90,7 @@ const Hero: React.FC = () => {
 
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter mb-6 sm:mb-8 leading-[0.9]">
               {SITE.name.split(' ').map((word, i) => (
-                <span key={word + i} className="text-gradient inline-block mr-4">
+                <span key={word + i} className="text-gradient inline-block mr-2 sm:mr-3 md:mr-4">
                   {word}
                   {i === SITE.name.split(' ').length - 1 ? '.' : ''}
                 </span>

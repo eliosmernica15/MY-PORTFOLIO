@@ -16,8 +16,8 @@ const Resume: React.FC = () => {
   return (
     <section id="resume" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 relative content-auto z-[1]">
       <div className="max-w-7xl mx-auto relative z-10">
-        <RevealSection className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-          <div className="lg:col-span-4 space-y-10">
+        <RevealSection className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 lg:gap-16">
+          <div className="lg:col-span-4 space-y-8 sm:space-y-10">
             <SectionHeader
               eyebrow="Resume"
               title={
@@ -72,7 +72,7 @@ const Resume: React.FC = () => {
             </AdvancedButton>
           </div>
 
-          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
             {[
               { title: 'Education', icon: Sparkles, items: EDUCATION },
               { title: 'Experience', icon: Zap, items: EXPERIENCE.map(e => ({ title: e.company, period: e.period, desc: e.desc })) },
@@ -112,12 +112,12 @@ const Resume: React.FC = () => {
           </div>
         </RevealSection>
 
-        <RevealSection className="mt-24">
+        <RevealSection className="mt-16 sm:mt-20 md:mt-24">
           <PremiumCard glow>
-            <h3 className="text-xs font-bold mb-10 text-center uppercase tracking-[0.4em]" style={{ color: 'var(--accent-light)' }}>
+            <h3 className="text-xs font-bold mb-8 sm:mb-10 text-center uppercase tracking-[0.4em]" style={{ color: 'var(--accent-light)' }}>
               System Proficiency
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-16 gap-y-6 md:gap-y-8">
               {SKILLS_PROGRESS.map((skill, idx) => (
                 <div key={skill.name} className="space-y-2.5">
                   <div className="flex justify-between font-bold text-[10px] uppercase tracking-widest">

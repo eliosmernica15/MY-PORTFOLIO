@@ -273,10 +273,21 @@ export default function Terminal({}: TerminalProps = {}) {
 
   // Mobile check.
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 640);
+    const check = () => {
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile);
+      // Reset stale desktop drag position when entering mobile width — the
+      // `position.x/y` from a 1920×1080 drag would push the panel off-screen
+      // on a 375×667 phone. Mobile uses full-bleed `inset: 0` anyway, so the
+      // stale coords are pure dead weight.
+      if (mobile && (position.x !== 24 || position.y !== 24)) {
+        setPosition({ x: 24, y: 24 });
+      }
+    };
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Seed welcome on first open.
@@ -494,6 +505,11 @@ export default function Terminal({}: TerminalProps = {}) {
         margin: 0,
         width: '100vw',
         height: '100dvh',
+        // iPhone notch + home indicator: pad the panel's interactive surfaces
+        // so the close button stays reachable and the input isn't hidden
+        // behind the indicator.
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
         borderRadius: 0,
       };
     }
@@ -514,19 +530,21 @@ export default function Terminal({}: TerminalProps = {}) {
       <button
         type="button"
         onClick={() => setIsOpen(v => !v)}
-        className="group fixed left-6 bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-4 py-3 transition-all duration-300"
+        className="group fixed left-4 sm:left-6 bottom-4 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
         style={{
           background: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
           backdropFilter: 'blur(16px)',
           color: 'var(--text-secondary)',
           boxShadow: '0 10px 40px -10px var(--shadow-accent)',
+          // Keep clear of the iOS home indicator on devices that have one.
+          marginBottom: 'env(safe-area-inset-bottom)',
         }}
         aria-label="Open terminal"
         data-cursor-hover
       >
         <TerminalIcon size={18} style={{ color: 'var(--accent)' }} />
-        <span className="text-xs font-mono font-bold uppercase tracking-widest opacity-80 group-hover:opacity-100">
+        <span className="hidden sm:inline text-xs font-mono font-bold uppercase tracking-widest opacity-80 group-hover:opacity-100">
           Terminal
         </span>
       </button>
@@ -606,7 +624,7 @@ export default function Terminal({}: TerminalProps = {}) {
               {/* Body */}
               <div
                 ref={bodyRef}
-                className="flex-1 overflow-y-auto px-4 py-3 space-y-1.5 text-[12.5px] leading-relaxed"
+                className="flex-1 overflow-y-auto px-4 py-3 space-y-1.5 text-sm sm:text-[12.5px] leading-relaxed"
                 style={{ color: 'var(--text-primary)' }}
                 aria-live="polite"
               >
@@ -637,7 +655,7 @@ export default function Terminal({}: TerminalProps = {}) {
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={onKeyDown}
-                  className="flex-1 bg-transparent border-0 outline-none text-[12.5px] font-mono"
+                  className="flex-1 bg-transparent border-0 outline-none text-base sm:text-[12.5px] font-mono"
                   style={{ color: 'var(--text-primary)' }}
                   placeholder="type \`help\` for commands"
                   spellCheck={false}

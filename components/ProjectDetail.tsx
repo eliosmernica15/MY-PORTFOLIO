@@ -21,12 +21,12 @@ const ProjectDetail: React.FC<Props> = ({ project }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="pt-32 pb-24 px-6 max-w-6xl mx-auto relative z-[1]"
+      className="pt-24 sm:pt-28 md:pt-32 pb-20 sm:pb-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-[1]"
     >
-      <div className="mb-14 flex flex-wrap items-center gap-4 relative z-10">
+      <div className="mb-10 sm:mb-14 flex flex-wrap items-center gap-3 sm:gap-4 relative z-10">
         <Link
           href="/#projects"
-          className="flex items-center gap-3 transition-all group hover:text-[var(--accent-light)]"
+          className="flex items-center gap-2 sm:gap-3 transition-all group hover:text-[var(--accent-light)]"
           style={{ color: 'var(--text-muted)' }}
           aria-label="Back to projects"
         >
@@ -34,28 +34,28 @@ const ProjectDetail: React.FC<Props> = ({ project }) => {
             size={18}
             className="group-hover:-translate-x-1 transition-transform"
           />
-          <span className="text-xs font-bold uppercase tracking-[0.3em]">
+          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.3em]">
             Back to Showcase
           </span>
         </Link>
         <Link
           href="/#projects"
-          className="flex items-center gap-3 transition-all group hover:text-[var(--accent-light)]"
+          className="flex items-center gap-2 sm:gap-3 transition-all group hover:text-[var(--accent-light)]"
           style={{ color: 'var(--text-muted)' }}
         >
           <LayoutGrid size={18} className="group-hover:scale-110 transition-transform" />
-          <span className="text-xs font-bold uppercase tracking-[0.3em]">
+          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.3em]">
             View all projects
           </span>
         </Link>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 relative z-10">
         <div className="lg:col-span-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="aspect-[16/9] rounded-[2.5rem] overflow-hidden mb-14 shadow-2xl relative"
+            className="aspect-[16/9] rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] overflow-hidden mb-10 sm:mb-14 shadow-2xl relative"
             style={{ border: '1px solid var(--border)' }}
           >
             <Image
@@ -69,11 +69,11 @@ const ProjectDetail: React.FC<Props> = ({ project }) => {
             />
           </motion.div>
           <RevealSection>
-            <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter text-gradient leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 sm:mb-8 tracking-tighter text-gradient leading-[1.05]">
               {project.title}
             </h1>
             <p
-              className="text-xl md:text-2xl leading-relaxed font-light"
+              className="text-base sm:text-xl md:text-2xl leading-relaxed font-light"
               style={{ color: 'var(--text-secondary)' }}
             >
               {project.longDescription}
@@ -81,8 +81,8 @@ const ProjectDetail: React.FC<Props> = ({ project }) => {
           </RevealSection>
         </div>
         <div className="lg:col-span-4">
-          <PremiumCard glow padding={false} className="sticky top-24 lg:top-28">
-            <div className="p-8">
+          <PremiumCard glow padding={false} className="lg:sticky lg:top-28">
+            <div className="p-6 sm:p-8">
               <h3
                 className="text-[10px] font-bold uppercase tracking-[0.4em] mb-6 pb-3"
                 style={{

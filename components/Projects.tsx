@@ -23,8 +23,8 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCa
       <TiltCard>
         <Link
           href={`/project/${project.id}`}
-          className={`block relative overflow-hidden rounded-[2rem] group cursor-pointer transition-transform duration-500 hover:scale-[1.01] ${
-            isFeatured ? 'aspect-[2.4/1]' : 'aspect-[16/10]'
+          className={`block relative overflow-hidden rounded-2xl sm:rounded-[2rem] group cursor-pointer transition-transform duration-500 hover:scale-[1.01] ${
+            isFeatured ? 'aspect-[4/3] sm:aspect-[2.4/1]' : 'aspect-[16/10]'
           }`}
           style={{ border: '1px solid var(--border)' }}
           data-cursor-hover
@@ -41,21 +41,21 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCa
             sizes={isFeatured ? '(min-width: 768px) 100vw, 100vw' : '(min-width: 768px) 50vw, 100vw'}
           />
           <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 flex flex-col justify-end p-8 md:p-10 transition-opacity duration-400"
+            className="absolute inset-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 flex flex-col justify-end p-5 sm:p-6 md:p-10 transition-opacity duration-400"
             style={{ background: 'linear-gradient(to top, var(--bg-primary) 0%, transparent 55%)' }}
           >
-            <div className="flex items-end justify-between gap-4">
-              <div className="flex-1 space-y-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-400">
+            <div className="flex items-end justify-between gap-3 sm:gap-4">
+              <div className="flex-1 space-y-2 transform translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-400">
                 <span className="text-[var(--accent-light)] text-[10px] font-bold uppercase tracking-[0.3em] block">
                   {project.category}
                 </span>
                 <h4
-                  className={`font-black tracking-tight ${isFeatured ? 'text-3xl md:text-5xl' : 'text-2xl md:text-3xl'}`}
+                  className={`font-black tracking-tight ${isFeatured ? 'text-2xl sm:text-3xl md:text-5xl' : 'text-xl sm:text-2xl md:text-3xl'}`}
                   style={{ color: 'var(--text-primary)' }}
                 >
                   {project.title}
                 </h4>
-                <p className="text-sm leading-relaxed max-w-md" style={{ color: 'var(--text-secondary)' }}>
+                <p className="text-xs sm:text-sm leading-relaxed max-w-md" style={{ color: 'var(--text-secondary)' }}>
                   {project.description}
                 </p>
                 <div className="project-tech-row">
@@ -66,8 +66,8 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCa
                   ))}
                 </div>
               </div>
-              <div className="w-12 h-12 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-full flex items-center justify-center shadow-accent shrink-0 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-400 delay-75">
-                <ArrowUpRight size={24} style={{ color: 'var(--accent-contrast)' }} />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-full flex items-center justify-center shadow-accent shrink-0 transform translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-400 delay-75">
+                <ArrowUpRight size={20} className="sm:w-6 sm:h-6" style={{ color: 'var(--accent-contrast)' }} />
               </div>
             </div>
           </div>
@@ -134,7 +134,7 @@ const Projects: React.FC = () => {
               type="button"
               role="tab"
               onClick={() => setFilter(cat)}
-              className={`interactive-btn nav-link px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
+              className={`interactive-btn nav-link px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
                 filter === cat
                   ? 'nav-link-active bg-[var(--accent)] text-[var(--accent-contrast)] shadow-accent'
                   : ''

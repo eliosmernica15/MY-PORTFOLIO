@@ -158,11 +158,11 @@ const Footer: React.FC = () => {
                 className="flex gap-3 text-[10px] font-medium uppercase tracking-[0.2em]"
                 style={{ color: 'var(--text-secondary)' }}
               >
+              <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">Next.js</span>
+              <span style={{ opacity: 0.3 }}>/</span>
               <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">React</span>
               <span style={{ opacity: 0.3 }}>/</span>
               <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">TypeScript</span>
-              <span style={{ opacity: 0.3 }}>/</span>
-              <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">Vite</span>
               </div>
             </div>
           </div>
