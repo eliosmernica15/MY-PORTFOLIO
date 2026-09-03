@@ -48,6 +48,28 @@ const nextConfig = {
           { key: 'Service-Worker-Allowed', value: '/' },
         ],
       },
+      // The Spline web component uses eval() internally to bootstrap the
+      // WebGL scene. The parent page keeps a strict script-src (no eval),
+      // but this isolated document — the only thing that loads the Spline
+      // runtime — runs with a permissive CSP. The iframe is sandboxed, so
+      // it can't reach into the parent document.
+      {
+        source: '/scene.html',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self' 'unsafe-inline' 'unsafe-eval'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https:",
+              "connect-src 'self' https://unpkg.com https://prod.spline.design https://*.spline.design",
+              "frame-ancestors 'self'",
+            ].join('; '),
+          },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+        ],
+      },
     ];
   },
 };

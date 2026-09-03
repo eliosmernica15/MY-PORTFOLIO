@@ -10,12 +10,13 @@ import { getDeviceProfile } from '../hooks/useDeviceProfile';
 
 const LazyParticleCanvas = lazy(() => import('./ParticleCanvas'));
 
-// Spline scene URL — the embed iframe runs the Spline runtime in a
-// separate document with its own (or no) CSP, so the parent page's
-// strict script-src stays eval-free. Don't change to a direct
-// @splinetool/react-spline mount; that uses eval() and trips CSP.
-const SPLINE_SCENE_URL = 'https://prod.spline.design/RONF3SHpGTERZs4g/scene.splinecode';
-const SPLINE_EMBED_SRC = `https://my.spline.design/embed?url=${encodeURIComponent(SPLINE_SCENE_URL)}`;
+// Spline scene is loaded inside a sandboxed iframe that points at a
+// local /scene.html. The local page runs the Spline web component
+// (which uses eval() at runtime) under its own permissive CSP, so the
+// parent page's strict script-src stays eval-free. Spline's own
+// my.spline.design embed endpoint is no longer serving this scene
+// (returns 403), so we host the embed page ourselves.
+const SPLINE_EMBED_SRC = '/scene.html';
 
 const Hero: React.FC = () => {
   const profile = getDeviceProfile();
