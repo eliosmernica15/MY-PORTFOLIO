@@ -146,6 +146,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" data-theme={theme} className={jakarta.variable}>
       <head>
+        <link rel="preconnect" href="https://my.spline.design" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://i.postimg.cc" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.github.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.emailjs.com" />

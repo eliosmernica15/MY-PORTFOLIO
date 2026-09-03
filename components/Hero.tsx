@@ -10,6 +10,13 @@ import { getDeviceProfile } from '../hooks/useDeviceProfile';
 
 const LazyParticleCanvas = lazy(() => import('./ParticleCanvas'));
 
+// Spline scene URL — the embed iframe runs the Spline runtime in a
+// separate document with its own (or no) CSP, so the parent page's
+// strict script-src stays eval-free. Don't change to a direct
+// @splinetool/react-spline mount; that uses eval() and trips CSP.
+const SPLINE_SCENE_URL = 'https://prod.spline.design/RONF3SHpGTERZs4g/scene.splinecode';
+const SPLINE_EMBED_SRC = `https://my.spline.design/embed?url=${encodeURIComponent(SPLINE_SCENE_URL)}`;
+
 const Hero: React.FC = () => {
   const profile = getDeviceProfile();
   const [loadEffects, setLoadEffects] = useState(false);
@@ -65,6 +72,22 @@ const Hero: React.FC = () => {
             border: '1px solid var(--border)',
           }}
         >
+          {loadEffects && profile.enable3D && (
+            <div
+              className="absolute inset-0 z-0 pointer-events-none"
+              aria-hidden
+            >
+              <iframe
+                src={SPLINE_EMBED_SRC}
+                title="Spline 3D scene"
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin"
+                referrerPolicy="no-referrer"
+                className="w-full h-full border-0 scale-[1.05] sm:scale-[1.18] md:scale-[1.18] lg:scale-[1.15] origin-center"
+                style={{ background: 'transparent' }}
+              />
+            </div>
+          )}
           <div className="absolute top-6 right-6 sm:top-10 sm:right-10 status-live">
             <span className="status-live-dot" aria-hidden />
             Available for Work

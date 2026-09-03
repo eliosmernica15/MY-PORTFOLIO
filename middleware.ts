@@ -94,7 +94,7 @@ function buildCsp(nonce: string): string {
     "font-src 'self' data: https://fonts.gstatic.com",
     "img-src 'self' data: blob: https:",
     "connect-src 'self' https://api.emailjs.com https://api.github.com",
-    "frame-src 'self'",
+    "frame-src 'self' https://my.spline.design https://*.spline.design",
     "worker-src 'self' blob:",
     "manifest-src 'self'",
     "media-src 'self'",
