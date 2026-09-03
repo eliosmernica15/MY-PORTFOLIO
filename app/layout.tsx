@@ -10,8 +10,8 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-jakarta',
-  weight: ['400', '500', '600', '700', '800'],
-  preload: false,
+  weight: ['300', '400', '500', '600', '700', '800'],
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -146,7 +146,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" data-theme={theme} className={jakarta.variable}>
       <head>
-        <link rel="preconnect" href="https://my.spline.design" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://prod.spline.design" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://i.postimg.cc" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.github.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.emailjs.com" />

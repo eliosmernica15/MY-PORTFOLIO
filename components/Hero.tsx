@@ -8,38 +8,32 @@ import AdvancedButton from './ui/AdvancedButton';
 import { useTypingEffect } from '../hooks/useTypingEffect';
 import { getDeviceProfile } from '../hooks/useDeviceProfile';
 
+const LazySplineScene = lazy(() => import('./SplineScene'));
 const LazyParticleCanvas = lazy(() => import('./ParticleCanvas'));
-
-// Spline scene is loaded inside a sandboxed iframe that points at a
-// local /scene.html. The local page runs the Spline web component
-// (which uses eval() at runtime) under its own permissive CSP, so the
-// parent page's strict script-src stays eval-free. Spline's own
-// my.spline.design embed endpoint is no longer serving this scene
-// (returns 403), so we host the embed page ourselves.
-const SPLINE_EMBED_SRC = '/scene.html';
 
 const Hero: React.FC = () => {
   const profile = getDeviceProfile();
   const [loadEffects, setLoadEffects] = useState(false);
 
   useEffect(() => {
-    if (!profile.enableHeavyEffects) return;
+    if (!profile.enable3D && !profile.enableHeavyEffects) return;
 
     let cancelled = false;
     const run = () => {
       if (!cancelled) setLoadEffects(true);
     };
+    const delay = profile.enable3D ? 500 : 900;
     const id =
       typeof requestIdleCallback !== 'undefined'
-        ? requestIdleCallback(run, { timeout: 1300 })
-        : window.setTimeout(run, 900);
+        ? requestIdleCallback(run, { timeout: delay + 400 })
+        : window.setTimeout(run, delay);
 
     return () => {
       cancelled = true;
       if (typeof cancelIdleCallback !== 'undefined') cancelIdleCallback(id as number);
       else clearTimeout(id as number);
     };
-  }, [profile.enableHeavyEffects]);
+  }, [profile.enable3D, profile.enableHeavyEffects]);
 
   const heroPhrases = useMemo(
     () => [
@@ -57,6 +51,14 @@ const Hero: React.FC = () => {
       id="home"
       className="relative pt-28 sm:pt-32 md:pt-40 lg:pt-44 pb-16 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden min-h-[100dvh] sm:min-h-screen flex flex-col justify-center z-[1]"
     >
+      {loadEffects && profile.enable3D && (
+        <div className="absolute inset-0 z-0">
+          <Suspense fallback={null}>
+            <LazySplineScene />
+          </Suspense>
+        </div>
+      )}
+
       {loadEffects && profile.enableHeavyEffects && (
         <div className="absolute inset-0 pointer-events-none z-[1]">
           <Suspense fallback={null}>
@@ -73,22 +75,6 @@ const Hero: React.FC = () => {
             border: '1px solid var(--border)',
           }}
         >
-          {loadEffects && profile.enable3D && (
-            <div
-              className="absolute inset-0 z-0 pointer-events-none"
-              aria-hidden
-            >
-              <iframe
-                src={SPLINE_EMBED_SRC}
-                title="Spline 3D scene"
-                loading="lazy"
-                sandbox="allow-scripts allow-same-origin"
-                referrerPolicy="no-referrer"
-                className="w-full h-full border-0 scale-[1.05] sm:scale-[1.18] md:scale-[1.18] lg:scale-[1.15] origin-center"
-                style={{ background: 'transparent' }}
-              />
-            </div>
-          )}
           <div className="absolute top-6 right-6 sm:top-10 sm:right-10 status-live">
             <span className="status-live-dot" aria-hidden />
             Available for Work

@@ -89,11 +89,11 @@ function buildCsp(nonce: string): string {
     // theme bootstrap through; modern browsers ignore it when a nonce
     // is present. `'self'` is kept as a fallback for browsers that
     // don't implement `'strict-dynamic'`.
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' ${NEXT_REQUEST_ANIMATION_FRAME_SHA256} ${NEXT_F_BOOTSTRAP_SHA256}`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' ${NEXT_REQUEST_ANIMATION_FRAME_SHA256} ${NEXT_F_BOOTSTRAP_SHA256} https://prod.spline.design`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' data: https://fonts.gstatic.com",
     "img-src 'self' data: blob: https:",
-    "connect-src 'self' https://api.emailjs.com https://api.github.com",
+    "connect-src 'self' https://api.emailjs.com https://api.github.com https://prod.spline.design https://*.spline.design",
     "frame-src 'self' https://my.spline.design https://*.spline.design",
     "worker-src 'self' blob:",
     "manifest-src 'self'",
