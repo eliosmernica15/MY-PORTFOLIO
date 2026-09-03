@@ -170,7 +170,17 @@ const Footer: React.FC = () => {
       </footer>
 
       {showBackToTop && (
-        <div className="fixed z-40 right-[max(2rem,env(safe-area-inset-right))] bottom-[max(2rem,env(safe-area-inset-bottom))] back-to-top-enter">
+        // Sits directly under the assistant trigger. The assistant's
+        // own bottom is `bottom-4 sm:bottom-6` (16-24px from viewport
+        // edge) and the trigger is ~48px tall, so this button needs
+        // `bottom` of at least `16 + 48 + 12 = 76px` on mobile and
+        // `24 + 48 + 16 = 88px` on `sm+` to clear it with breathing
+        // room. The `max(env(safe-area-inset-bottom), …)` keeps it
+        // above the iOS home-bar indicator on notched devices. Same
+        // right edge as the assistant so they stack vertically.
+        <div
+          className="fixed z-40 right-4 sm:right-6 bottom-[max(5rem,calc(4rem+env(safe-area-inset-bottom)))] sm:bottom-[max(5.5rem,calc(5rem+env(safe-area-inset-bottom)))] back-to-top-enter"
+        >
           <MagneticButton strength={0.3}>
             <button
               type="button"
