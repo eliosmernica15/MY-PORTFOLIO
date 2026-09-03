@@ -403,9 +403,26 @@ a:focus-visible {
   contain: layout style;
 }
 
+/* If the no-JS path is hit (or the IntersectionObserver doesn't
+   fire), fall back to visible after 1.2s via a CSS-only keyframe.
+   This guarantees content is always reachable even when the
+   observer silently fails. The `animation-fill-mode: forwards`
+   pins the visible state. */
+@keyframes reveal-fallback {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+.reveal-section {
+  animation: reveal-fallback 0.01s 1.2s forwards;
+}
+
 .reveal-visible {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+  /* Cancel the fallback animation if the observer fired first. */
+  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1340,4 +1357,133 @@ a:focus-visible {
 
 .scrubber-bar[data-active="true"] {
   opacity: 1;
+}
+
+/* ================================================================
+   Project detail page — server-rendered entrance
+   The previous implementation used framer-motion which required
+   ~40KB of client JS and waited for hydration before painting.
+   This CSS-only animation runs on first paint, so the page is
+   visible the moment the route loads. `animation-fill-mode: both`
+   keeps the final state pinned without needing a JS callback.
+   ================================================================ */
+@keyframes project-detail-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.project-detail-enter {
+  animation: project-detail-enter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.project-detail-image {
+  /* Slight delayed entrance for the hero image so the title
+     reads first, then the image lands. Pure CSS, no JS. */
+  animation: project-detail-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-detail-enter,
+  .project-detail-image {
+    animation: none;
+  }
+}
+
+/* ================================================================
+   Instant content reveal (replaces RevealSection for content
+   that should be visible from first paint)
+   ================================================================ */
+.reveal-instant {
+  opacity: 1;
+  transform: none;
+}
+
+/* ================================================================
+   Project card hover — pure CSS, no JS hover listeners
+   The previous implementation wrapped each card in a TiltCard
+   (a 'use client' component that adds mousemove listeners and
+   re-renders on every cursor move). All hover effects below
+   are declarative, ship in the static CSS bundle, and run on
+   the compositor thread without any JS.
+   ================================================================ */
+.project-card {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.project-card:hover {
+  transform: scale(1.01);
+}
+
+.project-card-image {
+  filter: grayscale(0.45);
+  transform: scale(1);
+  transition:
+    filter 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: filter, transform;
+}
+.project-card:hover .project-card-image {
+  filter: grayscale(0);
+  transform: scale(1.05);
+}
+
+.project-card-overlay {
+  opacity: 1;
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (min-width: 768px) {
+  .project-card-overlay {
+    opacity: 0;
+  }
+  .project-card:hover .project-card-overlay {
+    opacity: 1;
+  }
+}
+
+.project-card-content {
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (min-width: 768px) {
+  .project-card-content {
+    transform: translate3d(0, 16px, 0);
+  }
+  .project-card:hover .project-card-content {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.project-card-arrow {
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) 75ms,
+    background-color 0.3s ease;
+}
+@media (min-width: 768px) {
+  .project-card-arrow {
+    transform: translate3d(0, 16px, 0);
+  }
+  .project-card:hover .project-card-arrow {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .project-card-image,
+  .project-card-overlay,
+  .project-card-content,
+  .project-card-arrow {
+    transition: none;
+    transform: none;
+  }
+  .project-card-image {
+    filter: none;
+  }
 }

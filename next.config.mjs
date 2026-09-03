@@ -10,6 +10,11 @@ const nextConfig = {
   compress: true,
   images: {
     formats: ['image/avif', 'image/webp'],
+    // Cache optimized images at the edge for 30 days. The
+    // default is 60s, which means every repeat visit to a
+    // project detail page re-fetches the image from the origin.
+    // With 30 days, returning users see the cached variant.
+    minimumCacheTTL: 60 * 60 * 24 * 30,
     remotePatterns: [
       { protocol: 'https', hostname: 'i.postimg.cc' },
       { protocol: 'https', hostname: 'i.imgur.com' },
@@ -20,7 +25,19 @@ const nextConfig = {
     ],
   },
   experimental: {
+    // Tree-shake lucide-react + framer-motion exports.
     optimizePackageImports: ['lucide-react', 'framer-motion'],
+    // `staleTimes` controls how long the Next.js client router
+    // serves a cached version of a route before revalidating. The
+    // defaults (0s for dynamic, 30s for static) mean a back-
+    // navigation from /project/foo to / fetches the home page
+    // again. Bumping the static window to 5 minutes means the
+    // router keeps the home page's RSC payload warm and the
+    // back-navigation is instant.
+    staleTimes: {
+      dynamic: 30,
+      static: 300,
+    },
   },
   serverExternalPackages: ['nodemailer'],
   async headers() {
