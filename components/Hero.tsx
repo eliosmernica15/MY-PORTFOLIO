@@ -8,7 +8,6 @@ import AdvancedButton from './ui/AdvancedButton';
 import { useTypingEffect } from '../hooks/useTypingEffect';
 import { getDeviceProfile } from '../hooks/useDeviceProfile';
 
-const LazySplineScene = lazy(() => import('./SplineScene'));
 const LazyParticleCanvas = lazy(() => import('./ParticleCanvas'));
 
 const Hero: React.FC = () => {
@@ -16,24 +15,23 @@ const Hero: React.FC = () => {
   const [loadEffects, setLoadEffects] = useState(false);
 
   useEffect(() => {
-    if (!profile.enable3D && !profile.enableHeavyEffects) return;
+    if (!profile.enableHeavyEffects) return;
 
     let cancelled = false;
     const run = () => {
       if (!cancelled) setLoadEffects(true);
     };
-    const delay = profile.enable3D ? 500 : 900;
     const id =
       typeof requestIdleCallback !== 'undefined'
-        ? requestIdleCallback(run, { timeout: delay + 400 })
-        : window.setTimeout(run, delay);
+        ? requestIdleCallback(run, { timeout: 1300 })
+        : window.setTimeout(run, 900);
 
     return () => {
       cancelled = true;
       if (typeof cancelIdleCallback !== 'undefined') cancelIdleCallback(id as number);
       else clearTimeout(id as number);
     };
-  }, [profile.enable3D, profile.enableHeavyEffects]);
+  }, [profile.enableHeavyEffects]);
 
   const heroPhrases = useMemo(
     () => [
@@ -51,14 +49,6 @@ const Hero: React.FC = () => {
       id="home"
       className="relative pt-28 sm:pt-32 md:pt-40 lg:pt-44 pb-16 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden min-h-[100dvh] sm:min-h-screen flex flex-col justify-center z-[1]"
     >
-      {loadEffects && profile.enable3D && (
-        <div className="absolute inset-0 z-0">
-          <Suspense fallback={null}>
-            <LazySplineScene />
-          </Suspense>
-        </div>
-      )}
-
       {loadEffects && profile.enableHeavyEffects && (
         <div className="absolute inset-0 pointer-events-none z-[1]">
           <Suspense fallback={null}>

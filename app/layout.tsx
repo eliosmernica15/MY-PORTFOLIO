@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { headers } from 'next/headers';
-import { Plus_Jakarta_Sans, Inter } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { SITE } from '@/data/site';
 import { Providers } from './Providers';
@@ -11,14 +11,6 @@ const jakarta = Plus_Jakarta_Sans({
   display: 'swap',
   variable: '--font-jakarta',
   weight: ['300', '400', '500', '600', '700', '800'],
-  preload: true,
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-  weight: ['400', '500', '600'],
   preload: true,
 });
 
@@ -152,9 +144,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   };
 
   return (
-    <html lang="en" data-theme={theme} className={`${jakarta.variable} ${inter.variable}`}>
+    <html lang="en" data-theme={theme} className={jakarta.variable}>
       <head>
-        <link rel="preconnect" href="https://prod.spline.design" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://i.postimg.cc" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.github.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.emailjs.com" />

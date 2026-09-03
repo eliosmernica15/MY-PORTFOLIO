@@ -15,7 +15,6 @@ const nextConfig = {
       { protocol: 'https', hostname: 'i.imgur.com' },
       { protocol: 'https', hostname: 'raw.githubusercontent.com' },
       { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
-      { protocol: 'https', hostname: 'prod.spline.design' },
     ],
   },
   experimental: {
