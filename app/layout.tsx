@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
-import { Plus_Jakarta_Sans, Inter } from 'next/font/google';
 import { headers } from 'next/headers';
+import { Plus_Jakarta_Sans, Inter } from 'next/font/google';
 import './globals.css';
 import { SITE } from '@/data/site';
 import { Providers } from './Providers';
@@ -102,13 +102,25 @@ const themeInitScript = `
 `;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // Read theme and CSP nonce forwarded by middleware; fall back to dark
-  // and an empty nonce (the empty nonce is enough for `'strict-dynamic'`
-  // to permit the inline theme-init script; the CSP itself sets `'self'`
-  // + nonce + `https://prod.spline.design`).
+  // Read the per-request CSP nonce that middleware generates and forwards
+  // via the `x-nonce` request header. The nonce is attached to the inline
+  // theme-init script below, which is the only inline script this layout
+  // owns. Pairing it with `'strict-dynamic'` in the middleware CSP lets
+  // Next.js's RSC bootstrap (and the per-route RSC payload chunks it
+  // loads) run too — those don't have a nonce we can stamp on, but the
+  // strict-dynamic cascade trusts them transitively.
+  //
+  // Reading the header opts this layout into dynamic rendering, which is
+  // the trade-off the previous static-rendering attempt couldn't honor:
+  // the RSC payload chunks the page needs to hydrate are inline scripts
+  // that we can't hash (their content changes per build), and the only
+  // way to allow them under a strict CSP is to either use `'unsafe-inline'`
+  // (security regression) or pin them under a nonced trust anchor (this).
+  // Vercel still caches the rendered output at the edge, so the dynamic
+  // rendering here is a per-cold-cache recompute, not a per-request hit.
   const h = await headers();
-  const theme = (h.get('x-theme') as 'dark' | 'light' | null) ?? 'dark';
   const nonce = h.get('x-nonce') ?? '';
+  const theme = 'dark';
 
   const personJsonLd = {
     '@context': 'https://schema.org',
@@ -146,6 +158,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://i.postimg.cc" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.github.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.emailjs.com" />
+        {/* Theme bootstrap. Runs before React hydrates so the user never sees a
+            light/dark flash. Carries the per-request CSP nonce from
+            middleware so the inline script is trusted under our strict
+            `script-src` policy. */}
         <script nonce={nonce} dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="noise">

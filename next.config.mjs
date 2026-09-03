@@ -2,23 +2,6 @@ import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const ANALYZE = process.env.ANALYZE === 'true';
 
-const csp = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://prod.spline.design",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' data: https://fonts.gstatic.com",
-  "img-src 'self' data: blob: https:",
-  "connect-src 'self' https://api.emailjs.com https://api.github.com https://prod.spline.design",
-  "frame-src 'self' https://my.spline.design",
-  "worker-src 'self' blob:",
-  "media-src 'self'",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
-  "upgrade-insecure-requests",
-].join('; ');
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -40,11 +23,15 @@ const nextConfig = {
   },
   serverExternalPackages: ['nodemailer'],
   async headers() {
+    // Security headers only — Content-Security-Policy is set by middleware.ts
+    // so it can be per-request-aware. Don't define it here, otherwise the
+    // browser sees two CSP headers and the stricter one (middleware) wins
+    // for each directive, which used to block the inline theme-init script
+    // and leave the page stuck on its Suspense loading fallback.
     return [
       {
         source: '/:path*',
         headers: [
-          { key: 'Content-Security-Policy', value: csp },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
