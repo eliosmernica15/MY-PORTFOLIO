@@ -220,7 +220,15 @@ export default function AssistantChat() {
 
   // -- Mobile / voice detection --
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile);
+      // On mobile, `minimized` is meaningless (the panel is fullscreen),
+      // so force it off — otherwise a resize that crosses the 640px
+      // boundary would leave the panel as a 100dvh strip with only the
+      // header visible.
+      if (mobile) setMinimized(false);
+    };
     checkMobile();
     window.addEventListener('resize', checkMobile);
     const W = window as unknown as {
@@ -259,20 +267,61 @@ export default function AssistantChat() {
     }
   }, [isOpen, minimized]);
 
-  // -- Cmd/Ctrl+K to open --
+  // -- Cmd/Ctrl+K to toggle the panel --
   useKeyShortcut({ key: 'k', meta: true, handler: () => setIsOpen(v => !v) }, true);
-  // -- Esc closes (only when not in a text field would block) --
+
+  // -- Cmd/Ctrl+M to toggle minimize (desktop). On mobile, the panel is
+  //    fullscreen, so Ctrl+M closes the panel outright. --
+  useKeyShortcut({
+    key: 'm',
+    meta: true,
+    handler: () => {
+      setIsOpen(prevOpen => {
+        if (!prevOpen) return true;
+        if (isMobile) return false;
+        setMinimized(prevMin => !prevMin);
+        return true;
+      });
+    },
+  }, isOpen);
+
+  // -- Esc handling. On desktop, Esc minimizes (keeps session). On mobile
+  //    (fullscreen), Esc closes outright. --
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
-        setIsOpen(false);
+        if (isMobile) {
+          setIsOpen(false);
+        } else {
+          setMinimized(prev => !prev);
+        }
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [isOpen]);
+  }, [isOpen, isMobile]);
+
+  // -- Click outside (desktop only) minimizes rather than closes. --
+  useEffect(() => {
+    if (!isOpen || isMobile || minimized) return;
+    const onDocPointer = (e: MouseEvent) => {
+      const target = e.target as Node | null;
+      if (!target) return;
+      if (panelRef.current?.contains(target)) return;
+      const trigger = (target as HTMLElement).closest?.('[data-floating-trigger]');
+      if (trigger) return;
+      setMinimized(true);
+    };
+    const t = setTimeout(() => {
+      document.addEventListener('mousedown', onDocPointer);
+    }, 0);
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener('mousedown', onDocPointer);
+    };
+  }, [isOpen, isMobile, minimized]);
 
   // -- Seed greeting on first open --
   const seededRef = useRef(false);
@@ -456,9 +505,25 @@ export default function AssistantChat() {
         bottom: 88,
         zIndex: 80,
         width: 'min(420px, 92vw)',
-        height: minimized ? 'auto' : 'min(560px, 80vh)',
-        maxHeight: '80vh',
+        // Animated height: explicit pixel max so the CSS
+        // `transition: max-height` can play. `auto` doesn't transition.
+        maxHeight: minimized ? 60 : 'min(560px, 80vh)',
+        height: minimized ? 60 : 'min(560px, 80vh)',
       };
+
+  // Trigger button click — closed → open; open & expanded → minimize
+  // (desktop) or close (mobile); open & minimized → expand.
+  const onTriggerClick = useCallback(() => {
+    if (!isOpen) {
+      setIsOpen(true);
+      return;
+    }
+    if (isMobile) {
+      setIsOpen(false);
+    } else {
+      setMinimized(prev => !prev);
+    }
+  }, [isOpen, isMobile]);
 
   // ---------- Render ----------
 
@@ -467,8 +532,11 @@ export default function AssistantChat() {
       {/* Trigger */}
       <button
         type="button"
-        onClick={() => setIsOpen(v => !v)}
-        className="group fixed right-4 sm:right-6 bottom-4 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
+        onClick={onTriggerClick}
+        data-floating-trigger
+        data-open={isOpen ? 'true' : 'false'}
+        data-minimized={isOpen && minimized ? 'true' : 'false'}
+        className="floating-trigger group fixed right-4 sm:right-6 bottom-4 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
         style={{
           background: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
@@ -477,23 +545,46 @@ export default function AssistantChat() {
           boxShadow: '0 10px 40px -10px var(--shadow-accent)',
           marginBottom: 'env(safe-area-inset-bottom)',
         }}
-        aria-label="Open Elios AI assistant"
+        aria-label={isOpen && !isMobile ? (minimized ? 'Expand assistant' : 'Minimize assistant') : 'Open Elios AI assistant'}
+        aria-expanded={isOpen}
         data-cursor-hover
       >
-        <Sparkles size={18} style={{ color: 'var(--accent)' }} />
+        {isOpen && !isMobile ? (
+          minimized ? (
+            <Sparkles size={18} style={{ color: 'var(--accent)' }} />
+          ) : (
+            <Minus size={18} style={{ color: 'var(--accent)' }} />
+          )
+        ) : (
+          <Sparkles size={18} style={{ color: 'var(--accent)' }} />
+        )}
         <span className="hidden sm:inline text-xs font-bold uppercase tracking-widest opacity-80 group-hover:opacity-100">
-          Ask Elios AI
+          {isOpen && !isMobile ? (minimized ? 'Expand' : 'Minimize') : 'Ask Elios AI'}
         </span>
+        {isOpen && !isMobile && (
+          // Live pulse so the user knows the assistant is still running
+          // when the panel is minimized.
+          <span
+            className="ml-1 w-1.5 h-1.5 rounded-full"
+            style={{
+              background: 'var(--accent)',
+              boxShadow: '0 0 8px var(--shadow-accent)',
+              animation: 'pulse-live 2s ease-in-out infinite',
+            }}
+            aria-hidden
+          />
+        )}
       </button>
 
       {/* Panel */}
       {isOpen && (
         <div
           ref={combinedRef}
+          data-state={minimized ? 'minimized' : 'open'}
           className="assistant-floating flex flex-col"
           style={panelStyle}
           role="dialog"
-          aria-modal="true"
+          aria-modal={isMobile ? 'true' : 'false'}
           aria-label="Elios AI assistant"
         >
           {/* Header */}
@@ -539,25 +630,30 @@ export default function AssistantChat() {
               </button>
               <button
                 onClick={() => setShowInfo(v => !v)}
-                className="p-1.5 rounded opacity-70 hover:opacity-100"
+                className="p-1.5 rounded opacity-70 hover:opacity-100 transition-colors"
                 style={{ color: 'var(--text-secondary)' }}
                 aria-label="About this assistant"
+                title="About this assistant"
               >
                 <Info size={14} />
               </button>
-              <button
-                onClick={() => setMinimized(v => !v)}
-                className="p-1.5 rounded opacity-70 hover:opacity-100"
-                style={{ color: 'var(--text-secondary)' }}
-                aria-label="Minimize"
-              >
-                <Minus size={14} />
-              </button>
+              {!isMobile && (
+                <button
+                  onClick={() => setMinimized(v => !v)}
+                  className="p-1.5 rounded opacity-70 hover:opacity-100 transition-colors"
+                  style={{ color: 'var(--text-secondary)' }}
+                  aria-label={minimized ? 'Expand' : 'Minimize'}
+                  title={minimized ? 'Expand (⌘M)' : 'Minimize (⌘M)'}
+                >
+                  <Minus size={14} />
+                </button>
+              )}
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded opacity-70 hover:opacity-100"
+                className="p-1.5 rounded opacity-70 hover:opacity-100 transition-colors"
                 style={{ color: 'var(--text-secondary)' }}
                 aria-label="Close"
+                title="Close (Esc)"
               >
                 <X size={14} />
               </button>

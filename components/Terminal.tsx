@@ -283,6 +283,10 @@ export default function Terminal({}: TerminalProps = {}) {
       if (mobile && (position.x !== 24 || position.y !== 24)) {
         setPosition({ x: 24, y: 24 });
       }
+      // On mobile, `minimized` is meaningless (the panel is fullscreen), so
+      // force it off — otherwise a resize that crosses the 640px boundary
+      // would leave the panel as a 100dvh strip with only the header.
+      if (mobile) setMinimized(false);
     };
     check();
     window.addEventListener('resize', check);
@@ -313,16 +317,37 @@ export default function Terminal({}: TerminalProps = {}) {
     }
   }, [isOpen, minimized]);
 
-  // Keyboard shortcut to open.
+  // Keyboard shortcut to toggle the panel (open/close).
   useKeyShortcut({ key: '`', handler: () => setIsOpen(v => !v) }, true);
 
-  // Esc closes.
+  // Keyboard shortcut to toggle minimize: ⌘/Ctrl+M. Only meaningful on
+  // desktop — on mobile the panel is fullscreen, so minimize = close.
+  useKeyShortcut({
+    key: 'm',
+    meta: true,
+    handler: () => {
+      setIsOpen(prevOpen => {
+        if (!prevOpen) return true;
+        if (isMobile) return false; // mobile: Ctrl+M closes
+        setMinimized(prevMin => !prevMin);
+        return true;
+      });
+    },
+  }, isOpen);
+
+  // Esc handling. On desktop, Esc minimizes so users can dismiss the
+  // panel without losing their session. On mobile (fullscreen), Esc
+  // closes outright.
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
-        setIsOpen(false);
+        if (isMobile) {
+          setIsOpen(false);
+        } else {
+          setMinimized(prev => !prev);
+        }
         return;
       }
       // Ctrl/Cmd+L clears
@@ -334,7 +359,35 @@ export default function Terminal({}: TerminalProps = {}) {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
+  }, [isOpen, isMobile]);
+
+  // Click outside (desktop only) minimizes the panel rather than
+  // closing it — the user keeps their session. We do this by listening
+  // for mousedown on the document and checking whether the target is
+  // outside the panel and outside the trigger button.
+  useEffect(() => {
+    if (!isOpen || isMobile) return;
+    if (minimized) return;
+    const onDocPointer = (e: MouseEvent) => {
+      const target = e.target as Node | null;
+      if (!target) return;
+      if (panelRef.current?.contains(target)) return;
+      // The trigger button lives at the same root as the panel — guard
+      // against it by checking the [data-floating-trigger] attribute.
+      const trigger = (target as HTMLElement).closest?.('[data-floating-trigger]');
+      if (trigger) return;
+      setMinimized(true);
+    };
+    // Defer attaching so the click that opened the panel doesn't immediately
+    // minimize it on the same event.
+    const t = setTimeout(() => {
+      document.addEventListener('mousedown', onDocPointer);
+    }, 0);
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener('mousedown', onDocPointer);
+    };
+  }, [isOpen, isMobile, minimized]);
 
   const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen && !minimized);
   const combinedRef = (el: HTMLDivElement | null) => {
@@ -519,18 +572,42 @@ export default function Terminal({}: TerminalProps = {}) {
       left: `${position.x}px`,
       zIndex: 80,
       width: 'min(560px, 90vw)',
-      height: minimized ? 'auto' : 'min(420px, 70vh)',
-      maxHeight: '70vh',
+      // Animated height: explicit pixel max so the CSS `transition: max-height`
+      // can play. `auto` doesn't transition. We set a generous max (the same
+      // value the unminimized state uses) and let the inner body use
+      // `flex-1` to absorb the rest.
+      maxHeight: minimized ? 56 : 'min(420px, 70vh)',
+      height: minimized ? 56 : 'min(420px, 70vh)',
     };
   }, [isMobile, position, minimized]);
 
+  // Trigger button click — single button that always does the right thing:
+  // closed → open; open & expanded → minimize (desktop) or close (mobile);
+  // open & minimized → expand.
+  const onTriggerClick = useCallback(() => {
+    if (!isOpen) {
+      setIsOpen(true);
+      return;
+    }
+    if (isMobile) {
+      setIsOpen(false);
+    } else {
+      setMinimized(prev => !prev);
+    }
+  }, [isOpen, isMobile]);
+
   return (
     <>
-      {/* Trigger button */}
+      {/* Trigger button — always rendered so the user can re-open
+          the panel after closing it. When the panel is open, this
+          button toggles the minimize state on desktop. */}
       <button
         type="button"
-        onClick={() => setIsOpen(v => !v)}
-        className="group fixed left-4 sm:left-6 bottom-4 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
+        onClick={onTriggerClick}
+        data-floating-trigger
+        data-open={isOpen ? 'true' : 'false'}
+        data-minimized={isOpen && minimized ? 'true' : 'false'}
+        className="floating-trigger group fixed left-4 sm:left-6 bottom-4 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
         style={{
           background: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
@@ -540,23 +617,47 @@ export default function Terminal({}: TerminalProps = {}) {
           // Keep clear of the iOS home indicator on devices that have one.
           marginBottom: 'env(safe-area-inset-bottom)',
         }}
-        aria-label="Open terminal"
+        aria-label={isOpen && !isMobile ? (minimized ? 'Expand terminal' : 'Minimize terminal') : 'Open terminal'}
+        aria-expanded={isOpen}
         data-cursor-hover
       >
-        <TerminalIcon size={18} style={{ color: 'var(--accent)' }} />
+        {isOpen && !isMobile ? (
+          // When expanded, show a chevron so the button reads as "collapse".
+          minimized ? (
+            <TerminalIcon size={18} style={{ color: 'var(--accent)' }} />
+          ) : (
+            <Minus size={18} style={{ color: 'var(--accent)' }} />
+          )
+        ) : (
+          <TerminalIcon size={18} style={{ color: 'var(--accent)' }} />
+        )}
         <span className="hidden sm:inline text-xs font-mono font-bold uppercase tracking-widest opacity-80 group-hover:opacity-100">
-          Terminal
+          {isOpen && !isMobile ? (minimized ? 'Expand' : 'Minimize') : 'Terminal'}
         </span>
+        {isOpen && !isMobile && (
+          // "Live" pulse on the trigger when the panel is open & minimized,
+          // so the user knows the session is still running.
+          <span
+            className="ml-1 w-1.5 h-1.5 rounded-full"
+            style={{
+              background: 'var(--accent)',
+              boxShadow: '0 0 8px var(--shadow-accent)',
+              animation: 'pulse-live 2s ease-in-out infinite',
+            }}
+            aria-hidden
+          />
+        )}
       </button>
 
       {/* Panel */}
       {isOpen && (
         <div
           ref={combinedRef}
+          data-state={minimized ? 'minimized' : 'open'}
           className="terminal-floating flex flex-col font-mono"
           style={panelStyle}
           role="dialog"
-          aria-modal="true"
+          aria-modal={isMobile ? 'true' : 'false'}
           aria-label="Terminal"
         >
           {/* Header / drag handle */}
@@ -578,14 +679,13 @@ export default function Terminal({}: TerminalProps = {}) {
                   aria-label="Close terminal"
                 />
                 <button
-                  onClick={() => setMinimized(v => !v)}
+                  onClick={() => isMobile ? setIsOpen(false) : setMinimized(v => !v)}
                   className="w-2.5 h-2.5 rounded-full bg-amber-500/80 hover:bg-amber-500 transition-colors"
                   aria-label={minimized ? 'Expand terminal' : 'Minimize terminal'}
                 />
-                <button
-                  onClick={() => setMinimized(false)}
-                  className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 hover:bg-emerald-500 transition-colors"
-                  aria-label="Restore terminal"
+                <span
+                  className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 transition-colors"
+                  aria-hidden
                 />
               </div>
               <span className="text-[11px] font-bold uppercase tracking-[0.2em] ml-2 truncate"
@@ -600,19 +700,23 @@ export default function Terminal({}: TerminalProps = {}) {
                   {currentTheme}
                 </span>
               )}
-              <button
-                onClick={() => setMinimized(v => !v)}
-                className="p-1 rounded opacity-70 hover:opacity-100"
-                style={{ color: 'var(--text-secondary)' }}
-                aria-label="Minimize"
-              >
-                <Minus size={14} />
-              </button>
+              {!isMobile && (
+                <button
+                  onClick={() => setMinimized(v => !v)}
+                  className="p-1 rounded opacity-70 hover:opacity-100 transition-colors"
+                  style={{ color: 'var(--text-secondary)' }}
+                  aria-label={minimized ? 'Expand' : 'Minimize'}
+                  title={minimized ? 'Expand (⌘M)' : 'Minimize (⌘M)'}
+                >
+                  <Minus size={14} />
+                </button>
+              )}
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 rounded opacity-70 hover:opacity-100"
+                className="p-1 rounded opacity-70 hover:opacity-100 transition-colors"
                 style={{ color: 'var(--text-secondary)' }}
                 aria-label="Close"
+                title="Close (Esc)"
               >
                 <X size={14} />
               </button>

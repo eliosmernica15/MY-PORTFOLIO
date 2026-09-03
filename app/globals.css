@@ -1058,6 +1058,59 @@ a:focus-visible {
   }
 }
 
+/* ================================================================
+   Floating panel entrance + minimize animation
+   Shared by Terminal and AssistantChat. The components set
+   `data-state="open|minimized|closed"` on the panel root so this
+   CSS owns the transitions and keyframes in one place.
+   ================================================================ */
+.terminal-floating,
+.assistant-floating {
+  transform-origin: bottom left;
+  will-change: transform, opacity, max-height;
+}
+
+.terminal-floating[data-state="open"],
+.assistant-floating[data-state="open"] {
+  animation: panel-enter 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.terminal-floating[data-state="minimized"],
+.assistant-floating[data-state="minimized"] {
+  /* The component owns the JS height — we just give it a transition
+     when the height changes, plus a soft exit-style animation on the
+     body region. */
+  transition: max-height 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes panel-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Trigger button visual state when the panel is open. The trigger
+   doubles as a "minimize/expand" affordance: clicking it while the
+   panel is open collapses it, and vice versa. */
+.floating-trigger[data-open="true"] {
+  /* subtle inset look so the user knows the panel is currently visible */
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 4px 18px -6px var(--shadow-color) !important;
+}
+
+.floating-trigger[data-minimized="true"] {
+  /* When the panel is minimized, the trigger shows a "live" dot so
+     the user knows the app is still running. */
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .assistant-message-user {
   align-self: flex-end;
   max-width: 80%;
