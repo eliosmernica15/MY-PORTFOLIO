@@ -97,7 +97,7 @@ function buildCsp(nonce: string): string {
     "frame-src 'self' https://my.spline.design https://*.spline.design",
     "worker-src 'self' blob:",
     "manifest-src 'self'",
-    "media-src 'self'",
+    "media-src 'self' data:",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
