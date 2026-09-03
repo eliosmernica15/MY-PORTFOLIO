@@ -289,11 +289,13 @@ export default function Terminal({}: TerminalProps = {}) {
       if (mobile) setMinimized(false);
       // If a desktop user shrank the window so the dragged position would
       // push the panel off-screen, snap it back to the default corner.
+      // The clamp matches the drag handler: `y` is the offset from 80px
+      // from the viewport top, so the max is `innerHeight - 80 - panelH`.
       if (!mobile) {
         const panelW = Math.min(560, window.innerWidth * 0.9);
         const panelH = Math.min(420, window.innerHeight * 0.7);
         const maxX = Math.max(0, window.innerWidth - panelW);
-        const maxY = Math.max(0, window.innerHeight - panelH - 16);
+        const maxY = Math.max(0, window.innerHeight - 80 - panelH - 16);
         if (position.x > maxX || position.y > maxY) {
           setPosition({ x: 24, y: 24 });
         }
@@ -541,14 +543,17 @@ export default function Terminal({}: TerminalProps = {}) {
       // panel can't slide past the right edge of the viewport.
       const panelW = Math.min(560, window.innerWidth * 0.9);
       const maxX = Math.max(0, window.innerWidth - panelW);
-      // Clamp y so the panel's top edge stays at least 16px below the
-      // viewport top. Without this, dragging too far up strands the panel
-      // above the visible area (bottom becomes very negative).
+      // The panel is positioned from the top with `top: calc(80px + y)px`.
+      // Dragging the mouse up (dy negative) should move the panel up, so
+      // `y` should *decrease* as the mouse moves up. The clamp ensures
+      // the panel's bottom edge stays at least 16px above the viewport
+      // bottom: `80 + y + panelH <= innerHeight - 16` →
+      // `y <= innerHeight - 80 - panelH - 16`.
       const panelH = Math.min(420, window.innerHeight * 0.7);
-      const maxY = Math.max(0, window.innerHeight - panelH - 16);
+      const maxY = Math.max(0, window.innerHeight - 80 - panelH - 16);
       setPosition({
         x: Math.max(0, Math.min(maxX, dragRef.current.baseX + dx)),
-        y: Math.max(0, Math.min(maxY, dragRef.current.baseY - dy)),
+        y: Math.max(0, Math.min(maxY, dragRef.current.baseY + dy)),
       });
     };
     const onUp = () => {
@@ -583,16 +588,15 @@ export default function Terminal({}: TerminalProps = {}) {
         borderRadius: 0,
       };
     }
-    // When minimized, ignore the dragged position and pin the panel to the
-    // same place as the trigger button (bottom-left). This is what the user
-    // expects — a small bar at the corner they can click to re-expand.
-    // Without this, a user who dragged the panel up sees the "minimized"
-    // header stranded somewhere in the middle of the screen.
+    // When minimized, pin the panel ABOVE the trigger button (not on top
+    // of it) so the user can see both. The trigger is ~44px tall and sits
+    // at `bottom: 24px` (desktop) or `bottom: 16px` (mobile), plus the
+    // safe-area inset. We add 8px of breathing room.
     if (minimized) {
       return {
         position: 'fixed',
         left: 16,
-        bottom: 16,
+        bottom: 'calc(76px + env(safe-area-inset-bottom))',
         zIndex: 80,
         width: 'min(360px, 80vw)',
         // Match the header's `py-2` (8px × 2 = 16px) + content (~18px
@@ -603,7 +607,12 @@ export default function Terminal({}: TerminalProps = {}) {
     }
     return {
       position: 'fixed',
-      bottom: `calc(80px - ${position.y}px)`,
+      // `position.y` is the distance from the bottom (set by the drag
+      // handler — it increases when the user drags up). We position the
+      // panel from the top of the viewport, offset by 80px of breathing
+      // room and the safe-area inset. The clamp in the drag handler
+      // ensures `position.y` never pushes the panel off the top.
+      top: `calc(80px + ${position.y}px + env(safe-area-inset-top))`,
       left: `${position.x}px`,
       zIndex: 80,
       width: 'min(560px, 90vw)',

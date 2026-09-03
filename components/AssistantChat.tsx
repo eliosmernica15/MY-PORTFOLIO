@@ -507,13 +507,14 @@ export default function AssistantChat() {
         paddingBottom: 'env(safe-area-inset-bottom)',
       }
     : (minimized
-      // When minimized, pin the panel to the same place as the trigger
-      // button (bottom-right) and shrink it to a 44px header strip. The
-      // user can click anywhere on the strip to re-expand.
+      // When minimized, pin the panel ABOVE the trigger button (not on top
+      // of it) so the user can see both. The trigger is ~44px tall and sits
+      // at `bottom: 24px` (desktop) plus the safe-area inset. We add 8px
+      // of breathing room.
       ? {
           position: 'fixed',
           right: 16,
-          bottom: 16,
+          bottom: 'calc(76px + env(safe-area-inset-bottom))',
           zIndex: 80,
           width: 'min(280px, 60vw)',
           // Match the header's `py-2` + content + 1px border.
