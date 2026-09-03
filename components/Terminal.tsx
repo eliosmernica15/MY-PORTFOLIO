@@ -572,8 +572,10 @@ export default function Terminal({}: TerminalProps = {}) {
         bottom: 16,
         zIndex: 80,
         width: 'min(360px, 80vw)',
-        height: 52,
-        maxHeight: 52,
+        // Match the header's `py-2` (8px × 2 = 16px) + content (~18px
+        // buttons) + the 1px border. 44px is tight and clean.
+        height: 44,
+        maxHeight: 44,
       };
     }
     return {
@@ -672,8 +674,10 @@ export default function Terminal({}: TerminalProps = {}) {
             onClick={minimized ? () => setMinimized(false) : undefined}
             role={minimized ? 'button' : undefined}
             aria-label={minimized ? 'Expand terminal' : undefined}
-            className={`flex items-center justify-between border-b select-none transition-colors ${
-              minimized ? 'px-3 py-2 cursor-pointer hover:bg-[var(--surface-elevated)]' : 'px-4 py-2.5'
+            className={`flex items-center justify-between select-none transition-colors ${
+              minimized
+                ? 'px-3 py-2 cursor-pointer hover:bg-[var(--surface-elevated)]'
+                : 'border-b px-4 py-2.5'
             }`}
             style={{
               background: 'var(--bg-elevated, var(--bg-card))',

@@ -487,7 +487,7 @@ export default function AssistantChat() {
       }
     : (minimized
       // When minimized, pin the panel to the same place as the trigger
-      // button (bottom-right) and shrink it to a 52px header strip. The
+      // button (bottom-right) and shrink it to a 44px header strip. The
       // user can click anywhere on the strip to re-expand.
       ? {
           position: 'fixed',
@@ -495,8 +495,9 @@ export default function AssistantChat() {
           bottom: 16,
           zIndex: 80,
           width: 'min(280px, 60vw)',
-          height: 52,
-          maxHeight: 52,
+          // Match the header's `py-2` + content + 1px border.
+          height: 44,
+          maxHeight: 44,
         }
       : {
           position: 'fixed',
@@ -590,8 +591,10 @@ export default function AssistantChat() {
             onClick={minimized ? () => setMinimized(false) : undefined}
             role={minimized ? 'button' : undefined}
             aria-label={minimized ? 'Expand assistant' : undefined}
-            className={`flex items-center justify-between border-b select-none transition-colors ${
-              minimized ? 'px-3 py-2 cursor-pointer hover:bg-[var(--surface-elevated)]' : 'px-4 py-3'
+            className={`flex items-center justify-between select-none transition-colors ${
+              minimized
+                ? 'px-3 py-2 cursor-pointer hover:bg-[var(--surface-elevated)]'
+                : 'border-b px-4 py-3'
             }`}
             style={{
               background: 'var(--bg-elevated, var(--bg-card))',
