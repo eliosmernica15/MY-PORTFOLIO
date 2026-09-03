@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
 import { motion } from 'framer-motion';
-import { STATS } from '../constants';
+import { STATS } from '@/data/stats';
 import AnimatedCounter from './AnimatedCounter';
 import RevealSection from './RevealSection';
 

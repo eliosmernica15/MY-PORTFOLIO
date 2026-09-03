@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { SKILLS } from '../constants';
+import { SKILLS } from '@/data/skills';
 
 const SkillMarquee: React.FC = () => {
   const row1 = [...SKILLS, ...SKILLS];

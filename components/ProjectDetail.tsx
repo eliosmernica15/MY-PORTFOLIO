@@ -1,76 +1,151 @@
 'use client';
 
-import { useEffect } from 'react';
+import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, ExternalLink, LayoutGrid, Calendar, Tag, Layers } from 'lucide-react';
-import { Overview } from '@/components/case-study/Overview';
-import { Architecture } from '@/components/case-study/Architecture';
-import { Gallery } from '@/components/case-study/Gallery';
-import { PremiumCard } from '@/components/ui/PremiumCard';
-import { RevealSection } from '@/components/RevealSection';
+import { motion } from 'framer-motion';
+import { ArrowLeft, ExternalLink, LayoutGrid } from 'lucide-react';
+import RevealSection from './RevealSection';
+import AdvancedButton from './ui/AdvancedButton';
+import PremiumCard from './ui/PremiumCard';
 import type { Project } from '@/data/projects';
 
-export default function ProjectDetail({ project }: { project: Project }) {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  return (
-    <main className="pt-28 pb-24 relative z-[1]">
-      <div className="px-4 sm:px-6 max-w-6xl mx-auto mb-10 flex flex-wrap items-center gap-4">
-        <Link
-          href="/#projects"
-          className="flex items-center gap-3 transition-all group hover:text-[var(--accent-light)] text-xs font-bold uppercase tracking-[0.3em]"
-          style={{ color: 'var(--text-muted)' }}
-        >
-          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          Back to Showcase
-        </Link>
-        <Link
-          href="/#projects"
-          className="flex items-center gap-3 transition-all group hover:text-[var(--accent-light)] text-xs font-bold uppercase tracking-[0.3em]"
-          style={{ color: 'var(--text-muted)' }}
-        >
-          <LayoutGrid size={16} className="group-hover:scale-110 transition-transform" />
-          View all projects
-        </Link>
-      </div>
-
-      <Overview project={project} />
-
-      <RevealSection>
-        <Architecture project={project} />
-      </RevealSection>
-
-      <RevealSection>
-        <Gallery project={project} />
-      </RevealSection>
-
-      <div className="px-4 sm:px-6 max-w-5xl mx-auto mt-12">
-        <PremiumCard glow>
-          <div className="p-8 sm:p-10 flex flex-wrap items-center justify-between gap-6">
-            <div>
-              <h3 className="text-2xl font-black tracking-tight mb-2" style={{ color: 'var(--text-primary)' }}>
-                Want to see it live?
-              </h3>
-              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                Every case study ships with a working demo. Click through, kick the tires.
-              </p>
-            </div>
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-enterprise btn-enterprise-lg btn-enterprise-primary"
-              data-cursor-hover
-            >
-              <span className="btn-enterprise-shine" aria-hidden />
-              <span className="btn-enterprise-label">Open {project.title}</span>
-              <span className="btn-enterprise-icon"><ExternalLink size={16} /></span>
-            </a>
-          </div>
-        </PremiumCard>
-      </div>
-    </main>
-  );
+interface Props {
+  project: Project;
 }
+
+const ProjectDetail: React.FC<Props> = ({ project }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      className="pt-32 pb-24 px-6 max-w-6xl mx-auto relative z-[1]"
+    >
+      <div className="mb-14 flex flex-wrap items-center gap-4 relative z-10">
+        <Link
+          href="/#projects"
+          className="flex items-center gap-3 transition-all group hover:text-[var(--accent-light)]"
+          style={{ color: 'var(--text-muted)' }}
+          aria-label="Back to projects"
+        >
+          <ArrowLeft
+            size={18}
+            className="group-hover:-translate-x-1 transition-transform"
+          />
+          <span className="text-xs font-bold uppercase tracking-[0.3em]">
+            Back to Showcase
+          </span>
+        </Link>
+        <Link
+          href="/#projects"
+          className="flex items-center gap-3 transition-all group hover:text-[var(--accent-light)]"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          <LayoutGrid size={18} className="group-hover:scale-110 transition-transform" />
+          <span className="text-xs font-bold uppercase tracking-[0.3em]">
+            View all projects
+          </span>
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+        <div className="lg:col-span-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="aspect-[16/9] rounded-[2.5rem] overflow-hidden mb-14 shadow-2xl relative"
+            style={{ border: '1px solid var(--border)' }}
+          >
+            <Image
+              src={project.image}
+              alt={project.title}
+              width={1200}
+              height={675}
+              className="w-full h-full object-cover"
+              priority
+              sizes="(min-width: 1024px) 66vw, 100vw"
+            />
+          </motion.div>
+          <RevealSection>
+            <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter text-gradient leading-tight">
+              {project.title}
+            </h1>
+            <p
+              className="text-xl md:text-2xl leading-relaxed font-light"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              {project.longDescription}
+            </p>
+          </RevealSection>
+        </div>
+        <div className="lg:col-span-4">
+          <PremiumCard glow padding={false} className="sticky top-24 lg:top-28">
+            <div className="p-8">
+              <h3
+                className="text-[10px] font-bold uppercase tracking-[0.4em] mb-6 pb-3"
+                style={{
+                  color: 'var(--accent-light)',
+                  borderBottom: '1px solid var(--glass-accent-border)',
+                }}
+              >
+                Project Specs
+              </h3>
+              <div className="space-y-5">
+                <div>
+                  <p
+                    className="text-[10px] uppercase font-bold tracking-widest mb-1"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    Year
+                  </p>
+                  <p className="font-bold" style={{ color: 'var(--text-primary)' }}>
+                    {project.year}
+                  </p>
+                </div>
+                <div>
+                  <p
+                    className="text-[10px] uppercase font-bold tracking-widest mb-1"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    Category
+                  </p>
+                  <p className="font-bold" style={{ color: 'var(--text-primary)' }}>
+                    {project.category}
+                  </p>
+                </div>
+                <div>
+                  <p
+                    className="text-[10px] uppercase font-bold tracking-widest mb-1"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    Stack
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {project.tech.map(t => (
+                      <span key={t} className="project-tech-pill">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <AdvancedButton
+                variant="primary"
+                size="lg"
+                href={project.link}
+                iconRight={<ExternalLink size={16} />}
+                className="w-full mt-8"
+              >
+                Visit Live
+              </AdvancedButton>
+            </div>
+          </PremiumCard>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default ProjectDetail;

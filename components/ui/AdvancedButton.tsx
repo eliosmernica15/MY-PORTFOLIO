@@ -4,7 +4,6 @@ import * as React from 'react';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { AdvancedButtonClient } from './AdvancedButtonClient';
 
 type Variant = 'primary' | 'secondary' | 'ghost';
 type Size = 'sm' | 'md' | 'lg';
@@ -45,7 +44,7 @@ const VARIANT_CLASS: Record<Variant, string> = {
   ghost: 'btn-enterprise-ghost',
 };
 
-function AdvancedButtonInner(props: AdvancedButtonOwnProps) {
+export default function AdvancedButton(props: AdvancedButtonOwnProps) {
   const {
     children,
     variant = 'primary',
@@ -131,26 +130,6 @@ function AdvancedButtonInner(props: AdvancedButtonOwnProps) {
     >
       {content}
     </button>
-  );
-}
-
-/**
- * AdvancedButton — server-component compatible.
- * If `magnetic` is enabled, renders the client-side wrapper; otherwise the
- * button is fully static and SSR-friendly.
- */
-export default function AdvancedButton(props: AdvancedButtonOwnProps) {
-  const { magnetic = true, fullWidth = false, className } = props;
-
-  if (!magnetic) {
-    return <AdvancedButtonInner {...props} className={cn(fullWidth && 'w-full', className)} />;
-  }
-
-  return (
-    <AdvancedButtonClient
-      {...props}
-      className={cn(fullWidth && 'w-full', className)}
-    />
   );
 }
 
