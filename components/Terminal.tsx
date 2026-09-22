@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Terminal as TerminalIcon, Minus, X, Maximize2 } from 'lucide-react';
+import { Terminal as TerminalIcon, Minus, X, Maximize2, Send } from 'lucide-react';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useKeyShortcut } from '@/hooks/useKeyShortcut';
@@ -894,7 +894,21 @@ export default function Terminal({}: TerminalProps = {}) {
                   autoComplete="off"
                   aria-label="Terminal input"
                 />
-                <Maximize2 size={11} className="opacity-30" style={{ color: 'var(--text-muted)' }} />
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center rounded-lg px-3 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                  style={{
+                    background: 'var(--accent)',
+                    color: 'var(--accent-contrast)',
+                    boxShadow: '0 4px 12px var(--shadow-color)',
+                    border: '1px solid var(--border-hover)',
+                  }}
+                  aria-label="Send command"
+                  title="Send (Enter)"
+                >
+                  <Send size={14} className="mr-1.5" />
+                  <span className="hidden sm:inline">Send</span>
+                </button>
               </form>
             </>
           )}
