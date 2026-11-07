@@ -18,7 +18,7 @@ const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 // also lets any script the inline bootstrap loads (the Next.js RSC
 // runtime and its chunks) run without their own hashes — which is how
 // the RSC payload data gets handed to React and the page hydrates.
-// Cache-busting: 2026-11-07T19:45:00Z - Force redeploy to clear redirect loop cache
+// Cache-busting: 2026-11-07T19:55:00Z - Force redeploy to clear redirect loop and prerender cache
 function generateNonce(): string {
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
