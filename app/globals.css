@@ -12,26 +12,26 @@
   --bg-card: rgba(0, 0, 0, 0.04);
   --hero-card-bg: rgba(255, 255, 255, 0.88);
   --text-primary: #000000;
-  --text-secondary: rgba(0, 0, 0, 0.8);
-  --text-muted: rgba(0, 0, 0, 0.5);
+  --text-secondary: rgba(0, 0, 0, 0.7);
+  --text-muted: rgba(0, 0, 0, 0.6);
   --accent: #000000;
   --accent-light: #000000;
   --accent-dark: #000000;
   --accent-muted: rgba(0, 0, 0, 0.45);
   --accent-contrast: #ffffff;
   --text-on-accent: #ffffff;
-  --border: rgba(0, 0, 0, 0.1);
+  --border: rgba(0, 0, 0, 0.12);
   --border-hover: rgba(0, 0, 0, 0.25);
   --nav-bg: rgba(255, 255, 255, 0.7);
   --nav-bg-scrolled: rgba(255, 255, 255, 0.95);
   --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-border: rgba(0, 0, 0, 0.1);
   --glass-accent-bg: rgba(0, 0, 0, 0.06);
   --glass-accent-border: rgba(0, 0, 0, 0.12);
   --gradient-text-from: #000000;
   --gradient-text-mid: rgba(0, 0, 0, 0.9);
   --gradient-text-to: rgba(0, 0, 0, 0.5);
-  --scrollbar-thumb: #cccccc;
+  --scrollbar-thumb: #999999;
   --selection-bg: rgba(0, 0, 0, 0.15);
   --shadow-accent: rgba(0, 0, 0, 0.12);
   --input-bg: rgba(0, 0, 0, 0.04);
@@ -41,7 +41,7 @@
   --pill-border: rgba(0, 0, 0, 0.06);
   --surface-elevated: rgba(0, 0, 0, 0.04);
   --glow-soft: rgba(0, 0, 0, 0.06);
-  --ring-focus: rgba(0, 0, 0, 0.25);
+  --ring-focus: rgba(0, 0, 0, 0.4);
 }
 
 /* Dark mode — toggled via <html data-theme="dark"> for SSR safety */
@@ -51,26 +51,26 @@
   --bg-card: rgba(255, 255, 255, 0.04);
   --hero-card-bg: rgba(0, 0, 0, 0.75);
   --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.85);
-  --text-muted: rgba(255, 255, 255, 0.55);
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --text-muted: rgba(255, 255, 255, 0.7);
   --accent: #ffffff;
   --accent-light: #ffffff;
   --accent-dark: #ffffff;
   --accent-muted: rgba(255, 255, 255, 0.45);
   --accent-contrast: #000000;
   --text-on-accent: #000000;
-  --border: rgba(255, 255, 255, 0.1);
+  --border: rgba(255, 255, 255, 0.12);
   --border-hover: rgba(255, 255, 255, 0.25);
   --nav-bg: rgba(0, 0, 0, 0.6);
   --nav-bg-scrolled: rgba(0, 0, 0, 0.92);
   --glass-bg: rgba(255, 255, 255, 0.04);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.1);
   --glass-accent-bg: rgba(255, 255, 255, 0.06);
   --glass-accent-border: rgba(255, 255, 255, 0.12);
   --gradient-text-from: #ffffff;
   --gradient-text-mid: rgba(255, 255, 255, 0.9);
   --gradient-text-to: rgba(255, 255, 255, 0.5);
-  --scrollbar-thumb: #333333;
+  --scrollbar-thumb: #666666;
   --selection-bg: rgba(255, 255, 255, 0.2);
   --shadow-accent: rgba(255, 255, 255, 0.15);
   --input-bg: rgba(255, 255, 255, 0.04);
@@ -80,7 +80,7 @@
   --pill-border: rgba(255, 255, 255, 0.08);
   --surface-elevated: rgba(255, 255, 255, 0.06);
   --glow-soft: rgba(255, 255, 255, 0.08);
-  --ring-focus: rgba(255, 255, 255, 0.35);
+  --ring-focus: rgba(255, 255, 255, 0.5);
 }
 
 /* ================================================================
@@ -231,6 +231,265 @@ a[href*="spline.tool"] {
 }
 
 /* ================================================================
+   Scroll-Driven Animations (CSS Native)
+   Uses animation-timeline: scroll() and view() for zero-JS
+   scroll-linked animations. Works in Chrome 115+, Edge 115+,
+   Safari 18+, Firefox 124+ (behind flag).
+   ================================================================ */
+
+/* Scroll progress indicator - top of page */
+@keyframes scroll-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 100;
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent-dark));
+  pointer-events: none;
+  animation: scroll-progress auto linear;
+  animation-timeline: scroll(root);
+}
+
+/* Hero parallax - background moves slower than scroll */
+@keyframes hero-parallax {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, -30%, 0); }
+}
+
+.hero-parallax {
+  animation: hero-parallax linear;
+  animation-timeline: scroll(root);
+  animation-range: 0 50vh;
+}
+
+/* Section reveal on scroll - using view() timeline */
+@keyframes section-reveal {
+  from { opacity: 0; transform: translate3d(0, 40px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.reveal-on-scroll {
+  animation: section-reveal linear both;
+  animation-timeline: view();
+  animation-range: entry 20% cover 40%;
+}
+
+/* Staggered reveal for grid items */
+@keyframes stagger-reveal {
+  from { opacity: 0; transform: translate3d(0, 30px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.stagger-on-scroll {
+  animation: stagger-reveal linear both;
+  animation-timeline: view();
+  animation-range: entry 10% cover 30%;
+}
+
+/* Hero content fade out on scroll */
+@keyframes hero-fade-out {
+  from { opacity: 1; transform: translate3d(0, 0, 0); }
+  to { opacity: 0; transform: translate3d(0, -20px, 0); }
+}
+
+.hero-fade-on-scroll {
+  animation: hero-fade-out linear;
+  animation-timeline: view();
+  animation-range: cover 20% cover 80%;
+}
+
+/* Navbar background on scroll */
+@keyframes nav-background {
+  from { background-color: transparent; box-shadow: none; }
+  to { background-color: var(--nav-bg-scrolled); box-shadow: 0 8px 32px var(--shadow-color); }
+}
+
+.nav-scroll-bg {
+  animation: nav-background linear;
+  animation-timeline: scroll(root);
+  animation-range: 0 100px;
+}
+
+/* Floating orb parallax */
+@keyframes orb-parallax-slow {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(0, -15%, 0) scale(1.02); }
+}
+
+@keyframes orb-parallax-fast {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(0, -30%, 0) scale(1.05); }
+}
+
+.orb-parallax-slow {
+  animation: orb-parallax-slow linear;
+  animation-timeline: scroll(root);
+  animation-range: 0 100vh;
+}
+
+.orb-parallax-fast {
+  animation: orb-parallax-fast linear;
+  animation-timeline: scroll(root);
+  animation-range: 0 100vh;
+}
+
+/* Counter/stat animation on scroll */
+@keyframes counter-reveal {
+  from { opacity: 0; transform: translate3d(0, 20px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.counter-on-scroll {
+  animation: counter-reveal linear both;
+  animation-timeline: view();
+  animation-range: entry 30% cover 50%;
+}
+
+/* Image zoom on scroll */
+@keyframes image-zoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+.image-zoom-on-scroll {
+  animation: image-zoom linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 100%;
+}
+
+/* Text gradient shift on scroll */
+@keyframes gradient-shift {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
+}
+
+.gradient-shift-on-scroll {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s linear infinite;
+  animation-timeline: scroll(root);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress-bar,
+  .hero-parallax,
+  .reveal-on-scroll,
+  .stagger-on-scroll,
+  .hero-fade-on-scroll,
+  .nav-scroll-bg,
+  .orb-parallax-slow,
+  .orb-parallax-fast,
+  .counter-on-scroll,
+  .image-zoom-on-scroll {
+    animation: none !important;
+  }
+}
+
+/* ================================================================
+   View Transitions API - Page Transitions
+   Smooth same-origin page transitions without JavaScript.
+   Works in Chrome 111+, Edge 111+, Safari 18+, Firefox 124+.
+   ================================================================ */
+
+@view-transition {
+  navigation: auto;
+}
+
+/* Default page transition - crossfade */
+::view-transition-old(root) {
+  animation: vt-fade-out 0.3s ease-out both;
+}
+
+::view-transition-new(root) {
+  animation: vt-fade-in 0.3s ease-in both;
+}
+
+@keyframes vt-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Slide transition for project detail pages */
+::view-transition-old(project-detail) {
+  animation: vt-slide-left 0.4s ease-out both;
+}
+
+::view-transition-new(project-detail) {
+  animation: vt-slide-right 0.4s ease-in both;
+}
+
+@keyframes vt-slide-left {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-30px); }
+}
+
+@keyframes vt-slide-right {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Scale transition for modal-like pages */
+::view-transition-old(modal-page) {
+  animation: vt-scale-down 0.3s ease-out both;
+}
+
+::view-transition-new(modal-page) {
+  animation: vt-scale-up 0.3s ease-in both;
+}
+
+@keyframes vt-scale-down {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+@keyframes vt-scale-up {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Apply view-transition-name to specific elements */
+.vt-project-card {
+  view-transition-name: project-card;
+}
+
+.vt-project-hero {
+  view-transition-name: project-hero;
+}
+
+.vt-nav {
+  view-transition-name: nav;
+}
+
+.vt-hero {
+  view-transition-name: hero;
+}
+
+.vt-section {
+  view-transition-name: section;
+}
+
+/* Respect reduced motion for view transitions */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.001s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* ================================================================
    Floating Orb Animations
    ================================================================ */
 @keyframes float {
@@ -321,6 +580,18 @@ a:focus-visible {
   body.cursor-custom [data-cursor-hover] {
     cursor: none !important;
   }
+
+  /* CRITICAL: Restore native cursor for keyboard focus.
+     Without this, keyboard users cannot see where they are. */
+  body.cursor-custom *:focus-visible {
+    cursor: auto !important;
+  }
+
+  /* Ensure custom cursor elements don't interfere with focus */
+  body.cursor-custom .custom-cursor-dot,
+  body.cursor-custom .custom-cursor-ring {
+    pointer-events: none;
+  }
 }
 
 .custom-cursor-dot {
@@ -347,10 +618,11 @@ a:focus-visible {
   background: transparent;
 }
 
-/* Restore cursor for skip link */
+/* Restore cursor for skip link and all focusable elements */
 .skip-link:hover,
-.skip-link:focus {
-  cursor: pointer !important;
+.skip-link:focus,
+*:focus-visible {
+  cursor: auto !important;
 }
 
 /* ================================================================

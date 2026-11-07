@@ -5,7 +5,7 @@ import { Terminal as TerminalIcon, Minus, X, Maximize2, Send } from 'lucide-reac
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useKeyShortcut } from '@/hooks/useKeyShortcut';
-import { usePrefersReducedMotion } from '@/hooks/useMediaQuery';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { PROJECTS } from '@/data/projects';
 import { SERVICES } from '@/data/services';
 import { SKILL_CATEGORIES } from '@/data/skills';
@@ -253,7 +253,7 @@ function useOptionalTheme() {
 
 export default function Terminal({}: TerminalProps = {}) {
   // Theme is always available (the layout wraps with ThemeProvider).
-  const { theme: currentTheme, toggleTheme } = useOptionalTheme();
+  const { mode: currentTheme, toggleTheme } = useOptionalTheme();
   // Set a specific theme value, or toggle. `toggleTheme` flips based
   // on the current state and is what the `theme toggle` command uses
   // (the previous version always set theme to 'dark', which was a
@@ -270,7 +270,7 @@ export default function Terminal({}: TerminalProps = {}) {
     [currentTheme, toggleTheme]
   );
 
-  const reduced = usePrefersReducedMotion();
+  const reduced = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [minimized, setMinimized] = useState(false);
   // `position` is the source of truth for what's rendered; the
@@ -418,7 +418,12 @@ export default function Terminal({}: TerminalProps = {}) {
   // page interaction (clicking a project link, a card, etc.) and the
   // session is already preserved by the explicit minimize affordances.
 
-  const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen && !minimized);
+  const focusTrapRef = useFocusTrap<HTMLDivElement>({
+    active: isOpen && !minimized,
+    // Exclude the trigger button from being inert so it remains focusable
+    excludeSelectors: ['[data-floating-trigger]'],
+    onActivate: () => play('boot'),
+  });
 
   // Belt-and-suspenders: when `minimized` flips, force the panel's height
   // directly on the DOM element with `!important`. The CSS rule already
@@ -443,12 +448,8 @@ export default function Terminal({}: TerminalProps = {}) {
     }
   }, [minimized, isMobile, isOpen]);
   // Stable callback ref that writes to both the panel ref and the
-  // focus-trap ref. Using a single `useCallback` (rather than a fresh
-  // function inline) means React doesn't see a new ref identity on
-  // every render — which prevents the ref-callback from being
-  // invoked on every render and re-asserting the focus trap.
-  // `focusTrapRef` and `panelRef` are `useRef` objects whose identity
-  // is stable across renders, so the empty dep array is correct.
+  // focus-trap ref. The new useFocusTrap hook returns a ref directly,
+  // so we need to combine them.
   const combinedRef = useCallback(
     (el: HTMLDivElement | null) => {
       (panelRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
@@ -750,6 +751,7 @@ export default function Terminal({}: TerminalProps = {}) {
       {/* Panel */}
       {isOpen && (
         <div
+          id="terminal"
           ref={combinedRef}
           data-state={minimized ? 'minimized' : 'open'}
           className="terminal-floating flex flex-col font-mono"

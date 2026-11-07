@@ -1,16 +1,4 @@
-export type KnowledgeAction =
-  | { type: 'scroll_to'; target: string }
-  | { type: 'open_link'; target: string }
-  | { type: 'open_route'; target: string };
-
-export type KnowledgeEntry = {
-  id: string;
-  intent: string;
-  weight: number;
-  text: string;
-  related?: string[];
-  action?: KnowledgeAction;
-};
+import type { KnowledgeEntry, KnowledgeAction } from '@/types';
 
 export const KNOWLEDGE_STATIC: KnowledgeEntry[] = [
   { id: 'about_short', intent: 'about', weight: 1.0, text: "I'm Elios Mernica, a software engineer based in Vushtrri, Kosovo. I build AI systems, full-stack web platforms, and the network infrastructure that holds them up. I'm available for remote work worldwide.", related: ['projects', 'skills'] },

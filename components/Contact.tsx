@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, CheckCircle2, Send, AlertCircle } from 'lucide-react';
 import { CONTACT_INFO } from '@/data/contact-info';
-import { submitContact } from '../app/actions/contact';
+import { submitContact, getCsrfTokenAction } from '../app/actions/contact';
 import RevealSection from './RevealSection';
 import SectionHeader from './ui/SectionHeader';
 import AdvancedButton from './ui/AdvancedButton';
@@ -16,7 +16,13 @@ const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '', company: '' });
   const [status, setStatus] = useState<Status>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [csrfToken, setCsrfToken] = useState<string>('');
   const focusedAtRef = useRef<number | null>(null);
+
+  // Fetch CSRF token on mount
+  useEffect(() => {
+    getCsrfTokenAction().then(setCsrfToken).catch(console.error);
+  }, []);
 
   const validate = () => {
     const e: Record<string, string> = {};
@@ -47,6 +53,7 @@ const ContactForm: React.FC = () => {
     fd.set('email', formData.email);
     fd.set('message', formData.message);
     fd.set('company', formData.company);
+    fd.set('csrf_token', csrfToken);
     const focusedAt = focusedAtRef.current ?? Date.now();
     fd.set('formTime', String(Date.now() - focusedAt));
 
@@ -116,8 +123,8 @@ const ContactForm: React.FC = () => {
               />
             </div>
             {[
-              { key: 'name', label: 'Full Name', type: 'text', placeholder: 'Your Name' },
-              { key: 'email', label: 'Email Address', type: 'email', placeholder: 'your@email.com' },
+              { key: 'name', label: 'Full Name', type: 'text', placeholder: 'Your Name', errorId: 'name-error' },
+              { key: 'email', label: 'Email Address', type: 'email', placeholder: 'your@email.com', errorId: 'email-error' },
             ].map(field => (
               <div key={field.key} className="space-y-2">
                 <label htmlFor={field.key} className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
@@ -132,9 +139,17 @@ const ContactForm: React.FC = () => {
                   className={`input-enterprise ${errors[field.key] ? 'input-error' : ''}`}
                   placeholder={field.placeholder}
                   aria-invalid={!!errors[field.key]}
+                  aria-describedby={errors[field.key] ? field.errorId : undefined}
                 />
                 {errors[field.key] && (
-                  <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-red-400 text-xs" role="alert">
+                  <motion.p
+                    id={field.errorId}
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-red-400 text-xs"
+                    role="alert"
+                    aria-live="polite"
+                  >
                     {errors[field.key]}
                   </motion.p>
                 )}
@@ -158,9 +173,17 @@ const ContactForm: React.FC = () => {
                 className={`input-enterprise resize-none ${errors.message ? 'input-error' : ''}`}
                 placeholder="Tell me about your project, timeline, and goals..."
                 aria-invalid={!!errors.message}
+                aria-describedby={errors.message ? 'message-error' : undefined}
               />
               {errors.message && (
-                <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-red-400 text-xs" role="alert">
+                <motion.p
+                  id="message-error"
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-400 text-xs"
+                  role="alert"
+                  aria-live="polite"
+                >
                   {errors.message}
                 </motion.p>
               )}

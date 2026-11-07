@@ -2,7 +2,8 @@
 
 import { z } from 'zod';
 import nodemailer from 'nodemailer';
-import { rateLimit, getClientIp } from '@/lib/ratelimit';
+import { rateLimitAsync } from '@/lib/ratelimit';
+import { validateCsrfToken, getCsrfToken } from '@/lib/csrf';
 
 const ContactSchema = z.object({
   name: z.string().trim().min(3, 'Name must be at least 3 characters').max(80),
@@ -53,9 +54,9 @@ async function sendViaSMTP(payload: { name: string; email: string; message: stri
 }
 
 async function sendViaEmailJS(payload: { name: string; email: string; message: string }) {
-  const serviceId = getEnv('VITE_EMAILJS_SERVICE_ID') ?? getEnv('EMAILJS_SERVICE_ID');
-  const templateId = getEnv('VITE_EMAILJS_TEMPLATE_ID') ?? getEnv('EMAILJS_TEMPLATE_ID');
-  const publicKey = getEnv('VITE_EMAILJS_PUBLIC_KEY') ?? getEnv('EMAILJS_PUBLIC_KEY');
+  const serviceId = getEnv('EMAILJS_SERVICE_ID');
+  const templateId = getEnv('EMAILJS_TEMPLATE_ID');
+  const publicKey = getEnv('EMAILJS_PUBLIC_KEY');
   if (!serviceId || !templateId || !publicKey) return false;
 
   // Server-side EmailJS via REST (no SDK needed)
@@ -93,6 +94,13 @@ export async function submitContact(formData: FormData): Promise<ContactResult> 
     return { ok: false, error: 'spam' };
   }
 
+  // CSRF Protection
+  const csrfToken = formData.get('csrf_token') as string | null;
+  const isValidCsrf = await validateCsrfToken(csrfToken ?? '');
+  if (!isValidCsrf) {
+    return { ok: false, error: 'validation', fieldErrors: { csrf: 'Invalid CSRF token. Please refresh the page and try again.' } };
+  }
+
   // Validation
   const parsed = ContactSchema.safeParse(raw);
   if (!parsed.success) {
@@ -107,9 +115,9 @@ export async function submitContact(formData: FormData): Promise<ContactResult> 
   // Rate limit (1 / 30s, 5 / hour, per IP) — best-effort IP from common proxy headers
   const xff = (formData.get('_xff') as string | null) ?? 'unknown';
 
-  const fast = rateLimit(`contact:fast:${xff}`, { capacity: 1, refillPerSecond: 1 / 30 });
+  const fast = await rateLimitAsync(`contact:fast:${xff}`, { capacity: 1, refillPerSecond: 1 / 30 });
   if (!fast.ok) return { ok: false, error: 'rate_limited', retryAfterMs: fast.retryAfterMs };
-  const slow = rateLimit(`contact:slow:${xff}`, { capacity: 5, refillPerSecond: 5 / 3600 });
+  const slow = await rateLimitAsync(`contact:slow:${xff}`, { capacity: 5, refillPerSecond: 5 / 3600 });
   if (!slow.ok) return { ok: false, error: 'rate_limited', retryAfterMs: slow.retryAfterMs };
 
   // Delivery
@@ -130,4 +138,12 @@ export async function submitContact(formData: FormData): Promise<ContactResult> 
       message: 'Delivery failed. Please try again or email me directly at eliosmernica@gmail.com.',
     };
   }
+}
+
+/**
+ * Get CSRF token for form submission.
+ * Client components should call this on mount to get a fresh token.
+ */
+export async function getCsrfTokenAction(): Promise<string> {
+  return getCsrfToken();
 }

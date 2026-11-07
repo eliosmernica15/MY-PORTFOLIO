@@ -1,10 +1,4 @@
-export type Service = {
-  id: string;
-  title: string;
-  desc: string;
-  icon: string;
-  number: string;
-};
+import type { Service } from '@/types';
 
 export const SERVICES: Service[] = [
   {

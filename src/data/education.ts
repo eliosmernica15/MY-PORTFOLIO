@@ -1,10 +1,6 @@
-export type Education = {
-  title: string;
-  period: string;
-  desc: string;
-};
+import type { EducationEntry } from '@/types';
 
-export const EDUCATION: Education[] = [
+export const EDUCATION: EducationEntry[] = [
   {
     title: 'Unity Tech Hub',
     period: '2025 - Present',

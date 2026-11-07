@@ -1,0 +1,328 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  NODE_VERSION: '22.x'
+  PNPM_VERSION: '9.x'
+
+jobs:
+  # Install dependencies and cache
+  install:
+    name: Install Dependencies
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache.outputs.cache-primary-key }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Needed for gitleaks
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Cache pnpm store
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+  # Linting
+  lint:
+    name: Lint
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ESLint
+        run: pnpm lint
+
+  # Type checking
+  typecheck:
+    name: Type Check
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run TypeScript type check
+        run: pnpm typecheck
+
+  # Secret scanning with gitleaks
+  secrets:
+    name: Secret Scanning
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          config: .gitleaks.toml
+          verbose: true
+
+  # Dependency vulnerability scanning
+  security:
+    name: Dependency Security Scan
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+        continue-on-error: false
+
+      - name: Run osv-scanner
+        uses: google/osv-scanner@v1
+        with:
+          flags: --recursive --lockfile=pnpm-lock.yaml
+
+      - name: Run Snyk (if configured)
+        if: env.SNYK_TOKEN != ''
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+  # Build the application
+  build:
+    name: Build
+    needs: [install, lint, typecheck, secrets, security]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build application
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+          # Note: Add other env vars as needed from GitHub secrets/vars
+
+  # Performance budgets with Lighthouse CI
+  lighthouse:
+    name: Lighthouse CI
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build application
+        run: pnpm build
+
+      - name: Start preview server
+        run: pnpm start &
+        env:
+          PORT: 3000
+
+      - name: Wait for server
+        run: sleep 10
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            http://localhost:3000
+          budgetPath: ./lighthouse-budget.json
+          uploadArtifacts: true
+
+  # Bundle size analysis
+  bundle:
+    name: Bundle Analysis
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Analyze bundle
+        run: pnpm analyze
+        env:
+          ANALYZE: true
+
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: .next/analyze/
+          retention-days: 7
+
+      # Enforce bundle size budgets
+      - name: Check bundle size budgets
+        run: |
+          # Define bundle size budgets (in bytes, gzipped)
+          # Based on the audit report target of < 120KB gzipped
+          MAX_JS_BUNDLE=120000  # 120KB
+          MAX_CSS_BUNDLE=50000   # 50KB
+
+          # Find the gzipped bundle files
+          JS_BUNDLES=$(find .next -name "*.js.gz" -o -name "*.js" | head -20)
+          CSS_BUNDLES=$(find .next -name "*.css.gz" -o -name "*.css" | head -20)
+
+          echo "Checking JavaScript bundles..."
+          for bundle in $JS_BUNDLES; do
+            if [[ "$bundle" == *.gz ]]; then
+              size=$(stat -c%s "$bundle")
+            else
+              size=$(gzip -c "$bundle" | wc -c)
+            fi
+            size_kb=$((size / 1024))
+            if [ $size -gt $MAX_JS_BUNDLE ]; then
+              echo "❌ JavaScript bundle $bundle exceeds budget: ${size_kb}KB > ${MAX_JS_BUNDLE/1024}KB"
+              exit 1
+            fi
+            echo "✅ JavaScript bundle $bundle: ${size_kb}KB (budget: ${MAX_JS_BUNDLE/1024}KB)"
+          done
+
+          echo "Checking CSS bundles..."
+          for bundle in $CSS_BUNDLES; do
+            if [[ "$bundle" == *.gz ]]; then
+              size=$(stat -c%s "$bundle")
+            else
+              size=$(gzip -c "$bundle" | wc -c)
+            fi
+            size_kb=$((size / 1024))
+            if [ $size -gt $MAX_CSS_BUNDLE ]; then
+              echo "❌ CSS bundle $bundle exceeds budget: ${size_kb}KB > ${MAX_CSS_BUNDLE/1024}KB"
+              exit 1
+            fi
+            echo "✅ CSS bundle $bundle: ${size_kb}KB (budget: ${MAX_CSS_BUNDLE/1024}KB)"
+          done
+
+          echo "All bundle size budgets passed!"
+
+  # Summary
+  summary:
+    name: Summary
+    needs: [lint, typecheck, secrets, security, build, lighthouse, bundle]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check all jobs passed
+        run: |
+          if ${{ contains(needs.*.result, 'failure') }}; then
+            echo "❌ Some checks failed"
+            exit 1
+          else
+            echo "✅ All checks passed"
+          fi

@@ -13,8 +13,8 @@ interface Particle {
 const ParticleCanvas: React.FC = () => {
   const profile = useDeviceProfile();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const { mode } = useTheme();
+  const isDark = mode === 'dark';
 
   useEffect(() => {
     if (profile.prefersReducedMotion || !profile.enableHeavyEffects) return;

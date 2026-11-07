@@ -4,7 +4,7 @@ import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 const ThemeToggle: React.FC = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { mode, toggleTheme } = useTheme();
 
   return (
     <motion.button
@@ -18,10 +18,10 @@ const ThemeToggle: React.FC = () => {
         borderColor: 'var(--border)',
         color: 'var(--text-secondary)',
       }}
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
     >
       <AnimatePresence mode="wait" initial={false}>
-        {theme === 'dark' ? (
+        {mode === 'dark' ? (
           <motion.div
             key="sun"
             initial={{ rotate: -60, opacity: 0, scale: 0.6 }}

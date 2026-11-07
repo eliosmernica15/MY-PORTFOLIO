@@ -170,7 +170,7 @@ function emitFile(staticEntries, generatedEntries) {
     '// Run `node scripts/build-knowledge.mjs` (or `npm run sync:kb`) to regenerate.',
     '/* eslint-disable */',
     '',
-    'import type { KnowledgeEntry } from \'./knowledge.static\';',
+    "import type { KnowledgeEntry } from '@/types';",
     '',
     'export const KNOWLEDGE_GENERATED: KnowledgeEntry[] = [',
   ].join('\n');

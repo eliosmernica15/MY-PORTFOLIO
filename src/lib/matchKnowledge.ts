@@ -5,7 +5,8 @@
 // union of KNOWLEDGE_STATIC and KNOWLEDGE_GENERATED. If nothing scores
 // above the threshold, return the 'fallback' entry.
 
-import { KNOWLEDGE_STATIC, type KnowledgeAction, type KnowledgeEntry } from '@/data/knowledge.static';
+import { KNOWLEDGE_STATIC } from '@/data/knowledge.static';
+import type { KnowledgeAction, KnowledgeEntry } from '@/types';
 
 export type { KnowledgeAction, KnowledgeEntry };
 

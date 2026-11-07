@@ -1,21 +1,4 @@
-export type NoteBlock =
-  | { type: 'p'; text: string }
-  | { type: 'h2'; text: string }
-  | { type: 'h3'; text: string }
-  | { type: 'code'; lang: string; code: string }
-  | { type: 'list'; items: string[]; ordered?: boolean }
-  | { type: 'quote'; text: string; cite?: string }
-  | { type: 'callout'; tone: 'info' | 'warn' | 'success'; text: string };
-
-export type Note = {
-  slug: string;
-  title: string;
-  date: string;
-  readMin: number;
-  tags: string[];
-  summary: string;
-  body: NoteBlock[];
-};
+import type { Note, NoteBlock } from '@/types';
 
 export const NOTES: Note[] = [
   {

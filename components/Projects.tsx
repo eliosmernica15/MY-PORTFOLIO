@@ -8,6 +8,7 @@ import { PROJECTS } from '@/data/projects';
 import RevealSection from './RevealSection';
 import SectionHeader from './ui/SectionHeader';
 import AdvancedButton from './ui/AdvancedButton';
+import { gradientBlur } from '@/lib/blurDataURL';
 
 type Project = (typeof PROJECTS)[number];
 
@@ -50,6 +51,9 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCa
           className="project-card-image w-full h-full object-cover object-top"
           loading={isFeatured ? 'eager' : 'lazy'}
           priority={isFeatured}
+          // Generate a gradient blur placeholder from the project's theme color
+          placeholder="blur"
+          blurDataURL={gradientBlur(project.color, project.color)}
           // `sizes` lets Next.js pick the smallest srcset variant
           // that fits the rendered size. The previous default
           // shipped 1200×500 even on mobile.

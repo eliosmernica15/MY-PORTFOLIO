@@ -1,0 +1,137 @@
+# Gitleaks Configuration for Secret Detection
+# https://github.com/gitleaks/gitleaks
+
+[[allowlists]]
+description = "Allowlisted gitleaks entries"
+# Add any false positives here as needed
+# regexes = ['''example''']
+# paths = ['package-lock.json']
+
+# Allowlist entry to satisfy gitleaks config validation (matches nothing real)
+regexes = ['^a^']
+paths = []
+
+[[rule]]
+# Generic API keys and tokens
+description = "Generic API Key"
+regex = '''(?i)(api[_-]?key|apikey|access[_-]?token|secret[_-]?key|auth[_-]?token)['"]?\s*[:=]\s*['"]?[a-zA-Z0-9_\-]{20,}'''
+tags = ["key", "API"]
+
+# AWS Keys
+[[rule]]
+description = "AWS Access Key ID"
+regex = '''(?i)(aws[_-]?access[_-]?key[_-]?id|aws[_-]?access[_-]?key)['"]?\s*[:=]\s*['"]?(AKIA|ASIA|AROA|AIDA)[A-Z0-9]{16}'''
+tags = ["key", "AWS"]
+
+[[rule]]
+description = "AWS Secret Access Key"
+regex = '''(?i)(aws[_-]?secret[_-]?access[_-]?key|aws[_-]?secret[_-]?key)['"]?\s*[:=]\s*['"]?[A-Za-z0-9/+=]{40}'''
+tags = ["key", "AWS"]
+
+# GitHub Tokens
+[[rule]]
+description = "GitHub Personal Access Token"
+regex = '''(?i)(github[_-]?token|gh[_-]?token|github[_-]?pat)['"]?\s*[:=]\s*['"]?(ghp_|gho_|ghu_|ghs_|ghr_)[a-zA-Z0-9]{36}'''
+tags = ["key", "GitHub"]
+
+[[rule]]
+description = "GitHub OAuth Token"
+regex = '''(?i)github[_-]?oauth[_-]?token['"]?\s*[:=]\s*['"]?gho_[a-zA-Z0-9]{36}'''
+tags = ["key", "GitHub"]
+
+# Vercel
+[[rule]]
+description = "Vercel Token"
+regex = '''(?i)(vercel[_-]?token)['"]?\s*[:=]\s*['"]?[a-zA-Z0-9]{24,}'''
+tags = ["key", "Vercel"]
+
+# Database URLs
+[[rule]]
+description = "Database Connection String"
+regex = '''(?i)(database[_-]?url|db[_-]?url|mongodb[_-]?uri|postgres[_-]?url|mysql[_-]?url)['"]?\s*[:=]\s*['"]?(postgres|postgresql|mysql|mongodb|redis)://[^'"\s]{10,}'''
+tags = ["key", "database"]
+
+# SMTP Credentials
+[[rule]]
+description = "SMTP Password"
+regex = '''(?i)(smtp[_-]?pass|smtp[_-]?password|mail[_-]?pass|mail[_-]?password)['"]?\s*[:=]\s*['"]?[^'"\s]{8,}'''
+tags = ["key", "SMTP"]
+
+# EmailJS
+[[rule]]
+description = "EmailJS Credentials"
+regex = '''(?i)(emailjs[_-]?(service[_-]?id|template[_-]?id|public[_-]?key|private[_-]?key))['"]?\s*[:=]\s*['"]?[a-zA-Z0-9_\-]{10,}'''
+tags = ["key", "EmailJS"]
+
+# Generic secrets
+[[rule]]
+description = "Generic Secret"
+regex = '''(?i)(secret|password|passwd|pwd)['"]?\s*[:=]\s*['"]?[^'"\s]{8,}'''
+tags = ["secret"]
+
+# Private Keys
+[[rule]]
+description = "Private Key"
+regex = '''-----BEGIN (RSA|DSA|EC|OPENSSH|PGP) PRIVATE KEY-----'''
+tags = ["key", "private"]
+
+# JWT
+[[rule]]
+description = "JWT Token"
+regex = '''eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+'''
+tags = ["token", "JWT"]
+
+# Slack
+[[rule]]
+description = "Slack Token"
+regex = '''(?i)(slack[_-]?token|slack[_-]?webhook)['"]?\s*[:=]\s*['"]?(xox[baprs]-[a-zA-Z0-9-]{10,})'''
+tags = ["key", "Slack"]
+
+# Stripe
+[[rule]]
+description = "Stripe Secret Key"
+regex = '''(?i)(stripe[_-]?secret[_-]?key)['"]?\s*[:=]\s*['"]?(sk_live|sk_test)_[a-zA-Z0-9]{24,}'''
+tags = ["key", "Stripe"]
+
+# SendGrid
+[[rule]]
+description = "SendGrid API Key"
+regex = '''(?i)(sendgrid[_-]?api[_-]?key)['"]?\s*[:=]\s*['"]?SG\.[a-zA-Z0-9_-]{22}\.[a-zA-Z0-9_-]{43}'''
+tags = ["key", "SendGrid"]
+
+# OpenAI
+[[rule]]
+description = "OpenAI API Key"
+regex = '''(?i)(openai[_-]?api[_-]?key)['"]?\s*[:=]\s*['"]?sk-[a-zA-Z0-9]{48,}'''
+tags = ["key", "OpenAI"]
+
+# Anthropic
+[[rule]]
+description = "Anthropic API Key"
+regex = '''(?i)(anthropic[_-]?api[_-]?key)['"]?\s*[:=]\s*['"]?sk-ant-[a-zA-Z0-9_-]{95,}'''
+tags = ["key", "Anthropic"]
+
+# NPM
+[[rule]]
+description = "NPM Token"
+regex = '''(?i)(npm[_-]?token)['"]?\s*[:=]\s*['"]?[a-zA-Z0-9]{32,}'''
+tags = ["key", "NPM"]
+
+# Docker
+[[rule]]
+description = "Docker Config Auth"
+regex = '''"auth"\s*:\s*"[A-Za-z0-9+/=]{32,}"'''
+tags = ["key", "Docker"]
+
+# Generic high-entropy strings (potential secrets)
+[[rule]]
+description = "High Entropy String (Base64)"
+regex = '''(?i)(key|token|secret|password)['"]?\s*[:=]\s*['"]?[A-Za-z0-9+/]{40,}={0,2}'''
+tags = ["secret", "high-entropy"]
+entropy = 4.5
+
+[[rule]]
+description = "High Entropy String (Hex)"
+regex = '''(?i)(key|token|secret|password)['"]?\s*[:=]\s*['"]?[a-fA-F0-9]{32,}'''
+tags = ["secret", "high-entropy"]
+entropy = 4.0

@@ -1,10 +1,6 @@
-export type Experience = {
-  company: string;
-  period: string;
-  desc: string;
-};
+import type { ExperienceEntry } from '@/types';
 
-export const EXPERIENCE: Experience[] = [
+export const EXPERIENCE: ExperienceEntry[] = [
   {
     company: 'Linkify',
     period: '2024',

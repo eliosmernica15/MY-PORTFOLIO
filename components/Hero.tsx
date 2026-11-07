@@ -5,18 +5,21 @@ import { ArrowUpRight, Globe, Zap, ArrowDown } from 'lucide-react';
 import { SITE } from '@/data/site';
 import AnimatedCounter from './AnimatedCounter';
 import AdvancedButton from './ui/AdvancedButton';
-import { useTypingEffect } from '../hooks/useTypingEffect';
-import { useDeviceProfile } from '../hooks/useDeviceProfile';
+import { useTypingEffect } from '@/hooks/useTypingEffect';
+import { useDeviceProfile } from '@/hooks/useDeviceProfile';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const LazySplineScene = lazy(() => import('./SplineScene'));
 const LazyParticleCanvas = lazy(() => import('./ParticleCanvas'));
 
 const Hero: React.FC = () => {
   const profile = useDeviceProfile();
+  const prefersReducedMotion = useReducedMotion();
   const [loadEffects, setLoadEffects] = useState(false);
 
   useEffect(() => {
     if (!profile.enable3D && !profile.enableHeavyEffects) return;
+    if (prefersReducedMotion) return;
 
     let cancelled = false;
     const run = () => {
@@ -33,7 +36,7 @@ const Hero: React.FC = () => {
       if (typeof cancelIdleCallback !== 'undefined') cancelIdleCallback(id as number);
       else clearTimeout(id as number);
     };
-  }, [profile.enable3D, profile.enableHeavyEffects]);
+  }, [profile.enable3D, profile.enableHeavyEffects, prefersReducedMotion]);
 
   const heroPhrases = useMemo(
     () => [

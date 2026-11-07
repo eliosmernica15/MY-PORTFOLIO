@@ -6,6 +6,7 @@ import ThemeToggle from './ThemeToggle';
 import MagneticButton from './MagneticButton';
 import AdvancedButton from './ui/AdvancedButton';
 import { SITE } from '@/data/site';
+import { useInertBackground } from '@/hooks/useFocusTrap';
 
 const navLinks = [
   { name: 'Home', id: 'home' },
@@ -42,6 +43,11 @@ const useScrollFlags = () => {
 const Nav: React.FC = () => {
   const [activeTab, setActiveTab] = useState('About');
   const [isOpen, setIsOpen] = useState(false);
+  // Apply inert to background content when mobile menu is open
+  useInertBackground({
+    active: isOpen,
+    excludeSelectors: ['#navigation', '[data-floating-trigger]'],
+  });
   const { scrolled, navVisible } = useScrollFlags();
   const lastActiveUpdate = useRef(0);
 
@@ -131,6 +137,7 @@ const Nav: React.FC = () => {
     <>
       <div className="fixed top-3 sm:top-4 left-0 right-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4 pt-[env(safe-area-inset-top)] sm:top-6">
         <nav
+          id="navigation"
           className={`nav-floating pointer-events-auto max-w-fit px-2.5 sm:px-3 py-2 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 nav-blur ${
             navVisible ? '' : 'nav-floating-hidden'
           }`}

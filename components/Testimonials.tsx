@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, Quote, Star } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Quote, Star, Pause, Play } from 'lucide-react';
 import { TESTIMONIALS } from '@/data/testimonials';
 import RevealSection from './RevealSection';
 import SectionHeader from './ui/SectionHeader';
@@ -65,6 +65,10 @@ const TestimonialCarousel: React.FC = () => {
   const prev = useCallback(() => {
     setIndex(p => (p - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
     setProgressKey(k => k + 1);
+  }, []);
+
+  const togglePause = useCallback(() => {
+    setPaused(p => !p);
   }, []);
 
   useEffect(() => {
@@ -135,6 +139,20 @@ const TestimonialCarousel: React.FC = () => {
         <MagneticButton strength={0.2}>
           <button type="button" onClick={next} className="interactive-btn w-10 h-10 rounded-full flex items-center justify-center nav-link" style={{ border: '1px solid var(--border)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)' }} aria-label="Next testimonial">
             <ChevronRight size={16} />
+          </button>
+        </MagneticButton>
+
+        {/* Pause/Play button for WCAG 2.2.2 */}
+        <MagneticButton strength={0.2}>
+          <button
+            type="button"
+            onClick={togglePause}
+            className="interactive-btn w-10 h-10 rounded-full flex items-center justify-center nav-link"
+            style={{ border: '1px solid var(--border)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)' }}
+            aria-label={paused ? 'Play testimonials autoplay' : 'Pause testimonials autoplay'}
+            aria-pressed={paused}
+          >
+            {paused ? <Play size={16} /> : <Pause size={16} />}
           </button>
         </MagneticButton>
       </div>

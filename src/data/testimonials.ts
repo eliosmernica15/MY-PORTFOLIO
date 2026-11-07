@@ -1,11 +1,4 @@
-export type Testimonial = {
-  name: string;
-  role: string;
-  text: string;
-  avatar: string;
-  company?: string;
-  linkedinUrl?: string;
-};
+import type { Testimonial } from '@/types';
 
 export const TESTIMONIALS: Testimonial[] = [
   {

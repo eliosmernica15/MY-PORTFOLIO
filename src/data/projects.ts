@@ -1,23 +1,4 @@
-export type Project = {
-  id: string;
-  title: string;
-  category: string;
-  description: string;
-  longDescription: string;
-  image: string;
-  link: string;
-  color: string;
-  tech: string[];
-  year: string;
-  /** @assistant-source — included in the assistant knowledge base */
-  highlights?: string[];
-  metrics?: { label: string; value: string; suffix?: string }[];
-  techRationale?: { name: string; reason: string }[];
-  challenge?: string;
-  outcome?: string;
-  role?: string;
-  duration?: string;
-};
+import type { Project, ProjectMetric, ProjectTechRationale } from '@/types';
 
 export const PROJECTS: Project[] = [
   {

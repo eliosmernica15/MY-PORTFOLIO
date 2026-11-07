@@ -17,7 +17,7 @@ import Link from 'next/link';
 import { ArrowLeft, ExternalLink, LayoutGrid } from 'lucide-react';
 import AdvancedButton from './ui/AdvancedButton';
 import PremiumCard from './ui/PremiumCard';
-import type { Project } from '@/data/projects';
+import type { Project } from '@/types';
 
 interface Props {
   project: Project;

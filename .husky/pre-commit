@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run gitleaks secret scanning
+echo "🔍 Running gitleaks secret scan..."
+npx gitleaks protect --staged --verbose --config .gitleaks.toml
+
+# Run lint-staged for other checks
+npx lint-staged

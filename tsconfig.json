@@ -25,7 +25,10 @@
       "@/components/*": ["./components/*"],
       "@data/*": ["./src/data/*"],
       "@lib/*": ["./src/lib/*"],
-      "@hooks/*": ["./src/hooks/*"]
+      "@hooks/*": ["./hooks/*", "./src/hooks/*"],
+      "@context/*": ["./context/*"],
+      "@/hooks/*": ["./hooks/*", "./src/hooks/*"],
+      "@/context/*": ["./context/*"]
     }
   },
   "include": [
@@ -39,6 +42,8 @@
     ".next",
     "out",
     "dist",
-    "src/data/knowledge.generated.ts"
+    "src/data/knowledge.generated.ts",
+    "tests",
+    "playwright.config.ts"
   ]
 }

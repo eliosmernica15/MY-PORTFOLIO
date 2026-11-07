@@ -1,7 +1,4 @@
-export type Skill = {
-  name: string;
-  level: 1 | 2 | 3 | 4 | 5;
-};
+import type { Skill, SkillCategory, SkillLevel } from '@/types';
 
 export const SKILLS: string[] = [
   'React.Js',

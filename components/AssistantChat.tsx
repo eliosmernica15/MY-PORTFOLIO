@@ -8,7 +8,7 @@ import {
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useKeyShortcut } from '@/hooks/useKeyShortcut';
-import { usePrefersReducedMotion } from '@/hooks/useMediaQuery';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { matchKnowledge, type KnowledgeCard, type MatchResult } from '@/lib/matchKnowledge';
 import { KNOWLEDGE_STATIC } from '@/data/knowledge.static';
 import { PROJECTS } from '@/data/projects';
@@ -188,7 +188,7 @@ function CopyBtn({ text }: { text: string }) {
 // ---------- Component ----------
 
 export default function AssistantChat() {
-  const reduced = usePrefersReducedMotion();
+  const reduced = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [minimized, setMinimized] = useState(false);
   const [messages, setMessages] = useLocalStorage<Message[]>('assistant-messages', []);
@@ -207,20 +207,21 @@ export default function AssistantChat() {
   const recognitionRef = useRef<unknown>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen && !minimized);
+  const focusTrapRef = useFocusTrap<HTMLDivElement>({
+    active: isOpen && !minimized,
+    // Exclude the trigger button from being inert so it remains focusable
+    excludeSelectors: ['[data-floating-trigger]'],
+  });
   const panelRef = useRef<HTMLDivElement>(null);
-  // Stable callback ref — see the same pattern in Terminal.tsx.
-  // Inline-arrow refs get a new identity every render, which makes
-  // React re-run the ref callback on every render even when the DOM
-  // element didn't change. `focusTrapRef` and `panelRef` are
-  // `useRef` objects whose identity is stable across renders, so
-  // the empty dep array is correct.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // Stable callback ref that writes to both the panel ref and the
+  // focus-trap ref. The new useFocusTrap hook returns a ref directly,
+  // so we need to combine them.
   const combinedRef = useCallback(
     (el: HTMLDivElement | null) => {
       (panelRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
       (focusTrapRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -248,7 +249,7 @@ export default function AssistantChat() {
   // Theme is always available (the layout wraps with ThemeProvider).
   // The previous version was a no-op `useOptionalTheme()` wrapper
   // that paid a try/catch cost on every render. Direct call instead.
-  const { theme: currentTheme } = useTheme();
+  const { mode: currentTheme } = useTheme();
   void currentTheme; // we read it indirectly via the CSS variables
 
   // -- Mobile / voice detection --
@@ -620,6 +621,7 @@ export default function AssistantChat() {
       {/* Panel */}
       {isOpen && (
         <div
+          id="assistant"
           ref={combinedRef}
           data-state={minimized ? 'minimized' : 'open'}
           className="assistant-floating flex flex-col"

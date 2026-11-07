@@ -1,4 +1,6 @@
-export const SITE = {
+import type { SiteConfig } from '@/types';
+
+export const SITE: SiteConfig = {
   name: 'Elios Mernica',
   title: 'Software Engineer',
   shortTitle: 'Software Engineer · AI Systems · Kosovo → Worldwide',
@@ -15,5 +17,3 @@ export const SITE = {
   locale: 'en-US',
   themeColor: '#000000',
 };
-
-export type Site = typeof SITE;
