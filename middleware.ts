@@ -18,7 +18,13 @@ const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 // also lets any script the inline bootstrap loads (the Next.js RSC
 // runtime and its chunks) run without their own hashes — which is how
 // the RSC payload data gets handed to React and the page hydrates.
-// Cache-busting: 2026-11-07T19:55:00Z - Force redeploy to clear redirect loop and prerender cache
+// Generate a per-request CSP nonce. The layout reads this from the
+// `x-nonce` request header (via `headers()`) and attaches it to every
+// inline <script> it renders. Pairing the nonce with `'strict-dynamic'`
+// also lets any script the inline bootstrap loads (the Next.js RSC
+// runtime and its chunks) run without their own hashes — which is how
+// the RSC payload data gets handed to React and the page hydrates.
+// Cache-busting: 2026-11-07T20:00:00Z - Force redeploy to clear redirect loop and prerender cache
 function generateNonce(): string {
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
