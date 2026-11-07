@@ -3,6 +3,9 @@ import Home from '@/components/Home';
 import { SITE } from '@/data/site';
 import { buildBreadcrumbs } from '@/lib/breadcrumbs';
 
+// Force dynamic rendering to avoid prerender cache that causes redirect loops
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: { default: `${SITE.name} — ${SITE.title}`, template: `%s · ${SITE.name}` },
   description: SITE.summary,
