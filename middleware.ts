@@ -78,20 +78,17 @@ export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const pathnameLocale = getLocaleFromPath(pathname);
 
-  // If no locale in path, rewrite (not redirect) to add locale
-  // Using rewrite instead of redirect avoids browser redirect loops
+  // If no locale in path, set locale cookie based on accept-language
+  // but DO NOT rewrite/redirect - let the page handle locale detection
+  // This completely eliminates redirect loops
   if (!pathnameLocale) {
     const cookieLocale = getLocaleFromCookie(req);
     const acceptLangLocale = getLocaleFromAcceptLanguage(req);
     const locale = cookieLocale || acceptLangLocale || 'en';
 
-    // Create rewritten URL with locale
-    const url = req.nextUrl.clone();
-    url.pathname = `/${locale}${pathname}`;
+    const response = NextResponse.next();
 
-    const response = NextResponse.rewrite(url);
-
-    // Set locale cookie
+    // Set locale cookie for downstream components
     response.cookies.set('NEXT_LOCALE', locale, {
       maxAge: 60 * 60 * 24 * 365, // 1 year
       path: '/',
