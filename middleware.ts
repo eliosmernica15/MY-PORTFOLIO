@@ -85,44 +85,43 @@ export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const pathnameLocale = getLocaleFromPath(pathname);
 
-  // If no locale in path, set locale cookie based on accept-language
-  // but DO NOT rewrite/redirect - let the page handle locale detection
-  // This completely eliminates redirect loops
-  if (!pathnameLocale) {
-    const cookieLocale = getLocaleFromCookie(req);
-    const acceptLangLocale = getLocaleFromAcceptLanguage(req);
-    const locale = cookieLocale || acceptLangLocale || 'en';
+  // SIMPLE FIX: Don't do any locale routing in middleware.
+  // Just set the locale cookie based on accept-language and continue.
+  // This completely eliminates redirect loops.
+  // Locale detection/routing will be handled client-side or in layout.
+  const cookieLocale = getLocaleFromCookie(req);
+  const acceptLangLocale = getLocaleFromAcceptLanguage(req);
+  const locale = pathnameLocale || cookieLocale || getLocaleFromAcceptLanguage(req) || 'en';
 
-    const response = NextResponse.next();
+  const response = NextResponse.next();
 
-    // Set locale cookie for downstream components
-    response.cookies.set('NEXT_LOCALE', locale, {
-      maxAge: 60 * 60 * 24 * 365, // 1 year
-      path: '/',
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-    });
+  // Set locale cookie for downstream components
+  response.cookies.set('NEXT_LOCALE', locale, {
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+    path: '/',
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+  });
 
-    // Add nonce and security headers
-    const nonce = generateNonce();
-    const cspHeader = buildCsp(nonce);
-    const cspReportOnlyHeader = buildCspReportOnly(nonce);
+  // Add nonce and security headers
+  const nonce = generateNonce();
+  const cspHeader = buildCsp(nonce);
+  const cspReportOnlyHeader = buildCspReportOnly(nonce);
 
-    response.headers.set('Content-Security-Policy', cspHeader);
-    response.headers.set('Content-Security-Policy-Report-Only', cspReportOnlyHeader);
-    response.headers.set('Permissions-Policy', buildPermissionsPolicy());
-    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-    response.headers.set('X-Content-Type-Options', 'nosniff');
-    response.headers.set('X-Frame-Options', 'DENY');
-    response.headers.set('X-DNS-Prefetch-Control', 'off');
-    response.headers.set('X-Download-Options', 'noopen');
-    response.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
-    response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-    response.headers.set('Expect-CT', 'max-age=86400, enforce');
-    response.headers.set('Vary', 'Accept-Encoding');
+  response.headers.set('Content-Security-Policy', cspHeader);
+  response.headers.set('Content-Security-Policy-Report-Only', cspReportOnlyHeader);
+  response.headers.set('Permissions-Policy', buildPermissionsPolicy());
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-DNS-Prefetch-Control', 'off');
+  response.headers.set('X-Download-Options', 'noopen');
+  response.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
+  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  response.headers.set('Expect-CT', 'max-age=86400, enforce');
+  response.headers.set('Vary', 'Accept-Encoding');
 
-    return response;
-  }
+  return response;
 
   // Locale exists in path, continue with normal middleware
   const nonce = generateNonce();
