@@ -78,8 +78,32 @@ export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const pathnameLocale = getLocaleFromPath(pathname);
 
+  // Check for redirect loop prevention cookie
+  const redirectCount = parseInt(req.cookies.get('REDIRECT_COUNT')?.value || '0', 10);
+  const MAX_REDIRECTS = 3;
+
   // If no locale in path, redirect to add locale
   if (!pathnameLocale) {
+    // Prevent redirect loops
+    if (redirectCount >= MAX_REDIRECTS) {
+      // Too many redirects, serve the page without locale prefix
+      const nonce = generateNonce();
+      const res = NextResponse.next();
+      res.headers.set('Content-Security-Policy', buildCsp(nonce));
+      res.headers.set('Content-Security-Policy-Report-Only', buildCspReportOnly(nonce));
+      res.headers.set('Permissions-Policy', buildPermissionsPolicy());
+      res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+      res.headers.set('X-Content-Type-Options', 'nosniff');
+      res.headers.set('X-Frame-Options', 'DENY');
+      res.headers.set('X-DNS-Prefetch-Control', 'off');
+      res.headers.set('X-Download-Options', 'noopen');
+      res.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
+      res.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+      res.headers.set('Expect-CT', 'max-age=86400, enforce');
+      res.headers.set('Vary', 'Accept-Encoding');
+      return res;
+    }
+
     const cookieLocale = getLocaleFromCookie(req);
     const acceptLangLocale = getLocaleFromAcceptLanguage(req);
     const locale = cookieLocale || acceptLangLocale || 'en';
@@ -90,9 +114,15 @@ export function middleware(req: NextRequest) {
 
     const response = NextResponse.redirect(url);
 
-    // Set locale cookie
+    // Set locale cookie AND increment redirect count
     response.cookies.set('NEXT_LOCALE', locale, {
-      maxAge: 60 * 60 * 24 * 365, // 1 year
+      maxAge: 60 * 60 * 24 * 365,
+      path: '/',
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    });
+    response.cookies.set('REDIRECT_COUNT', String(redirectCount + 1), {
+      maxAge: 60, // 1 minute
       path: '/',
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
@@ -106,9 +136,6 @@ export function middleware(req: NextRequest) {
     response.headers.set('Content-Security-Policy', cspHeader);
     response.headers.set('Content-Security-Policy-Report-Only', cspReportOnlyHeader);
     response.headers.set('Permissions-Policy', buildPermissionsPolicy());
-    response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
-    response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
-    response.headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
     response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
     response.headers.set('X-Content-Type-Options', 'nosniff');
     response.headers.set('X-Frame-Options', 'DENY');
