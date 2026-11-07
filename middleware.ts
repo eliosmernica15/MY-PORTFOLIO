@@ -146,9 +146,6 @@ export function middleware(req: NextRequest) {
     response.headers.set('Content-Security-Policy', cspHeader);
     response.headers.set('Content-Security-Policy-Report-Only', cspReportOnlyHeader);
     response.headers.set('Permissions-Policy', buildPermissionsPolicy());
-    response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
-    response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
-    response.headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
     response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
     response.headers.set('X-Content-Type-Options', 'nosniff');
     response.headers.set('X-Frame-Options', 'DENY');
@@ -177,11 +174,8 @@ export function middleware(req: NextRequest) {
   // Report-Only CSP for violation monitoring without blocking
   res.headers.set('Content-Security-Policy-Report-Only', cspReportOnlyHeader);
 
-  // Additional security headers
+  // Additional security headers (removed overly restrictive COEP/CORP/COOP)
   res.headers.set('Permissions-Policy', buildPermissionsPolicy());
-  res.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
-  res.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
-  res.headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
   res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.headers.set('X-Content-Type-Options', 'nosniff');
   res.headers.set('X-Frame-Options', 'DENY');
@@ -219,15 +213,15 @@ function buildCsp(nonce: string): string {
     // theme bootstrap through; modern browsers ignore it when a nonce
     // is present. `'self'` is kept as a fallback for browsers that
     // don't implement `'strict-dynamic'`.
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' ${NEXT_REQUEST_ANIMATION_FRAME_SHA256} ${NEXT_F_BOOTSTRAP_SHA256} https://prod.spline.design`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' ${NEXT_REQUEST_ANIMATION_FRAME_SHA256} ${NEXT_F_BOOTSTRAP_SHA256} https://prod.spline.design https://unpkg.com`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' data: https://fonts.gstatic.com",
     "img-src 'self' data: blob: https:",
-    "connect-src 'self' https://api.emailjs.com https://api.github.com https://prod.spline.design https://*.spline.design https://unpkg.com",
+    "connect-src 'self' https://api.emailjs.com https://api.github.com https://prod.spline.design https://*.spline.design https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com",
     "frame-src 'self' https://my.spline.design https://*.spline.design",
     "worker-src 'self' blob:",
     "manifest-src 'self'",
-    "media-src 'self' data:",
+    "media-src 'self' data: https:",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
@@ -249,15 +243,15 @@ function buildCspReportOnly(nonce: string): string {
   return [
     "default-src 'self'",
     "trusted-types default allow-duplicates; require-trusted-types-for 'script'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' ${NEXT_REQUEST_ANIMATION_FRAME_SHA256} ${NEXT_F_BOOTSTRAP_SHA256} https://prod.spline.design`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' ${NEXT_REQUEST_ANIMATION_FRAME_SHA256} ${NEXT_F_BOOTSTRAP_SHA256} https://prod.spline.design https://unpkg.com`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' data: https://fonts.gstatic.com",
     "img-src 'self' data: blob: https:",
-    "connect-src 'self' https://api.emailjs.com https://api.github.com https://prod.spline.design https://*.spline.design https://unpkg.com",
+    "connect-src 'self' https://api.emailjs.com https://api.github.com https://prod.spline.design https://*.spline.design https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com",
     "frame-src 'self' https://my.spline.design https://*.spline.design",
     "worker-src 'self' blob:",
     "manifest-src 'self'",
-    "media-src 'self' data:",
+    "media-src 'self' data: https:",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
