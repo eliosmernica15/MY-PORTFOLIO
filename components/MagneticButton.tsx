@@ -50,11 +50,17 @@ const MagneticButton = memo(function MagneticButton({
     lg: 'px-4 py-2.5 text-base',
   };
 
-  // Variant classes
-  const variantClasses = {
-    primary: 'bg-[var(--accent)] text-[var(--accent-contrast)]',
-    secondary: 'bg-[var(--surface-elevated)] text-[var(--text-primary)] border border-[var(--border)]',
-  };
+  // NOTE: the wrapper intentionally has NO background/color classes.
+  // It is a transform layer only; every caller styles its own child
+  // (nav buttons, social icons, etc.). Painting variant colors here
+  // (the old `primary` default = accent bg) showed a black block
+  // behind transparent children and made their text unreadable
+  // (e.g. dark nav text on black in light theme).
+  // `sizeClasses` are kept for callers that rely on wrapper padding,
+  // and `variant` is accepted for API compatibility but does not
+  // paint anything.
+  void variant;
+  void sizeClasses;
 
   return (
     <div
@@ -62,7 +68,7 @@ const MagneticButton = memo(function MagneticButton({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
-      className={`magnetic-wrap ${className} ${sizeClasses[size]} ${variantClasses[variant]}`.trim()}
+      className={`magnetic-wrap ${className}`.trim()}
     >
       {children}
     </div>
