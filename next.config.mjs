@@ -1,6 +1,13 @@
 import withBundleAnalyzer from '@next/bundle-analyzer';
+import createNextIntlPlugin from 'next-intl/plugin';
 
 const ANALYZE = process.env.ANALYZE === 'true';
+
+// next-intl plugin: registers the request config (auto-detected at
+// ./src/i18n/request.ts) so getLocale()/getTranslations() work during
+// SSR. Without it, [locale] pages throw "Couldn't find next-intl
+// config file" at runtime and return 500.
+const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -69,4 +76,4 @@ const nextConfig = {
   },
 };
 
-export default withBundleAnalyzer({ enabled: ANALYZE })(nextConfig);
+export default withNextIntl(withBundleAnalyzer({ enabled: ANALYZE })(nextConfig));
