@@ -944,16 +944,14 @@ a:focus-visible {
 }
 
 .premium-card-inner {
-  /* min-height (not height): 100% prevents the inner panel from
-     inflating when the card's height is indefinite (normal flow inside
-     a stretched grid column). Percentages against an indefinite
-     containing block compute to 0 for min-height, so the inner sizes
-     to content — while still filling the card when the card itself has
-     a definite height (e.g. h-full grid rows in Services). The old
-     `height: 100%` resolved against the grid row height and pushed
-     following content (e.g. the Download CV button) over the next
-     section. */
-  min-height: 100%;
+  /* No percentage heights here. The card sits inside grid columns
+     whose heights are definite (stretch), and browsers resolve
+     height/min-height: 100% on the inner panel against the GRID ROW
+     height in that context — inflating the card to full column height
+     and shoving following siblings (e.g. the Resume Download CV
+     button) down over the next section. The inner panel must size to
+     its content. Equal-height service cards come from the card
+     boxes stretching, not the inner panel. */
   border-radius: calc(2rem - 1px);
   background: var(--bg-card);
   position: relative;
