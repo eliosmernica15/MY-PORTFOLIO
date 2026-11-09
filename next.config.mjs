@@ -1,3 +1,5 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import withBundleAnalyzer from '@next/bundle-analyzer';
 import createNextIntlPlugin from 'next-intl/plugin';
 
@@ -13,6 +15,10 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Pin the workspace root to this directory - without it Next.js infers
+  // the root from the nearest lockfile it finds up the tree (e.g. a stray
+  // pnpm-lock.yaml in the home directory) and traces files from there.
+  outputFileTracingRoot: path.dirname(fileURLToPath(import.meta.url)),
   productionBrowserSourceMaps: false,
   compress: true,
   images: {

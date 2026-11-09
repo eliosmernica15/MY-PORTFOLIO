@@ -46,3 +46,11 @@ Thumbs.db
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+
+# Vercel local project link (contains org/project IDs - not for VCS)
+.vercel/
+
+# Test/visual artifacts
+test-results/
+playwright-report/
+coverage/

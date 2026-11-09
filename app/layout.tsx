@@ -1,25 +1,100 @@
-import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-import './globals.css';
+import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
+import localFont from "next/font/local";
+import "./globals.css";
+import { SITE } from "@/data/site";
+import { Providers } from "./Providers";
+import { SwRegister } from "./sw-register";
+
+// Self-hosted Plus Jakarta Sans (variable, latin) — avoids the build-time
+// Google Fonts fetch that crashes Vercel builds.
+const jakarta = localFont({
+  src: "./fonts/plus-jakarta-sans-latin-variable.woff2",
+  display: "swap",
+  variable: "--font-jakarta",
+  weight: "200 800",
+  preload: true,
+});
 
 export const metadata: Metadata = {
-  title: 'Elios Mernica — Software Engineer',
-  description: 'Software engineer specializing in web development, system design, and network infrastructure. Based in Kosovo, available worldwide.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? SITE.url),
+  title: {
+    default: `${SITE.name} — ${SITE.title}`,
+    template: `%s · ${SITE.name}`,
+  },
+  description: SITE.summary,
+  applicationName: SITE.name,
+  authors: [{ name: SITE.name, url: SITE.url }],
+  keywords: [
+    "Elios Mernica",
+    "software engineer",
+    "web developer",
+    "AI engineer",
+    "portfolio",
+    "Kosovo",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "full-stack",
+    "AI systems",
+    "network infrastructure",
+  ],
+  creator: SITE.name,
+  publisher: SITE.name,
+  alternates: {
+    canonical: "/",
+    languages: { en: "/en", sq: "/sq", "x-default": "/en" },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: SITE.url,
+    siteName: SITE.name,
+    title: `${SITE.name} — ${SITE.title}`,
+    description: SITE.summary,
+    images: [
+      {
+        url: "/og-image",
+        width: 1200,
+        height: 630,
+        alt: `${SITE.name} — ${SITE.title}`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE.name} — ${SITE.title}`,
+    description: SITE.summary,
+    images: ["/opengraph-image"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/manifest.webmanifest",
 };
 
-// Theme bootstrap — runs before React hydrates so the theme is applied
-// without a light/dark flash. This mirrors the bootstrap in
-// app/[locale]/layout.tsx (which also sets data-theme on <html> for SSR).
-// The root layout cannot render <html> itself (nested layouts would
-// produce nested <html> tags), so this script sets the attribute on
-// documentElement directly. The script MUST carry the per-request CSP
-// nonce: the CSP uses 'strict-dynamic', which ignores 'unsafe-inline',
-// so a nonce-less inline script is blocked from executing.
-// Resolves from the SAME single source of truth ThemeProvider uses
-// (elios-theme-config), so pre-hydration and post-hydration agree:
-// cookie > explicit config mode > legacy localStorage key > system pref.
-// ThemeProvider keeps data-theme and the palette CSS vars in sync from
-// here on (see the MutationObserver in context/ThemeProvider.tsx).
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+  ],
+  colorScheme: "dark light",
+};
+
+// Theme bootstrap - runs before React hydrates so the theme is applied
+// without a light/dark flash. Mirrors the resolver ThemeProvider uses
+// (elios-theme-config): cookie > explicit config mode > legacy key > system.
+// MUST carry the per-request CSP nonce ('strict-dynamic' ignores
+// 'unsafe-inline' for scripts).
 const themeInitScript = `
 (function() {
   try {
@@ -43,16 +118,125 @@ const themeInitScript = `
 })();
 `;
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const nonce = (await headers()).get('x-nonce') ?? '';
-  // NOTE: no redirect here. The root layout wraps every route (including
-  // /[locale]/*), so a redirect to the default locale here loops on
-  // /en itself (ERR_TOO_MANY_REDIRECTS). The root page (app/page.tsx)
-  // renders the home page at /, and /[locale] handles localized paths.
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Reading the nonce/locale opts this layout into dynamic rendering; the
+  // rendered output is cached at the edge by Vercel.
+  const h = await headers();
+  const nonce = h.get("x-nonce") ?? "";
+  const locale = h.get("x-locale") ?? "en";
+
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: SITE.name,
+    jobTitle: "Software Engineer",
+    url: SITE.url,
+    email: `mailto:${SITE.email}`,
+    telephone: SITE.phone,
+    address: { "@type": "PostalAddress", addressLocality: SITE.location },
+    sameAs: [
+      "https://github.com/eliosmernica15",
+      "https://www.linkedin.com/in/elios-mernica-880562204/",
+      "https://www.instagram.com/e_mer03/",
+    ],
+    knowsAbout: [
+      "Software Engineering",
+      "Artificial Intelligence",
+      "Web Development",
+      "System Design",
+      "Network Infrastructure",
+      "Compilers",
+    ],
+  };
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE.name,
+    url: SITE.url,
+    inLanguage: "en",
+    publisher: { "@type": "Person", name: SITE.name },
+  };
+
   return (
-    <>
-      <script nonce={nonce} dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      {children}
-    </>
+    <html lang={locale} data-theme="dark" className={jakarta.variable}>
+      <head>
+        <link
+          rel="preconnect"
+          href="https://prod.spline.design"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://i.postimg.cc"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://api.github.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="dns-prefetch" href="https://api.emailjs.com" />
+        {/* View Transitions API - smooth page transitions for same-origin navigation */}
+        <meta name="view-transition" content="same-origin" />
+        {/* Theme bootstrap. Carries the per-request CSP nonce. */}
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
+      </head>
+      <body className="noise">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
+        <a href="#terminal" className="skip-link">
+          Skip to terminal
+        </a>
+        <a href="#assistant" className="skip-link">
+          Skip to AI assistant
+        </a>
+        <a href="#navigation" className="skip-link">
+          Skip to navigation
+        </a>
+        <noscript>
+          <div
+            style={{
+              padding: "12px 16px",
+              background: "var(--surface-elevated)",
+              borderBottom: "1px solid var(--border)",
+              textAlign: "center",
+              fontSize: 13,
+              color: "var(--text-secondary)",
+            }}
+          >
+            JavaScript is off — the site still works, but a few interactive
+            features (the assistant, terminal, particle field) are disabled.
+            Reach me at{" "}
+            <a
+              href={`mailto:${SITE.email}`}
+              style={{ color: "var(--accent-light)" }}
+            >
+              {SITE.email}
+            </a>
+            .
+          </div>
+        </noscript>
+        <Providers>{children}</Providers>
+        <SwRegister />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+      </body>
+    </html>
   );
 }

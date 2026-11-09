@@ -1,9 +1,4 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-# Run gitleaks secret scanning
-echo "🔍 Running gitleaks secret scan..."
-npx gitleaks protect --staged --verbose --config .gitleaks.toml
-
-# Run lint-staged for other checks
+# Husky 9+ - no shebang/shim sourcing needed (husky runs this with sh).
+# 1) Secret scan staged changes, 2) lint + format staged files.
+npm run secrets:scan:staged
 npx lint-staged

@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { locales, defaultLocale, isValidLocale } from './src/i18n/config';
+import { NextRequest, NextResponse } from "next/server";
+import { locales, defaultLocale, isValidLocale } from "./src/i18n/config";
 
 const BLOCKED_UA_PATTERNS = [
   /semrush/i,
@@ -9,7 +9,7 @@ const BLOCKED_UA_PATTERNS = [
   /petalbot/i,
 ];
 
-const LOCALE_COOKIE_NAME = 'NEXT_LOCALE';
+const LOCALE_COOKIE_NAME = "NEXT_LOCALE";
 const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 // Generate a per-request CSP nonce. The layout reads this from the
@@ -22,13 +22,13 @@ function generateNonce(): string {
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
   // base64-encode without padding; matches the format Next.js examples use.
-  return btoa(String.fromCharCode(...bytes)).replace(/=+$/, '');
+  return btoa(String.fromCharCode(...bytes)).replace(/=+$/, "");
 }
 
 function getLocaleFromPath(pathname: string): string | null {
-  const segments = pathname.split('/').filter(Boolean);
+  const segments = pathname.split("/").filter(Boolean);
   const firstSegment = segments[0];
-  if (firstSegment && ['en', 'sq'].includes(firstSegment)) {
+  if (firstSegment && ["en", "sq"].includes(firstSegment)) {
     return firstSegment;
   }
   return null;
@@ -36,21 +36,21 @@ function getLocaleFromPath(pathname: string): string | null {
 
 function getLocaleFromCookie(req: NextRequest): string | null {
   const cookie = req.cookies.get(LOCALE_COOKIE_NAME)?.value;
-  if (cookie && ['en', 'sq'].includes(cookie)) {
+  if (cookie && ["en", "sq"].includes(cookie)) {
     return cookie;
   }
   return null;
 }
 
 function getLocaleFromAcceptLanguage(req: NextRequest): string {
-  const acceptLanguage = req.headers.get('accept-language');
-  if (!acceptLanguage) return 'en';
+  const acceptLanguage = req.headers.get("accept-language");
+  if (!acceptLanguage) return "en";
 
   // Parse accept-language header
   const languages = acceptLanguage
-    .split(',')
-    .map(part => {
-      const [lang, quality] = part.split(';q=');
+    .split(",")
+    .map((part) => {
+      const [lang, quality] = part.split(";q=");
       return {
         lang: lang.trim().toLowerCase(),
         quality: quality ? parseFloat(quality) : 1,
@@ -60,19 +60,19 @@ function getLocaleFromAcceptLanguage(req: NextRequest): string {
 
   // Find first supported locale
   for (const { lang } of languages) {
-    const baseLang = lang.split('-')[0];
-    if (['en', 'sq'].includes(baseLang)) {
+    const baseLang = lang.split("-")[0];
+    if (["en", "sq"].includes(baseLang)) {
       return baseLang;
     }
   }
 
-  return 'en';
+  return "en";
 }
 
 export function middleware(req: NextRequest) {
-  const ua = req.headers.get('user-agent') ?? '';
-  if (BLOCKED_UA_PATTERNS.some(re => re.test(ua))) {
-    return new NextResponse('Forbidden', { status: 403 });
+  const ua = req.headers.get("user-agent") ?? "";
+  if (BLOCKED_UA_PATTERNS.some((re) => re.test(ua))) {
+    return new NextResponse("Forbidden", { status: 403 });
   }
 
   const pathname = req.nextUrl.pathname;
@@ -88,7 +88,10 @@ export function middleware(req: NextRequest) {
   // Accept-Language, and stored in the locale cookie for downstream
   // components. Locale rendering is handled by the layout / client.
   const locale =
-    pathnameLocale || getLocaleFromCookie(req) || getLocaleFromAcceptLanguage(req) || 'en';
+    pathnameLocale ||
+    getLocaleFromCookie(req) ||
+    getLocaleFromAcceptLanguage(req) ||
+    "en";
 
   // Forward the nonce to the request so server components (the layout) can
   // read it from `headers()` and attach it to inline <script> tags. We
@@ -96,7 +99,9 @@ export function middleware(req: NextRequest) {
   // request-scoped value the browser never sees, so leaking it would only
   // matter if a downstream proxy trusted it, which is not our setup.
   const requestHeaders = new Headers(req.headers);
-  requestHeaders.set('x-nonce', nonce);
+  requestHeaders.set("x-nonce", nonce);
+  // Resolved locale - the root layout reads this for <html lang>.
+  requestHeaders.set("x-locale", locale);
 
   const response = NextResponse.next({
     request: {
@@ -107,32 +112,38 @@ export function middleware(req: NextRequest) {
   // Set locale cookie for downstream components
   response.cookies.set(LOCALE_COOKIE_NAME, pathnameLocale || locale, {
     maxAge: LOCALE_COOKIE_MAX_AGE,
-    path: '/',
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    path: "/",
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
   });
 
   // CSP headers (nonce-based, with 'strict-dynamic')
-  response.headers.set('Content-Security-Policy', cspHeader);
-  response.headers.set('Content-Security-Policy-Report-Only', cspReportOnlyHeader);
+  response.headers.set("Content-Security-Policy", cspHeader);
+  response.headers.set(
+    "Content-Security-Policy-Report-Only",
+    cspReportOnlyHeader,
+  );
 
   // Additional security headers (removed overly restrictive COEP/CORP/COOP)
-  response.headers.set('Permissions-Policy', buildPermissionsPolicy());
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('X-Frame-Options', 'DENY');
-  response.headers.set('X-DNS-Prefetch-Control', 'off');
-  response.headers.set('X-Download-Options', 'noopen');
-  response.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
+  response.headers.set("Permissions-Policy", buildPermissionsPolicy());
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-DNS-Prefetch-Control", "off");
+  response.headers.set("X-Download-Options", "noopen");
+  response.headers.set("X-Permitted-Cross-Domain-Policies", "none");
 
   // HSTS with preload preparation (max-age=2 years, include subdomains)
   // Note: Submit to hstspreload.org after verifying all subdomains work
-  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  response.headers.set(
+    "Strict-Transport-Security",
+    "max-age=63072000; includeSubDomains; preload",
+  );
 
   // Expect-CT for Certificate Transparency
-  response.headers.set('Expect-CT', 'max-age=86400, enforce');
+  response.headers.set("Expect-CT", "max-age=86400, enforce");
 
-  response.headers.set('Vary', 'Accept-Encoding');
+  response.headers.set("Vary", "Accept-Encoding");
 
   return response;
 }
@@ -181,7 +192,7 @@ function buildCsp(nonce: string): string {
     "upgrade-insecure-requests",
     // Report violations to our endpoint
     "report-uri /api/csp-report",
-  ].join('; ');
+  ].join("; ");
 }
 
 function buildCspReportOnly(nonce: string): string {
@@ -213,50 +224,50 @@ function buildCspReportOnly(nonce: string): string {
     "frame-ancestors 'none'",
     // Report violations to our endpoint
     "report-uri /api/csp-report",
-  ].join('; ');
+  ].join("; ");
 }
 
 function buildPermissionsPolicy(): string {
   return [
-    'accelerometer=()',
-    'ambient-light-sensor=()',
-    'autoplay=(self)',
-    'battery=()',
-    'camera=()',
-    'cross-origin-isolated=()',
-    'display-capture=()',
-    'document-domain=()',
-    'encrypted-media=()',
-    'execution-while-not-rendered=()',
-    'execution-while-out-of-viewport=()',
-    'fullscreen=(self)',
-    'geolocation=()',
-    'gyroscope=()',
-    'hid=()',
-    'identity-credentials-get=()',
-    'idle-detection=()',
-    'local-fonts=()',
-    'magnetometer=()',
-    'microphone=()',
-    'midi=()',
-    'otp-credentials=()',
-    'payment=()',
-    'picture-in-picture=()',
-    'publickey-credentials-get=()',
-    'screen-wake-lock=()',
-    'serial=()',
-    'speaker-selection=()',
-    'sync-xhr=()',
-    'usb=()',
-    'web-share=()',
-    'window-management=()',
-    'xr-spatial-tracking=()',
-  ].join(', ');
+    "accelerometer=()",
+    "ambient-light-sensor=()",
+    "autoplay=(self)",
+    "battery=()",
+    "camera=()",
+    "cross-origin-isolated=()",
+    "display-capture=()",
+    "document-domain=()",
+    "encrypted-media=()",
+    "execution-while-not-rendered=()",
+    "execution-while-out-of-viewport=()",
+    "fullscreen=(self)",
+    "geolocation=()",
+    "gyroscope=()",
+    "hid=()",
+    "identity-credentials-get=()",
+    "idle-detection=()",
+    "local-fonts=()",
+    "magnetometer=()",
+    "microphone=()",
+    "midi=()",
+    "otp-credentials=()",
+    "payment=()",
+    "picture-in-picture=()",
+    "publickey-credentials-get=()",
+    "screen-wake-lock=()",
+    "serial=()",
+    "speaker-selection=()",
+    "sync-xhr=()",
+    "usb=()",
+    "web-share=()",
+    "window-management=()",
+    "xr-spatial-tracking=()",
+  ].join(", ");
 }
 
 export const config = {
   matcher: [
     // Run on all paths except _next/static, _next/image, favicon, public files
-    '/((?!_next/static|_next/image|favicon.ico|sw.js|.*\\..*).*)',
+    "/((?!_next/static|_next/image|favicon.ico|sw.js|.*\\..*).*)",
   ],
 };
