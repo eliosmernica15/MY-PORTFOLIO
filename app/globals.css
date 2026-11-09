@@ -1096,6 +1096,14 @@ a:focus-visible {
   transform: translateX(120%);
 }
 
+/* When a button is asked to be full width, it must actually be full
+   width: `.btn-enterprise { width: auto }` above otherwise wins the
+   cascade (custom CSS is emitted after Tailwind utilities), shrinking
+   the button to its content width and leaving it as a floating pill. */
+.btn-enterprise.w-full {
+  width: 100%;
+}
+
 .btn-enterprise-label,
 .btn-enterprise-icon {
   position: relative;
