@@ -134,8 +134,9 @@ jobs:
       - name: Build application
         run: npm run build
         env:
-          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
-          # Note: add other env vars as needed from GitHub secrets/vars
+          # Fall back to the public production URL when the variable is
+          # unset (an empty value failed zod URL validation).
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://eliosmernica.vercel.app' }}
 
   # Summary
   summary:
