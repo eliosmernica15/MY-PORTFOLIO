@@ -86,48 +86,16 @@ export const viewport: Viewport = {
   colorScheme: 'dark light',
 };
 
-const trustedTypesScript = `
-(function() {
-  if (window.trustedTypes && window.trustedTypes.createPolicy) {
-    try {
-      // Strict Trusted Types policy - only allows safe operations
-      // This prevents DOM XSS by rejecting unsafe HTML/scripts/URLs
-      window.trustedTypes.createPolicy('default', {
-        // Only allow plain text content, no HTML tags
-        // If you need HTML, create a named policy with explicit allowlist
-        createHTML: (string, sink) => {
-          // For terminal/assistant output: only allow plain text
-          // The sink parameter tells us the target element
-          if (sink && (sink.tagName === 'PRE' || sink.tagName === 'CODE' || sink.classList?.contains('terminal-output'))) {
-            return string; // Plain text is safe in pre/code
-          }
-          // For all other sinks, reject HTML - force use of textContent instead
-          throw new TypeError('TrustedTypes: createHTML only allowed for terminal/code sinks. Use textContent for dynamic content.');
-        },
-        // Never allow dynamic script creation
-        createScript: (string, sink) => {
-          throw new TypeError('TrustedTypes: createScript is not allowed. All scripts must be statically defined or loaded via nonce.');
-        },
-        // Only allow same-origin script URLs
-        createScriptURL: (string, sink) => {
-          try {
-            const url = new URL(string, window.location.origin);
-            if (url.origin !== window.location.origin) {
-              throw new TypeError('TrustedTypes: cross-origin script URLs not allowed');
-            }
-            return string;
-          } catch {
-            throw new TypeError('TrustedTypes: invalid script URL');
-          }
-        },
-      });
-    } catch (e) {
-      // Policy already exists or Trusted Types not supported
-      console.warn('[TrustedTypes] Policy creation failed:', e.message);
-    }
-  }
-})();
-`;
+// NOTE: no page-defined Trusted Types 'default' policy is created here.
+// A strict default policy (rejecting HTML for non-terminal sinks) breaks
+// framework rendering: React/Next assign innerHTML for JSON-LD scripts
+// and hydration, and the policy rejects it. Trusted Types policies are
+// instead created by the framework itself:
+// - Next.js client  -> policy named `nextjs`
+// - webpack runtime -> policy named `nextjs#bundler`
+// Both are allowlisted in the CSP `trusted-types` directive (middleware.ts).
+// XSS protection for inline scripts comes from the CSP nonce +
+// 'strict-dynamic', not from a page-level TT policy.
 
 const themeInitScript = `
 (function() {
@@ -238,9 +206,9 @@ export default async function RootLayout({
         <link rel="alternate" href={alternateUrls.en} hrefLang="en" />
         <link rel="alternate" href={alternateUrls.sq} hrefLang="sq" />
         <link rel="alternate" href="https://eliosmernica.vercel.app/en" hrefLang="x-default" />
-        {/* Trusted Types policy. Must be created before any scripts run to prevent
-            DOM XSS sinks. Carries the per-request CSP nonce. */}
-        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: trustedTypesScript }} />
+        {/* No page-defined Trusted Types policy (see note near the top of
+            this file). Framework policies `nextjs` / `nextjs#bundler` are
+            allowlisted via the CSP header instead. */}
         {/* Theme bootstrap. Runs before React hydrates so the user never sees a
             light/dark flash. Carries the per-request CSP nonce from
             middleware so the inline script is trusted under our strict
