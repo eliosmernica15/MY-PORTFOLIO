@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { headers } from 'next/headers';
-import { Plus_Jakarta_Sans } from 'next/font/google';
+import localFont from 'next/font/local';
 import { getTranslations, getLocale } from 'next-intl/server';
 import '../globals.css';
 import { SITE } from '@/data/site';
@@ -8,11 +8,16 @@ import { Providers } from '../Providers';
 import { SwRegister } from '../sw-register';
 import { localeNames, localeFlags } from '@/i18n/config';
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
+// Self-hosted Plus Jakarta Sans (variable, latin) — avoids the
+// build-time Google Fonts fetch in next/font/google, which crashes
+// Vercel builds with "Cannot read properties of null (reading '1')"
+// in @next/font's google loader whenever the CSS response parsing
+// yields a non-font URL (confirmed variable wght range 200-800).
+const jakarta = localFont({
+  src: '../fonts/plus-jakarta-sans-latin-variable.woff2',
   display: 'swap',
   variable: '--font-jakarta',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: '200 800',
   preload: true,
 });
 

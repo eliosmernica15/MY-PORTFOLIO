@@ -18,13 +18,6 @@ const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 // also lets any script the inline bootstrap loads (the Next.js RSC
 // runtime and its chunks) run without their own hashes — which is how
 // the RSC payload data gets handed to React and the page hydrates.
-// Generate a per-request CSP nonce. The layout reads this from the
-// `x-nonce` request header (via `headers()`) and attaches it to every
-// inline <script> it renders. Pairing the nonce with `'strict-dynamic'`
-// also lets any script the inline bootstrap loads (the Next.js RSC
-// runtime and its chunks) run without their own hashes — which is how
-// the RSC payload data gets handed to React and the page hydrates.
-// Cache-busting: 2026-11-07T20:00:00Z - Force redeploy to clear redirect loop and prerender cache
 function generateNonce(): string {
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
@@ -42,7 +35,7 @@ function getLocaleFromPath(pathname: string): string | null {
 }
 
 function getLocaleFromCookie(req: NextRequest): string | null {
-  const cookie = req.cookies.get('NEXT_LOCALE')?.value;
+  const cookie = req.cookies.get(LOCALE_COOKIE_NAME)?.value;
   if (cookie && ['en', 'sq'].includes(cookie)) {
     return cookie;
   }
@@ -85,80 +78,17 @@ export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const pathnameLocale = getLocaleFromPath(pathname);
 
-  // SIMPLE FIX: Don't do any locale routing in middleware.
-  // Just set the locale cookie based on accept-language and continue.
-  // This completely eliminates redirect loops.
-  // Locale detection/routing will be handled client-side or in layout.
-  const cookieLocale = getLocaleFromCookie(req);
-  const acceptLangLocale = getLocaleFromAcceptLanguage(req);
-  const locale = pathnameLocale || cookieLocale || getLocaleFromAcceptLanguage(req) || 'en';
-
-  const response = NextResponse.next();
-
-  // Set locale cookie for downstream components
-  response.cookies.set('NEXT_LOCALE', locale, {
-    maxAge: 60 * 60 * 24 * 365, // 1 year
-    path: '/',
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-  });
-
-  // Add nonce and security headers
+  // Generate nonce once for the entire middleware
   const nonce = generateNonce();
   const cspHeader = buildCsp(nonce);
   const cspReportOnlyHeader = buildCspReportOnly(nonce);
 
-  response.headers.set('Content-Security-Policy', cspHeader);
-  response.headers.set('Content-Security-Policy-Report-Only', cspReportOnlyHeader);
-  response.headers.set('Permissions-Policy', buildPermissionsPolicy());
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('X-Frame-Options', 'DENY');
-  response.headers.set('X-DNS-Prefetch-Control', 'off');
-  response.headers.set('X-Download-Options', 'noopen');
-  response.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
-  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-  response.headers.set('Expect-CT', 'max-age=86400, enforce');
-  response.headers.set('Vary', 'Accept-Encoding');
-
-  return response;
-
-  // Locale exists in path, continue with normal middleware
-  const nonce = generateNonce();
-  const cspHeader = buildCsp(nonce);
-  const cspReportOnlyHeader = buildCspReportOnly(nonce);
-
-  // Update locale cookie if different from path
-  const cookieLocale = getLocaleFromCookie(req);
-  if (cookieLocale !== pathnameLocale) {
-    const response = NextResponse.next();
-    response.cookies.set('NEXT_LOCALE', pathnameLocale, {
-      maxAge: 60 * 60 * 24 * 365,
-      path: '/',
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-    });
-
-    // Add security headers
-    const nonce = generateNonce();
-    const cspHeader = buildCsp(nonce);
-    const cspReportOnlyHeader = buildCspReportOnly(nonce);
-
-    response.headers.set('Content-Security-Policy', cspHeader);
-    response.headers.set('Content-Security-Policy-Report-Only', cspReportOnlyHeader);
-    response.headers.set('Permissions-Policy', buildPermissionsPolicy());
-    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-    response.headers.set('X-Content-Type-Options', 'nosniff');
-    response.headers.set('X-Frame-Options', 'DENY');
-    response.headers.set('X-DNS-Prefetch-Control', 'off');
-    response.headers.set('X-Download-Options', 'noopen');
-    response.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
-    response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-    response.headers.set('Expect-CT', 'max-age=86400, enforce');
-    response.headers.set('Vary', 'Accept-Encoding');
-
-    return response;
-  }
+  // No locale routing in middleware — this eliminates redirect loops.
+  // The locale is resolved from the path, then the cookie, then
+  // Accept-Language, and stored in the locale cookie for downstream
+  // components. Locale rendering is handled by the layout / client.
+  const locale =
+    pathnameLocale || getLocaleFromCookie(req) || getLocaleFromAcceptLanguage(req) || 'en';
 
   // Forward the nonce to the request so server components (the layout) can
   // read it from `headers()` and attach it to inline <script> tags. We
@@ -168,32 +98,43 @@ export function middleware(req: NextRequest) {
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set('x-nonce', nonce);
 
-  const res = NextResponse.next({ request: { headers: requestHeaders } });
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 
-  // Enforced CSP
-  res.headers.set('Content-Security-Policy', cspHeader);
-  // Report-Only CSP for violation monitoring without blocking
-  res.headers.set('Content-Security-Policy-Report-Only', cspReportOnlyHeader);
+  // Set locale cookie for downstream components
+  response.cookies.set(LOCALE_COOKIE_NAME, pathnameLocale || locale, {
+    maxAge: LOCALE_COOKIE_MAX_AGE,
+    path: '/',
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+  });
+
+  // CSP headers (nonce-based, with 'strict-dynamic')
+  response.headers.set('Content-Security-Policy', cspHeader);
+  response.headers.set('Content-Security-Policy-Report-Only', cspReportOnlyHeader);
 
   // Additional security headers (removed overly restrictive COEP/CORP/COOP)
-  res.headers.set('Permissions-Policy', buildPermissionsPolicy());
-  res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  res.headers.set('X-Content-Type-Options', 'nosniff');
-  res.headers.set('X-Frame-Options', 'DENY');
-  res.headers.set('X-DNS-Prefetch-Control', 'off');
-  res.headers.set('X-Download-Options', 'noopen');
-  res.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
+  response.headers.set('Permissions-Policy', buildPermissionsPolicy());
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-DNS-Prefetch-Control', 'off');
+  response.headers.set('X-Download-Options', 'noopen');
+  response.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
 
   // HSTS with preload preparation (max-age=2 years, include subdomains)
   // Note: Submit to hstspreload.org after verifying all subdomains work
-  res.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 
   // Expect-CT for Certificate Transparency
-  res.headers.set('Expect-CT', 'max-age=86400, enforce');
+  response.headers.set('Expect-CT', 'max-age=86400, enforce');
 
-  res.headers.set('Vary', 'Accept-Encoding');
+  response.headers.set('Vary', 'Accept-Encoding');
 
-  return res;
+  return response;
 }
 
 function buildCsp(nonce: string): string {
@@ -248,7 +189,7 @@ function buildCspReportOnly(nonce: string): string {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' data: https://fonts.gstatic.com",
     "img-src 'self' data: blob: https:",
-    "connect-src 'self' https://api.emailjs.com https://api.github.com https://prod.spline.design https://*.spline.design https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com",
+    "connect-src 'self' https://api.emailjs.com https://api.github.com https://prod.spline.design https://*.spline.design https://unpkg.com",
     "frame-src 'self' https://my.spline.design https://*.spline.design",
     "worker-src 'self' blob:",
     "manifest-src 'self'",
@@ -258,6 +199,7 @@ function buildCspReportOnly(nonce: string): string {
     "form-action 'self'",
     "frame-ancestors 'none'",
     "upgrade-insecure-requests",
+    // Report violations to our endpoint
     "report-uri /api/csp-report",
   ].join('; ');
 }
