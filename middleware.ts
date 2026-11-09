@@ -145,8 +145,14 @@ function buildCsp(nonce: string): string {
 
   return [
     "default-src 'self'",
-    // Trusted Types for DOM XSS prevention
-    "trusted-types default allow-duplicates; require-trusted-types-for 'script'",
+    // Trusted Types for DOM XSS prevention. NOTE: `require-trusted-types-for
+    // 'script'` must NOT be set here — it forces every innerHTML assignment
+    // (React's dangerouslySetInnerHTML, hydration, etc.) to use TrustedHTML,
+    // and any code that doesn't create a TrustedType policy throws
+    // "This document requires 'TrustedHTML' assignment", breaking the page.
+    // Keeping only `trusted-types default` still permits React's internal
+    // Trusted Types policy to work.
+    "trusted-types default allow-duplicates",
     // `'strict-dynamic'` is the key directive: it tells the browser to
     // trust any script loaded by a nonced/trusted script. That covers
     // Next.js's RSC runtime (loaded by the nonced theme-init) and
@@ -184,7 +190,10 @@ function buildCspReportOnly(nonce: string): string {
   // This allows us to catch violations without blocking anything
   return [
     "default-src 'self'",
-    "trusted-types default allow-duplicates; require-trusted-types-for 'script'",
+    // (No require-trusted-types-for here either — see buildCsp. Also no
+    // upgrade-insecure-requests: it's ignored in report-only policies and
+    // only logs a console error.)
+    "trusted-types default allow-duplicates",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' ${NEXT_REQUEST_ANIMATION_FRAME_SHA256} ${NEXT_F_BOOTSTRAP_SHA256} https://prod.spline.design https://unpkg.com`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' data: https://fonts.gstatic.com",
@@ -198,7 +207,6 @@ function buildCspReportOnly(nonce: string): string {
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    "upgrade-insecure-requests",
     // Report violations to our endpoint
     "report-uri /api/csp-report",
   ].join('; ');
