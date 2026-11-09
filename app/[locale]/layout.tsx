@@ -97,14 +97,25 @@ export const viewport: Viewport = {
 // XSS protection for inline scripts comes from the CSP nonce +
 // 'strict-dynamic', not from a page-level TT policy.
 
+// Resolves the theme from the SAME single source of truth ThemeProvider
+// uses (elios-theme-config), so pre-hydration and post-hydration agree:
+// cookie > explicit config mode > legacy localStorage key > system pref.
 const themeInitScript = `
 (function() {
   try {
     var t = document.cookie.match(/(?:^|; )theme=(dark|light)/);
-    var stored = null;
-    try { stored = localStorage.getItem('theme'); } catch (e) {}
+    var cfgMode = null;
+    try {
+      var raw = localStorage.getItem('elios-theme-config');
+      if (raw) cfgMode = JSON.parse(raw).mode;
+    } catch (e) {}
+    var legacy = null;
+    try { legacy = localStorage.getItem('theme'); } catch (e) {}
     var pref = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    var theme = t ? t[1] : (stored === 'dark' || stored === 'light' ? stored : pref);
+    var theme = t ? t[1]
+      : (cfgMode === 'dark' || cfgMode === 'light') ? cfgMode
+      : (legacy === 'dark' || legacy === 'light') ? legacy
+      : pref;
     document.documentElement.setAttribute('data-theme', theme);
   } catch(e) {
     document.documentElement.setAttribute('data-theme', 'dark');

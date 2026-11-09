@@ -176,7 +176,7 @@ const Nav: React.FC = () => {
                       isActive ? 'nav-link-active' : ''
                     }`}
                     style={{
-                      color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
+                      color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
                     }}
                     aria-current={isActive ? 'page' : undefined}
                   >
@@ -235,7 +235,7 @@ const Nav: React.FC = () => {
                     onClick={e => handleNavClick(e, link)}
                     className="text-left flex items-center justify-between py-2 interactive-btn"
                     style={{
-                      color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
+                      color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
                     }}
                   >
                     <span className="flex items-center gap-3 sm:gap-4 text-2xl sm:text-3xl font-bold">

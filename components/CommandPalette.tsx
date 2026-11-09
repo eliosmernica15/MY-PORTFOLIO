@@ -182,10 +182,19 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         category: 'Settings',
         icon: <Sparkles size={16} />,
         action: () => {
+          // Persist through the unified theme config (the single source
+          // of truth ThemeProvider reads); data-theme itself is applied
+          // by ThemeProvider's config effect (and the palette sync
+          // observer keeps colors consistent).
           const html = document.documentElement;
           const current = html.getAttribute('data-theme');
-          html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-          localStorage.setItem('theme', current === 'dark' ? 'light' : 'dark');
+          const newMode = current === 'dark' ? 'light' : 'dark';
+          html.setAttribute('data-theme', newMode);
+          try {
+            const raw = localStorage.getItem('elios-theme-config');
+            const cfg = raw ? JSON.parse(raw) : {};
+            localStorage.setItem('elios-theme-config', JSON.stringify({ ...cfg, mode: newMode }));
+          } catch {}
         },
         keywords: ['theme', 'dark', 'light', 'toggle', 'mode'],
         shortcut: '⌘K → th',

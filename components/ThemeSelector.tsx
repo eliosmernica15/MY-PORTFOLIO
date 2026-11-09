@@ -76,10 +76,8 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   };
 
   const handleModeClick = (newMode: typeof config.mode) => {
-    if (config.mode === 'auto' || config.mode === 'time') {
-      // Clear manual override when explicitly selecting a mode
-      localStorage.removeItem('theme-manual-override');
-    }
+    // setMode persists the choice to elios-theme-config (the single
+    // source of truth for theme state).
     setMode(newMode);
     if (variant === 'dropdown') setIsOpen(false);
   };

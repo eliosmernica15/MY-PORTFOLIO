@@ -6,6 +6,7 @@ import {
   ThemeContextValue,
   DEFAULT_THEME_CONFIG,
   applyThemeConfig,
+  applyPalette,
   getStoredThemeConfig,
   saveThemeConfig,
   ACCENT_PALETTES,
@@ -101,25 +102,49 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setConfig(prev => ({ ...prev, autoSwitch: enabled }));
   }, []);
 
-  // Toggle theme (light <-> dark)
+  // Toggle theme (light <-> dark). The resolved mode is persisted as an
+  // explicit config mode (the single source of truth); the config effect
+  // then applies it via applyThemeConfig, which sets data-theme AND the
+  // palette vars together. Writing data-theme directly here used to
+  // desync the inline palette vars from the theme, producing
+  // mixed/wrong colors.
   const toggleTheme = useCallback(() => {
-    const currentMode = document.documentElement.getAttribute('data-theme');
-    const newMode = currentMode === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', newMode);
-    setMode(newMode);
-
-    // If in auto/time mode, temporarily override
-    if (config.mode === 'auto' || config.mode === 'time') {
-      // Store the manual override
-      localStorage.setItem('theme-manual-override', newMode);
-    }
-  }, [config.mode]);
+    setConfig(prev => {
+      const current =
+        prev.mode === 'light' || prev.mode === 'dark'
+          ? prev.mode
+          : (document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+      return { ...prev, mode: current === 'light' ? 'dark' : 'light' };
+    });
+  }, []);
 
   // Get current palette
   const palette = useMemo(
     () => ACCENT_PALETTES.find(p => p.id === config.paletteId) || ACCENT_PALETTES[0],
     [config.paletteId]
   );
+
+  // Keep the inline palette variables in sync whenever data-theme
+  // changes. Several writers set data-theme directly (toggleTheme, the
+  // time/auto effects above, and the pre-hydration bootstrap script in
+  // the layout), bypassing applyThemeConfig. Without this sync, the
+  // inline palette vars from the previous theme stay on <html> and
+  // override the new theme's CSS vars — producing mixed/wrong colors
+  // (e.g. dark accent vars on a light page, invisible form fields).
+  useEffect(() => {
+    if (!mounted) return;
+    const root = document.documentElement;
+    const sync = () => {
+      const theme = root.getAttribute('data-theme');
+      if (theme === 'light' || theme === 'dark') {
+        applyPalette(palette, theme);
+      }
+    };
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, [mounted, palette]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
