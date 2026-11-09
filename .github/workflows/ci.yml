@@ -68,13 +68,11 @@ jobs:
         with:
           fetch-depth: 0 # Needed for gitleaks
 
+      # The action auto-discovers .gitleaks.toml at the repo root.
       - name: Run gitleaks
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          config: .gitleaks.toml
-          verbose: true
 
   # Dependency vulnerability scanning (production deps - this is what ships)
   security:
@@ -102,7 +100,7 @@ jobs:
         run: npm audit --omit=dev --audit-level=high
 
       - name: Run osv-scanner
-        uses: google/osv-scanner-action/osv-scanner-action@v2
+        uses: google/osv-scanner-action/osv-scanner-action@v2.7.0
         with:
           scan-args: |-
             --recursive
