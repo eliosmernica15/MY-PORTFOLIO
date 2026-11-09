@@ -10,7 +10,7 @@
     "build": "node --require ./scripts/ipv4-first.cjs node_modules/next/dist/bin/next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "node scripts/build-knowledge.mjs && tsc --noEmit",
     "analyze": "ANALYZE=true next build",
     "sync:kb": "node scripts/build-knowledge.mjs",
     "postinstall": "node scripts/patch-vercel-og.cjs",
