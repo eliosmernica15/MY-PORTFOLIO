@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { headers } from 'next/headers';
 import localFont from 'next/font/local';
 import { getTranslations, getLocale } from 'next-intl/server';
-import '../globals.css';
+// globals.css is imported once in the root layout (app/layout.tsx) so
+// that both the root page (/) and [locale] routes get styles.
 import { SITE } from '@/data/site';
 import { Providers } from '../Providers';
 import { SwRegister } from '../sw-register';
