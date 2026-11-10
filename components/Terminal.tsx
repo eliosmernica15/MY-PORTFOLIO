@@ -1,28 +1,40 @@
-'use client';
+"use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Terminal as TerminalIcon, Minus, X, Maximize2, Send } from 'lucide-react';
-import { useFocusTrap } from '@/hooks/useFocusTrap';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { useKeyShortcut } from '@/hooks/useKeyShortcut';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { PROJECTS } from '@/data/projects';
-import { SERVICES } from '@/data/services';
-import { SKILL_CATEGORIES } from '@/data/skills';
-import { NOTES } from '@/data/notes';
-import { NOW } from '@/data/now';
-import { SITE } from '@/data/site';
-import { useTheme } from '../context/ThemeContext';
-import { play } from '@/lib/sound';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  Terminal as TerminalIcon,
+  Minus,
+  X,
+  Maximize2,
+  Send,
+} from "lucide-react";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useKeyShortcut } from "@/hooks/useKeyShortcut";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { PROJECTS } from "@/data/projects";
+import { SERVICES } from "@/data/services";
+import { SKILL_CATEGORIES } from "@/data/skills";
+import { NOTES } from "@/data/notes";
+import { NOW } from "@/data/now";
+import { SITE } from "@/data/site";
+import { useTheme } from "@/context/ThemeProvider";
+import { play } from "@/lib/sound";
 
 // ---------- Types ----------
 
 type TerminalAction =
-  | { type: 'scroll_to'; target: string }
-  | { type: 'open_link'; target: string }
-  | { type: 'open_route'; target: string }
-  | { type: 'set_theme'; theme: 'dark' | 'light' | 'toggle' }
-  | { type: 'clear' };
+  | { type: "scroll_to"; target: string }
+  | { type: "open_link"; target: string }
+  | { type: "open_route"; target: string }
+  | { type: "set_theme"; theme: "dark" | "light" | "toggle" }
+  | { type: "clear" };
 
 type CommandOutput = string | { output: string; action?: TerminalAction };
 
@@ -39,14 +51,17 @@ interface TerminalProps {
 
 // ---------- Command map ----------
 
-const COMMANDS: Record<string, { description: string; run: (args: string[]) => CommandOutput }> = {
+const COMMANDS: Record<
+  string,
+  { description: string; run: (args: string[]) => CommandOutput }
+> = {
   help: {
-    description: 'List every command with a one-line description.',
+    description: "List every command with a one-line description.",
     run: () => {
       const list = Object.entries(COMMANDS)
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([name, c]) => `  ${name.padEnd(14)}  ${c.description}`)
-        .join('\n');
+        .join("\n");
       return {
         output: `Available commands:\n${list}\n\nTip: ⌘/ctrl+L clears the buffer. Esc closes.`,
       };
@@ -54,96 +69,106 @@ const COMMANDS: Record<string, { description: string; run: (args: string[]) => C
   },
 
   about: {
-    description: 'A short bio.',
+    description: "A short bio.",
     run: () => `${SITE.name} — ${SITE.title}. ${SITE.tagline}`,
   },
 
   whoami: {
-    description: 'Easter egg.',
-    run: () => 'elios@worldwide',
+    description: "Easter egg.",
+    run: () => "elios@worldwide",
   },
 
   projects: {
-    description: 'List projects with id, title, year.',
+    description: "List projects with id, title, year.",
     run: () => {
       const lines = PROJECTS.map(
-        p => `  ${p.id.padEnd(12)}  ${p.title}  (${p.year})  [${p.category}]`,
+        (p) => `  ${p.id.padEnd(12)}  ${p.title}  (${p.year})  [${p.category}]`,
       );
-      return `Projects (${PROJECTS.length}):\n${lines.join('\n')}\n\nTry \`repo <id>\` to open a case study.`;
+      return `Projects (${PROJECTS.length}):\n${lines.join("\n")}\n\nTry \`repo <id>\` to open a case study.`;
     },
   },
 
   skills: {
-    description: 'Categorized skill list.',
+    description: "Categorized skill list.",
     run: () => {
-      const sections = SKILL_CATEGORIES.map(cat => {
-        const list = cat.skills.map(s => `    ${s.name.padEnd(28)} ${'●'.repeat(s.level)}`).join('\n');
+      const sections = SKILL_CATEGORIES.map((cat) => {
+        const list = cat.skills
+          .map((s) => `    ${s.name.padEnd(28)} ${"●".repeat(s.level)}`)
+          .join("\n");
         return `[${cat.name}]\n${list}`;
       });
-      return sections.join('\n\n');
+      return sections.join("\n\n");
     },
   },
 
   services: {
-    description: 'List the services I offer.',
+    description: "List the services I offer.",
     run: () => {
-      const lines = SERVICES.map(s => `  ${s.number}  ${s.title}\n      ${s.desc}`);
-      return `Services (${SERVICES.length}):\n${lines.join('\n\n')}`;
+      const lines = SERVICES.map(
+        (s) => `  ${s.number}  ${s.title}\n      ${s.desc}`,
+      );
+      return `Services (${SERVICES.length}):\n${lines.join("\n\n")}`;
     },
   },
 
   now: {
-    description: 'What I am focused on right now.',
+    description: "What I am focused on right now.",
     run: () => `Now: ${NOW.line}\nLast updated: ${NOW.updatedAt}`,
   },
 
   contact: {
-    description: 'Scroll to the contact form.',
+    description: "Scroll to the contact form.",
     run: () => ({
       output: `Email ${SITE.email} or use the form below. Opening it…`,
-      action: { type: 'scroll_to' as const, target: '#contact' },
+      action: { type: "scroll_to" as const, target: "#contact" },
     }),
   },
 
   cv: {
-    description: 'Download the CV.',
+    description: "Download the CV.",
     run: () => ({
-      output: 'Downloading CV…',
-      action: { type: 'open_link' as const, target: '/Elios-Mernica-CV.pdf' },
+      output: "Downloading CV…",
+      action: { type: "open_link" as const, target: "/Elios-Mernica-CV.pdf" },
     }),
   },
 
   theme: {
-    description: 'theme dark|light|toggle',
+    description: "theme dark|light|toggle",
     run: (args) => {
-      const arg = (args[0] || '').toLowerCase();
-      if (arg === 'dark' || arg === 'light') {
-        return { output: `Switching to ${arg}…`, action: { type: 'set_theme', theme: arg } };
+      const arg = (args[0] || "").toLowerCase();
+      if (arg === "dark" || arg === "light") {
+        return {
+          output: `Switching to ${arg}…`,
+          action: { type: "set_theme", theme: arg },
+        };
       }
-      if (arg === 'toggle' || arg === '') {
+      if (arg === "toggle" || arg === "") {
         // The previous version hard-coded `theme: 'dark'`, so
         // `theme toggle` always switched to dark regardless of the
         // current state. Now we send `theme: 'toggle'` and let
         // `executeAction` invoke the provider's toggleTheme(), which
         // flips based on the current value.
-        return { output: 'Toggling theme…', action: { type: 'set_theme', theme: 'toggle' } };
+        return {
+          output: "Toggling theme…",
+          action: { type: "set_theme", theme: "toggle" },
+        };
       }
-      return 'Usage: theme dark | light | toggle';
+      return "Usage: theme dark | light | toggle";
     },
   },
 
   clear: {
-    description: 'Clear the message buffer.',
-    run: () => ({ output: '', action: { type: 'clear' } }),
+    description: "Clear the message buffer.",
+    run: () => ({ output: "", action: { type: "clear" } }),
   },
 
   history: {
-    description: 'Show recently run commands.',
-    run: () => '(history is shown as you scroll with ↑/↓)',
+    description: "Show recently run commands.",
+    run: () => "(history is shown as you scroll with ↑/↓)",
   },
 
   sudo: {
-    description: 'Easter egg.',
+    description: "Easter egg.",
     run: (args) =>
       args.length === 0
         ? "sudo what? Try \`sudo rm -rf /\` for a laugh."
@@ -151,74 +176,75 @@ const COMMANDS: Record<string, { description: string; run: (args: string[]) => C
   },
 
   matrix: {
-    description: 'Easter egg.',
+    description: "Easter egg.",
     run: () =>
-      'There is no spoon. There is only the codebase.\n(Tip: the hero has a live particle field — go look.)',
+      "There is no spoon. There is only the codebase.\n(Tip: the hero has a live particle field — go look.)",
   },
 
   coffee: {
-    description: 'Easter egg.',
-    run: () => 'I run on espresso and well-named variables. Ratio: 1:3, espresso to variables, on a good day.',
+    description: "Easter egg.",
+    run: () =>
+      "I run on espresso and well-named variables. Ratio: 1:3, espresso to variables, on a good day.",
   },
 
   github: {
-    description: 'Open the GitHub activity section.',
+    description: "Open the GitHub activity section.",
     run: () => ({
-      output: 'Opening the GitHub section…',
-      action: { type: 'scroll_to' as const, target: '#github' },
+      output: "Opening the GitHub section…",
+      action: { type: "scroll_to" as const, target: "#github" },
     }),
   },
 
   echo: {
-    description: 'echo <text>',
-    run: (args) => args.join(' '),
+    description: "echo <text>",
+    run: (args) => args.join(" "),
   },
 
   date: {
-    description: 'Current date and time.',
+    description: "Current date and time.",
     run: () => new Date().toString(),
   },
 
   repo: {
-    description: 'repo <projectId> — open a project case study.',
+    description: "repo <projectId> — open a project case study.",
     run: (args) => {
-      const id = (args[0] || '').toLowerCase();
-      const p = PROJECTS.find(p => p.id === id);
+      const id = (args[0] || "").toLowerCase();
+      const p = PROJECTS.find((p) => p.id === id);
       if (!p) {
-        const known = PROJECTS.map(p => p.id).join(', ');
+        const known = PROJECTS.map((p) => p.id).join(", ");
         return `Unknown project "${id}". Try one of: ${known}.`;
       }
       return {
         output: `Opening /project/${p.id}…`,
-        action: { type: 'open_link' as const, target: `/project/${p.id}` },
+        action: { type: "open_link" as const, target: `/project/${p.id}` },
       };
     },
   },
 
   note: {
-    description: 'note <slug> — open a writing post.',
+    description: "note <slug> — open a writing post.",
     run: (args) => {
-      const slug = (args[0] || '').toLowerCase();
-      const n = NOTES.find(n => n.slug === slug);
+      const slug = (args[0] || "").toLowerCase();
+      const n = NOTES.find((n) => n.slug === slug);
       if (!n) {
-        const known = NOTES.map(n => n.slug).join(', ');
+        const known = NOTES.map((n) => n.slug).join(", ");
         return `Unknown note "${slug}". Try one of: ${known}.`;
       }
       return {
         output: `Opening /notes/${n.slug}…`,
-        action: { type: 'open_link' as const, target: `/notes/${n.slug}` },
+        action: { type: "open_link" as const, target: `/notes/${n.slug}` },
       };
     },
   },
 
   open: {
-    description: 'open <sectionId> — scroll to a section by id.',
+    description: "open <sectionId> — scroll to a section by id.",
     run: (args) => {
-      const id = args[0] || '';
-      if (!id) return 'Usage: open <sectionId>';
+      const id = args[0] || "";
+      if (!id) return "Usage: open <sectionId>";
       return {
         output: `Scrolling to #${id}…`,
-        action: { type: 'scroll_to' as const, target: `#${id}` },
+        action: { type: "scroll_to" as const, target: `#${id}` },
       };
     },
   },
@@ -227,14 +253,14 @@ const COMMANDS: Record<string, { description: string; run: (args: string[]) => C
 const COMMAND_NAMES = Object.keys(COMMANDS);
 
 function longestCommonPrefix(items: string[]): string {
-  if (items.length === 0) return '';
+  if (items.length === 0) return "";
   let prefix = items[0];
   for (let i = 1; i < items.length; i++) {
     const s = items[i];
     let j = 0;
     while (j < prefix.length && j < s.length && prefix[j] === s[j]) j++;
     prefix = prefix.slice(0, j);
-    if (!prefix) return '';
+    if (!prefix) return "";
   }
   return prefix;
 }
@@ -260,14 +286,14 @@ export default function Terminal({}: TerminalProps = {}) {
   // bug — toggle from light should go to dark, toggle from dark
   // should go to light).
   const setTheme = useCallback(
-    (next: 'dark' | 'light' | 'toggle') => {
-      if (next === 'toggle') {
+    (next: "dark" | "light" | "toggle") => {
+      if (next === "toggle") {
         toggleTheme();
         return;
       }
       if (currentTheme !== next) toggleTheme();
     },
-    [currentTheme, toggleTheme]
+    [currentTheme, toggleTheme],
   );
 
   const reduced = useReducedMotion();
@@ -283,23 +309,36 @@ export default function Terminal({}: TerminalProps = {}) {
   // ref tracks the last value that was actually persisted so a
   // later resize-clamp knows what's "live" without re-reading
   // localStorage.
-  const [committedPosition, setCommittedPosition] = useLocalStorage<{ x: number; y: number }>(
-    'terminal-pos',
-    { x: 24, y: 24 }
-  );
+  const [committedPosition, setCommittedPosition] = useLocalStorage<{
+    x: number;
+    y: number;
+  }>("terminal-pos", { x: 24, y: 24 });
   const [position, setPosition] = useState(committedPosition);
   const positionRef = useRef(committedPosition);
-  const [history, setHistory] = useLocalStorage<string[]>('terminal-history', []);
+  const [history, setHistory] = useLocalStorage<string[]>(
+    "terminal-history",
+    [],
+  );
   const [messages, setMessages] = useState<TerminalMessage[]>([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [hIndex, setHIndex] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<{ active: boolean; startX: number; startY: number; baseX: number; baseY: number }>({
-    active: false, startX: 0, startY: 0, baseX: 0, baseY: 0,
+  const dragRef = useRef<{
+    active: boolean;
+    startX: number;
+    startY: number;
+    baseX: number;
+    baseY: number;
+  }>({
+    active: false,
+    startX: 0,
+    startY: 0,
+    baseX: 0,
+    baseY: 0,
   });
 
   // Mobile check.
@@ -340,8 +379,8 @@ export default function Terminal({}: TerminalProps = {}) {
       }
     };
     check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -349,15 +388,21 @@ export default function Terminal({}: TerminalProps = {}) {
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       setMessages([
-        { id: '0', prompt: 'elios', text: 'Welcome — type \`help\` to list commands. Esc to close. ⌘/ctrl+L to clear.', ts: Date.now() },
+        {
+          id: "0",
+          prompt: "elios",
+          text: "Welcome — type \`help\` to list commands. Esc to close. ⌘/ctrl+L to clear.",
+          ts: Date.now(),
+        },
       ]);
-      play('boot');
+      play("boot");
     }
   }, [isOpen, messages.length]);
 
   // Autoscroll to bottom.
   useEffect(() => {
-    if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+    if (bodyRef.current)
+      bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
   }, [messages]);
 
   // Focus input when open.
@@ -369,22 +414,25 @@ export default function Terminal({}: TerminalProps = {}) {
   }, [isOpen, minimized]);
 
   // Keyboard shortcut to toggle the panel (open/close).
-  useKeyShortcut({ key: '`', handler: () => setIsOpen(v => !v) }, true);
+  useKeyShortcut({ key: "`", handler: () => setIsOpen((v) => !v) }, true);
 
   // Keyboard shortcut to toggle minimize: ⌘/Ctrl+M. Only meaningful on
   // desktop — on mobile the panel is fullscreen, so minimize = close.
-  useKeyShortcut({
-    key: 'm',
-    meta: true,
-    handler: () => {
-      setIsOpen(prevOpen => {
-        if (!prevOpen) return true;
-        if (isMobile) return false; // mobile: Ctrl+M closes
-        setMinimized(prevMin => !prevMin);
-        return true;
-      });
+  useKeyShortcut(
+    {
+      key: "m",
+      meta: true,
+      handler: () => {
+        setIsOpen((prevOpen) => {
+          if (!prevOpen) return true;
+          if (isMobile) return false; // mobile: Ctrl+M closes
+          setMinimized((prevMin) => !prevMin);
+          return true;
+        });
+      },
     },
-  }, isOpen);
+    isOpen,
+  );
 
   // Esc handling. On desktop, Esc minimizes so users can dismiss the
   // panel without losing their session. On mobile (fullscreen), Esc
@@ -392,23 +440,23 @@ export default function Terminal({}: TerminalProps = {}) {
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         e.preventDefault();
         if (isMobile) {
           setIsOpen(false);
         } else {
-          setMinimized(prev => !prev);
+          setMinimized((prev) => !prev);
         }
         return;
       }
       // Ctrl/Cmd+L clears
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'l') {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "l") {
         e.preventDefault();
         runClear();
       }
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, isMobile]);
 
@@ -421,8 +469,8 @@ export default function Terminal({}: TerminalProps = {}) {
   const focusTrapRef = useFocusTrap<HTMLDivElement>({
     active: isOpen && !minimized,
     // Exclude the trigger button from being inert so it remains focusable
-    excludeSelectors: ['[data-floating-trigger]'],
-    onActivate: () => play('boot'),
+    excludeSelectors: ["[data-floating-trigger]"],
+    onActivate: () => play("boot"),
   });
 
   // Belt-and-suspenders: when `minimized` flips, force the panel's height
@@ -436,15 +484,15 @@ export default function Terminal({}: TerminalProps = {}) {
     const el = panelRef.current;
     if (!el) return;
     if (!isMobile && minimized) {
-      el.style.setProperty('height', '44px', 'important');
-      el.style.setProperty('min-height', '44px', 'important');
-      el.style.setProperty('max-height', '44px', 'important');
+      el.style.setProperty("height", "44px", "important");
+      el.style.setProperty("min-height", "44px", "important");
+      el.style.setProperty("max-height", "44px", "important");
     } else if (!isMobile && !minimized) {
       // Clear the `!important` overrides so the React inline style and
       // the expanded CSS can take over again.
-      el.style.removeProperty('height');
-      el.style.removeProperty('min-height');
-      el.style.removeProperty('max-height');
+      el.style.removeProperty("height");
+      el.style.removeProperty("min-height");
+      el.style.removeProperty("max-height");
     }
   }, [minimized, isMobile, isOpen]);
   // Stable callback ref that writes to both the panel ref and the
@@ -453,123 +501,166 @@ export default function Terminal({}: TerminalProps = {}) {
   const combinedRef = useCallback(
     (el: HTMLDivElement | null) => {
       (panelRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-      (focusTrapRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+      (focusTrapRef as React.MutableRefObject<HTMLDivElement | null>).current =
+        el;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   const runClear = useCallback(() => {
-    setMessages([{ id: String(Date.now()), prompt: 'elios', text: 'Buffer cleared.', ts: Date.now() }]);
+    setMessages([
+      {
+        id: String(Date.now()),
+        prompt: "elios",
+        text: "Buffer cleared.",
+        ts: Date.now(),
+      },
+    ]);
   }, []);
 
-  const executeAction = useCallback((action: TerminalAction | undefined) => {
-    if (!action) return;
-    switch (action.type) {
-      case 'scroll_to': {
-        const el = document.querySelector(action.target);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        break;
-      }
-      case 'open_link':
-      case 'open_route': {
-        window.open(action.target, '_blank', 'noopener,noreferrer');
-        break;
-      }
-      case 'clear':
-        runClear();
-        break;
-      case 'set_theme':
-        setTheme(action.theme);
-        break;
-    }
-  }, [runClear, setTheme]);
-
-  const onSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    const cmd = input.trim();
-    if (!cmd) return;
-    const args = cmd.split(/\s+/);
-    const name = args[0].toLowerCase();
-    setInput('');
-    setHIndex(null);
-
-    // Push to history (de-duped consecutive).
-    setHistory(prev => {
-      const next = prev[prev.length - 1] === cmd ? prev : [...prev, cmd].slice(-50);
-      return next;
-    });
-
-    // Find the command.
-    const command = COMMANDS[name];
-    const ts = Date.now();
-    const userMsg: TerminalMessage = { id: `u-${ts}`, prompt: '$', text: cmd, ts };
-    setMessages(prev => [...prev, userMsg]);
-
-    if (!command) {
-      play('error');
-      setMessages(prev => [...prev, { id: `b-${ts}`, prompt: '', text: `command not found: ${name}. Type \`help\` for a list.`, ts }]);
-      return;
-    }
-
-    const result = command.run(args.slice(1));
-    const { output, action } = typeof result === 'string' ? { output: result, action: undefined } : result;
-    if (action?.type !== 'clear') {
-      setMessages(prev => [...prev, { id: `b-${ts}`, prompt: '', text: output, ts }]);
-    }
-    executeAction(action);
-  }, [input, setHistory, executeAction]);
-
-  const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setHistory(prev => {
-        if (prev.length === 0) return prev;
-        const next = hIndex === null ? prev.length - 1 : Math.max(0, hIndex - 1);
-        setHIndex(next);
-        setInput(prev[next] || '');
-        return prev;
-      });
-      return;
-    }
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setHistory(prev => {
-        if (prev.length === 0 || hIndex === null) return prev;
-        const next = hIndex + 1;
-        if (next >= prev.length) {
-          setHIndex(null);
-          setInput('');
-          return prev;
+  const executeAction = useCallback(
+    (action: TerminalAction | undefined) => {
+      if (!action) return;
+      switch (action.type) {
+        case "scroll_to": {
+          const el = document.querySelector(action.target);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          break;
         }
-        setHIndex(next);
-        setInput(prev[next] || '');
-        return prev;
-      });
-      return;
-    }
-    if (e.key === 'Tab') {
+        case "open_link":
+        case "open_route": {
+          window.open(action.target, "_blank", "noopener,noreferrer");
+          break;
+        }
+        case "clear":
+          runClear();
+          break;
+        case "set_theme":
+          setTheme(action.theme);
+          break;
+      }
+    },
+    [runClear, setTheme],
+  );
+
+  const onSubmit = useCallback(
+    (e: React.FormEvent) => {
       e.preventDefault();
-      const partial = input.trim().toLowerCase();
-      if (!partial || partial.includes(' ')) return;
-      const matches = COMMAND_NAMES.filter(c => c.startsWith(partial));
-      if (matches.length === 1) {
-        setInput(matches[0] + ' ');
+      const cmd = input.trim();
+      if (!cmd) return;
+      const args = cmd.split(/\s+/);
+      const name = args[0].toLowerCase();
+      setInput("");
+      setHIndex(null);
+
+      // Push to history (de-duped consecutive).
+      setHistory((prev) => {
+        const next =
+          prev[prev.length - 1] === cmd ? prev : [...prev, cmd].slice(-50);
+        return next;
+      });
+
+      // Find the command.
+      const command = COMMANDS[name];
+      const ts = Date.now();
+      const userMsg: TerminalMessage = {
+        id: `u-${ts}`,
+        prompt: "$",
+        text: cmd,
+        ts,
+      };
+      setMessages((prev) => [...prev, userMsg]);
+
+      if (!command) {
+        play("error");
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `b-${ts}`,
+            prompt: "",
+            text: `command not found: ${name}. Type \`help\` for a list.`,
+            ts,
+          },
+        ]);
         return;
       }
-      if (matches.length > 1) {
-        const lcp = longestCommonPrefix(matches);
-        if (lcp.length > partial.length) {
-          setInput(lcp);
-        } else {
-          setMessages(prev => [
-            ...prev,
-            { id: `b-${Date.now()}`, prompt: '', text: matches.join('  '), ts: Date.now() },
-          ]);
+
+      const result = command.run(args.slice(1));
+      const { output, action } =
+        typeof result === "string"
+          ? { output: result, action: undefined }
+          : result;
+      if (action?.type !== "clear") {
+        setMessages((prev) => [
+          ...prev,
+          { id: `b-${ts}`, prompt: "", text: output, ts },
+        ]);
+      }
+      executeAction(action);
+    },
+    [input, setHistory, executeAction],
+  );
+
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setHistory((prev) => {
+          if (prev.length === 0) return prev;
+          const next =
+            hIndex === null ? prev.length - 1 : Math.max(0, hIndex - 1);
+          setHIndex(next);
+          setInput(prev[next] || "");
+          return prev;
+        });
+        return;
+      }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setHistory((prev) => {
+          if (prev.length === 0 || hIndex === null) return prev;
+          const next = hIndex + 1;
+          if (next >= prev.length) {
+            setHIndex(null);
+            setInput("");
+            return prev;
+          }
+          setHIndex(next);
+          setInput(prev[next] || "");
+          return prev;
+        });
+        return;
+      }
+      if (e.key === "Tab") {
+        e.preventDefault();
+        const partial = input.trim().toLowerCase();
+        if (!partial || partial.includes(" ")) return;
+        const matches = COMMAND_NAMES.filter((c) => c.startsWith(partial));
+        if (matches.length === 1) {
+          setInput(matches[0] + " ");
+          return;
+        }
+        if (matches.length > 1) {
+          const lcp = longestCommonPrefix(matches);
+          if (lcp.length > partial.length) {
+            setInput(lcp);
+          } else {
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: `b-${Date.now()}`,
+                prompt: "",
+                text: matches.join("  "),
+                ts: Date.now(),
+              },
+            ]);
+          }
         }
       }
-    }
-  }, [input, hIndex, setHistory]);
+    },
+    [input, hIndex, setHistory],
+  );
 
   // ---- Drag handling ----
   const onHeaderMouseDown = (e: React.MouseEvent) => {
@@ -582,7 +673,7 @@ export default function Terminal({}: TerminalProps = {}) {
       baseX: positionRef.current.x,
       baseY: positionRef.current.y,
     };
-    document.body.style.userSelect = 'none';
+    document.body.style.userSelect = "none";
   };
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
@@ -614,18 +705,18 @@ export default function Terminal({}: TerminalProps = {}) {
     const onUp = () => {
       if (dragRef.current.active) {
         dragRef.current.active = false;
-        document.body.style.userSelect = '';
+        document.body.style.userSelect = "";
         // Commit the final position to localStorage now that the
         // drag is over. One write per drag instead of one per
         // frame.
         setCommittedPosition(positionRef.current);
       }
     };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
     return () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseup', onUp);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
     };
   }, [setPosition, setCommittedPosition]);
 
@@ -633,17 +724,17 @@ export default function Terminal({}: TerminalProps = {}) {
   const panelStyle = useMemo<React.CSSProperties>(() => {
     if (isMobile) {
       return {
-        position: 'fixed',
+        position: "fixed",
         inset: 0,
         zIndex: 80,
         margin: 0,
-        width: '100vw',
-        height: '100dvh',
+        width: "100vw",
+        height: "100dvh",
         // iPhone notch + home indicator: pad the panel's interactive surfaces
         // so the close button stays reachable and the input isn't hidden
         // behind the indicator.
-        paddingTop: 'env(safe-area-inset-top)',
-        paddingBottom: 'env(safe-area-inset-bottom)',
+        paddingTop: "env(safe-area-inset-top)",
+        paddingBottom: "env(safe-area-inset-bottom)",
         borderRadius: 0,
       };
     }
@@ -653,11 +744,11 @@ export default function Terminal({}: TerminalProps = {}) {
     // safe-area inset. We add 8px of breathing room.
     if (minimized) {
       return {
-        position: 'fixed',
+        position: "fixed",
         left: 16,
-        bottom: 'calc(76px + env(safe-area-inset-bottom))',
+        bottom: "calc(76px + env(safe-area-inset-bottom))",
         zIndex: 80,
-        width: 'min(360px, 80vw)',
+        width: "min(360px, 80vw)",
         // Match the header's `py-2` (8px × 2 = 16px) + content (~18px
         // buttons) + the 1px border. 44px is tight and clean.
         height: 44,
@@ -665,7 +756,7 @@ export default function Terminal({}: TerminalProps = {}) {
       };
     }
     return {
-      position: 'fixed',
+      position: "fixed",
       // `position.y` is the distance from the bottom (set by the drag
       // handler — it increases when the user drags up). We position the
       // panel from the top of the viewport, offset by 80px of breathing
@@ -674,9 +765,9 @@ export default function Terminal({}: TerminalProps = {}) {
       top: `calc(80px + ${position.y}px + env(safe-area-inset-top))`,
       left: `${position.x}px`,
       zIndex: 80,
-      width: 'min(560px, 90vw)',
-      height: 'min(420px, 70vh)',
-      maxHeight: '70vh',
+      width: "min(560px, 90vw)",
+      height: "min(420px, 70vh)",
+      maxHeight: "70vh",
     };
   }, [isMobile, position, minimized]);
 
@@ -691,7 +782,7 @@ export default function Terminal({}: TerminalProps = {}) {
     if (isMobile) {
       setIsOpen(false);
     } else {
-      setMinimized(prev => !prev);
+      setMinimized((prev) => !prev);
     }
   }, [isOpen, isMobile]);
 
@@ -704,34 +795,44 @@ export default function Terminal({}: TerminalProps = {}) {
         type="button"
         onClick={onTriggerClick}
         data-floating-trigger
-        data-open={isOpen ? 'true' : 'false'}
-        data-minimized={isOpen && minimized ? 'true' : 'false'}
+        data-open={isOpen ? "true" : "false"}
+        data-minimized={isOpen && minimized ? "true" : "false"}
         className="floating-trigger group fixed left-4 sm:left-6 bottom-4 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
         style={{
-          background: 'var(--glass-bg)',
-          border: '1px solid var(--glass-border)',
-          backdropFilter: 'blur(16px)',
-          color: 'var(--text-secondary)',
-          boxShadow: '0 10px 40px -10px var(--shadow-accent)',
+          background: "var(--glass-bg)",
+          border: "1px solid var(--glass-border)",
+          backdropFilter: "blur(16px)",
+          color: "var(--text-secondary)",
+          boxShadow: "0 10px 40px -10px var(--shadow-accent)",
           // Keep clear of the iOS home indicator on devices that have one.
-          marginBottom: 'env(safe-area-inset-bottom)',
+          marginBottom: "env(safe-area-inset-bottom)",
         }}
-        aria-label={isOpen && !isMobile ? (minimized ? 'Expand terminal' : 'Minimize terminal') : 'Open terminal'}
+        aria-label={
+          isOpen && !isMobile
+            ? minimized
+              ? "Expand terminal"
+              : "Minimize terminal"
+            : "Open terminal"
+        }
         aria-expanded={isOpen}
         data-cursor-hover
       >
         {isOpen && !isMobile ? (
           // When expanded, show a chevron so the button reads as "collapse".
           minimized ? (
-            <TerminalIcon size={18} style={{ color: 'var(--accent)' }} />
+            <TerminalIcon size={18} style={{ color: "var(--accent)" }} />
           ) : (
-            <Minus size={18} style={{ color: 'var(--accent)' }} />
+            <Minus size={18} style={{ color: "var(--accent)" }} />
           )
         ) : (
-          <TerminalIcon size={18} style={{ color: 'var(--accent)' }} />
+          <TerminalIcon size={18} style={{ color: "var(--accent)" }} />
         )}
         <span className="hidden sm:inline text-xs font-mono font-bold uppercase tracking-widest opacity-80 group-hover:opacity-100">
-          {isOpen && !isMobile ? (minimized ? 'Expand' : 'Minimize') : 'Terminal'}
+          {isOpen && !isMobile
+            ? minimized
+              ? "Expand"
+              : "Minimize"
+            : "Terminal"}
         </span>
         {isOpen && !isMobile && (
           // "Live" pulse on the trigger when the panel is open & minimized,
@@ -739,9 +840,9 @@ export default function Terminal({}: TerminalProps = {}) {
           <span
             className="ml-1 w-1.5 h-1.5 rounded-full"
             style={{
-              background: 'var(--accent)',
-              boxShadow: '0 0 8px var(--shadow-accent)',
-              animation: 'pulse-live 2s ease-in-out infinite',
+              background: "var(--accent)",
+              boxShadow: "0 0 8px var(--shadow-accent)",
+              animation: "pulse-live 2s ease-in-out infinite",
             }}
             aria-hidden
           />
@@ -753,29 +854,29 @@ export default function Terminal({}: TerminalProps = {}) {
         <div
           id="terminal"
           ref={combinedRef}
-          data-state={minimized ? 'minimized' : 'open'}
+          data-state={minimized ? "minimized" : "open"}
           className="terminal-floating flex flex-col font-mono"
           style={panelStyle}
           role="dialog"
-          aria-modal={isMobile ? 'true' : 'false'}
+          aria-modal={isMobile ? "true" : "false"}
           aria-label="Terminal"
         >
           {/* Header / drag handle (or expand button when minimized) */}
           <div
             onMouseDown={onHeaderMouseDown}
             onClick={minimized ? () => setMinimized(false) : undefined}
-            role={minimized ? 'button' : undefined}
-            aria-label={minimized ? 'Expand terminal' : undefined}
+            role={minimized ? "button" : undefined}
+            aria-label={minimized ? "Expand terminal" : undefined}
             className={`flex items-center justify-between select-none transition-colors ${
               minimized
-                ? 'px-3 py-2 cursor-pointer hover:bg-[var(--surface-elevated)]'
-                : 'border-b px-4 py-2.5'
+                ? "px-3 py-2 cursor-pointer hover:bg-[var(--surface-elevated)]"
+                : "border-b px-4 py-2.5"
             }`}
             style={{
-              background: 'var(--bg-elevated, var(--bg-card))',
-              borderColor: 'var(--border)',
-              cursor: isMobile ? 'default' : (minimized ? 'pointer' : 'move'),
-              userSelect: 'none',
+              background: "var(--bg-elevated, var(--bg-card))",
+              borderColor: "var(--border)",
+              cursor: isMobile ? "default" : minimized ? "pointer" : "move",
+              userSelect: "none",
               // The header shrinks to its content height (py-2 + buttons).
               // Critically, NOT `height: 100%` — that would make the header
               // fill the whole panel and push the body to 0px.
@@ -786,14 +887,22 @@ export default function Terminal({}: TerminalProps = {}) {
               {!minimized && (
                 <div className="flex gap-1.5">
                   <button
-                    onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsOpen(false);
+                    }}
                     className="w-2.5 h-2.5 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors"
                     aria-label="Close terminal"
                   />
                   <button
-                    onClick={(e) => { e.stopPropagation(); isMobile ? setIsOpen(false) : setMinimized(v => !v); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      isMobile ? setIsOpen(false) : setMinimized((v) => !v);
+                    }}
                     className="w-2.5 h-2.5 rounded-full bg-amber-500/80 hover:bg-amber-500 transition-colors"
-                    aria-label={minimized ? 'Expand terminal' : 'Minimize terminal'}
+                    aria-label={
+                      minimized ? "Expand terminal" : "Minimize terminal"
+                    }
                   />
                   <span
                     className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 transition-colors"
@@ -802,49 +911,61 @@ export default function Terminal({}: TerminalProps = {}) {
                 </div>
               )}
               {minimized ? (
-                <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] truncate"
-                  style={{ color: 'var(--text-primary)' }}>
-                  <TerminalIcon size={14} style={{ color: 'var(--accent)' }} />
+                <span
+                  className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] truncate"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  <TerminalIcon size={14} style={{ color: "var(--accent)" }} />
                   Terminal
                   <span
                     className="ml-1 w-1.5 h-1.5 rounded-full"
                     style={{
-                      background: 'var(--accent)',
-                      boxShadow: '0 0 8px var(--shadow-accent)',
-                      animation: 'pulse-live 2s ease-in-out infinite',
+                      background: "var(--accent)",
+                      boxShadow: "0 0 8px var(--shadow-accent)",
+                      animation: "pulse-live 2s ease-in-out infinite",
                     }}
                     aria-hidden
                   />
                 </span>
               ) : (
-                <span className="text-[11px] font-bold uppercase tracking-[0.2em] ml-2 truncate"
-                  style={{ color: 'var(--text-muted)' }}>
+                <span
+                  className="text-[11px] font-bold uppercase tracking-[0.2em] ml-2 truncate"
+                  style={{ color: "var(--text-muted)" }}
+                >
                   elios@portfolio: ~$
                 </span>
               )}
             </div>
             <div className="flex items-center gap-1">
               {isOpen && !minimized && (
-                <span className="text-[10px] mr-2 font-bold uppercase tracking-widest hidden sm:inline"
-                  style={{ color: 'var(--text-muted)' }}>
+                <span
+                  className="text-[10px] mr-2 font-bold uppercase tracking-widest hidden sm:inline"
+                  style={{ color: "var(--text-muted)" }}
+                >
                   {currentTheme}
                 </span>
               )}
               {!isMobile && (
                 <button
-                  onClick={(e) => { e.stopPropagation(); setMinimized(v => !v); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMinimized((v) => !v);
+                  }}
                   className="p-1 rounded opacity-70 hover:opacity-100 transition-colors"
-                  style={{ color: 'var(--text-secondary)' }}
-                  aria-label={minimized ? 'Expand' : 'Minimize'}
-                  title={minimized ? 'Expand (⌘M)' : 'Minimize (⌘M)'}
+                  style={{ color: "var(--text-secondary)" }}
+                  aria-label={minimized ? "Expand" : "Minimize"}
+                  title={minimized ? "Expand (⌘M)" : "Minimize (⌘M)"}
                 >
                   <Minus size={14} />
                 </button>
               )}
               <button
-                onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsOpen(false);
+                }}
                 className="p-1 rounded opacity-70 hover:opacity-100 transition-colors"
-                style={{ color: 'var(--text-secondary)' }}
+                style={{ color: "var(--text-secondary)" }}
                 aria-label="Close"
                 title="Close (Esc)"
               >
@@ -859,17 +980,26 @@ export default function Terminal({}: TerminalProps = {}) {
               <div
                 ref={bodyRef}
                 className="flex-1 overflow-y-auto px-4 py-3 space-y-1.5 text-sm sm:text-[12.5px] leading-relaxed"
-                style={{ color: 'var(--text-primary)' }}
+                style={{ color: "var(--text-primary)" }}
                 aria-live="polite"
               >
-                {messages.map(m => (
+                {messages.map((m) => (
                   <div key={m.id} className="whitespace-pre-wrap break-words">
                     {m.prompt && (
-                      <span className="mr-1.5" style={{ color: 'var(--accent)' }}>
-                        {m.prompt === '$' ? '$' : `${m.prompt}@portfolio`}
+                      <span
+                        className="mr-1.5"
+                        style={{ color: "var(--accent)" }}
+                      >
+                        {m.prompt === "$" ? "$" : `${m.prompt}@portfolio`}
                       </span>
                     )}
-                    <span style={{ color: m.prompt ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+                    <span
+                      style={{
+                        color: m.prompt
+                          ? "var(--text-primary)"
+                          : "var(--text-secondary)",
+                      }}
+                    >
                       {m.text}
                     </span>
                   </div>
@@ -880,17 +1010,25 @@ export default function Terminal({}: TerminalProps = {}) {
               <form
                 onSubmit={onSubmit}
                 className="flex items-center gap-2 px-4 py-3 border-t"
-                style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated, var(--bg-card))' }}
+                style={{
+                  borderColor: "var(--border)",
+                  background: "var(--bg-elevated, var(--bg-card))",
+                }}
               >
-                <span style={{ color: 'var(--accent)' }} className="font-bold text-sm">$</span>
+                <span
+                  style={{ color: "var(--accent)" }}
+                  className="font-bold text-sm"
+                >
+                  $
+                </span>
                 <input
                   ref={inputRef}
                   type="text"
                   value={input}
-                  onChange={e => setInput(e.target.value)}
+                  onChange={(e) => setInput(e.target.value)}
                   onKeyDown={onKeyDown}
                   className="flex-1 bg-transparent border-0 outline-none text-base sm:text-[12.5px] font-mono"
-                  style={{ color: 'var(--text-primary)' }}
+                  style={{ color: "var(--text-primary)" }}
                   placeholder="type \`help\` for commands"
                   spellCheck={false}
                   autoComplete="off"
@@ -900,10 +1038,10 @@ export default function Terminal({}: TerminalProps = {}) {
                   type="submit"
                   className="inline-flex items-center justify-center rounded-lg px-3 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                   style={{
-                    background: 'var(--accent)',
-                    color: 'var(--accent-contrast)',
-                    boxShadow: '0 4px 12px var(--shadow-color)',
-                    border: '1px solid var(--border-hover)',
+                    background: "var(--accent)",
+                    color: "var(--accent-contrast)",
+                    boxShadow: "0 4px 12px var(--shadow-color)",
+                    border: "1px solid var(--border-hover)",
                   }}
                   aria-label="Send command"
                   title="Send (Enter)"

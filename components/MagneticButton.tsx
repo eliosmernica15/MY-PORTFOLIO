@@ -1,8 +1,8 @@
-import React, { useRef, memo } from 'react';
-import { useDeviceProfile } from '../hooks/useDeviceProfile';
+import React, { useRef, memo } from "react";
+import { useDeviceProfile } from "@/hooks/useDeviceProfile";
 
-type MagneticButtonVariant = 'primary' | 'secondary';
-type MagneticButtonSize = 'sm' | 'md' | 'lg';
+type MagneticButtonVariant = "primary" | "secondary";
+type MagneticButtonSize = "sm" | "md" | "lg";
 
 interface MagneticButtonProps {
   children: React.ReactNode;
@@ -15,11 +15,11 @@ interface MagneticButtonProps {
 
 const MagneticButton = memo(function MagneticButton({
   children,
-  className = '',
+  className = "",
   strength = 0.3,
   onClick,
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
 }: MagneticButtonProps) {
   const profile = useDeviceProfile();
   const ref = useRef<HTMLDivElement>(null);
@@ -40,14 +40,14 @@ const MagneticButton = memo(function MagneticButton({
   const handleMouseLeave = () => {
     const node = ref.current;
     if (!node) return;
-    node.style.transform = 'translate3d(0, 0, 0)';
+    node.style.transform = "translate3d(0, 0, 0)";
   };
 
   // Size classes
   const sizeClasses = {
-    sm: 'px-2 py-1.5 text-xs',
-    md: 'px-3 py-2 text-sm',
-    lg: 'px-4 py-2.5 text-base',
+    sm: "px-2 py-1.5 text-xs",
+    md: "px-3 py-2 text-sm",
+    lg: "px-4 py-2.5 text-base",
   };
 
   // NOTE: the wrapper intentionally has NO background/color classes.

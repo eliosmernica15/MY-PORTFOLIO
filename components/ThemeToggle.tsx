@@ -1,7 +1,7 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sun, Moon } from "lucide-react";
+import { useTheme } from "@/context/ThemeProvider";
 
 const ThemeToggle: React.FC = () => {
   const { mode, toggleTheme } = useTheme();
@@ -14,14 +14,14 @@ const ThemeToggle: React.FC = () => {
       whileTap={{ scale: 0.95 }}
       className="interactive-btn w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-300 nav-link hover:border-[var(--border-hover)]"
       style={{
-        backgroundColor: 'var(--bg-card)',
-        borderColor: 'var(--border)',
-        color: 'var(--text-secondary)',
+        backgroundColor: "var(--bg-card)",
+        borderColor: "var(--border)",
+        color: "var(--text-secondary)",
       }}
-      aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
+      aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}
     >
       <AnimatePresence mode="wait" initial={false}>
-        {mode === 'dark' ? (
+        {mode === "dark" ? (
           <motion.div
             key="sun"
             initial={{ rotate: -60, opacity: 0, scale: 0.6 }}

@@ -1,209 +1,84 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import {
-  ThemeConfig,
-  ThemeContextValue,
-  DEFAULT_THEME_CONFIG,
-  applyThemeConfig,
-  applyPalette,
-  getStoredThemeConfig,
-  saveThemeConfig,
-  ACCENT_PALETTES,
-  AccentPalette,
-} from '@/lib/theme.tokens';
+  ThemeMode,
+  getStoredTheme,
+  saveTheme,
+  applyTheme,
+} from "@/lib/theme.tokens";
 
-// Create context with default values
+interface ThemeContextValue {
+  mode: ThemeMode;
+  toggleTheme: () => void;
+  setMode: (mode: ThemeMode) => void;
+}
+
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 /**
- * ThemeProvider - Manages theme state and applies to document
- * Features:
- * - 8 curated accent color palettes
- * - Light/Dark/Auto/Time-based modes
- * - Time-of-day auto-switching
- * - LocalStorage persistence
- * - CSS custom property injection
+ * ThemeProvider - minimal light/dark theme for the monochrome portfolio.
+ *
+ * No accent palettes, no auto-switching timer, no per-user recoloring.
+ * `data-theme` on <html> is the single source of truth; globals.css
+ * defines the actual colors. Persisted in localStorage under the same
+ * key the pre-hydration bootstrap in app/layout.tsx reads, so
+ * pre- and post-hydration always agree.
  */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [config, setConfig] = useState<ThemeConfig>(DEFAULT_THEME_CONFIG);
-  const [mode, setMode] = useState<'light' | 'dark'>('dark');
+  const [mode, setModeState] = useState<ThemeMode>("dark");
   const [mounted, setMounted] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Initialize theme on mount
+  // Hydrate from storage on mount; the inline bootstrap already stamped
+  // <html data-theme>, so we read the DOM instead of recomputing.
   useEffect(() => {
-    const storedConfig = getStoredThemeConfig();
-    setConfig(storedConfig);
-    applyThemeConfig(storedConfig);
-    setMode(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+    const current = (
+      document.documentElement.getAttribute("data-theme") === "light"
+        ? "light"
+        : "dark"
+    ) as ThemeMode;
+    setModeState(current);
     setMounted(true);
   }, []);
 
-  // Apply theme whenever config changes
-  useEffect(() => {
-    if (!mounted) return;
-    applyThemeConfig(config);
-    saveThemeConfig(config);
-    setMode(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
-  }, [config, mounted]);
-
-  // Auto-switch based on time (for 'time' mode)
-  useEffect(() => {
-    if (!mounted || config.mode !== 'time' || !config.autoSwitch) return;
-
-    const checkTime = () => {
-      const hour = new Date().getHours();
-      const newMode = (hour >= 6 && hour < 20) ? 'light' : 'dark';
-      if (newMode !== mode) {
-        document.documentElement.setAttribute('data-theme', newMode);
-        setMode(newMode);
-      }
-    };
-
-    // Check immediately
-    checkTime();
-
-    // Check every minute
-    intervalRef.current = setInterval(checkTime, 60000);
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [config.mode, config.autoSwitch, mode, mounted]);
-
-  // Listen for system theme changes (for 'auto' mode)
-  useEffect(() => {
-    if (!mounted || config.mode !== 'auto') return;
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = () => {
-      const newMode = mediaQuery.matches ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', newMode);
-      setMode(newMode);
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [config.mode, mounted]);
-
-  // Palette setter
-  const setPalette = useCallback((paletteId: string) => {
-    setConfig(prev => ({ ...prev, paletteId }));
+  const setMode = useCallback((next: ThemeMode) => {
+    setModeState(next);
+    applyTheme(next);
+    saveTheme(next);
   }, []);
 
-  // Mode setter
-  const setModeConfig = useCallback((newMode: ThemeConfig['mode']) => {
-    setConfig(prev => ({ ...prev, mode: newMode }));
-  }, []);
-
-  // Auto-switch toggle
-  const setAutoSwitch = useCallback((enabled: boolean) => {
-    setConfig(prev => ({ ...prev, autoSwitch: enabled }));
-  }, []);
-
-  // Toggle theme (light <-> dark). The resolved mode is persisted as an
-  // explicit config mode (the single source of truth); the config effect
-  // then applies it via applyThemeConfig, which sets data-theme AND the
-  // palette vars together. Writing data-theme directly here used to
-  // desync the inline palette vars from the theme, producing
-  // mixed/wrong colors.
   const toggleTheme = useCallback(() => {
-    setConfig(prev => {
-      const current =
-        prev.mode === 'light' || prev.mode === 'dark'
-          ? prev.mode
-          : (document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
-      return { ...prev, mode: current === 'light' ? 'dark' : 'light' };
+    setModeState((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      applyTheme(next);
+      saveTheme(next);
+      return next;
     });
   }, []);
 
-  // Get current palette
-  const palette = useMemo(
-    () => ACCENT_PALETTES.find(p => p.id === config.paletteId) || ACCENT_PALETTES[0],
-    [config.paletteId]
+  const value = React.useMemo(
+    () => ({ mode, toggleTheme, setMode }),
+    [mode, toggleTheme, setMode],
   );
 
-  // Keep the inline palette variables in sync whenever data-theme
-  // changes. Several writers set data-theme directly (toggleTheme, the
-  // time/auto effects above, and the pre-hydration bootstrap script in
-  // the layout), bypassing applyThemeConfig. Without this sync, the
-  // inline palette vars from the previous theme stay on <html> and
-  // override the new theme's CSS vars — producing mixed/wrong colors
-  // (e.g. dark accent vars on a light page, invisible form fields).
-  useEffect(() => {
-    if (!mounted) return;
-    const root = document.documentElement;
-    const sync = () => {
-      const theme = root.getAttribute('data-theme');
-      if (theme === 'light' || theme === 'dark') {
-        applyPalette(palette, theme);
-      }
-    };
-    sync();
-    const observer = new MutationObserver(sync);
-    observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
-    return () => observer.disconnect();
-  }, [mounted, palette]);
-
-  const value = useMemo<ThemeContextValue>(
-    () => ({
-      config,
-      palette,
-      mode,
-      setPalette,
-      setMode: setModeConfig,
-      setAutoSwitch,
-      toggleTheme,
-      availablePalettes: ACCENT_PALETTES,
-    }),
-    [config, palette, mode]
-  );
+  // `mounted` gates nothing visually - kept for symmetry with the bootstrap.
+  void mounted;
 
   return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 }
 
-// Ref for interval
-const intervalRef = { current: null as NodeJS.Timeout | null };
-
-/**
- * Hook to access theme context
- */
 export function useTheme(): ThemeContextValue {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+  const ctx = useContext(ThemeContext);
+  if (!ctx) {
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
-  return context;
+  return ctx;
 }
-
-/**
- * Hook to get current palette
- */
-export function usePalette(): AccentPalette {
-  const { palette } = useTheme();
-  return palette;
-}
-
-/**
- * Hook to get current mode
- */
-export function useThemeMode(): 'light' | 'dark' {
-  const { mode } = useTheme();
-  return mode;
-}
-
-/**
- * Hook to get theme config
- */
-export function useThemeConfig(): ThemeConfig {
-  const { config } = useTheme();
-  return config;
-}
-
-export { ThemeContext };
-export default ThemeProvider;

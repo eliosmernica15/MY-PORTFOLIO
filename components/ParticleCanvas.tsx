@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from 'react';
-import { useTheme } from '../context/ThemeContext';
-import { useDeviceProfile } from '../hooks/useDeviceProfile';
+import React, { useRef, useEffect } from "react";
+import { useTheme } from "@/context/ThemeProvider";
+import { useDeviceProfile } from "@/hooks/useDeviceProfile";
 
 interface Particle {
   x: number;
@@ -14,24 +14,26 @@ const ParticleCanvas: React.FC = () => {
   const profile = useDeviceProfile();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { mode } = useTheme();
-  const isDark = mode === 'dark';
+  const isDark = mode === "dark";
 
   useEffect(() => {
     if (profile.prefersReducedMotion || !profile.enableHeavyEffects) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true });
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
     let animationId = 0;
     let width = 0;
     let height = 0;
-    let visible = document.visibilityState === 'visible';
+    let visible = document.visibilityState === "visible";
     let inViewport = true;
     const particles: Particle[] = [];
 
-    const particleColor = isDark ? 'rgba(255, 255, 255, 0.35)' : 'rgba(0, 0, 0, 0.2)';
+    const particleColor = isDark
+      ? "rgba(255, 255, 255, 0.35)"
+      : "rgba(0, 0, 0, 0.2)";
 
     const getParticleConfig = () => {
       const w = window.innerWidth;
@@ -49,8 +51,7 @@ const ParticleCanvas: React.FC = () => {
     // crosses a width threshold at runtime and need to re-seed the
     // particle count. Without this, a user resizing the window from
     // 800px to 1100px would stay stuck on the `< 1024` config.
-    const currentBucket = (w: number) =>
-      w < 640 ? 0 : w < 1024 ? 1 : 2;
+    const currentBucket = (w: number) => (w < 640 ? 0 : w < 1024 ? 1 : 2);
 
     let { numParticles, connectionDistance } = getParticleConfig();
     let lastBucket = currentBucket(window.innerWidth);
@@ -93,7 +94,7 @@ const ParticleCanvas: React.FC = () => {
     seedParticles();
 
     const onVisibility = () => {
-      visible = document.visibilityState === 'visible';
+      visible = document.visibilityState === "visible";
       if (visible && inViewport && animationId === 0) {
         animationId = requestAnimationFrame(animate);
       }
@@ -132,7 +133,9 @@ const ParticleCanvas: React.FC = () => {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = isDark ? `rgba(255,255,255,${alpha})` : `rgba(0,0,0,${alpha})`;
+            ctx.strokeStyle = isDark
+              ? `rgba(255,255,255,${alpha})`
+              : `rgba(0,0,0,${alpha})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -143,8 +146,8 @@ const ParticleCanvas: React.FC = () => {
     };
 
     animationId = requestAnimationFrame(animate);
-    window.addEventListener('resize', resize, { passive: true });
-    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener("resize", resize, { passive: true });
+    document.addEventListener("visibilitychange", onVisibility);
 
     // Pause the loop when the canvas scrolls out of view. The hero
     // is min-h-[100dvh] and the canvas covers the whole hero, so
@@ -162,14 +165,14 @@ const ParticleCanvas: React.FC = () => {
           }
         }
       },
-      { rootMargin: '50px' }
+      { rootMargin: "50px" },
     );
     io.observe(canvas);
 
     return () => {
       cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', resize);
-      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", onVisibility);
       io.disconnect();
     };
   }, [isDark]);
