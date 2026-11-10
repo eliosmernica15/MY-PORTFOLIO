@@ -176,12 +176,12 @@ function buildCsp(nonce: string): string {
     // theme bootstrap through; modern browsers ignore it when a nonce
     // is present. `'self'` is kept as a fallback for browsers that
     // don't implement `'strict-dynamic'`.
-    // Note: 'unsafe-eval' is deliberately NOT allowed in production script-src.
-    // Next.js/React 19 production runtimes don't need it and the CSP already
-    // runs the site without it (verified). 'unsafe-inline' remains as a
-    // compatibility fallback for legacy browsers; modern browsers ignore it
-    // when a nonce is present. `'strict-dynamic'` handles the RSC bootstrap.
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' ${NEXT_REQUEST_ANIMATION_FRAME_SHA256} ${NEXT_F_BOOTSTRAP_SHA256} https://prod.spline.design https://unpkg.com`,
+    // `'unsafe-eval'` IS required: the bundled Spline/three.js chunk uses
+    // `Function('return this')()` internally (core-js global detection), so a
+    // policy without it kills the hero scene and trips the error boundary.
+    // It cannot be scoped further (it is all-or-nothing for script-src), so
+    // it is kept narrowly alongside the nonce + strict-dynamic model here.
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' ${NEXT_REQUEST_ANIMATION_FRAME_SHA256} ${NEXT_F_BOOTSTRAP_SHA256} https://prod.spline.design https://unpkg.com`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' data: https://fonts.gstatic.com",
     "img-src 'self' data: blob: https:",
@@ -214,12 +214,12 @@ function buildCspReportOnly(nonce: string): string {
     // upgrade-insecure-requests: it's ignored in report-only policies and
     // only logs a console error.)
     "trusted-types default nextjs nextjs#bundler allow-duplicates",
-    // Note: 'unsafe-eval' is deliberately NOT allowed in production script-src.
-    // Next.js/React 19 production runtimes don't need it and the CSP already
-    // runs the site without it (verified). 'unsafe-inline' remains as a
-    // compatibility fallback for legacy browsers; modern browsers ignore it
-    // when a nonce is present. `'strict-dynamic'` handles the RSC bootstrap.
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' ${NEXT_REQUEST_ANIMATION_FRAME_SHA256} ${NEXT_F_BOOTSTRAP_SHA256} https://prod.spline.design https://unpkg.com`,
+    // `'unsafe-eval'` IS required: the bundled Spline/three.js chunk uses
+    // `Function('return this')()` internally (core-js global detection), so a
+    // policy without it kills the hero scene and trips the error boundary.
+    // It cannot be scoped further (it is all-or-nothing for script-src), so
+    // it is kept narrowly alongside the nonce + strict-dynamic model here.
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' ${NEXT_REQUEST_ANIMATION_FRAME_SHA256} ${NEXT_F_BOOTSTRAP_SHA256} https://prod.spline.design https://unpkg.com`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' data: https://fonts.gstatic.com",
     "img-src 'self' data: blob: https:",
