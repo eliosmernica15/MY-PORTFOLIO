@@ -8,22 +8,22 @@ A high-performance, content-first portfolio for a software engineer specializing
 
 ## What's in it
 
-| Section | Notes |
-|---|---|
-| **Hero** | Custom typing carousel, WebGL particle field layered over a Spline scene, custom cursor, "Now" pill (dismissible, persisted). |
-| **About** | Capability grid + a 5-stop horizontal timeline (Now → 2023) with hover/focus reveals. |
-| **Services** | 4-card grid driven by `src/data/services.ts`. |
-| **Projects** | 2-column grid with "Load more" pagination, link-out to a per-project case study. |
-| **Stack Map** | Categorized skills with 1–5 confidence dots. |
-| **Skill marquee** | Infinite horizontal scroller. |
-| **Notes (writing)** | Markdown-lite posts at `/notes` and `/notes/[slug]`, rendered from typed block arrays. |
-| **GitHub activity** | Server component with ISR (1h), curated fallback from `featuredRepos`. |
-| **Resume** | Education + experience + CV download. |
-| **Testimonials** | Auto-rotating carousel with `aria-live`. |
-| **Contact** | Server action, zod-validated, honeypot + behavioral heuristic + per-IP rate limit. |
-| **Terminal** | Floating, draggable, focus-trapped, persisted history, 18+ commands. |
-| **Elios AI** | Floating, scripted assistant — quick prompts, free chat, voice input, copy-transcript. Knowledge base auto-synced from the data layer. |
-| **Service worker** | Cache-first for `_next/static` and images, stale-while-revalidate for HTML, offline fallback at `/offline`. |
+| Section             | Notes                                                                                                                                  |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **Hero**            | Custom typing carousel, WebGL particle field layered over a Spline scene, custom cursor, "Now" pill (dismissible, persisted).          |
+| **About**           | Capability grid + a 5-stop horizontal timeline (Now → 2023) with hover/focus reveals.                                                  |
+| **Services**        | 4-card grid driven by `src/data/services.ts`.                                                                                          |
+| **Projects**        | 2-column grid with "Load more" pagination, link-out to a per-project case study.                                                       |
+| **Stack Map**       | Categorized skills with 1–5 confidence dots.                                                                                           |
+| **Skill marquee**   | Infinite horizontal scroller.                                                                                                          |
+| **Notes (writing)** | Markdown-lite posts at `/notes` and `/notes/[slug]`, rendered from typed block arrays.                                                 |
+| **GitHub activity** | Server component with ISR (1h), curated fallback from `featuredRepos`.                                                                 |
+| **Resume**          | Education + experience + CV download.                                                                                                  |
+| **Testimonials**    | Auto-rotating carousel with `aria-live`.                                                                                               |
+| **Contact**         | Server action, zod-validated, honeypot + behavioral heuristic + per-IP rate limit.                                                     |
+| **Terminal**        | Floating, draggable, focus-trapped, persisted history, 18+ commands.                                                                   |
+| **Elios AI**        | Floating, scripted assistant — quick prompts, free chat, voice input, copy-transcript. Knowledge base auto-synced from the data layer. |
+| **Service worker**  | Cache-first for `_next/static` and images, stale-while-revalidate for HTML, offline fallback at `/offline`.                            |
 
 ---
 
@@ -78,6 +78,7 @@ middleware.ts             CSP nonce + theme forwarding + UA blocklist
 ### CSP
 
 Strict Content-Security-Policy is set per request in `middleware.ts`:
+
 - `script-src 'self' 'nonce-<random>' 'strict-dynamic' https://prod.spline.design`
 - `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com` (inline styles are used heavily for theming)
 - `frame-src 'self' https://*.spline.design`, `connect-src` includes `https://api.github.com` and `https://*.spline.design`
@@ -140,18 +141,18 @@ To add a new page route, create a folder under `app/` and a `page.tsx`. To exclu
 
 ## Environment variables
 
-| Variable | Purpose | Default |
-|---|---|---|
-| `SMTP_HOST` | SMTP server hostname (optional) | none — contact form falls back to EmailJS server-side |
-| `SMTP_PORT` | SMTP port (typically 587) | unset |
-| `SMTP_USER` | SMTP username | unset |
-| `SMTP_PASS` | SMTP password | unset |
-| `SMTP_TO` | Destination address | `SITE.email` |
-| `EMAILJS_SERVICE_ID` | EmailJS service id (fallback transport) | unset |
-| `EMAILJS_TEMPLATE_ID` | EmailJS template id | unset |
-| `EMAILJS_PUBLIC_KEY` | EmailJS public key | unset |
-| `EMAILJS_PRIVATE_KEY` | EmailJS private key (server-only) | unset |
-| `NEXT_PUBLIC_CSP_REPORT` | Optional CSP report-uri | unset |
+| Variable                 | Purpose                                 | Default                                               |
+| ------------------------ | --------------------------------------- | ----------------------------------------------------- |
+| `SMTP_HOST`              | SMTP server hostname (optional)         | none — contact form falls back to EmailJS server-side |
+| `SMTP_PORT`              | SMTP port (typically 587)               | unset                                                 |
+| `SMTP_USER`              | SMTP username                           | unset                                                 |
+| `SMTP_PASS`              | SMTP password                           | unset                                                 |
+| `SMTP_TO`                | Destination address                     | `SITE.email`                                          |
+| `EMAILJS_SERVICE_ID`     | EmailJS service id (fallback transport) | unset                                                 |
+| `EMAILJS_TEMPLATE_ID`    | EmailJS template id                     | unset                                                 |
+| `EMAILJS_PUBLIC_KEY`     | EmailJS public key                      | unset                                                 |
+| `EMAILJS_PRIVATE_KEY`    | EmailJS private key (server-only)       | unset                                                 |
+| `NEXT_PUBLIC_CSP_REPORT` | Optional CSP report-uri                 | unset                                                 |
 
 No variables are required for the dev server to start.
 
@@ -159,16 +160,16 @@ No variables are required for the dev server to start.
 
 ## Scripts
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Regenerate the knowledge base, then start Next dev on port 3000 |
-| `npm run build` | Regenerate the knowledge base, then `next build` (with IPv4-first DNS preload) |
-| `npm run build:direct` | Same as `build` but without the IPv4-first preload (for non-Windows hosts) |
-| `npm run start` | Run the production build |
-| `npm run lint` | ESLint with the flat config |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run analyze` | Bundle analyzer report (`@next/bundle-analyzer`) |
-| `npm run sync:kb` | Manually regenerate the assistant's knowledge base |
+| Command                | What it does                                                                   |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| `npm run dev`          | Regenerate the knowledge base, then start Next dev on port 3000                |
+| `npm run build`        | Regenerate the knowledge base, then `next build` (with IPv4-first DNS preload) |
+| `npm run build:direct` | Same as `build` but without the IPv4-first preload (for non-Windows hosts)     |
+| `npm run start`        | Run the production build                                                       |
+| `npm run lint`         | ESLint with the flat config                                                    |
+| `npm run typecheck`    | `tsc --noEmit`                                                                 |
+| `npm run analyze`      | Bundle analyzer report (`@next/bundle-analyzer`)                               |
+| `npm run sync:kb`      | Manually regenerate the assistant's knowledge base                             |
 
 ### Windows-only build scripts
 
@@ -230,15 +231,19 @@ A small debug panel is wired in development only (`NODE_ENV === 'development'`) 
 
 ## Deployment
 
-The site is a standard Next.js 15 app. Build and run anywhere Node 20+ runs.
+The site is a standard Next.js 15 app (Node 24, matching Vercel). Install, build, and run:
 
 ```bash
-npm install
+npm ci
 npm run build
 npm run start
 ```
 
-On Vercel, no extra config is required — the build, env, and ISR (revalidate 1h on `api.github.com`) work out of the box.
+CI (GitHub Actions, `.github/workflows/ci.yml`) runs on every push to `main`/`develop` and on PRs: lint, type check, gitleaks secret scan, `npm audit --omit=dev --audit-level=high` (production deps only), and a production build. All jobs must pass before the summary job is green.
+
+Vercel is linked to the `MY-PORTFOLIO` GitHub repo: every push to `main` triggers a production deployment automatically (`vercel.json` pins the `nextjs` framework and `npm ci`). Environment variables live in Vercel project settings; see `.env.example` for what each one does. `npm run perf:check` validates bundle budgets locally after a build.
+
+Production URL: https://eliosmernica.vercel.app
 
 ---
 
