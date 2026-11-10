@@ -12,7 +12,10 @@
  *   computed from .next/app-build-manifest.json. (Next reports > 150 KB
  *   gzipped for the same initial payload; raw-on-disk is the honest,
  *   machine-checkable proxy.)
- * - Lighthouse runs separately via `npm run perf:lighthouse` and is not
+ * - Lighthouse is not part of this check. The @lhci/cli package was removed
+ *   (it carried the basic-ftp advisory chain via puppeteer and was unused in
+ *   this project's CI). Run Lighthouse on demand with `npx lighthouse-ci`
+ *   or in a scheduled workflow if it is ever needed again.
  *   part of this check (an earlier version of this script shelled out to
  *   it unconditionally and crashed on TypeScript annotations in a .mjs).
  */

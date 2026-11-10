@@ -1,14 +1,14 @@
 # Comprehensive Audit Report - Elios Mernica Portfolio
 
-> **Remediation note (2026-11-09):** the dependency/security findings in this report
+> **Remediation note (2026-11-09, updated 2026-11-10):** the dependency/security findings in this report
 > have since been addressed: `next` 15.5.25 → 15.5.29, `next-intl` 3 → 4.14.9 (open
 > redirect / prototype pollution), `nodemailer` 9 → 10.4.0, `zod` 3 → 4.6.7, `postcss`
 > forced to ^8.5.32 via npm overrides (CVE chain in Next's bundled postcss). The unused
 > `@xenova/transformers` dependency (unwired `src/lib/semanticSearch.ts`, removed) was
-> the source of the `protobufjs` advisories. `npm audit --omit=dev` reports 0
-> vulnerabilities. The VITE_* EmailJS variables were renamed to server-side
-> `EMAILJS_*` (see below). Remaining accepted risks: dev-only advisories in
-> `@lhci/cli`/lighthouse (basic-ftp, never executed or shipped) and the build-time
+> the source of the `protobufjs` advisories. `npm audit` reports **0 vulnerabilities**;
+> the dev-only `basic-ftp` (lighthouse/puppeteer) chain and `@lhci/cli` itself were
+> removed, and `minimatch` is forced to ^11.0.5. The VITE_* EmailJS variables were
+> renamed to server-side `EMAILJS_*`. Remaining accepted risks: the build-time
 > postcss findings that require a Next.js 16 upgrade.
 
 **Date:** 2026-11-06  

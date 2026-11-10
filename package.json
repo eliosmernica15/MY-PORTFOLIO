@@ -18,8 +18,6 @@
     "secrets:scan": "gitleaks detect --config .gitleaks.toml --verbose",
     "secrets:scan:staged": "gitleaks protect --staged --config .gitleaks.toml --verbose",
     "perf:check": "node scripts/check-performance-budget.mjs",
-    "perf:lighthouse": "lighthouse-ci autorun --config=lighthouserc.json",
-    "perf:budget": "npm run build && npm run perf:check",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
     "test:visual:report": "playwright show-report"
@@ -39,7 +37,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.7",
-    "@lhci/cli": "^0.16.0",
     "@next/bundle-analyzer": "^15.5.25",
     "@nogoo9/gitleaks": "^8.30.1",
     "@playwright/test": "^1.49.0",

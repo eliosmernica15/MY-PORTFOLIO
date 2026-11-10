@@ -93,17 +93,14 @@ jobs:
         run: npm ci
 
       # Only production dependencies are audited here. Dev-only chains
-      # (lighthouse -> puppeteer -> basic-ftp, eslint's minimatch) carry
-      # known unfixed DoS advisories that never execute or ship, and would
-      # otherwise fail this gate forever.
+      # (lighthouse -> puppeteer -> basic-ftp, eslint's minimatch) were
+      # removed entirely; this gate is what ships to production.
       - name: Run npm audit (production dependencies)
         run: npm audit --omit=dev --audit-level=high
 
-      # Advisory scan of the full lockfile. Reports 2 known dev-only
-      # advisories with no available fix path (basic-ftp via lighthouse's
-      # puppeteer chain; minimatch via typescript-eslint) - they never
-      # ship or run in production. The enforced gate is the npm audit
-      # --omit=dev step above.
+      # Advisory scan of the full lockfile. npm audit reports zero
+      # vulnerabilities (the lighthouse/puppeteer basic-ftp chain was
+      # removed entirely). The enforced gate is the audit step above.
       - name: Run osv-scanner (advisory)
         continue-on-error: true
         uses: google/osv-scanner-action/osv-scanner-action@v2.7.0
