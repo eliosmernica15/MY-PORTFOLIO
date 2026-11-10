@@ -1,0 +1,47 @@
+version: 2
+
+updates:
+  # npm dependencies. Grouped so related packages bump together and PR
+  # volume stays manageable for a solo maintainer.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+    open-pull-requests-limit: 5
+    groups:
+      next:
+        patterns:
+          - 'next'
+          - 'eslint-config-next'
+          - '@next/bundle-analyzer'
+      react:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
+      toolchain:
+        patterns:
+          - 'typescript'
+          - 'eslint'
+          - 'prettier'
+          - 'husky'
+          - 'lint-staged'
+        update-types:
+          - minor
+          - patch
+    # Always review major bumps individually.
+    ignore:
+      - dependency-name: 'next'
+        update-types: ['version-update:semver-major']
+
+  # GitHub Actions. Keeps checkout/setup-node/osv-scanner etc. current.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+    open-pull-requests-limit: 3

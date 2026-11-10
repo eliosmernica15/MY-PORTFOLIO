@@ -2,7 +2,7 @@
 
 A high-performance, content-first portfolio for a software engineer specializing in AI systems, full-stack web platforms, compilers, and network infrastructure.
 
-**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS v3 · framer-motion · WebGL2 (vanilla) · Spline · zod · nodemailer (optional)
+**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS v3 · framer-motion · Canvas 2D particles · Spline · zod · nodemailer (optional)
 
 ---
 
@@ -10,14 +10,14 @@ A high-performance, content-first portfolio for a software engineer specializing
 
 | Section             | Notes                                                                                                                                  |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **Hero**            | Custom typing carousel, WebGL particle field layered over a Spline scene, custom cursor, "Now" pill (dismissible, persisted).          |
+| **Hero**            | Custom typing carousel, canvas particle field layered over a Spline scene, custom cursor, "Now" pill (dismissible, persisted).         |
 | **About**           | Capability grid + a 5-stop horizontal timeline (Now → 2023) with hover/focus reveals.                                                  |
 | **Services**        | 4-card grid driven by `src/data/services.ts`.                                                                                          |
 | **Projects**        | 2-column grid with "Load more" pagination, link-out to a per-project case study.                                                       |
 | **Stack Map**       | Categorized skills with 1–5 confidence dots.                                                                                           |
 | **Skill marquee**   | Infinite horizontal scroller.                                                                                                          |
 | **Notes (writing)** | Markdown-lite posts at `/notes` and `/notes/[slug]`, rendered from typed block arrays.                                                 |
-| **GitHub activity** | Server component with ISR (1h), curated fallback from `featuredRepos`.                                                                 |
+| **GitHub activity** | Live fetch from api.github.com (client-side) with a curated real fallback from `featuredRepos` when rate-limited.                      |
 | **Resume**          | Education + experience + CV download.                                                                                                  |
 | **Testimonials**    | Auto-rotating carousel with `aria-live`.                                                                                               |
 | **Contact**         | Server action, zod-validated, honeypot + behavioral heuristic + per-IP rate limit.                                                     |
@@ -51,7 +51,7 @@ components/
   Home.tsx                Composes the home page
   Terminal.tsx            Floating interactive terminal
   AssistantChat.tsx       Elios AI panel
-  ParticleField.tsx       WebGL2 particle field (1500–3000 particles)
+  ParticleCanvas.tsx     Canvas 2D particle field (paused offscreen / on reduced motion)
   SplineScene.tsx         Ambient Spline base layer
   AboutTimeline.tsx       5-stop dot timeline
   Brand.tsx (in ui/)      Custom SVG monogram (E + M with accent dot)
@@ -72,17 +72,17 @@ middleware.ts             CSP nonce + theme forwarding + UA blocklist
 ### RSC vs client components
 
 - Server components by default for everything that doesn't need interactivity (data files, case-study sections, layout).
-- `'use client'` only where the component reads state, refs, effects, or events: `Home.tsx`, `Terminal.tsx`, `AssistantChat.tsx`, `ParticleField.tsx`, `NowWidget.tsx`, the form, the nav, the cursor, the toggle, etc.
+- `'use client'` only where the component reads state, refs, effects, or events: `Home.tsx`, `Terminal.tsx`, `AssistantChat.tsx`, `ParticleCanvas.tsx`, `NowWidget.tsx`, the form, the nav, the cursor, the toggle, etc.
 - The contact form is a client component but calls a **server action** (`app/actions/contact.ts`) — zod validation, SMTP via nodemailer (when configured), or a server-side EmailJS fallback. The public EmailJS key is no longer exposed to the browser.
 
 ### CSP
 
 Strict Content-Security-Policy is set per request in `middleware.ts`:
 
-- `script-src 'self' 'nonce-<random>' 'strict-dynamic' https://prod.spline.design`
+- `script-src 'self' 'nonce-<random>' 'strict-dynamic' 'unsafe-inline' (legacy fallback) https://prod.spline.design` — no `unsafe-eval`
 - `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com` (inline styles are used heavily for theming)
 - `frame-src 'self' https://*.spline.design`, `connect-src` includes `https://api.github.com` and `https://*.spline.design`
-- `worker-src 'self' blob:`, `manifest-src 'self'`
+- `worker-src 'self' blob:`, `manifest-src 'self'`, Trusted Types allowlist for the framework's policies (`default`, `nextjs`, `nextjs#bundler`)
 - `frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`, `upgrade-insecure-requests`
 
 The nonce is generated per request, attached to the response as a header, and consumed by the theme-init script in `<head>` (no `unsafe-inline` on scripts).
@@ -95,7 +95,7 @@ The nonce is generated per request, attached to the response as a header, and co
 - **Stale-while-revalidate** for HTML navigations (falls back to `/offline` on network failure).
 - **Network-first** with cache fallback for everything else.
 
-The offline fallback page is at `app/offline/page.tsx` with a "Retry" button.
+The offline fallback page is at `app/offline/page.tsx` (static, dependency-free, "Back to home" link).
 
 ---
 
