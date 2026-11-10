@@ -17,7 +17,6 @@ A high-performance, content-first portfolio for a software engineer specializing
 | **Stack Map**       | Categorized skills with 1–5 confidence dots.                                                                                           |
 | **Skill marquee**   | Infinite horizontal scroller.                                                                                                          |
 | **Notes (writing)** | Markdown-lite posts at `/notes` and `/notes/[slug]`, rendered from typed block arrays.                                                 |
-| **GitHub activity** | Live fetch from api.github.com (client-side) with a curated real fallback from `featuredRepos` when rate-limited.                      |
 | **Resume**          | Education + experience + CV download.                                                                                                  |
 | **Testimonials**    | Auto-rotating carousel with `aria-live`.                                                                                               |
 | **Contact**         | Server action, zod-validated, honeypot + behavioral heuristic + per-IP rate limit.                                                     |
@@ -115,7 +114,6 @@ src/data/testimonials.ts          ───►   Testimonials carousel
 src/data/notes.ts                 ───►   /notes index + /notes/[slug]
                                           ➜ Assistant "note:<slug>" knowledge entries
 src/data/now.ts                   ───►   "Now" pill in hero
-src/data/featuredRepos.ts         ───►   GitHub widget fallback (when API rate-limits)
 src/data/education.ts             ───►   Resume education list
 src/data/experience.ts            ───►   Resume experience list
 src/data/socials.ts               ───►   Footer social row

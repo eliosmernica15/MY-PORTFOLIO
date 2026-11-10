@@ -12,7 +12,6 @@ import StatsSection from "./StatsSection";
 import Resume from "./Resume";
 import StackSection from "./StackSection";
 import { NotesTeaser } from "./NotesTeaser";
-import { GitHubActivity } from "./GitHubActivity";
 import Testimonials from "./Testimonials";
 import Contact from "./Contact";
 import Footer from "./Footer";
@@ -391,9 +390,6 @@ const Home: React.FC = () => {
           <Resume />
         </Suspense>
         <NotesTeaser />
-        <Suspense fallback={<SkeletonCard />}>
-          <GitHubActivity />
-        </Suspense>
         <Suspense fallback={<SkeletonTestimonials />}>
           <Testimonials />
         </Suspense>
