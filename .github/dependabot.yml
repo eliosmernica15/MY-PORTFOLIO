@@ -32,9 +32,20 @@ updates:
         update-types:
           - minor
           - patch
-    # Always review major bumps individually.
+    # Major bumps that should NOT be taken automatically: reviewed
+    # individually, if ever. Next 16 and TypeScript 7 are dedicated
+    # migrations, eslint-config-next 16 breaks this setup, and ESLint 9
+    # is the supported line for Next 15.
     ignore:
       - dependency-name: 'next'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'eslint-config-next'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@next/bundle-analyzer'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'eslint'
         update-types: ['version-update:semver-major']
 
   # GitHub Actions. Keeps checkout/setup-node/osv-scanner etc. current.
