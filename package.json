@@ -25,7 +25,7 @@
     "test:visual:report": "playwright show-report"
   },
   "dependencies": {
-    "@splinetool/react-spline": "^4.1.0",
+    "@splinetool/react-spline": "^4.2.0",
     "@splinetool/runtime": "^1.12.58",
     "@vercel/kv": "^1.0.1",
     "framer-motion": "^12.34.0",
