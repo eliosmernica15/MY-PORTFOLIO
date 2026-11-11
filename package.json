@@ -20,7 +20,8 @@
     "perf:check": "node scripts/check-performance-budget.mjs",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
-    "test:visual:report": "playwright show-report"
+    "test:visual:report": "playwright show-report",
+    "test:smoke": "playwright test tests/smoke.spec.ts"
   },
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",

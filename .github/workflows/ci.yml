@@ -135,10 +135,40 @@ jobs:
           # unset (an empty value failed zod URL validation).
           NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://eliosmernica.vercel.app' }}
 
+  # Smoke tests with Playwright (chromium only, runs against production build)
+  smoke:
+    name: Smoke Tests
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://eliosmernica.vercel.app' }}
+
+      - name: Run smoke tests
+        run: npm run test:smoke
+
   # Summary
   summary:
     name: Summary
-    needs: [lint, typecheck, secrets, security, build]
+    needs: [lint, typecheck, secrets, security, build, smoke]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
