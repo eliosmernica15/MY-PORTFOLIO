@@ -92,7 +92,18 @@ export default function Boot() {
   const finish = () => {
     setLeaving(true);
     markBooted();
-    window.setTimeout(() => setVisible(false), FADE_MS);
+    // Unmount on a rAF clock, not setTimeout: headless browsers can throttle
+    // timers in hidden/occluded pages, which used to strand the invisible
+    // overlay in the DOM indefinitely.
+    const fadeStart = performance.now();
+    const fade = (now: number) => {
+      if (now - fadeStart >= FADE_MS) {
+        setVisible(false);
+      } else {
+        rafRef.current = window.requestAnimationFrame(fade);
+      }
+    };
+    rafRef.current = window.requestAnimationFrame(fade);
   };
 
   const skip = () => {

@@ -21,7 +21,7 @@
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
     "test:visual:report": "playwright show-report",
-    "test:smoke": "playwright test tests/smoke.spec.ts"
+    "test:smoke": "playwright test"
   },
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",
