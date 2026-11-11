@@ -143,297 +143,332 @@ const Contact: React.FC = () => {
         {/* The compose card */}
         <Reveal variant="rise" delay={220} className="lg:col-span-6">
           <div
-            className="border p-5 sm:p-7"
+            className="border"
             style={{
-              borderColor: "var(--border)",
+              borderColor: "var(--border-hover)",
               background: "var(--bg-card)",
-              boxShadow: "0 24px 70px rgba(28, 26, 23, 0.10)",
+              boxShadow:
+                "0 0 0 1px rgba(28,26,23,0.05), 0 30px 70px rgba(28,26,23,0.18), 0 6px 18px rgba(28,26,23,0.08)",
             }}
           >
-            {status === "success" ? (
-              <div className="flex flex-col items-center py-8 text-center">
-                <CheckCircle2
-                  size={40}
-                  strokeWidth={1.5}
-                  style={{ color: "var(--accent)" }}
-                  aria-hidden
-                />
-                <h3 className="font-display mt-4 text-2xl font-semibold text-[var(--text-primary)]">
-                  {t("contact.form.successTitle")}
-                </h3>
-                <p className="mt-2 max-w-xs text-sm text-[var(--text-secondary)]">
-                  {t("contact.form.success")}
-                </p>
-                {referenceId && (
-                  <p className="mt-4 font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--text-muted)]">
-                    {t("contact.reference")} #{referenceId.slice(0, 8)}
-                  </p>
-                )}
-                <button
-                  type="button"
-                  onClick={sendAnother}
-                  className="interactive-btn mt-6 border px-5 py-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--text-primary)] transition-colors hover:bg-[var(--pill-bg)]"
-                  style={{ borderColor: "var(--border-hover)" }}
-                >
-                  {t("contact.form.sendAnother")}
-                </button>
-              </div>
-            ) : (
-              <form
-                className="flex flex-col gap-4"
-                onFocus={markFocused}
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (honeypot) return;
-                  void submit({
-                    ...form,
-                    projectType:
-                      showDetails && projectType ? projectType : undefined,
-                    timeline: showDetails && timeline ? timeline : undefined,
-                    budget: showDetails && budget ? budget : undefined,
-                    subject:
-                      showDetails && projectType
-                        ? `Project: ${projectType}`
-                        : undefined,
-                    source:
-                      showDetails && (projectType || timeline || budget)
-                        ? "hire-me"
-                        : "mail",
-                  });
-                }}
+            {/* Window chrome */}
+            <div
+              className="flex items-center gap-2 border-b px-5 sm:px-7 py-3"
+              style={{
+                borderColor: "var(--border)",
+                background: "var(--pill-bg)",
+              }}
+            >
+              <span
+                className="window-dot"
+                style={{ background: "var(--border-hover)" }}
+              />
+              <span
+                className="window-dot"
+                style={{ background: "var(--border-hover)" }}
+              />
+              <span
+                className="window-dot"
+                style={{ background: "var(--border-hover)" }}
+              />
+              <span
+                className="ml-auto font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.3em]"
+                style={{ color: "var(--text-muted)" }}
               >
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="c-name" className="os-label">
-                      {t("contact.form.name")}
-                    </label>
-                    <input
-                      id="c-name"
-                      name="name"
-                      type="text"
-                      autoComplete="name"
-                      required
-                      minLength={3}
-                      maxLength={80}
-                      value={form.name}
-                      onChange={(e) =>
-                        setForm((f) => ({ ...f, name: e.target.value }))
-                      }
-                      placeholder={t("contact.form.namePlaceholder")}
-                      aria-invalid={fieldErrors.name ? "true" : undefined}
-                      className="os-field"
-                    />
-                    {fieldErrors.name && (
-                      <p className="mt-1 flex items-center gap-1 text-[10px] text-[var(--text-primary)]">
-                        <AlertCircle size={10} aria-hidden /> {fieldErrors.name}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label htmlFor="c-email" className="os-label">
-                      {t("contact.form.email")}
-                    </label>
-                    <input
-                      id="c-email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      maxLength={120}
-                      value={form.email}
-                      onChange={(e) =>
-                        setForm((f) => ({ ...f, email: e.target.value }))
-                      }
-                      placeholder={t("contact.form.emailPlaceholder")}
-                      aria-invalid={fieldErrors.email ? "true" : undefined}
-                      className="os-field"
-                    />
-                    {fieldErrors.email && (
-                      <p className="mt-1 flex items-center gap-1 text-[10px] text-[var(--text-primary)]">
-                        <AlertCircle size={10} aria-hidden />{" "}
-                        {fieldErrors.email}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="c-message" className="os-label">
-                    {t("contact.form.message")}
-                  </label>
-                  <textarea
-                    id="c-message"
-                    name="message"
-                    required
-                    minLength={20}
-                    maxLength={4000}
-                    rows={4}
-                    value={form.message}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, message: e.target.value }))
-                    }
-                    placeholder={t("contact.form.messagePlaceholder")}
-                    aria-invalid={fieldErrors.message ? "true" : undefined}
-                    className="os-field resize-y leading-relaxed"
+                {t("contact.title")}
+              </span>
+            </div>
+            <div className="p-5 sm:p-7">
+              {status === "success" ? (
+                <div className="flex flex-col items-center py-8 text-center">
+                  <CheckCircle2
+                    size={40}
+                    strokeWidth={1.5}
+                    style={{ color: "var(--accent)" }}
+                    aria-hidden
                   />
-                  {fieldErrors.message && (
-                    <p className="mt-1 flex items-center gap-1 text-[10px] text-[var(--text-primary)]">
-                      <AlertCircle size={10} aria-hidden />{" "}
-                      {fieldErrors.message}
+                  <h3 className="font-display mt-4 text-2xl font-semibold text-[var(--text-primary)]">
+                    {t("contact.form.successTitle")}
+                  </h3>
+                  <p className="mt-2 max-w-xs text-sm text-[var(--text-secondary)]">
+                    {t("contact.form.success")}
+                  </p>
+                  {referenceId && (
+                    <p className="mt-4 font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--text-muted)]">
+                      {t("contact.reference")} #{referenceId.slice(0, 8)}
                     </p>
                   )}
-                </div>
-
-                {/* Optional project details — closed by default */}
-                <button
-                  type="button"
-                  onClick={() => setShowDetails((v) => !v)}
-                  aria-expanded={showDetails}
-                  className="interactive-btn flex items-center gap-1.5 self-start font-mono text-[9px] font-bold uppercase tracking-[0.25em] text-[var(--text-muted)] transition-colors hover:text-[var(--accent)]"
-                >
-                  {t("contact.detailsToggle")}
-                  <ChevronDown
-                    size={12}
-                    aria-hidden
-                    className={`transition-transform duration-200 ${showDetails ? "rotate-180" : ""}`}
-                  />
-                </button>
-                {showDetails && (
-                  <fieldset
-                    className="flex flex-col gap-3 border-t pt-4"
-                    style={{ borderColor: "var(--border)" }}
+                  <button
+                    type="button"
+                    onClick={sendAnother}
+                    className="interactive-btn mt-6 border px-5 py-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--text-primary)] transition-colors hover:bg-[var(--pill-bg)]"
+                    style={{ borderColor: "var(--border-hover)" }}
                   >
-                    <legend className="sr-only">
-                      {t("hire.qualifierLegend")}
-                    </legend>
-                    <div>
-                      <span className="os-label" id="q-type">
-                        {t("hire.q1")}
-                      </span>
-                      <div
-                        role="group"
-                        aria-labelledby="q-type"
-                        className="flex flex-wrap gap-1.5"
-                      >
-                        {PROJECT_TYPES.map((opt) => (
-                          <button
-                            key={opt}
-                            type="button"
-                            aria-pressed={projectType === opt}
-                            onClick={() =>
-                              setProjectType((v) => (v === opt ? null : opt))
-                            }
-                            className={chip(projectType === opt)}
-                            style={chipStyle(projectType === opt)}
-                          >
-                            {t(`hire.projects.${opt}`)}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <span className="os-label" id="q-time">
-                        {t("hire.q2")}
-                      </span>
-                      <div
-                        role="group"
-                        aria-labelledby="q-time"
-                        className="flex flex-wrap gap-1.5"
-                      >
-                        {TIMELINES.map((opt) => (
-                          <button
-                            key={opt}
-                            type="button"
-                            aria-pressed={timeline === opt}
-                            onClick={() =>
-                              setTimeline((v) => (v === opt ? null : opt))
-                            }
-                            className={chip(timeline === opt)}
-                            style={chipStyle(timeline === opt)}
-                          >
-                            {t(`hire.timelines.${opt}`)}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <span className="os-label" id="q-budget">
-                        {t("hire.q3")}
-                      </span>
-                      <div
-                        role="group"
-                        aria-labelledby="q-budget"
-                        className="flex flex-wrap gap-1.5"
-                      >
-                        {BUDGETS.map((opt) => (
-                          <button
-                            key={opt}
-                            type="button"
-                            aria-pressed={budget === opt}
-                            onClick={() =>
-                              setBudget((v) => (v === opt ? null : opt))
-                            }
-                            className={chip(budget === opt)}
-                            style={chipStyle(budget === opt)}
-                          >
-                            {t(`hire.budgets.${opt}`)}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </fieldset>
-                )}
-
-                {/* Honeypot */}
-                <div
-                  aria-hidden="true"
-                  className="absolute left-[-9999px] top-[-9999px] h-0 w-0 overflow-hidden"
-                >
-                  <label htmlFor="c-company">{t("contact.form.company")}</label>
-                  <input
-                    id="c-company"
-                    name="company"
-                    type="text"
-                    tabIndex={-1}
-                    autoComplete="off"
-                    value={honeypot}
-                    onChange={(e) => setHoneypot(e.target.value)}
-                  />
+                    {t("contact.form.sendAnother")}
+                  </button>
                 </div>
+              ) : (
+                <form
+                  className="flex flex-col gap-4"
+                  onFocus={markFocused}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (honeypot) return;
+                    void submit({
+                      ...form,
+                      projectType:
+                        showDetails && projectType ? projectType : undefined,
+                      timeline: showDetails && timeline ? timeline : undefined,
+                      budget: showDetails && budget ? budget : undefined,
+                      subject:
+                        showDetails && projectType
+                          ? `Project: ${projectType}`
+                          : undefined,
+                      source:
+                        showDetails && (projectType || timeline || budget)
+                          ? "hire-me"
+                          : "mail",
+                    });
+                  }}
+                >
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                      <label htmlFor="c-name" className="os-label">
+                        {t("contact.form.name")}
+                      </label>
+                      <input
+                        id="c-name"
+                        name="name"
+                        type="text"
+                        autoComplete="name"
+                        required
+                        minLength={3}
+                        maxLength={80}
+                        value={form.name}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, name: e.target.value }))
+                        }
+                        placeholder={t("contact.form.namePlaceholder")}
+                        aria-invalid={fieldErrors.name ? "true" : undefined}
+                        className="os-field"
+                      />
+                      {fieldErrors.name && (
+                        <p className="mt-1 flex items-center gap-1 text-[10px] text-[var(--text-primary)]">
+                          <AlertCircle size={10} aria-hidden />{" "}
+                          {fieldErrors.name}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label htmlFor="c-email" className="os-label">
+                        {t("contact.form.email")}
+                      </label>
+                      <input
+                        id="c-email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        maxLength={120}
+                        value={form.email}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, email: e.target.value }))
+                        }
+                        placeholder={t("contact.form.emailPlaceholder")}
+                        aria-invalid={fieldErrors.email ? "true" : undefined}
+                        className="os-field"
+                      />
+                      {fieldErrors.email && (
+                        <p className="mt-1 flex items-center gap-1 text-[10px] text-[var(--text-primary)]">
+                          <AlertCircle size={10} aria-hidden />{" "}
+                          {fieldErrors.email}
+                        </p>
+                      )}
+                    </div>
+                  </div>
 
-                {status === "error" && (
-                  <p
-                    role="alert"
-                    className="flex items-start gap-2 text-[11px] leading-snug text-[var(--text-secondary)]"
-                  >
-                    <AlertCircle
-                      size={13}
-                      aria-hidden
-                      className="mt-0.5 shrink-0"
+                  <div>
+                    <label htmlFor="c-message" className="os-label">
+                      {t("contact.form.message")}
+                    </label>
+                    <textarea
+                      id="c-message"
+                      name="message"
+                      required
+                      minLength={20}
+                      maxLength={4000}
+                      rows={4}
+                      value={form.message}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, message: e.target.value }))
+                      }
+                      placeholder={t("contact.form.messagePlaceholder")}
+                      aria-invalid={fieldErrors.message ? "true" : undefined}
+                      className="os-field resize-y leading-relaxed"
                     />
-                    <span>
-                      {errorText}{" "}
-                      <a
-                        className="font-semibold underline underline-offset-2"
-                        href={`mailto:${SITE.email}`}
-                      >
-                        {SITE.email}
-                      </a>
-                    </span>
-                  </p>
-                )}
+                    {fieldErrors.message && (
+                      <p className="mt-1 flex items-center gap-1 text-[10px] text-[var(--text-primary)]">
+                        <AlertCircle size={10} aria-hidden />{" "}
+                        {fieldErrors.message}
+                      </p>
+                    )}
+                  </div>
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="interactive-btn btn-lift mt-1 inline-flex w-fit items-center gap-2 rounded-full px-7 py-3.5 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] text-[var(--bg-primary)] transition-opacity disabled:opacity-50"
-                  style={{ background: "var(--text-primary)" }}
-                >
-                  {loading ? t("contact.form.sending") : t("contact.form.send")}
-                  <ArrowRight size={14} strokeWidth={2.5} aria-hidden />
-                </button>
-              </form>
-            )}
+                  {/* Optional project details — closed by default */}
+                  <button
+                    type="button"
+                    onClick={() => setShowDetails((v) => !v)}
+                    aria-expanded={showDetails}
+                    className="interactive-btn flex items-center gap-1.5 self-start font-mono text-[9px] font-bold uppercase tracking-[0.25em] text-[var(--text-muted)] transition-colors hover:text-[var(--accent)]"
+                  >
+                    {t("contact.detailsToggle")}
+                    <ChevronDown
+                      size={12}
+                      aria-hidden
+                      className={`transition-transform duration-200 ${showDetails ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  {showDetails && (
+                    <fieldset
+                      className="flex flex-col gap-3 border-t pt-4"
+                      style={{ borderColor: "var(--border)" }}
+                    >
+                      <legend className="sr-only">
+                        {t("hire.qualifierLegend")}
+                      </legend>
+                      <div>
+                        <span className="os-label" id="q-type">
+                          {t("hire.q1")}
+                        </span>
+                        <div
+                          role="group"
+                          aria-labelledby="q-type"
+                          className="flex flex-wrap gap-1.5"
+                        >
+                          {PROJECT_TYPES.map((opt) => (
+                            <button
+                              key={opt}
+                              type="button"
+                              aria-pressed={projectType === opt}
+                              onClick={() =>
+                                setProjectType((v) => (v === opt ? null : opt))
+                              }
+                              className={chip(projectType === opt)}
+                              style={chipStyle(projectType === opt)}
+                            >
+                              {t(`hire.projects.${opt}`)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <span className="os-label" id="q-time">
+                          {t("hire.q2")}
+                        </span>
+                        <div
+                          role="group"
+                          aria-labelledby="q-time"
+                          className="flex flex-wrap gap-1.5"
+                        >
+                          {TIMELINES.map((opt) => (
+                            <button
+                              key={opt}
+                              type="button"
+                              aria-pressed={timeline === opt}
+                              onClick={() =>
+                                setTimeline((v) => (v === opt ? null : opt))
+                              }
+                              className={chip(timeline === opt)}
+                              style={chipStyle(timeline === opt)}
+                            >
+                              {t(`hire.timelines.${opt}`)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <span className="os-label" id="q-budget">
+                          {t("hire.q3")}
+                        </span>
+                        <div
+                          role="group"
+                          aria-labelledby="q-budget"
+                          className="flex flex-wrap gap-1.5"
+                        >
+                          {BUDGETS.map((opt) => (
+                            <button
+                              key={opt}
+                              type="button"
+                              aria-pressed={budget === opt}
+                              onClick={() =>
+                                setBudget((v) => (v === opt ? null : opt))
+                              }
+                              className={chip(budget === opt)}
+                              style={chipStyle(budget === opt)}
+                            >
+                              {t(`hire.budgets.${opt}`)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </fieldset>
+                  )}
+
+                  {/* Honeypot */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute left-[-9999px] top-[-9999px] h-0 w-0 overflow-hidden"
+                  >
+                    <label htmlFor="c-company">
+                      {t("contact.form.company")}
+                    </label>
+                    <input
+                      id="c-company"
+                      name="company"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                    />
+                  </div>
+
+                  {status === "error" && (
+                    <p
+                      role="alert"
+                      className="flex items-start gap-2 text-[11px] leading-snug text-[var(--text-secondary)]"
+                    >
+                      <AlertCircle
+                        size={13}
+                        aria-hidden
+                        className="mt-0.5 shrink-0"
+                      />
+                      <span>
+                        {errorText}{" "}
+                        <a
+                          className="font-semibold underline underline-offset-2"
+                          href={`mailto:${SITE.email}`}
+                        >
+                          {SITE.email}
+                        </a>
+                      </span>
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="interactive-btn btn-lift mt-1 inline-flex w-full sm:w-fit items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] text-[var(--bg-primary)] transition-opacity disabled:opacity-50"
+                    style={{ background: "var(--text-primary)" }}
+                  >
+                    {loading
+                      ? t("contact.form.sending")
+                      : t("contact.form.send")}
+                    <ArrowRight size={14} strokeWidth={2.5} aria-hidden />
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
         </Reveal>
       </div>

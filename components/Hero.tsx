@@ -133,33 +133,42 @@ const Hero: React.FC = () => {
         <figure className="lg:col-span-5">
           <Link
             href="/project/apl"
-            className="hero-figure group block border"
+            className="hero-figure panel-frame group block"
             style={
               {
-                borderColor: "var(--border)",
                 "--fig-delay": "300ms",
               } as React.CSSProperties
             }
             aria-label={t("hero.aplLinkLabel")}
           >
-            <div className="overflow-hidden" style={{ background: "#1c1a17" }}>
+            <div className="window-chrome">
+              <span className="window-dot" />
+              <span className="window-dot" />
+              <span className="window-dot" />
+              <span className="window-title">apl.sh — live</span>
+            </div>
+            <div className="overflow-hidden" style={{ background: "#0d0d0f" }}>
               <Image
                 src="/projects/apl.png"
                 alt={t("hero.aplImageAlt")}
                 width={1200}
                 height={900}
                 priority
-                className="aspect-[4/3] w-full object-cover object-top"
+                className="aspect-[4/3] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               />
             </div>
             <figcaption
               className="flex items-baseline justify-between gap-4 border-t px-4 py-3"
-              style={{ borderColor: "var(--border)" }}
+              style={{
+                borderColor: "var(--border)",
+                background: "var(--bg-card)",
+              }}
             >
               <span
-                className="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.3em]"
+                className="flex items-center gap-2 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.3em]"
                 style={{ color: "var(--accent)" }}
               >
+                <span className="status-dot" aria-hidden />
                 A++(APL) — 2026
               </span>
               <span

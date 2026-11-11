@@ -35,7 +35,7 @@ const BackToTop: React.FC = () => {
       aria-label={t("accessibility.backToTop")}
       aria-hidden={!visible}
       tabIndex={visible ? 0 : -1}
-      className={`interactive-btn fixed bottom-5 left-5 z-[65] flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-500 ${
+      className={`interactive-btn fixed bottom-5 sm:bottom-6 left-1/2 z-[65] flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border transition-all duration-500 ${
         visible
           ? "opacity-100 translate-y-0"
           : "pointer-events-none opacity-0 translate-y-4"

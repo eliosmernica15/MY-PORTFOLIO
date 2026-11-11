@@ -55,7 +55,8 @@
     "linkedin": "LinkedIn",
     "email": "Email",
     "main": "Main navigation",
-    "logo": "Elios Mernica - home"
+    "logo": "Elios Mernica - home",
+    "home": "Home"
   },
   "about": {
     "title": "About Me",
@@ -222,7 +223,22 @@
     "notesTitle": "Notes",
     "notesHero": "Writing on what I build.",
     "notesDescription": "Short, focused pieces on AI systems, web performance, language design, and the craft of shipping software.",
-    "viewAll": "All notes"
+    "viewAll": "All notes",
+    "addNote": "Add Note",
+    "modalTitle": "New note",
+    "noteTitleLabel": "Title",
+    "noteTitlePlaceholder": "Give the note a title…",
+    "noteBodyLabel": "Note",
+    "noteBodyPlaceholder": "Write the note — it stays on this device…",
+    "noteTagsLabel": "Tags (optional)",
+    "noteTagsPlaceholder": "engineering, apl, ideas",
+    "saveNote": "Save note",
+    "cancel": "Cancel",
+    "noteAdded": "Note added",
+    "noteRemoved": "Note removed",
+    "yourNote": "Your note",
+    "deleteNote": "Delete note",
+    "noteInvalid": "Give it a title (3+ chars) and at least 20 characters of body."
   },
   "terminal": {
     "welcome": "Welcome — type `help` to list commands. Esc to close. ⌘/ctrl+L to clear.",
@@ -425,7 +441,8 @@
     },
     "navWork": "Work",
     "navServices": "Services",
-    "navAbout": "About"
+    "navAbout": "About",
+    "short": "Search"
   },
   "hero": {
     "kicker": "KOS — ENGINEER · DESIGNER · PRODUCT BUILDER",

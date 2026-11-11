@@ -70,14 +70,13 @@ const Work: React.FC = () => {
             <Reveal key={project.id} variant="clip" delay={i * 120}>
               <Link
                 href={`/project/${project.id}`}
-                className="group block border"
-                style={{ borderColor: "var(--border)" }}
+                className="panel-frame group block"
                 aria-label={project.title}
               >
                 <div
                   ref={covers[i]}
                   className="parallax-frame aspect-[16/10]"
-                  style={{ background: "#1c1a17" }}
+                  style={{ background: "#0d0d0f" }}
                 >
                   <Image
                     src={project.image}
@@ -85,12 +84,15 @@ const Work: React.FC = () => {
                     width={1200}
                     height={750}
                     sizes="(min-width: 768px) 50vw, 100vw"
-                    className="parallax-inner aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                    className="parallax-inner aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                   />
                 </div>
                 <div
-                  className="flex items-baseline justify-between gap-4 border-t px-4 py-3.5"
-                  style={{ borderColor: "var(--border)" }}
+                  className="relative flex items-baseline justify-between gap-4 border-t px-4 py-3.5"
+                  style={{
+                    borderColor: "var(--border)",
+                    background: "var(--bg-card)",
+                  }}
                 >
                   <div className="min-w-0">
                     <p
@@ -103,11 +105,14 @@ const Work: React.FC = () => {
                       {project.title}
                     </h3>
                   </div>
+                  <span className="ghost-index" aria-hidden>
+                    0{i + 1}
+                  </span>
                   <ArrowUpRight
                     size={20}
                     strokeWidth={1.5}
                     aria-hidden
-                    className="arrow-nudge shrink-0 text-[var(--text-muted)] group-hover:text-[var(--accent)]"
+                    className="arrow-nudge relative shrink-0 text-[var(--text-muted)] group-hover:text-[var(--accent)]"
                   />
                 </div>
               </Link>
@@ -125,7 +130,7 @@ const Work: React.FC = () => {
               <Reveal as="div" variant="slide" delay={i * 60}>
                 <Link
                   href={`/project/${project.id}`}
-                  className="group grid grid-cols-[2.25rem_1fr_auto] sm:grid-cols-[3rem_5.5rem_1fr_auto_auto] items-center gap-3 sm:gap-5 px-3 sm:px-4 py-3 sm:py-4 transition-colors hover:bg-[var(--pill-bg)]"
+                  className="group row-accent grid grid-cols-[2.25rem_1fr_auto] sm:grid-cols-[3rem_5.5rem_1fr_auto_auto] items-center gap-3 sm:gap-5 pl-4 sm:pl-5 pr-3 sm:pr-4 py-3 sm:py-4 transition-colors hover:bg-[var(--pill-bg)]"
                   style={{ background: "var(--bg-card)" }}
                 >
                   <span className="font-mono text-[9px] sm:text-[10px] tabular-nums text-[var(--text-muted)] transition-colors group-hover:text-[var(--accent)]">

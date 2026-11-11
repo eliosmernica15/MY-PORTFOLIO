@@ -57,14 +57,10 @@ const About: React.FC = () => {
               href="/Elios-Mernica-CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="interactive-btn btn-lift mt-8 inline-flex items-center gap-2 font-bold text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[var(--text-primary)]"
+              className="interactive-btn btn-lift mt-8 inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 font-bold text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[var(--bg-primary)]"
+              style={{ background: "var(--accent)" }}
             >
-              <Download
-                size={14}
-                strokeWidth={2.25}
-                aria-hidden
-                style={{ color: "var(--accent)" }}
-              />
+              <Download size={16} strokeWidth={2.5} aria-hidden />
               {t("resume.downloadCV")}
             </a>
           </Reveal>

@@ -55,7 +55,8 @@
     "linkedin": "LinkedIn",
     "email": "Email",
     "main": "Navigimi kryesor",
-    "logo": "Elios Mernica - ballina"
+    "logo": "Elios Mernica - ballina",
+    "home": "Ballina"
   },
   "about": {
     "title": "Rreth Meje",
@@ -222,7 +223,22 @@
     "notesTitle": "Shënimet",
     "notesHero": "Shkrime mbi atë që ndërtoj.",
     "notesDescription": "Pjesë të shkurtra dhe të fokusuara mbi sistemet e AI-së, performancën web, dizajnin e gjuhëve dhe mjeshtërinë e dorëzimit të softuerit.",
-    "viewAll": "Të gjitha shënimet"
+    "viewAll": "Të gjitha shënimet",
+    "addNote": "Shto shënim",
+    "modalTitle": "Shënim i ri",
+    "noteTitleLabel": "Titulli",
+    "noteTitlePlaceholder": "Vendosi një titull shënimit…",
+    "noteBodyLabel": "Shënimi",
+    "noteBodyPlaceholder": "Shkruaje shënimin — qëndron në këtë pajisje…",
+    "noteTagsLabel": "Etiketat (opsionale)",
+    "noteTagsPlaceholder": "inxhinieri, apl, ide",
+    "saveNote": "Ruaj shënimin",
+    "cancel": "Anulo",
+    "noteAdded": "Shënimi u shtua",
+    "noteRemoved": "Shënimi u hoq",
+    "yourNote": "Shënimi juaj",
+    "deleteNote": "Fshi shënimin",
+    "noteInvalid": "Jepni një titull (3+ karaktere) dhe të paktën 20 karaktere përmbajtje."
   },
   "terminal": {
     "welcome": "Mirësevini — shtypni `help` për të listuar komandat. Esc për të mbyllur. ⌘/ctrl+L për të pastër.",
@@ -425,7 +441,8 @@
     },
     "navWork": "Puna",
     "navServices": "Shërbimet",
-    "navAbout": "Rreth meje"
+    "navAbout": "Rreth meje",
+    "short": "Kërko"
   },
   "hero": {
     "kicker": "KOS — INXHINIER · DIZAJNER · NDËRTUES PRODUKTESH",

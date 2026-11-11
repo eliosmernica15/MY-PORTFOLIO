@@ -68,17 +68,6 @@ const Footer: React.FC = () => {
             >
               {t("footer.email")}
             </a>
-            <button
-              type="button"
-              onClick={() =>
-                window.dispatchEvent(new CustomEvent("elios:palette-toggle"))
-              }
-              aria-keyshortcuts="Control+K Meta+K"
-              title={t("palette.label")}
-              className="interactive-btn inline-flex items-center gap-1 rounded border border-[var(--border)] bg-[var(--pill-bg)] px-2 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]"
-            >
-              ⌘K
-            </button>
           </nav>
         </div>
 

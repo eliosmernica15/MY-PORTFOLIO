@@ -1,6 +1,7 @@
 "use client";
 
 import React, { memo, useEffect, useState } from "react";
+import { Search } from "lucide-react";
 import { useT, useLocale, useSetLocale } from "@/i18n/LocaleProvider";
 
 /**
@@ -78,6 +79,35 @@ const Nav: React.FC = () => {
               {t(link.key)}
             </a>
           ))}
+
+          <button
+            type="button"
+            onClick={() =>
+              window.dispatchEvent(new CustomEvent("elios:palette-toggle"))
+            }
+            aria-keyshortcuts="Control+K Meta+K"
+            aria-label={t("palette.label")}
+            title={t("palette.label")}
+            className="interactive-btn btn-lift inline-flex h-7 sm:h-8 items-center gap-1.5 rounded-md border px-2 font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]"
+            style={{
+              borderColor: "var(--border)",
+              background: "var(--pill-bg)",
+            }}
+          >
+            <Search size={12} strokeWidth={2.25} aria-hidden />
+            <span className="hidden md:inline">{t("palette.short")}</span>
+            <kbd
+              aria-hidden
+              className="hidden sm:inline rounded border px-1 text-[8px]"
+              style={{
+                borderColor: "var(--border)",
+                background: "var(--bg-card)",
+                color: "var(--text-muted)",
+              }}
+            >
+              ⌘K
+            </kbd>
+          </button>
 
           <div
             className="flex items-center rounded-full border p-0.5"

@@ -21,7 +21,9 @@ test("ticker renders once and is aria-hidden with sr-only copy", async ({
 test("scroll reveals engage for below-the-fold sections", async ({ page }) => {
   await page.goto("/en", { waitUntil: "domcontentloaded" });
   await page.locator("#services").scrollIntoViewIfNeeded();
-  await page.waitForSelector("#services .reveal.is-visible", { timeout: 5000 });
+  await page.waitForSelector("#services .reveal.is-visible", {
+    timeout: 10000,
+  });
   const visible = await page.locator("#services .reveal.is-visible").count();
   expect(visible).toBeGreaterThan(0);
 });

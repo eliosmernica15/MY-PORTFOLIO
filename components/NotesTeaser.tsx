@@ -67,7 +67,7 @@ const NotesTeaser: React.FC = () => {
               <Reveal variant="slide" delay={i * 80}>
                 <Link
                   href={`/notes/${note.slug}`}
-                  className="group grid grid-cols-[1fr_auto] sm:grid-cols-[9rem_1fr_auto] items-baseline gap-3 sm:gap-6 border-b py-5 transition-colors hover:bg-[var(--pill-bg)]"
+                  className="group row-accent grid grid-cols-[1fr_auto] sm:grid-cols-[9rem_1fr_auto] items-baseline gap-3 sm:gap-6 border-b py-5 pl-4 sm:pl-5 pr-2 sm:pr-4 transition-colors hover:bg-[var(--pill-bg)]"
                   style={{ borderColor: "var(--border)" }}
                 >
                   <span className="hidden sm:block font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">

@@ -163,12 +163,11 @@ const Showcase: React.FC = () => {
                   <Link
                     href={`/project/${chapter.id}`}
                     aria-label={chapter.title}
-                    className="group block border"
-                    style={{ borderColor: "var(--border)" }}
+                    className="panel-frame group block"
                   >
                     <div
-                      className="overflow-hidden"
-                      style={{ background: "#1c1a17" }}
+                      className="relative overflow-hidden"
+                      style={{ background: "#0d0d0f" }}
                     >
                       <Image
                         src={chapter.image}
@@ -178,6 +177,18 @@ const Showcase: React.FC = () => {
                         sizes="(min-width: 1024px) 58vw, 100vw"
                         className="aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                       />
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute left-3 top-3 rounded-full border px-3 py-1 font-mono text-[8px] font-bold uppercase tracking-[0.3em]"
+                        style={{
+                          borderColor: "rgba(250,247,242,0.18)",
+                          background: "rgba(13,13,15,0.55)",
+                          color: "#FAF7F2",
+                          backdropFilter: "blur(6px)",
+                        }}
+                      >
+                        Case 0{i + 1}
+                      </span>
                     </div>
                   </Link>
                 </Reveal>
