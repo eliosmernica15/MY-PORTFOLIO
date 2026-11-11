@@ -122,7 +122,7 @@ test("service worker never caches HTML (nonce-safe)", async ({ request }) => {
   const precache = body.match(/const PRECACHE = \[([^\]]*)\]/)?.[1] ?? "";
   expect(precache.replace(/["']/g, "").trim()).toBe("/offline");
   expect(precache).not.toContain(",");
-  expect(body).toContain("v3");
+  expect(body).toContain("v4");
   expect(body).toMatch(/caches\.match\(["']\/offline["']\)/);
   expect(body).not.toContain("cache.put(req, res)");
 });
