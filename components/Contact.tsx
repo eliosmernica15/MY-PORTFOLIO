@@ -11,6 +11,7 @@ import {
 import { SITE } from "@/data/site";
 import { useT } from "@/i18n/LocaleProvider";
 import { useContactSubmit } from "./useContactSubmit";
+import { Reveal } from "./motion/Reveal";
 
 const PROJECT_TYPES = [
   "website",
@@ -99,21 +100,30 @@ const Contact: React.FC = () => {
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 lg:grid-cols-12">
         {/* The ask */}
         <div className="lg:col-span-6 flex flex-col">
-          <p className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.4em] text-[var(--accent)]">
+          <Reveal
+            as="p"
+            variant="rise"
+            className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.4em] text-[var(--accent)]"
+          >
             {t("contact.title")}
-          </p>
+          </Reveal>
           <h2
             id="contact-heading"
             className="font-display mt-4 text-5xl sm:text-7xl font-semibold leading-[0.98] tracking-[-0.02em] text-[var(--text-primary)]"
           >
-            {t("contact.subtitle")}
+            <Reveal as="span" variant="mask" delay={80}>
+              {t("contact.subtitle")}
+            </Reveal>
           </h2>
-          <p
+          <Reveal
+            as="p"
+            variant="rise"
+            delay={160}
             className="mt-6 max-w-md text-[15px] sm:text-lg leading-snug"
             style={{ color: "var(--text-secondary)" }}
           >
             {t("contact.description")}
-          </p>
+          </Reveal>
           <a
             href={`mailto:${SITE.email}`}
             className="interactive-btn group mt-8 inline-flex w-fit items-center gap-2 break-all font-display text-lg sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]"
@@ -131,12 +141,13 @@ const Contact: React.FC = () => {
         </div>
 
         {/* The compose card */}
-        <div className="lg:col-span-6">
+        <Reveal variant="rise" delay={220} className="lg:col-span-6">
           <div
             className="border p-5 sm:p-7"
             style={{
               borderColor: "var(--border)",
               background: "var(--bg-card)",
+              boxShadow: "0 24px 70px rgba(28, 26, 23, 0.10)",
             }}
           >
             {status === "success" ? (
@@ -415,7 +426,7 @@ const Contact: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="interactive-btn mt-1 inline-flex w-fit items-center gap-2 rounded-full px-7 py-3.5 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] text-[var(--bg-primary)] transition-opacity disabled:opacity-50"
+                  className="interactive-btn btn-lift mt-1 inline-flex w-fit items-center gap-2 rounded-full px-7 py-3.5 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] text-[var(--bg-primary)] transition-opacity disabled:opacity-50"
                   style={{ background: "var(--text-primary)" }}
                 >
                   {loading ? t("contact.form.sending") : t("contact.form.send")}
@@ -424,7 +435,7 @@ const Contact: React.FC = () => {
               </form>
             )}
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

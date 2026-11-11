@@ -29,17 +29,22 @@ const Footer: React.FC = () => {
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <p className="font-display text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
-              Elios{" "}
-              <em className="italic" style={{ color: "var(--accent)" }}>
-                Mernica.
-              </em>
-            </p>
-            <p className="mt-1 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-[var(--text-muted)]">
+          <a
+            href="#home"
+            className="group font-display text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)] transition-transform duration-300 hover:-translate-y-0.5"
+            aria-label={t("navigation.logo")}
+          >
+            Elios{" "}
+            <em
+              className="italic transition-colors duration-300 group-hover:text-[var(--accent-dark)]"
+              style={{ color: "var(--accent)" }}
+            >
+              Mernica.
+            </em>
+            <span className="mt-1 block font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-[var(--text-muted)] transition-colors duration-300 group-hover:text-[var(--accent)]">
               {t("footer.tagline")}
-            </p>
-          </div>
+            </span>
+          </a>
 
           <nav
             aria-label={t("navigation.main")}
@@ -51,10 +56,10 @@ const Footer: React.FC = () => {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer me"
-                className="interactive-btn inline-flex items-center gap-1 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]"
+                className="interactive-btn link-draw inline-flex items-center gap-1 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]"
               >
                 {link.label}
-                <ArrowUpRight size={11} aria-hidden />
+                <ArrowUpRight size={11} aria-hidden className="arrow-nudge" />
               </a>
             ))}
             <a

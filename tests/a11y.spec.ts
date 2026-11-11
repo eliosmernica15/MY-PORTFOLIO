@@ -23,6 +23,8 @@ test("no boot overlay or dock exists", async ({ page }) => {
 
 test("ctrl+k opens palette and escape closes it", async ({ page }) => {
   await page.goto("/en");
+  await page.waitForLoadState("load");
+  await page.waitForTimeout(500);
   await page.keyboard.press("Control+KeyK");
   const palette = page.getByRole("dialog", { name: /command palette/i });
   await expect(palette).toBeVisible();
@@ -34,6 +36,8 @@ test("ctrl+k opens palette and escape closes it", async ({ page }) => {
 
 test("palette navigates to a project", async ({ page }) => {
   await page.goto("/en");
+  await page.waitForLoadState("load");
+  await page.waitForTimeout(500);
   await page.keyboard.press("Control+KeyK");
   const palette = page.getByRole("dialog", { name: /command palette/i });
   await palette.getByRole("combobox").fill("apl");

@@ -1,0 +1,34 @@
+feat(motion): editorial motion system (Option A)
+
+A complete, CSS-first motion layer for the warm-paper design. All motion is
+transform/opacity, IntersectionObserver-driven, paused offscreen, and fully
+inert under prefers-reduced-motion; no-JS visitors get a completely static,
+fully legible page (html:not(.js) guard).
+
+Hero — choreographed opening scene: masked headline lines rise with 90ms
+stagger, the terracotta italic line draws its underline, APL artwork wipes
+open with scale-out, CTAs and proof line cascade. Total entrance under ~1.1s.
+
+Scroll system — Reveal primitives (rise/fade/clip/slide/mask) + useParallax
+hook; below-the-fold kickers and rows reveal with staggered timing.
+
+Work — two covers clip-reveal with restrained scroll parallax (±30px inside
+the frame), index rows slide in, arrows nudge.
+
+Showcase — new sticky editorial spread (desktop only): APL / ESMP / Eltrix
+Cloud chapters stay pinned in a rail while figures scroll; Intersection-
+Observer drives the active chapter; mobile gets a stacked sequence.
+
+Ticker — the single permitted marquee between hero and work
+(A++(APL) · ESMP · Eltrix Cloud · products shipped · Kosovo → World).
+
+Micro-interactions — link underline draw, button lift + press compression,
+arrow nudges on hover, footer wordmark nudge, back-to-top disc that appears
+after one screen of scroll, back-to-top smooth scroll (instant under reduced
+motion).
+
+Verified: build, typecheck, lint clean; perf budget 601.8 KB worst route;
+126/126 across desktop/tablet/mobile in consecutive full runs; reduced-motion
+and no-JS paths structurally asserted; SW/offline behavior unchanged.
+
+Production untouched.

@@ -73,7 +73,7 @@ const Nav: React.FC = () => {
               key={link.id}
               href={`#${link.id}`}
               onClick={scrollTo(link.id)}
-              className="font-mono text-[8px] sm:text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.18em] text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)] whitespace-nowrap"
+              className="link-draw font-mono text-[8px] sm:text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.18em] text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)] whitespace-nowrap"
             >
               {t(link.key)}
             </a>

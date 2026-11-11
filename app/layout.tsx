@@ -117,7 +117,10 @@ export const viewport: Viewport = {
 // story stays uniform across the app.
 const themeInitScript = `
 (function() {
-  try { document.documentElement.setAttribute('data-theme', 'light'); } catch(e) {}
+  try {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.documentElement.classList.add('js');
+  } catch(e) {}
 })();
 `;
 

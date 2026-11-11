@@ -336,7 +336,8 @@
     "toggleTheme": "Toggle theme",
     "openCommandPalette": "Open command palette",
     "openThemeSelector": "Open theme selector",
-    "switchLanguage": "Switch language"
+    "switchLanguage": "Switch language",
+    "backToTop": "Back to top"
   },
   "projectDetail": {
     "backToProjects": "Back to Showcase",
@@ -441,5 +442,12 @@
     "kicker": "01 — Work",
     "title": "Selected work.",
     "count": "{count} products, shipped end-to-end"
+  },
+  "ticker": {
+    "line": "A++(APL) — Albanian syntax · ESMP — Marketplace OS · Eltrix Cloud — AI creative tooling · 8 products shipped · Kosovo → World"
+  },
+  "showcase": {
+    "kicker": "The work, up close",
+    "openCaseStudy": "Open case study"
   }
 }

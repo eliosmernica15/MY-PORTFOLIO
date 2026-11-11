@@ -336,7 +336,8 @@
     "toggleTheme": "Ndrysho temën",
     "openCommandPalette": "Hap paletën e komandave",
     "openThemeSelector": "Hap zgjedhësit e temës",
-    "switchLanguage": "Ndrysho gjuhën"
+    "switchLanguage": "Ndrysho gjuhën",
+    "backToTop": "Kthehu lart"
   },
   "projectDetail": {
     "backToProjects": "Kthehu te Galeria",
@@ -441,5 +442,12 @@
     "kicker": "01 — Puna",
     "title": "Punë të zgjedhura.",
     "count": "{count} produkte, të dërguara nga fillimi deri në fund"
+  },
+  "ticker": {
+    "line": "A++(APL) — Sintaksë shqipe · ESMP — Sistemi operativ i tregtisë · Eltrix Cloud — Mjete kreative me IA · 8 produkte të dërguara · Kosovë → Botë"
+  },
+  "showcase": {
+    "kicker": "Puna nga afër",
+    "openCaseStudy": "Hap studimin e rastit"
   }
 }

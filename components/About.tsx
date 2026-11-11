@@ -4,9 +4,10 @@ import React from "react";
 import { Download, ArrowUpRight } from "lucide-react";
 import { SITE } from "@/data/site";
 import { useT } from "@/i18n/LocaleProvider";
+import { Reveal } from "./motion/Reveal";
 
 /**
- * About — one statement, six facts. No timeline, no cards.
+ * About — one statement, six facts. Reveals label-first, facts cascade.
  */
 const About: React.FC = () => {
   const t = useT();
@@ -27,68 +28,94 @@ const About: React.FC = () => {
     >
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 lg:grid-cols-12">
         <div className="lg:col-span-7">
-          <p className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.4em] text-[var(--accent)]">
+          <Reveal
+            as="p"
+            variant="rise"
+            className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.4em] text-[var(--accent)]"
+          >
             {t("about.title")}
-          </p>
+          </Reveal>
           <h2
             id="about-heading"
             className="font-display mt-4 text-4xl sm:text-6xl font-semibold leading-[1.0] tracking-[-0.02em] text-[var(--text-primary)]"
           >
-            {t("about.subtitle")}
+            <Reveal as="span" variant="mask" delay={80}>
+              {t("about.subtitle")}
+            </Reveal>
           </h2>
-          <p
+          <Reveal
+            as="p"
+            variant="rise"
+            delay={160}
             className="mt-6 max-w-md text-[15px] sm:text-lg leading-snug"
             style={{ color: "var(--text-secondary)" }}
           >
             {t("about.description")}
-          </p>
-          <a
-            href="/Elios-Mernica-CV.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="interactive-btn mt-8 inline-flex items-center gap-2 font-bold text-[11px] sm:text-xs uppercase tracking-[0.22em]"
-            style={{ color: "var(--text-primary)" }}
-          >
-            <Download
-              size={14}
-              strokeWidth={2.25}
-              aria-hidden
-              style={{ color: "var(--accent)" }}
-            />
-            {t("resume.downloadCV")}
-          </a>
+          </Reveal>
+          <Reveal variant="rise" delay={240}>
+            <a
+              href="/Elios-Mernica-CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="interactive-btn btn-lift mt-8 inline-flex items-center gap-2 font-bold text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[var(--text-primary)]"
+            >
+              <Download
+                size={14}
+                strokeWidth={2.25}
+                aria-hidden
+                style={{ color: "var(--accent)" }}
+              />
+              {t("resume.downloadCV")}
+            </a>
+          </Reveal>
         </div>
 
         <div className="lg:col-span-5">
           <dl className="border-t" style={{ borderColor: "var(--border)" }}>
-            {facts.map(([label, value]) => (
-              <div
+            {facts.map(([label, value], i) => (
+              <Reveal
                 key={label}
+                variant="rise"
+                delay={i * 70}
                 className="grid grid-cols-[6.5rem_1fr] sm:grid-cols-[8rem_1fr] gap-x-4 border-b py-4"
                 style={{ borderColor: "var(--border)" }}
               >
-                <dt className="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-[var(--text-muted)] pt-1">
+                <dt
+                  className="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.25em] pt-1"
+                  style={{ color: "var(--accent)" }}
+                >
                   {label}
                 </dt>
                 <dd className="text-[13px] sm:text-sm font-semibold leading-snug text-[var(--text-primary)]">
                   {value}
                 </dd>
-              </div>
+              </Reveal>
             ))}
-            <div className="grid grid-cols-[6.5rem_1fr] sm:grid-cols-[8rem_1fr] gap-x-4 py-4">
-              <dt className="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-[var(--text-muted)] pt-1">
+            <Reveal
+              variant="rise"
+              delay={facts.length * 70}
+              className="grid grid-cols-[6.5rem_1fr] sm:grid-cols-[8rem_1fr] gap-x-4 py-4"
+            >
+              <dt
+                className="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.25em] pt-1"
+                style={{ color: "var(--accent)" }}
+              >
                 {t("about.contact")}
               </dt>
               <dd className="min-w-0">
                 <a
                   href={`mailto:${SITE.email}`}
-                  className="inline-flex max-w-full items-center gap-1 text-[13px] sm:text-sm font-semibold text-[var(--text-primary)] transition-colors hover:text-[var(--accent)]"
+                  className="link-draw inline-flex max-w-full items-center gap-1 text-[13px] sm:text-sm font-semibold text-[var(--text-primary)] transition-colors hover:text-[var(--accent)]"
                 >
                   <span className="truncate">{SITE.email}</span>
-                  <ArrowUpRight size={13} aria-hidden className="shrink-0" />
+                  <ArrowUpRight
+                    size={13}
+                    aria-hidden
+                    className="arrow-nudge shrink-0"
+                  />
                 </a>
               </dd>
-            </div>
+            </Reveal>
           </dl>
         </div>
       </div>
