@@ -62,60 +62,37 @@
     "main": "Main navigation",
     "logo": "Elios Mernica - home"
   },
-  "hero": {
-    "title": "Elios Mernica",
-    "subtitle": "Software Engineer · AI Systems · Kosovo → Worldwide",
-    "description": "I engineer AI systems, high-performance web platforms, and the network plumbing underneath them.",
-    "available": "Available for Work",
-    "viewShowcase": "View Showcase",
-    "contactMe": "Contact Me",
-    "location": "Kosovo, EU",
-    "experience": "4+ Years of Growth",
-    "specializing": "Specializing in",
-    "typedPhrases": [
-      "Web Development",
-      "System Design",
-      "Network Infrastructure",
-      "Full-Stack Engineering"
-    ],
-    "remoteAvailable": "Available for remote engineering and digital missions.",
-    "yearsOfGrowth": "Years of Growth"
-  },
   "about": {
     "title": "About Me",
-    "subtitle": "I am Elios Mernica, Software Engineer",
-    "description": "Software engineer specializing in web development, system design, and network infrastructure. Based in Kosovo, available worldwide.",
+    "subtitle": "Elios Mernica — Engineer · Designer · Product Builder",
+    "description": "I design, engineer and ship digital products end-to-end — from the interface people touch to the architecture and tooling that power it. Based in Kosovo. Building for the world.",
     "focus": "Focus",
     "principle": "Principle",
     "availability": "Availability",
-    "values": [
-      "Web & Infrastructure",
-      "Minimalism & Speed",
-      "Remote · Worldwide"
-    ],
+    "values": ["End-to-end products", "Ship real work", "Remote · Worldwide"],
     "skills": "Technologies & Skills",
     "experience": "Experience",
     "education": "Education",
     "capabilities": [
       "Full-Stack Engineering",
-      "System Architecture",
-      "Performance Optimization",
-      "UI/UX Engineering",
-      "Cloud Deployment",
-      "API Design"
+      "Product Design",
+      "AI Integration",
+      "Developer Tooling",
+      "UI Engineering",
+      "Cloud Deployment"
     ],
-    "timelineLabel": "Where I've been",
-    "timelineNow": "Shipping ESMP v2 + A++(APL) v1.2.",
-    "timeline2026": "AI agent systems, custom RAG, and a public compiler.",
-    "timeline2025": "Founding Flixverse; first 1k monthly users in week three.",
-    "timeline2024": "Shipped Eltrix Cloud to production; remote work worldwide.",
-    "timeline2023": "Founding ForexPulse; full-stack SaaS from zero to paying users.",
+    "timelineLabel": "The road so far",
+    "timelineNow": "Shipping ESMP + A++(APL) — open to contract roles.",
+    "timeline2026": "A++(APL) — a language with Albanian syntax; ESMP marketplace OS in production.",
+    "timeline2025": "Eltrix Cloud, ForexPulse, FlixVerse — shipped end-to-end as solo projects.",
+    "timeline2024": "Foodery — a delivery ecosystem: restaurant dashboard, driver app, marketplace.",
+    "timeline2023": "Calista — a high-end retail storefront; where the frontend craft started.",
     "timelineNowLabel": "Now"
   },
   "services": {
     "title": "Services",
-    "subtitle": "Unique Web Projects.",
-    "description": "I transform ideas into high-performance digital products — engineered for clarity, speed, and long-term scalability.",
+    "subtitle": "What I build.",
+    "description": "From a landing page to a complete product — designed, engineered and shipped end-to-end by one person who cares about every layer.",
     "items": [
       {
         "number": "01",
@@ -138,7 +115,7 @@
         "description": "Transform an idea into a real project. I oversee its development from zero to production, providing ongoing maintenance."
       }
     ],
-    "eyebrow": "Services you can trust"
+    "eyebrow": "Services"
   },
   "projects": {
     "title": "Portfolio",
@@ -202,19 +179,12 @@
       "devops": "Infra & DevOps",
       "design": "Design"
     },
-    "level": {
-      "beginner": "Beginner",
-      "intermediate": "Intermediate",
-      "advanced": "Advanced",
-      "expert": "Expert"
-    },
     "tagline": "Built for production, not for slides.",
-    "stackTagline": "What I build with.",
-    "levelOf": "Level {level} of 5"
+    "stackTagline": "What I build with."
   },
   "testimonials": {
     "title": "Feedback",
-    "subtitle": "Verified Trust.",
+    "subtitle": "In their words.",
     "description": "What clients and collaborators say about working together on ambitious digital products.",
     "previous": "Previous",
     "next": "Next",
@@ -224,8 +194,8 @@
   },
   "contact": {
     "title": "Get in Touch",
-    "subtitle": "Craft the Future.",
-    "description": "Architecting the next generation of digital excellence. Share your vision — I'll engineer the path from concept to production.",
+    "subtitle": "Have something to build?",
+    "description": "Tell me what you want to build. I'll come back with a straight answer, a real estimate, and the first step — or an honest recommendation not to do it yet.",
     "email": "Email",
     "phone": "Phone",
     "form": {
@@ -240,7 +210,6 @@
       "validation": {
         "nameRequired": "Name must be at least 3 characters",
         "emailRequired": "Please enter a valid email",
-        "emailInvalid": "Invalid email format",
         "messageRequired": "Message must be at least 20 characters",
         "tooFast": "Submission too fast. Please take your time.",
         "csrfError": "Session expired — please refresh the page and try again."

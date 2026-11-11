@@ -48,22 +48,6 @@ export interface Project {
 }
 
 // ============================================================
-// Skill Types
-// ============================================================
-
-export type SkillLevel = 1 | 2 | 3 | 4 | 5;
-
-export interface Skill {
-  name: string;
-  level: SkillLevel;
-}
-
-export interface SkillCategory {
-  name: string;
-  skills: Skill[];
-}
-
-// ============================================================
 // Service Types
 // ============================================================
 

@@ -85,7 +85,7 @@ const buildCommands = (
     },
 
     whoami: {
-      description: t("terminal.commands.sudo"),
+      description: t("terminal.commands.whoami"),
       run: () => "elios@worldwide",
     },
 
@@ -103,12 +103,10 @@ const buildCommands = (
     skills: {
       description: t("terminal.commands.skills"),
       run: () => {
-        const sections = SKILL_CATEGORIES.map((cat) => {
-          const list = cat.skills
-            .map((s) => `    ${s.name.padEnd(28)} ${"●".repeat(s.level)}`)
-            .join("\n");
-          return `[${cat.name}]\n${list}`;
-        });
+        const sections = SKILL_CATEGORIES.map(
+          (cat) =>
+            `[${cat.name}]\n${cat.skills.map((s) => `    ${s.name}`).join("\n")}`,
+        );
         return sections.join("\n\n");
       },
     },
@@ -188,13 +186,13 @@ const buildCommands = (
     },
 
     matrix: {
-      description: t("terminal.commands.sudo"),
+      description: t("terminal.commands.matrix"),
       run: () =>
         "There is no spoon. There is only the codebase.\n(Tip: the hero has a live particle field — go look.)",
     },
 
     coffee: {
-      description: t("terminal.commands.sudo"),
+      description: t("terminal.commands.coffee"),
       run: () =>
         "I run on espresso and well-named variables. Ratio: 1:3, espresso to variables, on a good day.",
     },

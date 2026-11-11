@@ -16,19 +16,16 @@ export const PROJECTS: Project[] = [
     year: "2026",
     challenge:
       "Unify storefront, payments, invoicing, and analytics into a single fast dashboard",
-    outcome: "Polished enterprise marketplace OS used across 120+ countries",
+    outcome:
+      "Enterprise marketplace OS — storefront, payments, invoicing and analytics unified in one production dashboard",
     role: "Solo product engineer",
     duration: "4 months",
-    metrics: [
-      { label: "TTFB", value: "<200", suffix: "ms" },
-      { label: "Lighthouse", value: "98", suffix: "/100" },
-      { label: "Bundle", value: "92", suffix: "KB" },
-    ],
+    metrics: [],
     highlights: [
       "Single-dashboard OS for SMBs",
       "Stripe + invoicing + analytics",
       "Theme switching with system preference",
-      "120+ countries supported",
+      "Designed, built and shipped end-to-end",
     ],
     techRationale: [
       {
@@ -55,7 +52,7 @@ export const PROJECTS: Project[] = [
       "A++(APL) is a programming language written in Albanian that reads like natural language. The platform includes a live transpiler demo, interactive playground, CLI tooling, and full documentation. Developers write .apl files with plain Albanian syntax and compile to Python, React TSX, or FastAPI with a single command — supported by hot reload, a CIL architecture, and cross-platform installers.",
     image: "/projects/apl.png",
     link: "https://aplplus.vercel.app/",
-    color: "#e879f9",
+    color: "#2e2e2e",
     tech: ["Python", "React", "FastAPI", "TypeScript", "Vite", "CIL"],
     year: "2026",
     challenge:
@@ -64,11 +61,7 @@ export const PROJECTS: Project[] = [
       "A live transpiler with a CIL architecture, a playground, and a CLI toolchain",
     role: "Designer, compiler engineer, and product engineer",
     duration: "5 months",
-    metrics: [
-      { label: "Targets", value: "3", suffix: "" },
-      { label: "Parse time", value: "<12", suffix: "ms" },
-      { label: "Docs", value: "40+", suffix: "pages" },
-    ],
+    metrics: [{ label: "Targets", value: "3", suffix: "" }],
     highlights: [
       "Natural-language Albanian syntax",
       "CIL-based compiler pipeline",
@@ -100,7 +93,7 @@ export const PROJECTS: Project[] = [
       "EM Motors is an interactive, high-performance website for showcasing cars. It features a modern design built with HTML, CSS, JavaScript, and Bootstrap, ensuring a responsive and engaging user experience across all devices. The platform offers detailed car listings, smooth animations, and an intuitive UI.",
     image: "/projects/em-motors.png",
     link: "https://em-motors.vercel.app/",
-    color: "#3b82f6",
+    color: "#262626",
     tech: ["HTML", "CSS", "JavaScript", "Bootstrap"],
     year: "2026",
     challenge:
@@ -109,11 +102,7 @@ export const PROJECTS: Project[] = [
       "A polished, fast site with smooth animations and detailed vehicle listings",
     role: "Solo frontend engineer",
     duration: "3 weeks",
-    metrics: [
-      { label: "LCP", value: "1.1", suffix: "s" },
-      { label: "CLS", value: "0", suffix: "" },
-      { label: "Pages", value: "8", suffix: "" },
-    ],
+    metrics: [],
     highlights: [
       "Mobile-first responsive layout",
       "Dynamic vehicle listings",
@@ -141,7 +130,7 @@ export const PROJECTS: Project[] = [
       "ForexPulse is a trading platform built for forex and prop traders. It delivers real-time forex rates for 50+ pairs via the Frankfurter API, pair detail pages with full charts, a Tools page with pip value, position size calculator, and currency converter, plus a dashboard for portfolio snapshot and watchlist. The landing page and app share a dark, modern UI with amber accents—free to use, with optional sign-in for saving preferences.",
     image: "/forexpulse-hero.png",
     link: "https://forexpulse-trading.vercel.app/",
-    color: "#f59e0b",
+    color: "#1f1f1f",
     tech: ["HTML", "JavaScript", "Tailwind CSS", "Frankfurter API", "Vercel"],
     year: "2025",
     challenge:
@@ -182,7 +171,7 @@ export const PROJECTS: Project[] = [
       "Eltrix Cloud is an all-in-one AI-powered platform that combines content creation, file sharing, and digital asset management into a seamless experience. It features AI-assisted content generation, secure cloud storage, real-time collaboration tools, and an intuitive dashboard for managing digital assets. The platform delivers a premium, immersive UI with 3D visuals and smooth interactions.",
     image: "/projects/eltrix-cloud.png",
     link: "https://eltrixcloud.netlify.app/",
-    color: "#7c3aed",
+    color: "#232323",
     tech: [
       "React",
       "TypeScript",
@@ -197,11 +186,7 @@ export const PROJECTS: Project[] = [
       "A polished, immersive platform with 3D visuals and AI-assisted content workflows",
     role: "Solo product engineer",
     duration: "3 months",
-    metrics: [
-      { label: "AI tools", value: "6", suffix: "" },
-      { label: "Asset types", value: "12", suffix: "" },
-      { label: "3D scenes", value: "4", suffix: "" },
-    ],
+    metrics: [],
     highlights: [
       "AI-assisted content generation",
       "Secure cloud storage",
@@ -229,7 +214,7 @@ export const PROJECTS: Project[] = [
       "FlixVerse is a full-featured streaming platform inspired by Netflix, built with a focus on performance and user experience. It features dynamic content carousels, real-time search with autocomplete, user authentication, watchlist management, and HD-ready video playback. The UI delivers a cinematic feel with smooth animations and responsive layouts across all devices.",
     image: "/flixverse-hero.png",
     link: "https://flixverse-streaming-pro.vercel.app/",
-    color: "#e50914",
+    color: "#191919",
     tech: ["React", "TypeScript", "TMDB API", "Tailwind CSS", "Vercel"],
     year: "2025",
     challenge:
@@ -238,11 +223,7 @@ export const PROJECTS: Project[] = [
       "A premium-feel streaming UI with carousels, instant search, and watchlist",
     role: "Solo product engineer",
     duration: "5 weeks",
-    metrics: [
-      { label: "Catalog", value: "10k+", suffix: "titles" },
-      { label: "LCP", value: "1.3", suffix: "s" },
-      { label: "Animations", value: "60", suffix: "fps" },
-    ],
+    metrics: [{ label: "Catalog", value: "10k+", suffix: "titles" }],
     highlights: [
       "Dynamic content carousels",
       "Instant search with autocomplete",
@@ -267,27 +248,22 @@ export const PROJECTS: Project[] = [
     description:
       "A comprehensive food delivery and ordering platform with modern UI.",
     longDescription:
-      "Foodery is a high-performance food delivery ecosystem built for scale. It features a reactive dashboard for restaurant owners, a driver app with real-time GPS tracking, and a consumer marketplace. The system handles thousands of concurrent requests with sub-100ms response times.",
+      "Foodery is a food delivery ecosystem: a reactive dashboard for restaurant owners, a driver app with live GPS tracking, and a consumer marketplace. Next.js serves the product pages and SEO surface, Supabase powers realtime driver locations, and Redis caches menu and order state.",
     image: "/projects/project-7.jpg",
     link: "https://fooderydelivery.netlify.app",
-    color: "#fbbf24",
+    color: "#2b2b2b",
     tech: ["Next.js", "Supabase", "Redis", "Framer Motion", "Tailwind CSS"],
     year: "2024",
     challenge:
       "Build a delivery ecosystem with a reactive dashboard, a driver app, and a marketplace",
     outcome:
-      "A high-performance platform handling thousands of concurrent requests under 100ms",
+      "A food delivery ecosystem: restaurant dashboard, driver app with live GPS, and a consumer marketplace",
     role: "Full-stack engineer",
     duration: "4 months",
-    metrics: [
-      { label: "p95 latency", value: "<100", suffix: "ms" },
-      { label: "Roles", value: "3", suffix: "" },
-      { label: "Realtime", value: "yes", suffix: "" },
-    ],
+    metrics: [{ label: "Roles", value: "3", suffix: "" }],
     highlights: [
       "Reactive restaurant dashboard",
       "Driver app with live GPS",
-      "Sub-100ms response times",
       "Multi-role authentication",
     ],
     techRationale: [
@@ -309,7 +285,7 @@ export const PROJECTS: Project[] = [
       "Calista redefines the online shopping experience for high-end fashion. The project focuses on micro-interactions, seamless transitions, and high-quality asset delivery. It includes a custom headless CMS integration for dynamic inventory management.",
     image: "/projects/project-8.png",
     link: "https://calista-bake.netlify.app",
-    color: "#ec4899",
+    color: "#282828",
     tech: ["React", "Shopify Hydrogen", "Three.js", "GSAP"],
     year: "2023",
     challenge:
@@ -318,11 +294,7 @@ export const PROJECTS: Project[] = [
       "A premium retail experience with custom transitions and headless CMS integration",
     role: "Frontend engineer",
     duration: "2 months",
-    metrics: [
-      { label: "Micro-interactions", value: "20+", suffix: "" },
-      { label: "3D scenes", value: "3", suffix: "" },
-      { label: "CMS fields", value: "40+", suffix: "" },
-    ],
+    metrics: [],
     highlights: [
       "Bespoke micro-interactions",
       "Seamless page transitions",

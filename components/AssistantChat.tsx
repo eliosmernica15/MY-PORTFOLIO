@@ -153,18 +153,11 @@ function renderCard(
         >
           {cat.name}
         </h4>
-        <div className="grid grid-cols-2 gap-1.5">
+        <div className="flex flex-wrap gap-1.5">
           {cat.skills.map((s) => (
-            <div
-              key={s.name}
-              className="flex items-center justify-between text-[11px]"
-              style={{ color: "var(--text-primary)" }}
-            >
-              <span>{s.name}</span>
-              <span style={{ color: "var(--accent)" }}>
-                {"●".repeat(s.level)}
-              </span>
-            </div>
+            <span key={s.name} className="os-chip">
+              {s.name}
+            </span>
           ))}
         </div>
       </div>

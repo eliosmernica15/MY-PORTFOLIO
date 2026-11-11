@@ -1,62 +1,67 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { PROJECTS } from '@/data/projects';
-import { SITE } from '@/data/site';
-import { buildBreadcrumbs } from '@/lib/breadcrumbs';
-import { gradientBlur } from '@/lib/blurDataURL';
-import ProjectDetail from '@/components/ProjectDetail';
+import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { notFound } from "next/navigation";
+import { getProjects } from "@/data/i18n";
+import { SITE } from "@/data/site";
+import { buildBreadcrumbs } from "@/lib/breadcrumbs";
+import { gradientBlur } from "@/lib/blurDataURL";
+import ProjectDetail from "@/components/ProjectDetail";
 
-// `dynamicParams = false` means every project route is statically
-// prebuilt at build time. This is critical for click-to-detail
-// speed: the page's HTML, RSC payload, and JS chunk are all
-// precomputed and cached at the edge, so the click resolves
-// against a warm cache with no DB / SSR compute in the hot path.
-export const dynamicParams = false;
+// Case studies render in the visitor's language: the HTML is streamed with
+// a per-request CSP nonce anyway, so static generation would only serve a
+// stale English artifact to Albanian readers. Locale comes from x-locale
+// (set by middleware from path/cookie/Accept-Language).
+export const dynamic = "force-dynamic";
 
-export function generateStaticParams() {
-  return PROJECTS.map(p => ({ id: p.id }));
+function resolveLocale(value: string | null): "en" | "sq" {
+  return value === "sq" ? "sq" : "en";
 }
 
-export async function generateMetadata(
-  { params }: { params: Promise<{ id: string }> }
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
   const { id } = await params;
-  const project = PROJECTS.find(p => p.id === id);
-  if (!project) return { title: 'Project not found' };
+  const locale = resolveLocale((await headers()).get("x-locale"));
+  const project = getProjects(locale).find((p) => p.id === id);
+  if (!project) return { title: "Project not found" };
 
   const title = `${project.title} — Case Study`;
   const description = project.description;
   return {
     title,
     description,
-    alternates: { canonical: `/project/${project.id}` },
+    alternates: {
+      canonical: `/project/${project.id}`,
+    },
     openGraph: {
-      type: 'article',
+      type: "article",
       title,
       description,
       url: `${SITE.url}/project/${project.id}`,
       siteName: SITE.name,
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title,
       description,
     },
   };
 }
 
-export default async function ProjectPage(
-  { params }: { params: Promise<{ id: string }> }
-) {
+export default async function ProjectPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
-  const project = PROJECTS.find(p => p.id === id);
+  const locale = resolveLocale((await headers()).get("x-locale"));
+  const project = getProjects(locale).find((p) => p.id === id);
   if (!project) notFound();
   const breadcrumbs = buildBreadcrumbs(`/project/${id}`);
-  // Per-project blur placeholder. The Next/Image component uses
-  // this as the `blurDataURL`, which paints a tiny gradient under
-  // the full-size image as it loads. Without it, the image area
-  // shows a white flash while the postimg URL is fetched.
-  const blur = gradientBlur(project.color || '#171717', '#0a0a0a');
+  // Per-project blur placeholder painted under the full-size image.
+  const blur = gradientBlur(project.color || "#171717", "#0a0a0a");
   return (
     <>
       <ProjectDetail project={project} blurDataURL={blur} />

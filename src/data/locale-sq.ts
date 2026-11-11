@@ -22,19 +22,16 @@ export const SQ_PROJECTS: Project[] = [
     year: "2026",
     challenge:
       "Unifikimi i vitrinës, pagesave, faturimeve dhe analizave në një panel të vetëm të shpejtë",
-    outcome: "Një OS tregu ndërmarrës i rafinuar, i përdorur në mbi 120 vende",
+    outcome:
+      "Sistemi operativ i tregtisë ndërmarrëse — vitrina, pagesat, faturimet dhe analizat të unifikuara në një panel të vetëm produktiv",
     role: "Inxhinier produkti (i vetëm)",
     duration: "4 muaj",
-    metrics: [
-      { label: "TTFB", value: "<200", suffix: "ms" },
-      { label: "Lighthouse", value: "98", suffix: "/100" },
-      { label: "Bundle", value: "92", suffix: "KB" },
-    ],
+    metrics: [],
     highlights: [
       "Panel i vetëm OS për SMB",
       "Stripe + faturim + analiza",
       "Ndërrim temash sipas preferencës së sistemit",
-      "120+ vende të mbështetura",
+      "Dizajnuar, ndërtuar dhe dërguar nga fillimi deri në fund",
     ],
     techRationale: [
       {
@@ -62,7 +59,7 @@ export const SQ_PROJECTS: Project[] = [
       "A++(APL) është një gjuhë programimi e shkruar në shqip që lexohet si gjuhë natyrale. Platforma përfshin një demo transpiluesi live, një playground interaktiv, mjete CLI dhe dokumentacion të plotë. Zhvilluesit shkruajnë skedarë .apl me sintaksë të thjeshtë shqipe dhe kompilojnë në Python, React TSX ose FastAPI me një komandë të vetme — me hot reload, një arkitekturë CIL dhe instalues ndër-platform.",
     image: "/projects/apl.png",
     link: "https://aplplus.vercel.app/",
-    color: "#e879f9",
+    color: "#2e2e2e",
     tech: ["Python", "React", "FastAPI", "TypeScript", "Vite", "CIL"],
     year: "2026",
     challenge:
@@ -71,11 +68,7 @@ export const SQ_PROJECTS: Project[] = [
       "Një transpilues live me arkitekturë CIL, një playground dhe një zinxhir mjetesh CLI",
     role: "Dizajnues, inxhinier kompiluesi dhe inxhinier produkti",
     duration: "5 muaj",
-    metrics: [
-      { label: "Objektiva", value: "3", suffix: "" },
-      { label: "Koha e leximit", value: "<12", suffix: "ms" },
-      { label: "Dokumente", value: "40+", suffix: "faqe" },
-    ],
+    metrics: [{ label: "Objektiva", value: "3", suffix: "" }],
     highlights: [
       "Sintaksë shqipe në gjuhë natyrale",
       "Zinxhir kompiluesi i bazuar në CIL",
@@ -109,7 +102,7 @@ export const SQ_PROJECTS: Project[] = [
       "EM Motors është një faqe interaktive me performancë të lartë për shfaqjen e makinave. Ajo shfaq një dizajn modern të ndërtuar me HTML, CSS, JavaScript dhe Bootstrap, duke siguruar një përvojë përdoruesi responzive dhe angazhuese në të gjitha pajisjet. Platforma ofron listime të detajuara makinash, animacione të buta dhe një ndërfaqe intuitive.",
     image: "/projects/em-motors.png",
     link: "https://em-motors.vercel.app/",
-    color: "#3b82f6",
+    color: "#262626",
     tech: ["HTML", "CSS", "JavaScript", "Bootstrap"],
     year: "2026",
     challenge:
@@ -118,11 +111,7 @@ export const SQ_PROJECTS: Project[] = [
       "Një faqe e rafinuar dhe e shpejtë me animacione të buta dhe listime të detajuara mjetesh",
     role: "Inxhinier frontend i vetëm",
     duration: "3 javë",
-    metrics: [
-      { label: "LCP", value: "1.1", suffix: "s" },
-      { label: "CLS", value: "0", suffix: "" },
-      { label: "Faqe", value: "8", suffix: "" },
-    ],
+    metrics: [],
     highlights: [
       "Layout responziv mobile-first",
       "Listime dinamike mjetesh",
@@ -150,7 +139,7 @@ export const SQ_PROJECTS: Project[] = [
       "ForexPulse është një platformë tregtimi e ndërtuar për tregtarët forex dhe prop. Ajo ofron kurse reale forex për 50+ çifte përmes API-së Frankfurter, faqe çiftesh me grafikë të plotë, një faqe Mjetesh me vlerën e pip-it, kalkulator madhësie pozicioni dhe konvertues valutash, plus një panel me snapshot portofoli dhe listë vëzhgimi. Faqe ulëse dhe aplikacioni ndajnë një UI të errët dhe moderne me thekse qelibar — falas për t’u përdorur, me hyrje opsionale për ruajtjen e preferencave.",
     image: "/forexpulse-hero.png",
     link: "https://forexpulse-trading.vercel.app/",
-    color: "#f59e0b",
+    color: "#1f1f1f",
     tech: ["HTML", "JavaScript", "Tailwind CSS", "Frankfurter API", "Vercel"],
     year: "2025",
     challenge:
@@ -191,7 +180,7 @@ export const SQ_PROJECTS: Project[] = [
       "Eltrix Cloud është një platformë gjithë-në-një e fuqizuar nga IA që kombinon krijimin e përmbajtjes, ndarjen e skedarëve dhe menaxhimin e aseteve digjitale në një përvojë të pandërprerë. Ajo ofron gjenerim përmbajtjeje të asistuar nga IA, ruajtje të sigurt cloud, mjete bashkëpunimi në kohë reale dhe një panel intuitiv për menaxhimin e aseteve digjitale. Platforma jep një UI premium dhe zhytëse me pamje 3D dhe ndërveprime të buta.",
     image: "/projects/eltrix-cloud.png",
     link: "https://eltrixcloud.netlify.app/",
-    color: "#7c3aed",
+    color: "#232323",
     tech: [
       "React",
       "TypeScript",
@@ -206,11 +195,7 @@ export const SQ_PROJECTS: Project[] = [
       "Një platformë e rafinuar dhe zhytëse me pamje 3D dhe rrjedha pune përmbajtjeje të asistuara nga IA",
     role: "Inxhinier produkti i vetëm",
     duration: "3 muaj",
-    metrics: [
-      { label: "Mjete IA", value: "6", suffix: "" },
-      { label: "Lloje asetesh", value: "12", suffix: "" },
-      { label: "Skena 3D", value: "4", suffix: "" },
-    ],
+    metrics: [],
     highlights: [
       "Gjenerim përmbajtjeje i asistuar nga IA",
       "Ruajtje e sigurt cloud",
@@ -237,9 +222,9 @@ export const SQ_PROJECTS: Project[] = [
       "Një platformë transmetimi premium me zbulim përmbajtjeje në kohë reale dhe UI zhytëse.",
     longDescription:
       "FlixVerse është një platformë transmetimi e plotë e frymëzuar nga Netflix, e ndërtuar me fokus në performancë dhe përvojë përdoruesi. Ajo ofron karusele dinamike përmbajtjeje, kërkim në kohë reale me autoplotësim, autentikim përdoruesish, menaxhim liste vëzhgimi dhe riprodhim video të gatshme për HD. UI-ja jep një ndjesi kinematografike me animacione të buta dhe paraqitje responzive në të gjitha pajisjet.",
-    image: "/projects/eltrix-finance.png",
+    image: "/flixverse-hero.png",
     link: "https://flixverse-streaming-pro.vercel.app/",
-    color: "#e50914",
+    color: "#191919",
     tech: ["React", "TypeScript", "TMDB API", "Tailwind CSS", "Vercel"],
     year: "2025",
     challenge:
@@ -248,11 +233,7 @@ export const SQ_PROJECTS: Project[] = [
       "Një UI transmetimi me ndjesi premium me karusele, kërkim të menjëhershëm dhe listë vëzhgimi",
     role: "Inxhinier produkti i vetëm",
     duration: "5 javë",
-    metrics: [
-      { label: "Katalog", value: "10k+", suffix: "tituj" },
-      { label: "LCP", value: "1.3", suffix: "s" },
-      { label: "Animacione", value: "60", suffix: "fps" },
-    ],
+    metrics: [{ label: "Katalog", value: "10k+", suffix: "tituj" }],
     highlights: [
       "Karusele dinamike përmbajtjeje",
       "Kërkim i menjëhershëm me autoplotësim",
@@ -277,27 +258,22 @@ export const SQ_PROJECTS: Project[] = [
     description:
       "Një platformë gjithëpërfshirëse shpërndarje ushqimi dhe porosie me UI moderne.",
     longDescription:
-      "Foodery është një ekosistem shpërndarje ushqimi me performancë të lartë, i ndërtuar për shkallë. Ai ofron një panel reaktiv për pronarët e restoranteve, një aplikacion shoferësh me gjurmim GPS në kohë reale dhe një treg konsumatorësh. Sistemi trajton mijëra kërkesa të njëkohshme me kohë përgjigjeje nën 100ms.",
+      "Foodery është një ekosistem shpërndarje ushqimi: një panel reaktiv për pronarët e restoranteve, një aplikacion shoferësh me gjurmim GPS në kohë reale dhe një treg konsumatorësh. Next.js shërben faqet e produktit dhe SEO-në, ndërsa Supabase fuqizon vendndodhjet live të shoferëve dhe Redis ruan meny dhe gjendjen e porosive në cache.",
     image: "/projects/project-7.jpg",
     link: "https://fooderydelivery.netlify.app",
-    color: "#fbbf24",
+    color: "#2b2b2b",
     tech: ["Next.js", "Supabase", "Redis", "Framer Motion", "Tailwind CSS"],
     year: "2024",
     challenge:
       "Ndërtimi i një ekosistemi shpërndarjeje me një panel reaktiv, një aplikacion shoferësh dhe një treg",
     outcome:
-      "Një platformë me performancë të lartë që trajton mijëra kërkesa të njëkohshme nën 100ms",
+      "Një ekosistem shpërndarje ushqimi — panel restoranti, aplikacion shoferësh me GPS live dhe treg konsumatorësh",
     role: "Inxhinier full-stack",
     duration: "4 muaj",
-    metrics: [
-      { label: "Latenca p95", value: "<100", suffix: "ms" },
-      { label: "Rolë", value: "3", suffix: "" },
-      { label: "Në kohë reale", value: "po", suffix: "" },
-    ],
+    metrics: [{ label: "Rolë", value: "3", suffix: "" }],
     highlights: [
       "Panel restoranti reaktiv",
       "Aplikacion shoferësh me GPS live",
-      "Kohë përgjigjeje nën 100ms",
       "Autentikim shumë-rolësh",
     ],
     techRationale: [
@@ -325,7 +301,7 @@ export const SQ_PROJECTS: Project[] = [
       "Calista ripërkufizon përvojën e blerjeve në internet për modën e lartë. Projekti fokusohet në mikro-ndërveprime, kalime pa ndërprerje dhe dorëzim asetesh me cilësi të lartë. Ai përfshin një integrim custom headless CMS për menaxhimin dinamik të inventarit.",
     image: "/projects/project-8.png",
     link: "https://calista-bake.netlify.app",
-    color: "#ec4899",
+    color: "#282828",
     tech: ["React", "Shopify Hydrogen", "Three.js", "GSAP"],
     year: "2023",
     challenge:
@@ -334,11 +310,7 @@ export const SQ_PROJECTS: Project[] = [
       "Një përvojë shitjeje premium me kalime custom dhe integrim headless CMS",
     role: "Inxhinier frontend",
     duration: "2 muaj",
-    metrics: [
-      { label: "Mikro-ndërveprime", value: "20+", suffix: "" },
-      { label: "Skena 3D", value: "3", suffix: "" },
-      { label: "Fusha CMS", value: "40+", suffix: "" },
-    ],
+    metrics: [],
     highlights: [
       "Mikro-ndërveprime të personalizuara",
       "Kalime faqeje pa ndërprerje",

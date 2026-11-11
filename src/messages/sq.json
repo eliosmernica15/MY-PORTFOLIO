@@ -62,60 +62,41 @@
     "main": "Navigimi kryesor",
     "logo": "Elios Mernica - ballina"
   },
-  "hero": {
-    "title": "Elios Mernica",
-    "subtitle": "Inxhinier Softueri · Sisteme AI · Kosova → Botë",
-    "description": "Inxhinieroj sisteme AI, platforma web me performancë të lartë dhe plumbimin e rrjetëve që i mbështesin.",
-    "available": "I Lirë për Punë",
-    "viewShowcase": "Shiko Shfaqen",
-    "contactMe": "Kontakto Me",
-    "location": "Kosovë, BE",
-    "experience": "4+ Vjet Rritjeje",
-    "specializing": "Specializohem në",
-    "typedPhrases": [
-      "Zhvillim Web",
-      "Dizajn Sistemesh",
-      "Infrastrukturë Rrjeti",
-      "Inxhinieri Full-Stack"
-    ],
-    "remoteAvailable": "I disponueshëm për inxhinieri në distancë dhe misione digjitale.",
-    "yearsOfGrowth": "Vite të Rritjes"
-  },
   "about": {
     "title": "Rreth Meje",
-    "subtitle": "Unë jam Elios Mernica, Inxhinier Softueri",
-    "description": "Inxhinier softueri i specializuar në zhvillim web, dizajn sistimesh dhe infrastrukturë rrjetesh. Bazuar në Kosovë, disponibil botërisht.",
+    "subtitle": "Elios Mernica — Inxhinier · Dizajner · Ndërtues Produktesh",
+    "description": "Dizajnoj, inxhinieroj dhe dërgoj produkte dixhitale nga fillimi deri në fund — nga ndërfaqja që prekin njerëzit deri te arkitektura dhe mjetet që e mbajnë atë. Me bazë në Kosovë. Duke ndërtuar për botën.",
     "focus": "Fokusi",
-    "principle": "Principi",
+    "principle": "Parimi",
     "availability": "Disponueshmëria",
     "values": [
-      "Web & Infrastruktura",
-      "Minimalizëm & Shpejtësi",
-      "Larg · Botërisht"
+      "Produkte nga fillimi deri në fund",
+      "Punë e dërguar vërtet",
+      "Remote · Në të gjithë botën"
     ],
     "skills": "Teknologjet & Aftësitë",
     "experience": "Përvoja",
     "education": "Arsimi",
     "capabilities": [
       "Inxhinieri Full-Stack",
-      "Arkitektura e Sistemit",
-      "Optimizimi i Performancës",
-      "UI/UX Inxhinieri",
-      "Deployment në Cloud",
-      "API Design"
+      "Dizajn Produkti",
+      "Integrim AI",
+      "Mjete Zhvillimi",
+      "Inxhinieri UI",
+      "Deploy në Cloud"
     ],
-    "timelineLabel": "Ku kam qenë",
-    "timelineNow": "ESMP v2 + A++(APL) v1.2 në produksion.",
-    "timeline2026": "Sisteme agjentësh IA, RAG custom dhe një kompilues publik.",
-    "timeline2025": "Themelimi i Flixverse; 1k përdorues në javën e tretë.",
-    "timeline2024": "Eltrix Cloud në produksion; punë remote në të gjithë botën.",
-    "timeline2023": "Themelimi i ForexPulse; SaaS full-stack nga zero te klientët që paguajnë.",
+    "timelineLabel": "Rrugëtimi deri këtu",
+    "timelineNow": "ESMP + A++(APL) në produksion — i hapur për role me kontratë.",
+    "timeline2026": "A++(APL) — gjuhë programimi me sintaksë shqipe; ESMP, sistemi operativ i tregtisë, në produksion.",
+    "timeline2025": "Eltrix Cloud, ForexPulse, FlixVerse — të dërguara nga fillimi deri në fund si projekte solo.",
+    "timeline2024": "Foodery — një ekosistem shpërndarjeje: panel restoranti, aplikacion shoferësh, treg.",
+    "timeline2023": "Calista — vitrinë mode e lartë; fillimi i zanatit të frontend-it.",
     "timelineNowLabel": "Tani"
   },
   "services": {
     "title": "Shërbimet",
-    "subtitle": "Projekte Web Unike.",
-    "description": "Kthej ide në produkte dixhitale me performancë të lartë — inxhinieruar për qartësi, shpejtësi dhe skaluese të gjatë kohës.",
+    "subtitle": "Çfarë ndërtoj.",
+    "description": "Nga një landing page deri te një produkt i plotë — dizajnuar, inxhinieruar dhe dërguar nga fillimi deri në fund nga një person i vetëm që kujdeset për çdo shtresë.",
     "items": [
       {
         "number": "01",
@@ -138,7 +119,7 @@
         "description": "Kthej një ide në një projekt real. Mbijetoj zhvillimin e tij nga zero deri në prodhim, duke ofruar mirëmbajtje vazhdimore."
       }
     ],
-    "eyebrow": "Shërbime të besueshme"
+    "eyebrow": "Shërbimet"
   },
   "projects": {
     "title": "Portofoli",
@@ -202,19 +183,12 @@
       "devops": "Infra & DevOps",
       "design": "Dizajn"
     },
-    "level": {
-      "beginner": "Fillestar",
-      "intermediate": "Mesatar",
-      "advanced": "Të Avancuar",
-      "expert": "Ekspert"
-    },
     "tagline": "Ndërtuar për produksion, jo për prezantime.",
-    "stackTagline": "Çfarë ndërtoj me.",
-    "levelOf": "Niveli {level} nga 5"
+    "stackTagline": "Çfarë ndërtoj me."
   },
   "testimonials": {
     "title": "Përgjigjet",
-    "subtitle": "Besimi i Verifikuar.",
+    "subtitle": "Me fjalët e tyre.",
     "description": "Çfarë thonë klientët dhe kolaboruesit rreth bashkëpunimit në produkte dixhitale ambicioze.",
     "previous": "Parës",
     "next": "Tjetri",
@@ -224,8 +198,8 @@
   },
   "contact": {
     "title": "Kontaktohu",
-    "subtitle": "Formoni të Ardhmen.",
-    "description": "Arkitektim i brezit të ardhshëm të shkollës dixhitale. Ndani vizionin tuaj — unë do ta inxhinieroj rrugën nga koncepti në prodhim.",
+    "subtitle": "Ke diçka për të ndërtuar?",
+    "description": "Trego çfarë dëshiron të ndërtosh. Do të kthehem me një përgjigje të drejtëpërdrejtë, një vlerësim real dhe hapin e parë — ose një rekomandim të ndershëm për të mos e bërë ende.",
     "email": "Email",
     "phone": "Telefoni",
     "form": {
@@ -240,7 +214,6 @@
       "validation": {
         "nameRequired": "Emri duhet të ketë të paktën 3 karaktere",
         "emailRequired": "Ju lutemi shkruani një email të vlefshëm",
-        "emailInvalid": "Formati i email-it është i pavlefshëm",
         "messageRequired": "Mesazhi duhet të ketë të paktën 20 karaktere",
         "tooFast": "Dërgimi shumë i shpejtë. Ju lutemi merrni kohën tuaj.",
         "csrfError": "Seanca ka skaduar — rifresko faqen dhe provo sërish."

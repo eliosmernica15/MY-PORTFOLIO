@@ -22,10 +22,10 @@ export async function generateMetadata({
 
   const isAlbanian = locale === "sq";
   const title = isAlbanian
-    ? `${SITE.name} — Inxhinier Softueri`
+    ? `${SITE.name} — Inxhinier · Dizajner · Ndërtues Produktesh`
     : `${SITE.name} — ${SITE.title}`;
   const description = isAlbanian
-    ? "Inxhinier softueri i specializuar në zhvillim web, dizajn sistemesh dhe infrastrukturë rrjetesh. Bazuar në Kosovë, i disponueshëm në të gjithë botën."
+    ? "Elios Mernica dizajnon, inxhinieron dhe dërgon produkte dixhitale nga fillimi deri në fund — web full-stack, integrim AI dhe mjete zhvillimi, duke përfshirë A++(APL), një gjuhë programimi me sintaksë shqipe. Me bazë në Kosovë, duke ndërtuar për botën."
     : SITE.summary;
 
   return {

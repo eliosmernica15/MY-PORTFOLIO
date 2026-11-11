@@ -34,30 +34,14 @@ export function StackMap() {
               `skills.categories.${CATEGORY_KEY[category.name] ?? "frontend"}`,
             )}
           </h3>
-          <ul className="space-y-3">
+          <ul className="divide-y" style={{ borderColor: "var(--border)" }}>
             {category.skills.map((skill) => (
-              <li key={skill.name} className="flex items-center gap-3">
-                <span
-                  className="flex items-center gap-1"
-                  aria-label={t("skills.levelOf", { level: skill.level })}
-                >
-                  {[1, 2, 3, 4, 5].map((dot) => (
-                    <span
-                      key={dot}
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{
-                        background:
-                          dot <= skill.level
-                            ? "var(--accent)"
-                            : "var(--border)",
-                      }}
-                    />
-                  ))}
-                </span>
-                <span
-                  className="text-sm"
-                  style={{ color: "var(--text-secondary)" }}
-                >
+              <li
+                key={skill.name}
+                className="py-2 text-sm"
+                style={{ borderColor: "var(--border)" }}
+              >
+                <span style={{ color: "var(--text-secondary)" }}>
                   {skill.name}
                 </span>
               </li>
