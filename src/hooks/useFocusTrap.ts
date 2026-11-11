@@ -1,5 +1,5 @@
-'use client';
-import { useEffect, useRef, useCallback } from 'react';
+"use client";
+import { useEffect, useRef, useCallback } from "react";
 
 interface UseFocusTrapOptions {
   /** Whether the focus trap is active */
@@ -42,11 +42,13 @@ export function useFocusTrap<T extends HTMLElement>({
   const previouslyFocused = useRef<HTMLElement | null>(null);
   const inertElements = useRef<HTMLElement[]>([]);
   const isNested = useRef(false);
+  const wasActiveRef = useRef(false);
 
   // Build the exclude selector string
-  const excludeSelector = excludeSelectors.length > 0
-    ? `:not(${excludeSelectors.join('):not(')})`
-    : '';
+  const excludeSelector =
+    excludeSelectors.length > 0
+      ? `:not(${excludeSelectors.join("):not(")})`
+      : "";
 
   const getFocusableElements = useCallback(() => {
     const root = ref.current;
@@ -54,35 +56,40 @@ export function useFocusTrap<T extends HTMLElement>({
 
     return Array.from(
       root.querySelectorAll<HTMLElement>(
-        `a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"]), [data-focusable]${excludeSelector}`
-      )
+        `a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"]), [data-focusable]${excludeSelector}`,
+      ),
     ).filter(
       (el) =>
-        !el.hasAttribute('aria-hidden') &&
+        !el.hasAttribute("aria-hidden") &&
         el.offsetParent !== null && // visible
-        !el.inert // not already inert
+        !el.inert, // not already inert
     );
   }, [excludeSelector]);
 
   const applyInert = useCallback(
     (root: HTMLElement, activate: boolean) => {
-      if (typeof document === 'undefined') return;
+      if (typeof document === "undefined") return;
 
       // Find all main content areas that should be inert
       // Exclude the root element and any elements with data-focus-trap-exclude
       const mainContent = document.querySelectorAll<HTMLElement>(
-        'main, [role="main"], #main-content, .main-content, #content, .content'
+        'main, [role="main"], #main-content, .main-content, #content, .content',
       );
 
       if (activate) {
         // Store currently focused element
-        previouslyFocused.current = document.activeElement as HTMLElement | null;
+        previouslyFocused.current =
+          document.activeElement as HTMLElement | null;
 
         // Apply inert to background content
         mainContent.forEach((el) => {
-          if (el !== root && !root.contains(el) && !excludeSelectors.some((s) => el.matches(s))) {
-            el.setAttribute('inert', '');
-            el.setAttribute('data-focus-trap-inert', 'true');
+          if (
+            el !== root &&
+            !root.contains(el) &&
+            !excludeSelectors.some((s) => el.matches(s))
+          ) {
+            el.setAttribute("inert", "");
+            el.setAttribute("data-focus-trap-inert", "true");
             inertElements.current.push(el);
           }
         });
@@ -92,8 +99,8 @@ export function useFocusTrap<T extends HTMLElement>({
         if (parent) {
           Array.from(parent.children).forEach((child) => {
             if (child !== root && child instanceof HTMLElement) {
-              child.setAttribute('inert', '');
-              child.setAttribute('data-focus-trap-inert', 'true');
+              child.setAttribute("inert", "");
+              child.setAttribute("data-focus-trap-inert", "true");
               inertElements.current.push(child);
             }
           });
@@ -101,25 +108,34 @@ export function useFocusTrap<T extends HTMLElement>({
       } else {
         // Remove inert from all elements we marked
         inertElements.current.forEach((el) => {
-          el.removeAttribute('inert');
-          el.removeAttribute('data-focus-trap-inert');
+          el.removeAttribute("inert");
+          el.removeAttribute("data-focus-trap-inert");
         });
         inertElements.current = [];
       }
     },
-    [excludeSelectors]
+    [excludeSelectors],
   );
 
   useEffect(() => {
+    // Activation keys off the `active` boolean's false→true edge — never off
+    // mere identity changes of callbacks/refs between renders. Without this,
+    // an inline `onActivate` would re-run the trap on every keystroke
+    // and re-focus the first element (observed as: can't type in the input).
+    const isFreshActivation = active && wasActiveRef.current === false;
+    wasActiveRef.current = active;
+
     if (!active || !ref.current) return;
+    if (!isFreshActivation) return;
 
     const root = ref.current;
 
     // Check if there's already an active focus trap (nested)
-    isNested.current = document.querySelector('[data-focus-trap-active="true"]') !== null;
+    isNested.current =
+      document.querySelector('[data-focus-trap-active="true"]') !== null;
 
     // Mark this element as having an active focus trap
-    root.setAttribute('data-focus-trap-active', 'true');
+    root.setAttribute("data-focus-trap-active", "true");
 
     // Apply inert to background
     applyInert(root, true);
@@ -131,7 +147,7 @@ export function useFocusTrap<T extends HTMLElement>({
     const last = focusables[focusables.length - 1];
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
 
       const currentFocusables = getFocusableElements();
       if (currentFocusables.length === 0) return;
@@ -150,18 +166,21 @@ export function useFocusTrap<T extends HTMLElement>({
 
     const onKeyDown = (e: KeyboardEvent) => {
       // Handle Escape key
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         // Don't prevent default here - let the component handle it
         // This allows components to customize Escape behavior
       }
       onKey(e);
     };
 
-    root.addEventListener('keydown', onKeyDown);
+    root.addEventListener("keydown", onKeyDown);
 
-    // Focus the first focusable element after a brief delay
-    // This ensures the element is rendered and ready
+    // Focus the first focusable element after a brief delay — but never
+    // steal focus from something the user is already interacting with inside
+    // the trap (otherwise re-runs re-focus the close button on every keystroke).
     const timeoutId = setTimeout(() => {
+      const current = document.activeElement as HTMLElement | null;
+      if (current && root.contains(current)) return;
       const elements = getFocusableElements();
       if (elements.length > 0) {
         elements[0].focus();
@@ -171,14 +190,17 @@ export function useFocusTrap<T extends HTMLElement>({
     onActivate?.();
 
     return () => {
-      root.removeEventListener('keydown', onKeyDown);
+      root.removeEventListener("keydown", onKeyDown);
       clearTimeout(timeoutId);
 
       // Remove the active marker
-      root.removeAttribute('data-focus-trap-active');
+      root.removeAttribute("data-focus-trap-active");
 
       // Only remove inert if this is the outermost trap
-      if (!isNested.current || !document.querySelector('[data-focus-trap-active="true"]')) {
+      if (
+        !isNested.current ||
+        !document.querySelector('[data-focus-trap-active="true"]')
+      ) {
         applyInert(root, false);
       }
 
@@ -190,7 +212,14 @@ export function useFocusTrap<T extends HTMLElement>({
 
       onDeactivate?.();
     };
-  }, [active, applyInert, getFocusableElements, onActivate, onDeactivate, restoreFocus]);
+  }, [
+    active,
+    applyInert,
+    getFocusableElements,
+    onActivate,
+    onDeactivate,
+    restoreFocus,
+  ]);
 
   return ref;
 }
@@ -210,32 +239,32 @@ export function useInertBackground({
   const inertElements = useRef<HTMLElement[]>([]);
 
   useEffect(() => {
-    if (typeof document === 'undefined') return;
+    if (typeof document === "undefined") return;
 
     const mainContent = document.querySelectorAll<HTMLElement>(
-      'main, [role="main"], #main-content, .main-content, #content, .content'
+      'main, [role="main"], #main-content, .main-content, #content, .content',
     );
 
     if (active) {
       mainContent.forEach((el) => {
         if (!excludeSelectors.some((s) => el.matches(s))) {
-          el.setAttribute('inert', '');
-          el.setAttribute('data-inert-background', 'true');
+          el.setAttribute("inert", "");
+          el.setAttribute("data-inert-background", "true");
           inertElements.current.push(el);
         }
       });
     } else {
       inertElements.current.forEach((el) => {
-        el.removeAttribute('inert');
-        el.removeAttribute('data-inert-background');
+        el.removeAttribute("inert");
+        el.removeAttribute("data-inert-background");
       });
       inertElements.current = [];
     }
 
     return () => {
       inertElements.current.forEach((el) => {
-        el.removeAttribute('inert');
-        el.removeAttribute('data-inert-background');
+        el.removeAttribute("inert");
+        el.removeAttribute("data-inert-background");
       });
       inertElements.current = [];
     };

@@ -138,6 +138,8 @@ export interface KnowledgeEntry {
   intent: string;
   weight: number;
   text: string;
+  /** Optional Albanian counterpart — same facts, native phrasing. */
+  textSq?: string;
   related?: string[];
   action?: KnowledgeAction;
 }
