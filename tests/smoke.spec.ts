@@ -16,7 +16,7 @@ const PAGES = [
   "/notes",
   "/notes/why-i-built-apl",
   "/project/esmp",
-  "/offline",
+  "/offline.html",
 ];
 
 for (const path of PAGES) {
@@ -118,12 +118,12 @@ test("service worker never caches HTML (nonce-safe)", async ({ request }) => {
   const res = await request.get("/sw.js");
   const body = await res.text();
   // Regression guard: HTML documents carry a per-request CSP nonce, so the
-  // SW must not store them. The only precached page is /offline.
+  // SW must not store them. The only precached page is /offline.html.
   const precache = body.match(/const PRECACHE = \[([^\]]*)\]/)?.[1] ?? "";
-  expect(precache.replace(/["']/g, "").trim()).toBe("/offline");
+  expect(precache.replace(/["']/g, "").trim()).toBe("/offline.html");
   expect(precache).not.toContain(",");
-  expect(body).toContain("v4");
-  expect(body).toMatch(/caches\.match\(["']\/offline["']\)/);
+  expect(body).toContain("v6");
+  expect(body).toMatch(/caches\.match\(["']\/offline\.html["']\)/);
   expect(body).not.toContain("cache.put(req, res)");
 });
 
@@ -132,4 +132,16 @@ test("invalid locale returns 404 and does not render English", async ({
 }) => {
   const res = await request.get("/fr");
   expect(res.status()).toBe(404);
+});
+
+test("offline page is hermetic (no JS chunks to go stale)", async ({
+  request,
+}) => {
+  // The SW precaches /offline once. If that snapshot references build-specific
+  // chunks, every rebuild turns the offline fallback into a corpse.
+  const res = await request.get("/offline.html");
+  const body = await res.text();
+  expect(res.status()).toBe(200);
+  expect(body).not.toMatch(/src="\/_next\/static\/chunks/);
+  expect(body).not.toContain("<script");
 });
