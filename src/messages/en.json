@@ -403,7 +403,10 @@
     "year": "Year",
     "category": "Category",
     "stack": "Stack",
-    "visitLive": "Visit Live"
+    "visitLive": "Visit Live",
+    "previous": "Previous case study",
+    "next": "Next case study",
+    "moreWork": "More case studies"
   },
   "boot": {
     "title": "ELIOS/OS",

@@ -407,7 +407,10 @@
     "year": "Viti",
     "category": "Kategoria",
     "stack": "Teknologjitë",
-    "visitLive": "Vizito Live"
+    "visitLive": "Vizito Live",
+    "previous": "Studimi i mëparshëm",
+    "next": "Studimi tjetër",
+    "moreWork": "Më shumë studime rasti"
   },
   "boot": {
     "title": "ELIOS/OS",
