@@ -184,7 +184,7 @@
     "location": "Vendndodhja",
     "education": "Arsimi",
     "experience": "Përvoja",
-    "skills": "Aftësitë Sisteme",
+    "skills": "Teknologjitë që Përdor",
     "period": "Periudha",
     "role": "Roli",
     "company": "Kompania",
@@ -415,10 +415,10 @@
     "switchLanguage": "Ndrysho gjuhën"
   },
   "stats": {
-    "projectsCompleted": "Projekte të përfunduara",
+    "projectsShipped": "Projekte të përfunduara",
     "yearsExperience": "Vite përvojë",
-    "happyClients": "Klientë të kënaqur",
-    "skillsMastered": "Aftësi të zotëruara"
+    "technologiesUsed": "Teknologji të përdorura",
+    "notesPublished": "Shënime të publikuara"
   },
   "projectDetail": {
     "backToProjects": "Kthehu te Galeria",

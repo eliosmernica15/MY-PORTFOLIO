@@ -93,13 +93,13 @@ export interface Testimonial {
 // ============================================================
 
 export type NoteBlock =
-  | { type: 'p'; text: string }
-  | { type: 'h2'; text: string }
-  | { type: 'h3'; text: string }
-  | { type: 'code'; lang: string; code: string }
-  | { type: 'list'; items: string[]; ordered?: boolean }
-  | { type: 'quote'; text: string; cite?: string }
-  | { type: 'callout'; tone: 'info' | 'warn' | 'success'; text: string };
+  | { type: "p"; text: string }
+  | { type: "h2"; text: string }
+  | { type: "h3"; text: string }
+  | { type: "code"; lang: string; code: string }
+  | { type: "list"; items: string[]; ordered?: boolean }
+  | { type: "quote"; text: string; cite?: string }
+  | { type: "callout"; tone: "info" | "warn" | "success"; text: string };
 
 export interface Note {
   slug: string;
@@ -125,7 +125,6 @@ export interface SiteConfig {
   email: string;
   phone: string;
   location: string;
-  birthday: string;
   ogImagePath: string;
   twitterHandle: string;
   locale: string;
@@ -136,7 +135,6 @@ export interface ContactInfo {
   email: string;
   phone: string;
   location: string;
-  birthday: string;
 }
 
 // ============================================================
@@ -160,9 +158,9 @@ export interface EducationEntry {
 // ============================================================
 
 export type KnowledgeAction =
-  | { type: 'scroll_to'; target: string }
-  | { type: 'open_link'; target: string }
-  | { type: 'open_route'; target: string };
+  | { type: "scroll_to"; target: string }
+  | { type: "open_link"; target: string }
+  | { type: "open_route"; target: string };
 
 export interface KnowledgeEntry {
   id: string;
@@ -218,7 +216,7 @@ export interface ContactFormData {
 // Theme Types
 // ============================================================
 
-export type ThemeMode = 'light' | 'dark' | 'auto' | 'time';
+export type ThemeMode = "light" | "dark" | "auto" | "time";
 
 export interface ThemeConfig {
   paletteId: string;
@@ -255,7 +253,7 @@ export interface AccentPalette {
 
 export type EasingFunction =
   | [number, number, number, number]
-  | { type: 'spring'; stiffness: number; damping: number };
+  | { type: "spring"; stiffness: number; damping: number };
 
 export interface MotionDurations {
   instant: 0;
@@ -324,13 +322,14 @@ export interface SearchOptions {
 // ============================================================
 
 export type TerminalAction =
-  | { type: 'scroll_to'; target: string }
-  | { type: 'open_link'; target: string }
-  | { type: 'open_route'; target: string }
-  | { type: 'set_theme'; theme: 'dark' | 'light' | 'toggle' }
-  | { type: 'clear' };
+  | { type: "scroll_to"; target: string }
+  | { type: "open_link"; target: string }
+  | { type: "open_route"; target: string }
+  | { type: "set_theme"; theme: "dark" | "light" | "toggle" }
+  | { type: "clear" };
 
-export type CommandOutput = string | { output: string; action?: TerminalAction };
+export type CommandOutput =
+  string | { output: string; action?: TerminalAction };
 
 export interface TerminalMessage {
   id: string;
@@ -343,7 +342,7 @@ export interface TerminalMessage {
 // Assistant Chat Types
 // ============================================================
 
-export type AssistantMessageRole = 'user' | 'bot';
+export type AssistantMessageRole = "user" | "bot";
 
 export interface AssistantMessage {
   id: string;
@@ -377,7 +376,9 @@ export type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
 /** Extract the return type of a function */
-export type ReturnType<T> = T extends (...args: unknown[]) => infer R ? R : never;
+export type ReturnType<T> = T extends (...args: unknown[]) => infer R
+  ? R
+  : never;
 
 /** Deep partial type */
 export type DeepPartial<T> = {
@@ -391,7 +392,8 @@ export type NonNullable<T> = T extends null | undefined ? never : T;
 export type RequireKeys<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
 /** Make specific keys optional */
-export type OptionalKeys<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+export type OptionalKeys<T, K extends keyof T> = Omit<T, K> &
+  Partial<Pick<T, K>>;
 
 // ============================================================
 // Re-export commonly used types for convenience

@@ -908,10 +908,12 @@ export default function AssistantChat() {
                     How this works
                   </p>
                   <p>
-                    Replies come from a knowledge base built from this site
-                    (projects, services, skills, notes, and a hand-written FAQ).
-                    It runs entirely in your browser — no API key, no server
-                    calls, no data leaves your device. Regenerated on every{" "}
+                    This is a scripted, on-device knowledge base — not a hosted
+                    AI model or LLM. It matches your question against curated
+                    answers built from this site (projects, services, skills,
+                    notes, and a hand-written FAQ). It runs entirely in your
+                    browser — no API key, no server calls, no data leaves your
+                    device. Regenerated on every{" "}
                     <code className="kbd">sync:kb</code> run.
                   </p>
                 </div>
@@ -1109,7 +1111,7 @@ export default function AssistantChat() {
               >
                 <span className="flex items-center gap-1.5">
                   <ShieldCheck size={11} />
-                  Scripted KB · no data leaves browser
+                  Scripted assistant — not an LLM · no data leaves your browser
                 </span>
                 <span>
                   {rateRemaining}/{RATE_MAX} this min

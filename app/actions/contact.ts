@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import nodemailer from "nodemailer";
+import { headers } from "next/headers";
 import { rateLimitAsync } from "@/lib/ratelimit";
 import { validateCsrfToken, getCsrfToken } from "@/lib/csrf";
 
@@ -148,10 +149,15 @@ export async function submitContact(
     return { ok: false, error: "validation", fieldErrors };
   }
 
-  // Rate limit (1 / 30s, 5 / hour, per IP) — best-effort IP from common proxy headers
-  const xff = (formData.get("_xff") as string | null) ?? "unknown";
+  // Rate limit (1 / 30s, 5 / hour, per IP). IP is derived from trusted
+  // server-side request headers only — never from client-supplied data.
+  const hdrs = await headers();
+  const forwarded = hdrs.get("x-forwarded-for");
+  const realIp = hdrs.get("x-real-ip");
+  const clientIp =
+    (forwarded?.split(",")[0] ?? realIp ?? "").trim() || "unknown";
 
-  const fast = await rateLimitAsync(`contact:fast:${xff}`, {
+  const fast = await rateLimitAsync(`contact:fast:${clientIp}`, {
     capacity: 1,
     refillPerSecond: 1 / 30,
   });
@@ -161,7 +167,7 @@ export async function submitContact(
       error: "rate_limited",
       retryAfterMs: fast.retryAfterMs,
     };
-  const slow = await rateLimitAsync(`contact:slow:${xff}`, {
+  const slow = await rateLimitAsync(`contact:slow:${clientIp}`, {
     capacity: 5,
     refillPerSecond: 5 / 3600,
   });

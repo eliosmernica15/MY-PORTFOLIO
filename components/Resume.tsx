@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Sparkles, Zap, Download } from "lucide-react";
-import { SKILLS_PROGRESS } from "@/data/skills-progress";
+import { SKILL_CATEGORIES } from "@/data/skills";
 import { CONTACT_INFO } from "@/data/contact-info";
 import RevealSection from "./RevealSection";
 import SectionHeader from "./ui/SectionHeader";
@@ -175,30 +175,37 @@ const Resume: React.FC = () => {
             >
               {t("resume.skills")}
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-16 gap-y-6 md:gap-y-8">
-              {SKILLS_PROGRESS.map((skill, idx) => (
-                <div key={skill.name} className="space-y-2.5">
-                  <div className="flex justify-between font-bold text-[10px] uppercase tracking-widest">
-                    <span style={{ color: "var(--text-secondary)" }}>
-                      {skill.name}
-                    </span>
-                    <span style={{ color: "var(--text-primary)" }}>
-                      {skill.value}%
-                    </span>
-                  </div>
-                  <div className="h-1.5 w-full bg-[var(--border)] rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.value}%` }}
-                      viewport={{ once: true }}
-                      transition={{
-                        duration: 1,
-                        delay: idx * 0.08,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
-                      className="h-full rounded-full bg-[var(--accent)] shadow-accent"
-                    />
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {SKILL_CATEGORIES.map((category) => (
+                <div
+                  key={category.name}
+                  className="rounded-2xl border p-4 sm:p-5"
+                  style={{
+                    borderColor: "var(--border)",
+                    backgroundColor: "var(--bg-primary)",
+                  }}
+                >
+                  <h4
+                    className="text-[10px] font-bold uppercase tracking-[0.25em] mb-3"
+                    style={{ color: "var(--accent-light)" }}
+                  >
+                    {category.name}
+                  </h4>
+                  <ul className="flex flex-wrap gap-2">
+                    {category.skills.map((skill) => (
+                      <li
+                        key={skill.name}
+                        className="text-xs font-semibold px-2.5 py-1 rounded-full border"
+                        style={{
+                          borderColor: "var(--border)",
+                          color: "var(--text-secondary)",
+                          backgroundColor: "var(--bg-card)",
+                        }}
+                      >
+                        {skill.name}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </div>

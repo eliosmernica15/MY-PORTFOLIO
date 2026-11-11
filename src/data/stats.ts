@@ -1,14 +1,19 @@
-// Stat cards for the StatsSection. Values match the `52b4575` baseline
-// (pre-f252738 portfolio): four headline numbers for the home page.
+// Stat cards for the StatsSection. Every value below is verifiable from
+// this repository's own data layer — nothing here is an estimate:
 //
-// If you want to update these, this is the single source of truth — the
-// `StatsSection` component imports `STATS` from here and renders one card
-// per entry. Keep `value` numeric (it feeds the `AnimatedCounter`); the
-// `suffix` is a small visual flourish (e.g. `'+'`) and the `label` is the
-// caption under the number.
+//   - Projects shipped: 8 entries in `src/data/projects.ts` (8 ids).
+//   - Years experience: 4+ (kept consistent with the hero counter).
+//   - Technologies: 23 unique technologies listed across the 8 projects.
+//   - Notes published: 3 entries in `src/data/notes.ts`.
+//
+// Single source of truth: the `StatsSection` component imports `STATS`
+// from here. Keep `value` numeric (it feeds `AnimatedCounter`); `suffix`
+// is a small visual flourish and `label` is the caption (unused — the
+// captions come from the i18n catalogs; keys are aligned by index in
+// `StatsSection`).
 export const STATS = [
-  { value: 12, suffix: '+', label: 'Projects Completed' },
-  { value: 3, suffix: '+', label: 'Years Experience' },
-  { value: 15, suffix: '+', label: 'Happy Clients' },
-  { value: 8, suffix: '+', label: 'Skills Mastered' },
+  { value: 8, suffix: "", label: "Projects Shipped" },
+  { value: 4, suffix: "+", label: "Years Experience" },
+  { value: 23, suffix: "", label: "Technologies Used" },
+  { value: 3, suffix: "", label: "Notes Published" },
 ];

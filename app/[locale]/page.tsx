@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Home from "@/components/Home";
 import { SITE } from "@/data/site";
 import { buildBreadcrumbs } from "@/lib/breadcrumbs";
+import { isValidLocale } from "@/i18n/config";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -17,28 +18,40 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  if (!isValidLocale(locale)) notFound();
+
+  const isAlbanian = locale === "sq";
+  const title = isAlbanian
+    ? `${SITE.name} — Inxhinier Softueri`
+    : `${SITE.name} — ${SITE.title}`;
+  const description = isAlbanian
+    ? "Inxhinier softueri i specializuar në zhvillim web, dizajn sistemesh dhe infrastrukturë rrjetesh. Bazuar në Kosovë, i disponueshëm në të gjithë botën."
+    : SITE.summary;
 
   return {
     title: {
-      default: `${SITE.name} — ${SITE.title}`,
+      default: title,
       template: `%s · ${SITE.name}`,
     },
-    description: SITE.summary,
+    description,
     alternates: {
       canonical: `/${locale}`,
+      languages: { en: "/en", sq: "/sq", "x-default": "/en" },
     },
     openGraph: {
-      locale: "en_US",
+      locale: isAlbanian ? "sq_AL" : "en_US",
+      alternateLocale: isAlbanian ? ["en_US"] : ["sq_AL"],
       url: `https://eliosmernica.vercel.app/${locale}`,
       siteName: SITE.name,
-      title: `${SITE.name} — ${SITE.title}`,
-      description: SITE.summary,
+      title,
+      description,
     },
   };
 }
 
 export default async function Page({ params }: PageProps) {
   const { locale } = await params;
+  if (!isValidLocale(locale)) notFound();
   const breadcrumbs = await buildBreadcrumbs(`/${locale}`);
 
   return (

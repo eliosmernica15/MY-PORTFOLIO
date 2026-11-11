@@ -1,12 +1,12 @@
 // Hand-rolled service worker for the Elios Mernica portfolio.
 // Strategies:
-//   - Network-first with cache fallback for HTML navigations (falls back to /offline).
-//     HTML is NOT precached: it carries a per-request CSP nonce, so caching it
-//     would serve stale (and unusable) markup.
-//   - Cache-first for hashed _next/static assets (content-addressed, safe forever).
-//   - No caching for /api/* or anything else.
-// Bump CACHE_VERSION on any strategy change; the activate handler purges old versions.
-const CACHE_VERSION = "v2";
+//   - Network-first for EVERYTHING; no caching of HTML. HTML carries a
+//     per-request CSP nonce, so caching it would replay stale nonce'd
+//     markup. Only the offline page may be precached, never a page response.
+//   - Cache-first exception: content-hashed _next/static assets only.
+//   - Offline fallback: /offline (precached).
+// Bump CACHE_VERSION on any strategy change; activate purges old caches.
+const CACHE_VERSION = "v3";
 const CACHE = `elios-portfolio-${CACHE_VERSION}`;
 const PRECACHE = ["/offline"];
 
@@ -40,7 +40,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   const sameOrigin = url.origin === self.location.origin;
 
-  // Never cache API routes or non-GET traffic.
+  // Never cache API routes.
   if (url.pathname.startsWith("/api/")) return;
 
   // Cache-first for hashed Next.js static assets (content-hashed filenames).
@@ -69,34 +69,16 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Network-first for HTML navigations; fall back to cache, then /offline.
+  // Network-first for navigations. On failure, fall back to the precached
+  // offline page. HTML is NEVER cached (nonce-safe).
   if (
     req.mode === "navigate" ||
     req.headers.get("accept")?.includes("text/html")
   ) {
-    event.respondWith(
-      fetch(req)
-        .then((res) => {
-          if (res.ok) {
-            const copy = res.clone();
-            caches
-              .open(CACHE)
-              .then((c) => c.put(req, copy))
-              .catch(() => {});
-          }
-          return res;
-        })
-        .catch(() =>
-          caches
-            .match(req)
-            .then((cached) => cached || caches.match("/offline")),
-        ),
-    );
+    event.respondWith(fetch(req).catch(() => caches.match("/offline")));
     return;
   }
 
-  // Network-first for everything else; fall back to cache (no /offline for non-HTML).
-  if (sameOrigin) {
-    event.respondWith(fetch(req).catch(() => caches.match(req)));
-  }
+  // Network-first for everything else; no cache fallback for non-HTML assets.
+  event.respondWith(fetch(req));
 });

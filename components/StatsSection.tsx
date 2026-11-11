@@ -8,10 +8,10 @@ import AnimatedCounter from "./AnimatedCounter";
 import RevealSection from "./RevealSection";
 
 const STATS_KEYS = [
-  "projectsCompleted",
+  "projectsShipped",
   "yearsExperience",
-  "happyClients",
-  "skillsMastered",
+  "technologiesUsed",
+  "notesPublished",
 ] as const;
 
 const StatsSection: React.FC = () => {

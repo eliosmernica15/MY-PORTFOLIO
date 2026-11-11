@@ -227,7 +227,7 @@ export const PROJECTS: Project[] = [
       "A premium streaming platform with real-time content discovery and immersive UI.",
     longDescription:
       "FlixVerse is a full-featured streaming platform inspired by Netflix, built with a focus on performance and user experience. It features dynamic content carousels, real-time search with autocomplete, user authentication, watchlist management, and HD-ready video playback. The UI delivers a cinematic feel with smooth animations and responsive layouts across all devices.",
-    image: "/projects/eltrix-finance.png",
+    image: "/flixverse-hero.png",
     link: "https://flixverse-streaming-pro.vercel.app/",
     color: "#e50914",
     tech: ["React", "TypeScript", "TMDB API", "Tailwind CSS", "Vercel"],

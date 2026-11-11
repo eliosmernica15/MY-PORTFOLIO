@@ -184,7 +184,7 @@
     "location": "Location",
     "education": "Education",
     "experience": "Experience",
-    "skills": "System Proficiency",
+    "skills": "What I Build With",
     "period": "Period",
     "role": "Role",
     "company": "Company",
@@ -415,10 +415,10 @@
     "switchLanguage": "Switch language"
   },
   "stats": {
-    "projectsCompleted": "Projects Completed",
+    "projectsShipped": "Projects Shipped",
     "yearsExperience": "Years Experience",
-    "happyClients": "Happy Clients",
-    "skillsMastered": "Skills Mastered"
+    "technologiesUsed": "Technologies Used",
+    "notesPublished": "Notes Published"
   },
   "projectDetail": {
     "backToProjects": "Back to Showcase",

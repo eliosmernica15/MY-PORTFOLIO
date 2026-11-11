@@ -111,3 +111,22 @@ test("service worker script is served with correct cache behavior", async ({
   // SW must be public, max-age=0, must-revalidate so browsers pick up updates
   expect(cacheControl).toContain("max-age=0");
 });
+
+test("service worker never caches HTML (nonce-safe)", async ({ request }) => {
+  const res = await request.get("/sw.js");
+  const body = await res.text();
+  // Regression guard: HTML documents carry a per-request CSP nonce, so the
+  // SW must not store them. The only precached page is /offline.
+  const precache = body.match(/const PRECACHE = \[([^\]]*)\]/)?.[1] ?? "";
+  expect(precache.trim()).toBe("'/offline'");
+  expect(body).toContain("v3");
+  expect(body).toContain("caches.match('/offline')");
+  expect(body).not.toContain("cache.put(req, res)");
+});
+
+test("invalid locale returns 404 and does not render English", async ({
+  request,
+}) => {
+  const res = await request.get("/fr");
+  expect(res.status()).toBe(404);
+});
