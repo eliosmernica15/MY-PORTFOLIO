@@ -126,7 +126,12 @@ export function LocaleProvider({
   );
 
   const t: Translate = useCallback(
-    (key, vars) => interpolate(lookup(locale, key) ?? key, vars),
+    (key, vars) => {
+      // Defensive: non-string keys would throw inside lookup; degrade to an
+      // empty string instead so a caller bug never crashes the render tree.
+      if (typeof key !== "string") return "";
+      return interpolate(lookup(locale, key) ?? key, vars);
+    },
     [locale],
   );
 

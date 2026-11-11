@@ -434,6 +434,13 @@ export default function Terminal({}: TerminalProps = {}) {
   // Keyboard shortcut to toggle the panel (open/close).
   useKeyShortcut({ key: "`", handler: () => setIsOpen((v) => !v) }, true);
 
+  // External toggle (e.g. the ELIOS/OS dock's Terminal app).
+  useEffect(() => {
+    const onToggle = () => setIsOpen((v) => !v);
+    window.addEventListener("elios:terminal-toggle", onToggle);
+    return () => window.removeEventListener("elios:terminal-toggle", onToggle);
+  }, []);
+
   // Keyboard shortcut to toggle minimize: ⌘/Ctrl+M. Only meaningful on
   // desktop — on mobile the panel is fullscreen, so minimize = close.
   useKeyShortcut(

@@ -77,18 +77,20 @@ test("contact API path does not exist as a public endpoint", async ({
   expect(res.status()).toBe(404);
 });
 
-test("EN homepage renders English nav", async ({ page }) => {
+test("EN homepage renders ELIOS/OS menu bar", async ({ page }) => {
   await page.goto("/en");
-  await expect(page.locator("#navigation")).toContainText("HOME", {
+  await expect(page.locator("#navigation")).toContainText("PROJECTS", {
     ignoreCase: true,
   });
+  await expect(page.locator("#navigation")).toContainText("ELIOS/OS");
 });
 
-test("SQ homepage renders Albanian nav", async ({ page }) => {
+test("SQ homepage renders ELIOS/OS menu bar in Albanian", async ({ page }) => {
   await page.goto("/sq");
-  await expect(page.locator("#navigation")).toContainText("Ballina", {
+  await expect(page.locator("#navigation")).toContainText("PROJEKTET", {
     ignoreCase: true,
   });
+  await expect(page.locator("#navigation")).toContainText("ELIOS/OS");
 });
 
 test("no console errors on homepage", async ({ page }) => {
@@ -118,9 +120,10 @@ test("service worker never caches HTML (nonce-safe)", async ({ request }) => {
   // Regression guard: HTML documents carry a per-request CSP nonce, so the
   // SW must not store them. The only precached page is /offline.
   const precache = body.match(/const PRECACHE = \[([^\]]*)\]/)?.[1] ?? "";
-  expect(precache.trim()).toBe("'/offline'");
+  expect(precache.replace(/["']/g, "").trim()).toBe("/offline");
+  expect(precache).not.toContain(",");
   expect(body).toContain("v3");
-  expect(body).toContain("caches.match('/offline')");
+  expect(body).toMatch(/caches\.match\(["']\/offline["']\)/);
   expect(body).not.toContain("cache.put(req, res)");
 });
 

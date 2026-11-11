@@ -7,6 +7,7 @@
    ================================================================ */
 /* Light mode defaults (matches existing :root behavior) */
 :root {
+  --grid-line: rgba(0, 0, 0, 0.055);
   --bg-primary: #ffffff;
   --bg-secondary: #ffffff;
   --bg-card: rgba(0, 0, 0, 0.04);
@@ -46,6 +47,7 @@
 
 /* Dark mode — toggled via <html data-theme="dark"> for SSR safety */
 [data-theme="dark"] {
+  --grid-line: rgba(255, 255, 255, 0.055);
   --bg-primary: #000000;
   --bg-secondary: #000000;
   --bg-card: rgba(255, 255, 255, 0.04);
@@ -1994,4 +1996,138 @@ a:focus-visible {
 .prose-content ::selection {
   background: var(--accent);
   color: var(--accent-contrast);
+}
+
+/* ================================================================
+   ELIOS/OS — Desktop shell (Phase 1)
+   ================================================================ */
+
+/* Blueprint grid backdrop for the desktop hero; masked radially so the
+   grid fades toward the edges. Pure CSS, no image assets. */
+.desktop-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 95% 85% at 50% 42%,
+    black 25%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(
+    ellipse 95% 85% at 50% 42%,
+    black 25%,
+    transparent 78%
+  );
+}
+
+/* Outlined display type — falls back to solid text where stroke is
+   unsupported, so nothing ever renders invisible. */
+.text-outline {
+  color: var(--text-primary);
+}
+@supports ((-webkit-text-stroke: 1px white)) {
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--text-primary);
+  }
+}
+
+/* Featured editorial rows (APL / ESMP) */
+.featured-row {
+  transition: background 0.25s ease;
+}
+.featured-row:hover {
+  background: var(--surface-elevated);
+}
+
+/* ---- ELIOS/OS Dock ---- */
+.dock-app {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+.dock-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  color: var(--text-primary);
+  background: var(--pill-bg);
+  border: 1px solid var(--border);
+  transition:
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+@media (min-width: 640px) {
+  .dock-tile {
+    width: 2.875rem;
+    height: 2.875rem;
+    border-radius: 0.875rem;
+  }
+}
+.dock-tile-elevated {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .dock-app:hover .dock-tile {
+    transform: translateY(-5px) scale(1.09);
+    background: var(--pill-border);
+    border-color: var(--border-hover);
+  }
+  .dock-app:hover .dock-tile-elevated {
+    transform: translateY(-5px) scale(1.09);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+}
+.dock-app:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+}
+.dock-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(2px);
+  white-space: nowrap;
+  border-radius: 0.375rem;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  padding: 0.35rem 0.55rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  z-index: 60;
+}
+.dock-app:hover .dock-tooltip,
+.dock-app:focus-visible .dock-tooltip,
+.dock-app:focus-within .dock-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .dock-tile,
+  .dock-tooltip,
+  .featured-row {
+    transition: none;
+  }
 }

@@ -3,8 +3,10 @@
 import React, { Suspense } from "react";
 import CustomCursor from "./CustomCursor";
 import AmbientBackground from "./AmbientBackground";
-import Nav from "./Nav";
-import Hero from "./Hero";
+import Boot from "./Boot";
+import MenuBar from "./MenuBar";
+import Desktop from "./Desktop";
+import Dock from "./Dock";
 import About from "./About";
 import Services from "./Services";
 import Projects from "./Projects";
@@ -347,34 +349,34 @@ const Home: React.FC = () => {
   return (
     <>
       <CustomCursor />
+      <Boot />
       <ErrorBoundary
-        displayName="Nav"
+        displayName="MenuBar"
         fallback={
           <nav
-            className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4"
-            style={{ pointerEvents: "none" }}
+            className="fixed top-0 inset-x-0 z-50 border-b"
+            style={{
+              background: "var(--bg-card)",
+              borderColor: "var(--border)",
+              pointerEvents: "none",
+            }}
             role="navigation"
             aria-label="Main navigation (fallback)"
           >
             <div
-              className="rounded-full border px-3 py-2 text-center"
-              style={{
-                background: "var(--bg-card)",
-                borderColor: "var(--border)",
-                color: "var(--text-secondary)",
-                width: "fit-content",
-              }}
+              className="mx-auto max-w-7xl px-4 py-3 font-display text-xs uppercase tracking-[0.3em]"
+              style={{ color: "var(--text-secondary)" }}
             >
-              Navigation unavailable
+              ELIOS/OS
             </div>
           </nav>
         }
       >
-        <Nav />
+        <MenuBar />
       </ErrorBoundary>
       <AmbientBackground />
       <main id="main-content">
-        <Hero />
+        <Desktop />
         <About />
         <Services />
         <Suspense fallback={<SkeletonCard />}>
@@ -398,6 +400,7 @@ const Home: React.FC = () => {
         </Suspense>
       </main>
       <Footer />
+      <Dock />
     </>
   );
 };

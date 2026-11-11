@@ -6,13 +6,24 @@ import { SITE } from "@/data/site";
 import { Providers } from "./Providers";
 import { SwRegister } from "./sw-register";
 
-// Self-hosted Plus Jakarta Sans (variable, latin) — avoids the build-time
+// Self-hosted Plus Jakarta Sans (variable, latin) - avoids the build-time
 // Google Fonts fetch that crashes Vercel builds.
 const jakarta = localFont({
   src: "./fonts/plus-jakarta-sans-latin-variable.woff2",
   display: "swap",
   variable: "--font-jakarta",
   weight: "200 800",
+  preload: true,
+});
+
+// Self-hosted Space Grotesk Variable (SIL OFL 1.1, see ./fonts/space-grotesk-OFL.txt).
+// Display typeface for the ELIOS/OS masthead, section titles and large numerals.
+// latin subset covers U+0000-00FF, which includes Albanian ë (U+00EB) and ç (U+00E7).
+const spaceGrotesk = localFont({
+  src: "./fonts/space-grotesk-latin-variable.woff2",
+  display: "swap",
+  variable: "--font-space-grotesk",
+  weight: "300 700",
   preload: true,
 });
 
@@ -163,7 +174,11 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang={locale} data-theme="dark" className={jakarta.variable}>
+    <html
+      lang={locale}
+      data-theme="dark"
+      className={`${jakarta.variable} ${spaceGrotesk.variable}`}
+    >
       <head>
         <link
           rel="preconnect"
