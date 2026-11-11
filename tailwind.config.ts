@@ -12,10 +12,10 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-jakarta)", "system-ui", "sans-serif"],
         display: [
-          "var(--font-space-grotesk)",
+          "var(--font-fraunces)",
           "var(--font-jakarta)",
-          "system-ui",
-          "sans-serif",
+          "Georgia",
+          "serif",
         ],
         mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },

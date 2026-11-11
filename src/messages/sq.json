@@ -46,19 +46,14 @@
     "timeBasedMode": "Bazuar në Kohë"
   },
   "navigation": {
-    "home": "Ballina",
     "about": "Rreth Meje",
-    "services": "Shërbimet",
     "projects": "Projektet",
-    "resume": "CV",
     "contact": "Kontakto",
     "blog": "Blogu",
     "notes": "Shënimet",
     "github": "GitHub",
     "linkedin": "LinkedIn",
     "email": "Email",
-    "hireMe": "Më punëso",
-    "getInTouch": "Lidhu me mua",
     "main": "Navigimi kryesor",
     "logo": "Elios Mernica - ballina"
   },
@@ -66,32 +61,15 @@
     "title": "Rreth Meje",
     "subtitle": "Elios Mernica — Inxhinier · Dizajner · Ndërtues Produktesh",
     "description": "Dizajnoj, inxhinieroj dhe dërgoj produkte dixhitale nga fillimi deri në fund — nga ndërfaqja që prekin njerëzit deri te arkitektura dhe mjetet që e mbajnë atë. Me bazë në Kosovë. Duke ndërtuar për botën.",
-    "focus": "Fokusi",
-    "principle": "Parimi",
     "availability": "Disponueshmëria",
-    "values": [
-      "Produkte nga fillimi deri në fund",
-      "Punë e dërguar vërtet",
-      "Remote · Në të gjithë botën"
-    ],
-    "skills": "Teknologjet & Aftësitë",
+    "values": ["Remote · Në të gjithë botën"],
+    "based": "Vendndodhja",
+    "basedValue": "Vushtrri, Kosovë",
+    "languages": "Gjuhët",
+    "languagesValue": "Anglisht · Shqip",
     "experience": "Përvoja",
-    "education": "Arsimi",
-    "capabilities": [
-      "Inxhinieri Full-Stack",
-      "Dizajn Produkti",
-      "Integrim AI",
-      "Mjete Zhvillimi",
-      "Inxhinieri UI",
-      "Deploy në Cloud"
-    ],
-    "timelineLabel": "Rrugëtimi deri këtu",
-    "timelineNow": "ESMP + A++(APL) në produksion — i hapur për role me kontratë.",
-    "timeline2026": "A++(APL) — gjuhë programimi me sintaksë shqipe; ESMP, sistemi operativ i tregtisë, në produksion.",
-    "timeline2025": "Eltrix Cloud, ForexPulse, FlixVerse — të dërguara nga fillimi deri në fund si projekte solo.",
-    "timeline2024": "Foodery — një ekosistem shpërndarjeje: panel restoranti, aplikacion shoferësh, treg.",
-    "timeline2023": "Calista — vitrinë mode e lartë; fillimi i zanatit të frontend-it.",
-    "timelineNowLabel": "Tani"
+    "experienceValue": "4+ vjet produkte në produksion",
+    "contact": "Kontakti"
   },
   "services": {
     "title": "Shërbimet",
@@ -156,21 +134,7 @@
     "loadMoreCount": "Shfaq edhe {count}"
   },
   "resume": {
-    "title": "CV",
-    "subtitle": "Baza e Karrierës.",
-    "downloadCV": "Shkarko CV-në",
-    "contactInfo": "Informacioni i Kontaktit",
-    "email": "Email",
-    "phone": "Telefoni",
-    "location": "Vendndodhja",
-    "education": "Arsimi",
-    "experience": "Përvoja",
-    "skills": "Teknologjitë që Përdor",
-    "period": "Periudha",
-    "role": "Roli",
-    "company": "Kompania",
-    "description": "Përshkrimi",
-    "heading": "Thelbi i Karrierës."
+    "downloadCV": "Shkarko CV-në"
   },
   "skills": {
     "title": "Aftësitë",
@@ -185,16 +149,6 @@
     },
     "tagline": "Ndërtuar për produksion, jo për prezantime.",
     "stackTagline": "Çfarë ndërtoj me."
-  },
-  "testimonials": {
-    "title": "Përgjigjet",
-    "subtitle": "Me fjalët e tyre.",
-    "description": "Çfarë thonë klientët dhe kolaboruesit rreth bashkëpunimit në produkte dixhitale ambicioze.",
-    "previous": "Parës",
-    "next": "Tjetri",
-    "pause": "Pauzë",
-    "play": "Luaj",
-    "goTo": "Shko te dëshmia {index}"
   },
   "contact": {
     "title": "Kontaktohu",
@@ -227,19 +181,16 @@
       "emailPlaceholder": "juaji@email.com",
       "messagePlaceholder": "Tregoni për projektin tuaj, afatin dhe objektivat..."
     },
-    "directContact": "Ose më kontaktoni drejtpërdrejt:"
+    "directContact": "Ose më kontaktoni drejtpërdrejt:",
+    "rateLimited": "Shumë mesazhe — prit një minutë dhe provo sërish.",
+    "reference": "Referenca",
+    "detailsToggle": "Shto detaje të projektit (opsionale)"
   },
   "footer": {
-    "copyright": "© {viti} Elios Mernica. Të drejtat e rezervuara.",
-    "builtWith": "Ndërtuar me Next.js, React, TypeScript",
-    "available": "I disponueshëm për projekte",
-    "social": "Lidhuni",
-    "quickLinks": "Linkë të Shpejta",
-    "connect": "Lidhuni",
-    "bio": "Zhvillues full-stack që krijoj përvoja digjitale me saktësi dhe qëllim. Bazuar në Kosovë, i disponueshëm në mbarë botën.",
-    "backToTop": "Kthehu lart",
-    "goTo": "Shko te seksioni {section}",
-    "navigation": "Navigimi në fundfaqe"
+    "tagline": "Me bazë në Kosovë. Duke ndërtuar për botën.",
+    "rights": "Të gjitha të drejtat e rezervuara.",
+    "email": "eliosmernica@gmail.com",
+    "colophon": "Vendosur në Fraunces & Plus Jakarta · letër & terakotë"
   },
   "blog": {
     "title": "Blogu",
@@ -270,7 +221,8 @@
     "teaserHeading": "Shënime mbi punën.",
     "notesTitle": "Shënimet",
     "notesHero": "Shkrime mbi atë që ndërtoj.",
-    "notesDescription": "Pjesë të shkurtra dhe të fokusuara mbi sistemet e AI-së, performancën web, dizajnin e gjuhëve dhe mjeshtërinë e dorëzimit të softuerit."
+    "notesDescription": "Pjesë të shkurtra dhe të fokusuara mbi sistemet e AI-së, performancën web, dizajnin e gjuhëve dhe mjeshtërinë e dorëzimit të softuerit.",
+    "viewAll": "Të gjitha shënimet"
   },
   "terminal": {
     "welcome": "Mirësevini — shtypni `help` për të listuar komandat. Esc për të mbyllur. ⌘/ctrl+L për të pastër.",
@@ -381,18 +333,10 @@
     "skipToTerminal": "Kaloni në terminal",
     "skipToAssistant": "Kaloni në asistentin AI",
     "skipToNavigation": "Kaloni në navigim",
-    "openMenu": "Hap menun",
-    "closeMenu": "Mbyll menun",
     "toggleTheme": "Ndrysho temën",
     "openCommandPalette": "Hap paletën e komandave",
     "openThemeSelector": "Hap zgjedhësit e temës",
     "switchLanguage": "Ndrysho gjuhën"
-  },
-  "stats": {
-    "projectsShipped": "Projekte të përfunduara",
-    "yearsExperience": "Vite përvojë",
-    "technologiesUsed": "Teknologji të përdorura",
-    "notesPublished": "Shënime të publikuara"
   },
   "projectDetail": {
     "backToProjects": "Kthehu te Galeria",
@@ -411,119 +355,6 @@
     "previous": "Studimi i mëparshëm",
     "next": "Studimi tjetër",
     "moreWork": "Më shumë studime rasti"
-  },
-  "boot": {
-    "title": "ELIOS/OS",
-    "version": "v1.0",
-    "status1": "Duke inicializuar kernelin…",
-    "status2": "Duke montuar /portfolio…",
-    "status3": "Duke ngarkuar ndërfaqen…",
-    "status4": "Mirë se vjen",
-    "skip": "Kalua",
-    "srLabel": "Sekuenca e nisjes së ELIOS/OS"
-  },
-  "menubar": {
-    "brand": "ELIOS/OS"
-  },
-  "dock": {
-    "finder": "Finder",
-    "finderHint": "Projektet",
-    "terminal": "Terminal",
-    "terminalHint": "Shell interaktiv",
-    "notes": "Notes",
-    "notesHint": "Shkrime teknike",
-    "preview": "Preview",
-    "previewHint": "Studime rasti",
-    "about": "Rreth Këtij Sistemi",
-    "aboutHint": "Profili, CV dhe përvoja",
-    "preferences": "Preferencat e Sistemit",
-    "preferencesHint": "Shërbimet dhe aftësitë",
-    "mail": "Mail",
-    "mailHint": "Shkruaj një mesazh",
-    "hireMe": "Më Punëso",
-    "hireMeHint": "Kërkesë për projekt",
-    "launchApp": "Hap {app}",
-    "desktop": "Desktopi"
-  },
-  "desktop": {
-    "kicker": "ELIOS MERNICA — INXHINIER · DIZAJNER · NDËRTUES PRODUKTESH",
-    "headline": "Ndërtoj sistemet,\nndërfaqet,\ndhe mjetet që\nqëndrojnë poshtë tyre",
-    "lede": "Dizajnoj, inxhinieroj dhe dërgoj produkte dixhitale nga fillimi deri në fund — nga ndërfaqja që prekin njerëzit deri te arkitektura dhe mjetet që e mundësojnë.",
-    "location": "Me bazë në Kosovë. Duke ndërtuar për botën.",
-    "ctaWork": "Shiko punën",
-    "ctaHire": "Më punëso",
-    "featuredLabel": "A++ (APL) — produkti që e përcakton punën",
-    "viewProject": "Shiko projektin",
-    "aplName": "A++(APL)",
-    "aplDesc": "Një gjuhë programimi me sintaksë shqipe. Konvertohet në Python, React dhe FastAPI — me transpilues live, playground dhe CLI.",
-    "esmpName": "ESMP",
-    "esmpDesc": "Sistemi operativ për bizneset e vogla. Dyqan online, pagesa, faturim dhe statistika në një dashboard të vetëm e të shpejtë.",
-    "specTitle": "elios — rreth këtij sistemi",
-    "specName": "Emri",
-    "specNameValue": "Elios Mernica",
-    "specRole": "Roli",
-    "specRoleValue": "Inxhinier · Dizajner · Ndërtues Produktesh",
-    "specFocus": "Fokusi",
-    "specFocusValue": "Full-stack, integrim AI, mjete zhvillimi",
-    "specLocation": "Vendndodhja",
-    "specLocationValue": "Vushtrri, Kosovë — remote në të gjithë botën",
-    "specStatus": "Statusi",
-    "specStatusValue": "I disponueshëm për projekte ndërkombëtare",
-    "osLabel": "ELIOS/OS",
-    "osVersion": "1.0.0",
-    "mastheadTag": "Mjedis personal operativ"
-  },
-  "os": {
-    "minimizeWindow": "Zvogëlo",
-    "maximizeWindow": "Maksimizo",
-    "restoreWindow": "Rikthe",
-    "closeWindow": "Mbyll",
-    "loadingApp": "Duke ngarkuar…"
-  },
-  "finder": {
-    "all": "Të gjitha",
-    "featured": "Të veçuara",
-    "collections": "Koleksionet",
-    "projectsLabel": "Projektet",
-    "empty": "Nuk ka asgjë në këtë koleksion ende.",
-    "backToList": "Kthehu te lista",
-    "openCaseStudy": "Hap studimin e rastit",
-    "liveSite": "Faqja live",
-    "stack": "Stack-u",
-    "previewAlt": "pamje e projektit"
-  },
-  "preview": {
-    "challenge": "Sfida",
-    "outcome": "Rezultati",
-    "role": "Roli",
-    "metrics": "Metrikat"
-  },
-  "notesApp": {
-    "openFull": "Lexo artikullin e plotë"
-  },
-  "aboutSystem": {
-    "philosophyLabel": "Filozofia e inxhinierisë",
-    "philosophy": "Kujdesem për të gjithë rrjedhën — problemin, arkitekturën, ndërfaqen, deploy-in. Softueri përfundon vetëm kur është në prodhim dhe dikush e përdor.",
-    "nowLabel": "Aktualisht"
-  },
-  "prefs": {
-    "servicesPane": "Shërbimet",
-    "stackPane": "Aftësitë & Stack-u",
-    "deliverLabel": "Çfarë dërgoj",
-    "stackLabel": "Si ndërtoj",
-    "stackNote": "Teknologjitë që përdor në prodhim — pa matësa përqindje të sajuar.",
-    "servicesNote": "Çdo angazhim më poshtë përfundon me diçka të deploy-uar dhe të përdorshme."
-  },
-  "mail": {
-    "compose": "Mesazh i ri",
-    "via": "nëpërmjet",
-    "to": "Për",
-    "from": "Nga",
-    "subject": "Subjekti",
-    "subjectPlaceholder": "Kërkesë për projekt — p.sh. \"Onboarding ESMP\"",
-    "successBody": "E lexoj çdo mesazh personalisht. Prit një përgjigje të menduar, jo një autoresponder.",
-    "reference": "Referenca",
-    "rateLimited": "Shumë mesazhe — prit një minutë dhe provo përsëri."
   },
   "hire": {
     "eyebrow": "ELIOS — Pranimi i projekteve",
@@ -575,21 +406,40 @@
     "go": "Shko",
     "runInTerminal": "Mbush terminalin",
     "close": "Mbyll paletën",
-    "navHome": "Ballina",
-    "navProjects": "Projektet",
     "navContact": "Kontakto",
     "hintNav": "lëviz",
     "hintRun": "zgjedh",
     "hintCount": "rezultate",
     "groups": {
-      "apps": "Aplikacionet",
       "projects": "Projektet",
       "notes": "Shënimet",
       "services": "Shërbimet",
-      "skills": "Aftësitë",
       "navigation": "Navigimi",
-      "commands": "Komandat e terminalit"
+      "commands": "Komandat e terminalit",
+      "actions": "Veprimet"
     },
-    "short": "Kërko"
+    "actions": {
+      "hire": "Më punëso — nis një projekt",
+      "cv": "Shkarko CV-në"
+    },
+    "navWork": "Puna",
+    "navServices": "Shërbimet",
+    "navAbout": "Rreth meje"
+  },
+  "hero": {
+    "kicker": "KOS — INXHINIER · DIZAJNER · NDËRTUES PRODUKTESH",
+    "headline": "Ndërtoj sistemet,\nndërfaqet,\ndhe mjetet që qëndrojnë poshtë tyre.",
+    "lede": "Elios Mernica — nga skica e parë në produksion. Dizajn, frontend, backend dhe IA në një palë duar.",
+    "ctaWork": "Shiko punën",
+    "ctaHire": "Më punëso",
+    "proofLine": "8 produkte të dërguara — A++(APL) · ESMP · Eltrix Cloud",
+    "aplImageAlt": "A++(APL) — pamje e transpiluesit live",
+    "aplCaption": "një gjuhë programimi me sintaksë shqipe",
+    "aplLinkLabel": "Hap studimin e rastit A++(APL)"
+  },
+  "work": {
+    "kicker": "01 — Puna",
+    "title": "Punë të zgjedhura.",
+    "count": "{count} produkte, të dërguara nga fillimi deri në fund"
   }
 }

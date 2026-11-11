@@ -1,0 +1,46 @@
+feat(redesign): warm paper redesign, bottom-up rebuild
+
+Working from the user's verdict on the previous direction ('I don't like
+the theme... too much text... overwhelming') and their rebuild call:
+
+Design: single warm-paper theme (cream #FAF7F2, soft-ink #1C1A17,
+terracotta #C2410C). Fraunces (SIL OFL) as the display face — editorial,
+high-contrast, italic accents; Plus Jakarta Sans for body; ui-monospace
+for technical labels. One big statement per section; vastly reduced copy;
+explicit two-cover-plus-index treatment of the projects; colophon footer.
+
+Kept from the existing site (per user): the project data (honest metrics),
+the notes/articles, the CV, the contact pipeline (CSRF/rate-limit/
+honeypot/min-time), the terminal, the assistant, the command palette
+(Ctrl/Cmd+K — now the ONLY owner of that shortcut) and all routes.
+
+Removed entirely (user: 'remove unnecessary elements'): boot overlay,
+menu bar chrome, dock, window manager, desktop hero, windowed apps
+(Finder/Preview/Notes/About/Prefs/Mail/HireMe), StatsSection,
+StackSection/StackMap, Resume timeline, testimonials (unverifiable),
+SplineScene, ParticleCanvas, AmbientBackground, MagneticButton,
+AnimatedCounter, SkillMarquee, Space Grotesk, the ELIOS/OS namespaces
+(352 keys vs 493; parity holds at 352/352).
+
+Nav: wordmark + four destinations + EN/SQ, same at every width (mobile
+keeps the destinations; they were hidden before). Hero: one statement
+('I build the systems, the interfaces, and the tools underneath them.'),
+one proof (APL screenshot), two actions. Work: two covers + numbered
+index of all 8 projects. Services: four typographic rows. Notes: three
+rows. About: one statement + six facts. Contact: two-column ask + card,
+optional project details one click away (same server action). Footer:
+colophon.
+
+Critical bug fixed: the assistant was also bound to Ctrl/Cmd+K — both
+opened on the shortcut and the assistant's focus-trap inerted the whole
+document including the palette. Assistant moved to Ctrl/Cmd+J; palette
+has sole ownership of Ctrl/Cmd+K. Found via the new suite.
+
+Tests: suites rewritten for the new chrome (smoke, a11y, portfolio,
+i18n-parity) — 126/126 green across desktop/tablet/mobile; stale
+visual-regression snapshots removed; hydration-race flakes fixed by
+waiting for React attach in contact interaction tests.
+Perf budget: initial JS worst route 591 KB vs 800 KB cap; CSS 57.6 KB.
+
+Production untouched (eliosmernica.vercel.app = d328376); nothing
+pushed. Local preview serves the redesign at :3000.

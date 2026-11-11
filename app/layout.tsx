@@ -16,14 +16,23 @@ const jakarta = localFont({
   preload: true,
 });
 
-// Self-hosted Space Grotesk Variable (SIL OFL 1.1, see ./fonts/space-grotesk-OFL.txt).
-// Display typeface for the ELIOS/OS masthead, section titles and large numerals.
-// latin subset covers U+0000-00FF, which includes Albanian ë (U+00EB) and ç (U+00E7).
-const spaceGrotesk = localFont({
-  src: "./fonts/space-grotesk-latin-variable.woff2",
+// Self-hosted Fraunces Variable + italic (SIL OFL 1.1, see ./fonts/fraunces-OFL.txt).
+// Display face for the ELIOS/redesign masthead, headlines and numerals.
+const fraunces = localFont({
+  src: [
+    {
+      path: "./fonts/fraunces-latin-variable.woff2",
+      weight: "100 900",
+      style: "normal",
+    },
+    {
+      path: "./fonts/fraunces-italic-latin-variable.woff2",
+      weight: "100 900",
+      style: "italic",
+    },
+  ],
   display: "swap",
-  variable: "--font-space-grotesk",
-  weight: "300 700",
+  variable: "--font-fraunces",
   preload: true,
 });
 
@@ -97,37 +106,18 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: light)", color: "#FAF7F2" },
+    { media: "(prefers-color-scheme: dark)", color: "#FAF7F2" },
   ],
-  colorScheme: "dark light",
+  colorScheme: "light",
 };
 
-// Theme bootstrap - runs before React hydrates so the theme is applied
-// without a light/dark flash. Mirrors the resolver ThemeProvider uses
-// (elios-theme-config): cookie > explicit config mode > legacy key > system.
-// MUST carry the per-request CSP nonce ('strict-dynamic' ignores
-// 'unsafe-inline' for scripts).
+// Theme bootstrap — simplified: the redesigned site ships a single
+// warm-paper theme (no light/dark switching). Kept nonce'd so the CSP
+// story stays uniform across the app.
 const themeInitScript = `
 (function() {
-  try {
-    var t = document.cookie.match(/(?:^|; )theme=(dark|light)/);
-    var cfgMode = null;
-    try {
-      var raw = localStorage.getItem('elios-theme-config');
-      if (raw) cfgMode = JSON.parse(raw).mode;
-    } catch (e) {}
-    var legacy = null;
-    try { legacy = localStorage.getItem('theme'); } catch (e) {}
-    var pref = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    var theme = t ? t[1]
-      : (cfgMode === 'dark' || cfgMode === 'light') ? cfgMode
-      : (legacy === 'dark' || legacy === 'light') ? legacy
-      : pref;
-    document.documentElement.setAttribute('data-theme', theme);
-  } catch(e) {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  }
+  try { document.documentElement.setAttribute('data-theme', 'light'); } catch(e) {}
 })();
 `;
 
@@ -176,28 +166,9 @@ export default async function RootLayout({
   };
 
   return (
-    <html
-      lang={locale}
-      data-theme="dark"
-      className={`${jakarta.variable} ${spaceGrotesk.variable}`}
-    >
+    <html lang={locale} className={`${jakarta.variable} ${fraunces.variable}`}>
       <head>
-        <link
-          rel="preconnect"
-          href="https://prod.spline.design"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://i.postimg.cc"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://api.github.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="dns-prefetch" href="https://api.emailjs.com" />
+        <link rel="dns-prefetch" href="https://api.github.com" />
         {/* View Transitions API - smooth page transitions for same-origin navigation */}
         <meta name="view-transition" content="same-origin" />
         {/* Theme bootstrap. Carries the per-request CSP nonce. */}

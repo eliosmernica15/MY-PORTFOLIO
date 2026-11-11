@@ -362,9 +362,10 @@ export default function AssistantChat() {
     }
   }, [isOpen, minimized]);
 
-  // -- Cmd/Ctrl+K to toggle the panel --
+  // -- Ctrl/Cmd+J toggles the assistant panel (Ctrl/Cmd+K belongs to the
+  //    command palette; both must never fire together) --
   useKeyShortcut(
-    { key: "k", meta: true, handler: () => setIsOpen((v) => !v) },
+    { key: "j", meta: true, handler: () => setIsOpen((v) => !v) },
     true,
   );
 
@@ -689,7 +690,7 @@ export default function AssistantChat() {
         data-floating-trigger
         data-open={isOpen ? "true" : "false"}
         data-minimized={isOpen && minimized ? "true" : "false"}
-        className="floating-trigger group fixed right-4 sm:right-6 bottom-24 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
+        className="floating-trigger group fixed right-4 sm:right-6 bottom-4 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
         style={{
           background: "var(--glass-bg)",
           border: "1px solid var(--glass-border)",
@@ -698,6 +699,8 @@ export default function AssistantChat() {
           boxShadow: "0 10px 40px -10px var(--shadow-accent)",
           marginBottom: "env(safe-area-inset-bottom)",
         }}
+        aria-keyshortcuts="Control+J Meta+J"
+        title={isOpen ? undefined : "Ask Elios AI (Ctrl/⌘ + J)"}
         aria-label={
           isOpen && !isMobile
             ? minimized

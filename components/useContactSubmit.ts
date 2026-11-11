@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { submitContact, getCsrfTokenAction } from "../../app/actions/contact";
+import { submitContact, getCsrfTokenAction } from "../app/actions/contact";
 
 export type SubmitStatus = "idle" | "loading" | "success" | "error";
 
@@ -17,9 +17,10 @@ export interface ContactFields {
 }
 
 /**
- * Shared submission plumbing for the Mail and Hire Me applications.
- * Fetches a CSRF token on mount, enforces the behavioral min-2000ms rule,
- * validates client-side, and maps server results onto local state.
+ * Shared submission plumbing for the contact form.
+ * Fetches a CSRF token on mount, enforces the behavioral min-2000ms
+ * rule, and maps server results onto local state — including the
+ * formTime/csrf rejections, mapped to localized, visible messages.
  */
 export function useContactSubmit() {
   const [status, setStatus] = useState<SubmitStatus>("idle");
@@ -44,9 +45,6 @@ export function useContactSubmit() {
   }, []);
 
   const submit = useCallback(async (fields: ContactFields) => {
-    // Behavioral rule enforced client-side too: the server rejects anything
-    // submitted <2s after first focus anyway, so fail fast with a localized
-    // message instead of a confusing server round-trip.
     if (focusedAtRef.current == null) focusedAtRef.current = Date.now();
     if (Date.now() - focusedAtRef.current < 2100) {
       setServerError("slow");
@@ -68,8 +66,7 @@ export function useContactSubmit() {
     fd.set("source", fields.source);
     fd.set("company", ""); // honeypot
     fd.set("csrf_token", csrfTokenRef.current);
-    const focusedAt = focusedAtRef.current ?? Date.now();
-    fd.set("formTime", String(Date.now() - focusedAt));
+    fd.set("formTime", String(Date.now() - focusedAtRef.current));
 
     try {
       const result = await submitContact(fd);
@@ -80,8 +77,6 @@ export function useContactSubmit() {
         return true;
       }
       if (result.error === "validation") {
-        // formTime/csrf rejections are behavioral, not field issues — surface
-        // them as a general message instead of an invisible field error.
         if (result.fieldErrors?.formTime) {
           setServerError("slow");
           setStatus("error");
@@ -101,12 +96,11 @@ export function useContactSubmit() {
         setStatus("error");
         return false;
       }
-      // spam / delivery
       setServerError(result.error === "delivery" ? result.message : null);
       setStatus("error");
       return false;
     } catch (err) {
-      console.error("[os] contact submit failed", err);
+      console.error("[contact] submit failed", err);
       setServerError(null);
       setStatus("error");
       return false;

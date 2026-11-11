@@ -1,92 +1,90 @@
 /**
- * Accessibility + interaction guarantees for the ELIOS/OS shell.
- *  - reduced motion: boot is skipped entirely, page is fully usable
- *  - ⌘K / Ctrl+K opens the palette; Escape closes it without closing a window behind it
- *  - opening a window from the dock and closing it returns focus to the dock button
- *  - the dock is keyboard-reachable and every control has an accessible name
+ * Accessibility + interaction guarantees for the redesigned site.
+ *  - reduced motion: page renders fully, no boot overlay exists anymore
+ *  - Ctrl/Cmd+K opens the palette; Escape closes it (no OS layer to leak into)
+ *  - skip links are first in tab order; wordmark + EN/SQ are reachable
  */
 import { test, expect } from "@playwright/test";
 
-test("reduced motion: boot overlay never appears", async ({ page }) => {
+test("reduced motion: page renders fully", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/en", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("h1")).toBeVisible();
+  await expect(page.locator("#navigation")).toBeVisible();
+});
+
+test("no boot overlay or dock exists", async ({ page }) => {
+  await page.goto("/en");
   await expect(
     page.getByRole("status", { name: /startup|nisjes/i }),
   ).toHaveCount(0);
-  await expect(page.locator("h1")).toBeVisible();
+  await expect(page.locator(".dock-app")).toHaveCount(0);
 });
 
-test("normal motion: boot renders and auto-dismisses", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/en", { waitUntil: "domcontentloaded" });
-  const boot = page.getByRole("status", { name: /startup|nisjes/i });
-  // Boot must appear for fresh visitors and then detach on its own
-  await boot.waitFor({ state: "attached", timeout: 3000 }).catch(() => {});
-  await boot.waitFor({ state: "detached", timeout: 8000 });
-  await expect(page.locator("h1")).toBeVisible();
-});
-
-test("ctrl+k opens palette and escape leaves windows alone", async ({
-  page,
-}) => {
-  await page.goto("/en", { waitUntil: "domcontentloaded" });
-  // Wait out the boot
-  await page.waitForTimeout(2200);
-
-  // Open the Finder window first — Esc inside the palette must not close it
-  const dock = page.locator('nav[aria-label="Personal operating environment"]');
-  await dock.getByRole("button", { name: /finder/i }).click();
-  await expect(page.getByRole("dialog", { name: "Finder" })).toBeVisible();
-
+test("ctrl+k opens palette and escape closes it", async ({ page }) => {
+  await page.goto("/en");
   await page.keyboard.press("Control+KeyK");
   const palette = page.getByRole("dialog", { name: /command palette/i });
   await expect(palette).toBeVisible();
+  await palette.getByRole("combobox").fill("apl");
+  await expect(palette).toContainText("A++(APL)");
   await page.keyboard.press("Escape");
   await expect(palette).not.toBeVisible();
-  // The Finder window is still open — Esc was consumed by the palette only
-  await expect(page.getByRole("dialog", { name: "Finder" })).toBeVisible();
 });
 
-test("focus returns to the dock button after closing its window", async ({
-  page,
-}) => {
-  await page.goto("/en", { waitUntil: "domcontentloaded" });
-  await page.waitForTimeout(2200);
-
-  const dock = page.locator('nav[aria-label="Personal operating environment"]');
-  const hire = dock.getByRole("button", { name: /hire me/i });
-  await hire.focus();
+test("palette navigates to a project", async ({ page }) => {
+  await page.goto("/en");
+  await page.keyboard.press("Control+KeyK");
+  const palette = page.getByRole("dialog", { name: /command palette/i });
+  await palette.getByRole("combobox").fill("apl");
   await page.keyboard.press("Enter");
-
-  const hireWindow = page.getByRole("dialog", { name: /hire me/i });
-  await expect(hireWindow).toBeVisible();
-
-  await page.keyboard.press("Escape");
-  await expect(hireWindow).not.toBeVisible();
-  await expect(hire).toBeFocused();
+  await page.waitForURL("**/project/apl", { timeout: 15000 });
+  await expect(page).toHaveURL(/\/project\/apl$/);
 });
 
-test("dock controls all have accessible names and are keyboard reachable", async ({
-  page,
-}) => {
-  await page.goto("/en", { waitUntil: "domcontentloaded" });
-  await page.waitForTimeout(2200);
-
-  const dock = page.locator('nav[aria-label="Personal operating environment"]');
-  const controls = dock.getByRole("button");
-  const count = await controls.count();
-  expect(count).toBeGreaterThanOrEqual(8);
-  for (let i = 0; i < count; i++) {
-    const name = await controls.nth(i).getAttribute("aria-label");
-    expect(name, `dock control #${i} must have an aria-label`).toBeTruthy();
-  }
-});
-
-test("skip links are present and first in tab order", async ({ page }) => {
+test("skip links are first in tab order", async ({ page }) => {
   await page.goto("/en", { waitUntil: "domcontentloaded" });
   await page.keyboard.press("Tab");
   const focused = await page.evaluate(
     () => document.activeElement?.textContent ?? "",
   );
   expect(focused.toLowerCase()).toContain("skip to main");
+});
+
+test("nav exposes the four destinations and the wordmark", async ({ page }) => {
+  await page.goto("/en");
+  const nav = page.locator("#navigation");
+  await expect(nav).toContainText(/elios/i);
+  await expect(nav.getByRole("link", { name: /projects/i })).toBeVisible();
+  await expect(nav.getByRole("link", { name: /notes/i })).toBeVisible();
+  await expect(nav.getByRole("link", { name: /about/i })).toBeVisible();
+  await expect(nav.getByRole("link", { name: /contact/i })).toBeVisible();
+});
+
+test("SQ page renders Albanian chrome", async ({ page }) => {
+  await page.goto("/sq");
+  await expect(page.locator("#navigation")).toContainText("Projektet", {
+    ignoreCase: true,
+  });
+  await expect(page.locator("h1")).toContainText(/ndërtoj sistemet/i);
+});
+
+test("contact form enforces the 2s behavioral window with a visible message", async ({
+  page,
+}) => {
+  await page.goto("/en", { waitUntil: "domcontentloaded" });
+  // Let React finish hydrating — robotic-speed clicks must not land before
+  // the client handlers attach (native submit would reload the page).
+  await page.waitForLoadState("load");
+  await page.waitForTimeout(600);
+  await page
+    .locator("#c-message")
+    .fill("This is a legitimate project inquiry from a real human.");
+  await page.locator("#c-name").fill("Real Person");
+  await page.locator("#c-email").fill("real@example.com");
+  await page.getByRole("button", { name: /send message/i }).click();
+  // Submitted <2s after first focus → localized behavioral message, not silence
+  await expect(page.locator("#contact [role='alert']")).toBeVisible({
+    timeout: 15000,
+  });
 });

@@ -4,11 +4,9 @@ import React from "react";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import Terminal from "@/components/Terminal";
 import AssistantChat from "@/components/AssistantChat";
+import CommandPalette from "@/components/CommandPalette";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
-import { OsProvider } from "@/components/os/OsContext";
-import WindowLayer from "@/components/os/WindowLayer";
-import CommandPalette from "@/components/os/CommandPalette";
 
 export function Providers({
   children,
@@ -20,59 +18,55 @@ export function Providers({
   return (
     <LocaleProvider initialLocale={initialLocale}>
       <ThemeProvider>
-        <OsProvider>
-          {children}
-          {/* Signature features — available on every page. */}
-          <ErrorBoundary
-            displayName="Terminal"
-            fallback={
+        {children}
+        {/* Signature features — available on every page. */}
+        <ErrorBoundary
+          displayName="Terminal"
+          fallback={
+            <div
+              className="fixed left-4 bottom-4 z-[60]"
+              style={{ pointerEvents: "none" }}
+            >
               <div
-                className="fixed left-4 bottom-4 z-[60]"
-                style={{ pointerEvents: "none" }}
+                className="rounded-xl border p-4 text-center"
+                style={{
+                  background: "var(--bg-card)",
+                  borderColor: "var(--border)",
+                  color: "var(--text-secondary)",
+                  width: "200px",
+                }}
               >
-                <div
-                  className="rounded-xl border p-4 text-center"
-                  style={{
-                    background: "var(--bg-card)",
-                    borderColor: "var(--border)",
-                    color: "var(--text-secondary)",
-                    width: "200px",
-                  }}
-                >
-                  Terminal unavailable
-                </div>
+                Terminal unavailable
               </div>
-            }
-          >
-            <Terminal />
-          </ErrorBoundary>
-          <ErrorBoundary
-            displayName="AssistantChat"
-            fallback={
+            </div>
+          }
+        >
+          <Terminal />
+        </ErrorBoundary>
+        <ErrorBoundary
+          displayName="AssistantChat"
+          fallback={
+            <div
+              className="fixed right-4 bottom-4 z-[60]"
+              style={{ pointerEvents: "none" }}
+            >
               <div
-                className="fixed right-4 bottom-4 z-[60]"
-                style={{ pointerEvents: "none" }}
+                className="rounded-xl border p-4 text-center"
+                style={{
+                  background: "var(--bg-card)",
+                  borderColor: "var(--border)",
+                  color: "var(--text-secondary)",
+                  width: "200px",
+                }}
               >
-                <div
-                  className="rounded-xl border p-4 text-center"
-                  style={{
-                    background: "var(--bg-card)",
-                    borderColor: "var(--border)",
-                    color: "var(--text-secondary)",
-                    width: "200px",
-                  }}
-                >
-                  Assistant unavailable
-                </div>
+                Assistant unavailable
               </div>
-            }
-          >
-            <AssistantChat />
-          </ErrorBoundary>
-          {/* ELIOS/OS application windows + command palette */}
-          <WindowLayer />
-          <CommandPalette />
-        </OsProvider>
+            </div>
+          }
+        >
+          <AssistantChat />
+        </ErrorBoundary>
+        <CommandPalette />
       </ThemeProvider>
     </LocaleProvider>
   );

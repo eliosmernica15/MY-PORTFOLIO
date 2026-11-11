@@ -1,330 +1,430 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Mail, Phone, CheckCircle2, Send, AlertCircle } from "lucide-react";
-import { CONTACT_INFO } from "@/data/contact-info";
-import { submitContact, getCsrfTokenAction } from "../app/actions/contact";
-import RevealSection from "./RevealSection";
-import SectionHeader from "./ui/SectionHeader";
-import AdvancedButton from "./ui/AdvancedButton";
-import PremiumCard from "./ui/PremiumCard";
+import React, { useState } from "react";
+import {
+  CheckCircle2,
+  AlertCircle,
+  ArrowRight,
+  ChevronDown,
+  Mail,
+} from "lucide-react";
+import { SITE } from "@/data/site";
 import { useT } from "@/i18n/LocaleProvider";
+import { useContactSubmit } from "./useContactSubmit";
 
-type Status = "idle" | "loading" | "success" | "error";
+const PROJECT_TYPES = [
+  "website",
+  "webapp",
+  "saas",
+  "ecommerce",
+  "ai",
+  "custom",
+  "other",
+] as const;
+const TIMELINES = ["asap", "2-4w", "1-3m", "flexible"] as const;
+const BUDGETS = [
+  "<1k",
+  "1k-3k",
+  "3k-5k",
+  "5k-10k",
+  "10k+",
+  "prefer_not_to_say",
+] as const;
 
-const ContactForm: React.FC = () => {
-  const t = useT();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-    company: "",
-  });
-  const [status, setStatus] = useState<Status>("idle");
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [csrfToken, setCsrfToken] = useState<string>("");
-  const focusedAtRef = useRef<number | null>(null);
-
-  // Fetch CSRF token on mount
-  useEffect(() => {
-    getCsrfTokenAction().then(setCsrfToken).catch(console.error);
-  }, []);
-
-  const validate = () => {
-    const e: Record<string, string> = {};
-    if (formData.name.trim().length < 3)
-      e.name = t("contact.form.validation.nameRequired");
-    if (
-      !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
-        formData.email,
-      )
-    )
-      e.email = t("contact.form.validation.emailRequired");
-    if (formData.message.trim().length < 20)
-      e.message = t("contact.form.validation.messageRequired");
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
-
-  const handleFocus = () => {
-    if (focusedAtRef.current == null) focusedAtRef.current = Date.now();
-  };
-
-  const handleSubmit = async (ev: React.FormEvent) => {
-    ev.preventDefault();
-    if (!validate()) return;
-    setStatus("loading");
-
-    const fd = new FormData();
-    fd.set("name", formData.name);
-    fd.set("email", formData.email);
-    fd.set("message", formData.message);
-    fd.set("company", formData.company);
-    fd.set("csrf_token", csrfToken);
-    const focusedAt = focusedAtRef.current ?? Date.now();
-    fd.set("formTime", String(Date.now() - focusedAt));
-
-    try {
-      const result = await submitContact(fd);
-      if (result.ok) {
-        setStatus("success");
-        setFormData({ name: "", email: "", message: "", company: "" });
-        focusedAtRef.current = null;
-        setTimeout(() => setStatus("idle"), 5000);
-      } else if (result.error === "validation") {
-        setErrors(result.fieldErrors);
-        setStatus("idle");
-      } else {
-        setStatus("error");
-        setTimeout(() => setStatus("idle"), 5000);
-      }
-    } catch (err) {
-      console.error("Contact submit error:", err);
-      setStatus("error");
-      setTimeout(() => setStatus("idle"), 5000);
-    }
-  };
-
-  return (
-    <PremiumCard glow padding={false}>
-      <div className="p-8 md:p-12 relative overflow-hidden">
-        <div
-          className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[80px] pointer-events-none opacity-60"
-          style={{ background: "var(--glass-accent-bg)" }}
-        />
-        {status === "success" ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-10"
-          >
-            <div
-              className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
-              style={{ backgroundColor: "var(--glass-accent-bg)" }}
-            >
-              <CheckCircle2 size={32} className="text-[var(--accent)]" />
-            </div>
-            <h3
-              className="text-3xl font-bold mb-3"
-              style={{ color: "var(--text-primary)" }}
-            >
-              {t("contact.form.successTitle")}
-            </h3>
-            <p style={{ color: "var(--text-secondary)" }} className="mb-6">
-              {t("contact.form.success")}
-            </p>
-            <AdvancedButton
-              variant="secondary"
-              size="sm"
-              onClick={() => setStatus("idle")}
-            >
-              {t("contact.form.sendAnother")}
-            </AdvancedButton>
-          </motion.div>
-        ) : status === "error" ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-10"
-          >
-            <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
-              <AlertCircle size={32} className="text-red-400" />
-            </div>
-            <h3
-              className="text-3xl font-bold mb-3"
-              style={{ color: "var(--text-primary)" }}
-            >
-              {t("contact.form.errorTitle")}
-            </h3>
-            <p style={{ color: "var(--text-secondary)" }} className="mb-6">
-              {t("contact.form.error")}
-            </p>
-            <AdvancedButton
-              variant="secondary"
-              size="sm"
-              onClick={() => setStatus("idle")}
-            >
-              {t("contact.form.tryAgain")}
-            </AdvancedButton>
-          </motion.div>
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5 relative z-10"
-            noValidate
-          >
-            {/* Honeypot — must stay empty */}
-            <div
-              aria-hidden="true"
-              className="hidden"
-              style={{
-                position: "absolute",
-                left: "-9999px",
-                top: "auto",
-                width: 1,
-                height: 1,
-                overflow: "hidden",
-              }}
-            >
-              <label htmlFor="company-hp">{t("contact.form.company")}</label>
-              <input
-                id="company-hp"
-                type="text"
-                tabIndex={-1}
-                autoComplete="off"
-                value={formData.company}
-                onChange={(e) =>
-                  setFormData({ ...formData, company: e.target.value })
-                }
-              />
-            </div>
-            {[
-              {
-                key: "name",
-                label: t("contact.form.name"),
-                type: "text",
-                placeholder: t("contact.form.namePlaceholder"),
-                errorId: "name-error",
-              },
-              {
-                key: "email",
-                label: t("contact.form.email"),
-                type: "email",
-                placeholder: t("contact.form.emailPlaceholder"),
-                errorId: "email-error",
-              },
-            ].map((field) => (
-              <div key={field.key} className="space-y-2">
-                <label
-                  htmlFor={field.key}
-                  className="text-[10px] font-bold uppercase tracking-widest"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  {field.label}
-                </label>
-                <input
-                  id={field.key}
-                  type={field.type}
-                  value={formData[field.key as "name" | "email"]}
-                  onChange={(e) =>
-                    setFormData({ ...formData, [field.key]: e.target.value })
-                  }
-                  onFocus={handleFocus}
-                  className={`input-enterprise ${errors[field.key] ? "input-error" : ""}`}
-                  placeholder={field.placeholder}
-                  aria-invalid={!!errors[field.key]}
-                  aria-describedby={
-                    errors[field.key] ? field.errorId : undefined
-                  }
-                />
-                {errors[field.key] && (
-                  <motion.p
-                    id={field.errorId}
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-red-400 text-xs"
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    {errors[field.key]}
-                  </motion.p>
-                )}
-              </div>
-            ))}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between gap-4">
-                <label
-                  htmlFor="message"
-                  className="text-[10px] font-bold uppercase tracking-widest"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  {t("contact.form.message")}
-                </label>
-                <span
-                  className="text-[10px] font-medium tabular-nums"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  {formData.message.length} {t("contact.form.chars")}
-                </span>
-              </div>
-              <textarea
-                id="message"
-                rows={4}
-                value={formData.message}
-                onChange={(e) =>
-                  setFormData({ ...formData, message: e.target.value })
-                }
-                onFocus={handleFocus}
-                className={`input-enterprise resize-none ${errors.message ? "input-error" : ""}`}
-                placeholder={t("contact.form.messagePlaceholder")}
-                aria-invalid={!!errors.message}
-                aria-describedby={errors.message ? "message-error" : undefined}
-              />
-              {errors.message && (
-                <motion.p
-                  id="message-error"
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-red-400 text-xs"
-                  role="alert"
-                  aria-live="polite"
-                >
-                  {errors.message}
-                </motion.p>
-              )}
-            </div>
-            <AdvancedButton
-              type="submit"
-              variant="primary"
-              size="lg"
-              loading={status === "loading"}
-              icon={<Send size={16} />}
-              className="w-full"
-            >
-              {status === "loading"
-                ? t("contact.form.sending")
-                : t("contact.form.send")}
-            </AdvancedButton>
-          </form>
-        )}
-      </div>
-    </PremiumCard>
-  );
-};
-
+/**
+ * Contact — one column of ask, one card of compose.
+ * Name, email, message; optional project details one click away.
+ */
 const Contact: React.FC = () => {
   const t = useT();
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [showDetails, setShowDetails] = useState(false);
+  const [projectType, setProjectType] = useState<string | null>(null);
+  const [timeline, setTimeline] = useState<string | null>(null);
+  const [budget, setBudget] = useState<string | null>(null);
+  const [honeypot, setHoneypot] = useState("");
+
+  const {
+    status,
+    fieldErrors,
+    serverError,
+    referenceId,
+    markFocused,
+    submit,
+    reset,
+  } = useContactSubmit();
+
+  const loading = status === "loading";
+
+  const sendAnother = () => {
+    setForm({ name: "", email: "", message: "" });
+    setProjectType(null);
+    setTimeline(null);
+    setBudget(null);
+    setHoneypot("");
+    setShowDetails(false);
+    reset();
+  };
+
+  const rateLimited = serverError?.startsWith("rate:");
+  const errorText = rateLimited
+    ? t("contact.rateLimited")
+    : serverError === "slow"
+      ? t("contact.form.validation.tooFast")
+      : serverError === "csrf"
+        ? t("contact.form.validation.csrfError")
+        : serverError && !serverError.startsWith("rate:")
+          ? serverError
+          : t("contact.form.error");
+
+  const chip = (pressed: boolean) =>
+    `interactive-btn rounded-full border px-3 py-1.5 text-[11px] leading-none transition-colors ${
+      pressed
+        ? "border-[var(--accent)] text-[var(--accent-contrast)]"
+        : "border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--border-hover)]"
+    }`;
+
+  const chipStyle = (pressed: boolean): React.CSSProperties => ({
+    background: pressed ? "var(--accent)" : "transparent",
+    borderColor: pressed ? "var(--accent)" : undefined,
+  });
+
   return (
     <section
       id="contact"
-      className="py-20 sm:py-24 lg:py-32 px-4 sm:px-6 relative overflow-hidden content-auto z-[1]"
+      aria-labelledby="contact-heading"
+      className="border-t px-5 sm:px-8 py-16 sm:py-24"
+      style={{ borderColor: "var(--border)" }}
     >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-center relative z-10">
-        <RevealSection>
-          <SectionHeader
-            eyebrow={t("contact.title")}
-            title={t("contact.subtitle")}
-            subtitle={t("contact.description")}
-          />
-          <div className="flex flex-wrap gap-3 -mt-4">
-            <a
-              href={`mailto:${CONTACT_INFO.email}`}
-              className="interactive-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-all hover:text-[var(--accent-light)] chip-enterprise"
-            >
-              <Mail size={14} /> {CONTACT_INFO.email}
-            </a>
-            <a
-              href={`tel:${CONTACT_INFO.phone}`}
-              className="interactive-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-all hover:text-[var(--accent-light)] chip-enterprise"
-            >
-              <Phone size={14} /> {CONTACT_INFO.phone}
-            </a>
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 lg:grid-cols-12">
+        {/* The ask */}
+        <div className="lg:col-span-6 flex flex-col">
+          <p className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.4em] text-[var(--accent)]">
+            {t("contact.title")}
+          </p>
+          <h2
+            id="contact-heading"
+            className="font-display mt-4 text-5xl sm:text-7xl font-semibold leading-[0.98] tracking-[-0.02em] text-[var(--text-primary)]"
+          >
+            {t("contact.subtitle")}
+          </h2>
+          <p
+            className="mt-6 max-w-md text-[15px] sm:text-lg leading-snug"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            {t("contact.description")}
+          </p>
+          <a
+            href={`mailto:${SITE.email}`}
+            className="interactive-btn group mt-8 inline-flex w-fit items-center gap-2 break-all font-display text-lg sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]"
+          >
+            <Mail
+              size={18}
+              strokeWidth={1.75}
+              aria-hidden
+              style={{ color: "var(--accent)" }}
+            />
+            <span className="underline decoration-[var(--accent)] decoration-2 underline-offset-4 transition-colors group-hover:text-[var(--accent)]">
+              {SITE.email}
+            </span>
+          </a>
+        </div>
+
+        {/* The compose card */}
+        <div className="lg:col-span-6">
+          <div
+            className="border p-5 sm:p-7"
+            style={{
+              borderColor: "var(--border)",
+              background: "var(--bg-card)",
+            }}
+          >
+            {status === "success" ? (
+              <div className="flex flex-col items-center py-8 text-center">
+                <CheckCircle2
+                  size={40}
+                  strokeWidth={1.5}
+                  style={{ color: "var(--accent)" }}
+                  aria-hidden
+                />
+                <h3 className="font-display mt-4 text-2xl font-semibold text-[var(--text-primary)]">
+                  {t("contact.form.successTitle")}
+                </h3>
+                <p className="mt-2 max-w-xs text-sm text-[var(--text-secondary)]">
+                  {t("contact.form.success")}
+                </p>
+                {referenceId && (
+                  <p className="mt-4 font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--text-muted)]">
+                    {t("contact.reference")} #{referenceId.slice(0, 8)}
+                  </p>
+                )}
+                <button
+                  type="button"
+                  onClick={sendAnother}
+                  className="interactive-btn mt-6 border px-5 py-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--text-primary)] transition-colors hover:bg-[var(--pill-bg)]"
+                  style={{ borderColor: "var(--border-hover)" }}
+                >
+                  {t("contact.form.sendAnother")}
+                </button>
+              </div>
+            ) : (
+              <form
+                className="flex flex-col gap-4"
+                onFocus={markFocused}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (honeypot) return;
+                  void submit({
+                    ...form,
+                    projectType:
+                      showDetails && projectType ? projectType : undefined,
+                    timeline: showDetails && timeline ? timeline : undefined,
+                    budget: showDetails && budget ? budget : undefined,
+                    subject:
+                      showDetails && projectType
+                        ? `Project: ${projectType}`
+                        : undefined,
+                    source:
+                      showDetails && (projectType || timeline || budget)
+                        ? "hire-me"
+                        : "mail",
+                  });
+                }}
+              >
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="c-name" className="os-label">
+                      {t("contact.form.name")}
+                    </label>
+                    <input
+                      id="c-name"
+                      name="name"
+                      type="text"
+                      autoComplete="name"
+                      required
+                      minLength={3}
+                      maxLength={80}
+                      value={form.name}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, name: e.target.value }))
+                      }
+                      placeholder={t("contact.form.namePlaceholder")}
+                      aria-invalid={fieldErrors.name ? "true" : undefined}
+                      className="os-field"
+                    />
+                    {fieldErrors.name && (
+                      <p className="mt-1 flex items-center gap-1 text-[10px] text-[var(--text-primary)]">
+                        <AlertCircle size={10} aria-hidden /> {fieldErrors.name}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label htmlFor="c-email" className="os-label">
+                      {t("contact.form.email")}
+                    </label>
+                    <input
+                      id="c-email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      maxLength={120}
+                      value={form.email}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, email: e.target.value }))
+                      }
+                      placeholder={t("contact.form.emailPlaceholder")}
+                      aria-invalid={fieldErrors.email ? "true" : undefined}
+                      className="os-field"
+                    />
+                    {fieldErrors.email && (
+                      <p className="mt-1 flex items-center gap-1 text-[10px] text-[var(--text-primary)]">
+                        <AlertCircle size={10} aria-hidden />{" "}
+                        {fieldErrors.email}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="c-message" className="os-label">
+                    {t("contact.form.message")}
+                  </label>
+                  <textarea
+                    id="c-message"
+                    name="message"
+                    required
+                    minLength={20}
+                    maxLength={4000}
+                    rows={4}
+                    value={form.message}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, message: e.target.value }))
+                    }
+                    placeholder={t("contact.form.messagePlaceholder")}
+                    aria-invalid={fieldErrors.message ? "true" : undefined}
+                    className="os-field resize-y leading-relaxed"
+                  />
+                  {fieldErrors.message && (
+                    <p className="mt-1 flex items-center gap-1 text-[10px] text-[var(--text-primary)]">
+                      <AlertCircle size={10} aria-hidden />{" "}
+                      {fieldErrors.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Optional project details — closed by default */}
+                <button
+                  type="button"
+                  onClick={() => setShowDetails((v) => !v)}
+                  aria-expanded={showDetails}
+                  className="interactive-btn flex items-center gap-1.5 self-start font-mono text-[9px] font-bold uppercase tracking-[0.25em] text-[var(--text-muted)] transition-colors hover:text-[var(--accent)]"
+                >
+                  {t("contact.detailsToggle")}
+                  <ChevronDown
+                    size={12}
+                    aria-hidden
+                    className={`transition-transform duration-200 ${showDetails ? "rotate-180" : ""}`}
+                  />
+                </button>
+                {showDetails && (
+                  <fieldset
+                    className="flex flex-col gap-3 border-t pt-4"
+                    style={{ borderColor: "var(--border)" }}
+                  >
+                    <legend className="sr-only">
+                      {t("hire.qualifierLegend")}
+                    </legend>
+                    <div>
+                      <span className="os-label" id="q-type">
+                        {t("hire.q1")}
+                      </span>
+                      <div
+                        role="group"
+                        aria-labelledby="q-type"
+                        className="flex flex-wrap gap-1.5"
+                      >
+                        {PROJECT_TYPES.map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            aria-pressed={projectType === opt}
+                            onClick={() =>
+                              setProjectType((v) => (v === opt ? null : opt))
+                            }
+                            className={chip(projectType === opt)}
+                            style={chipStyle(projectType === opt)}
+                          >
+                            {t(`hire.projects.${opt}`)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="os-label" id="q-time">
+                        {t("hire.q2")}
+                      </span>
+                      <div
+                        role="group"
+                        aria-labelledby="q-time"
+                        className="flex flex-wrap gap-1.5"
+                      >
+                        {TIMELINES.map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            aria-pressed={timeline === opt}
+                            onClick={() =>
+                              setTimeline((v) => (v === opt ? null : opt))
+                            }
+                            className={chip(timeline === opt)}
+                            style={chipStyle(timeline === opt)}
+                          >
+                            {t(`hire.timelines.${opt}`)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="os-label" id="q-budget">
+                        {t("hire.q3")}
+                      </span>
+                      <div
+                        role="group"
+                        aria-labelledby="q-budget"
+                        className="flex flex-wrap gap-1.5"
+                      >
+                        {BUDGETS.map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            aria-pressed={budget === opt}
+                            onClick={() =>
+                              setBudget((v) => (v === opt ? null : opt))
+                            }
+                            className={chip(budget === opt)}
+                            style={chipStyle(budget === opt)}
+                          >
+                            {t(`hire.budgets.${opt}`)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </fieldset>
+                )}
+
+                {/* Honeypot */}
+                <div
+                  aria-hidden="true"
+                  className="absolute left-[-9999px] top-[-9999px] h-0 w-0 overflow-hidden"
+                >
+                  <label htmlFor="c-company">{t("contact.form.company")}</label>
+                  <input
+                    id="c-company"
+                    name="company"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
+
+                {status === "error" && (
+                  <p
+                    role="alert"
+                    className="flex items-start gap-2 text-[11px] leading-snug text-[var(--text-secondary)]"
+                  >
+                    <AlertCircle
+                      size={13}
+                      aria-hidden
+                      className="mt-0.5 shrink-0"
+                    />
+                    <span>
+                      {errorText}{" "}
+                      <a
+                        className="font-semibold underline underline-offset-2"
+                        href={`mailto:${SITE.email}`}
+                      >
+                        {SITE.email}
+                      </a>
+                    </span>
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="interactive-btn mt-1 inline-flex w-fit items-center gap-2 rounded-full px-7 py-3.5 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] text-[var(--bg-primary)] transition-opacity disabled:opacity-50"
+                  style={{ background: "var(--text-primary)" }}
+                >
+                  {loading ? t("contact.form.sending") : t("contact.form.send")}
+                  <ArrowRight size={14} strokeWidth={2.5} aria-hidden />
+                </button>
+              </form>
+            )}
           </div>
-        </RevealSection>
-        <RevealSection delay={0.15}>
-          <ContactForm />
-        </RevealSection>
+        </div>
       </div>
     </section>
   );

@@ -60,19 +60,6 @@ export interface Service {
 }
 
 // ============================================================
-// Testimonial Types
-// ============================================================
-
-export interface Testimonial {
-  name: string;
-  role: string;
-  text: string;
-  avatar: string;
-  company?: string;
-  linkedinUrl?: string;
-}
-
-// ============================================================
 // Note Types
 // ============================================================
 

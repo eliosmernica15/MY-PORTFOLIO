@@ -1,74 +1,57 @@
+"use client";
+
 import React from "react";
-import { Database, MonitorSmartphone, Store, Code } from "lucide-react";
 import { SERVICES } from "@/data/services";
-import RevealSection from "./RevealSection";
-import SectionHeader from "./ui/SectionHeader";
-import PremiumCard from "./ui/PremiumCard";
 import { useT } from "@/i18n/LocaleProvider";
 
-const iconMap: Record<string, React.ReactNode> = {
-  MonitorSmartphone: <MonitorSmartphone size={24} />,
-  Store: <Store size={24} />,
-  Database: <Database size={24} />,
-  Code: <Code size={24} />,
-};
-
+/**
+ * Services — four rows, zero card chrome. What he actually delivers.
+ */
 const Services: React.FC = () => {
   const t = useT();
+
   return (
     <section
       id="services"
-      className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 scroll-mt-24 relative overflow-hidden content-auto z-[1]"
+      aria-labelledby="services-heading"
+      className="border-t px-5 sm:px-8 py-16 sm:py-20"
+      style={{ borderColor: "var(--border)" }}
     >
-      <div
-        className="absolute top-0 right-1/4 w-96 h-96 blur-[120px] rounded-full pointer-events-none opacity-40"
-        style={{ background: "var(--glass-accent-bg)" }}
-      />
-      <div className="max-w-7xl mx-auto relative z-10">
-        <RevealSection>
-          <SectionHeader
-            align="center"
-            eyebrow={t("services.eyebrow")}
-            title={t("services.subtitle")}
-            subtitle={t("services.description")}
-          />
-        </RevealSection>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {SERVICES.map((s, idx) => (
-            <RevealSection key={s.id} delay={idx * 0.08}>
-              <PremiumCard className="h-full group">
-                <div
-                  className="absolute top-0 right-0 p-8 text-5xl font-black opacity-[0.03] pointer-events-none transition-opacity duration-500 group-hover:opacity-10"
-                  style={{ color: "var(--text-primary)" }}
-                >
-                  {s.number || `0${idx + 1}`}
-                </div>
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-8 shadow-accent group-hover:shadow-accent-hover transition-all duration-300 relative z-10"
-                  style={{
-                    backgroundColor: "var(--glass-accent-bg)",
-                    color: "var(--accent)",
-                  }}
-                >
-                  {iconMap[s.icon] || <Code size={24} />}
-                </div>
-                <h3
-                  className="text-2xl font-black mb-4 tracking-tight relative z-10"
-                  style={{ color: "var(--text-primary)" }}
-                >
-                  {t(`services.items.${idx}.title`)}
-                </h3>
-                <p
-                  className="text-base leading-relaxed relative z-10"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  {t(`services.items.${idx}.description`)}
-                </p>
-              </PremiumCard>
-            </RevealSection>
-          ))}
+      <div className="mx-auto max-w-6xl">
+        <div className="border-b pb-5" style={{ borderColor: "var(--border)" }}>
+          <p className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.4em] text-[var(--accent)]">
+            {t("services.eyebrow")}
+          </p>
+          <h2
+            id="services-heading"
+            className="font-display mt-2 text-4xl sm:text-6xl font-semibold tracking-[-0.02em] text-[var(--text-primary)]"
+          >
+            {t("services.subtitle")}
+          </h2>
         </div>
+
+        <ol>
+          {SERVICES.map((service, idx) => (
+            <li
+              key={service.id}
+              className="grid grid-cols-[2.5rem_1fr] sm:grid-cols-[4.5rem_1fr_1.25fr] gap-x-4 sm:gap-x-8 gap-y-1 border-b py-5 sm:py-6"
+              style={{ borderColor: "var(--border)" }}
+            >
+              <span className="font-mono text-[10px] sm:text-xs tabular-nums text-[var(--accent)] pt-1">
+                0{idx + 1}
+              </span>
+              <h3 className="font-display text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+                {t(`services.items.${idx}.title`)}
+              </h3>
+              <p
+                className="col-start-2 sm:col-start-3 text-[12px] sm:text-sm leading-snug"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                {t(`services.items.${idx}.description`)}
+              </p>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );

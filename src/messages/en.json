@@ -46,19 +46,14 @@
     "timeBasedMode": "Time-Based"
   },
   "navigation": {
-    "home": "Home",
     "about": "About",
-    "services": "Services",
     "projects": "Projects",
-    "resume": "Resume",
     "contact": "Contact",
     "blog": "Blog",
     "notes": "Notes",
     "github": "GitHub",
     "linkedin": "LinkedIn",
     "email": "Email",
-    "hireMe": "Hire Me",
-    "getInTouch": "Get in Touch",
     "main": "Main navigation",
     "logo": "Elios Mernica - home"
   },
@@ -66,28 +61,15 @@
     "title": "About Me",
     "subtitle": "Elios Mernica — Engineer · Designer · Product Builder",
     "description": "I design, engineer and ship digital products end-to-end — from the interface people touch to the architecture and tooling that power it. Based in Kosovo. Building for the world.",
-    "focus": "Focus",
-    "principle": "Principle",
     "availability": "Availability",
-    "values": ["End-to-end products", "Ship real work", "Remote · Worldwide"],
-    "skills": "Technologies & Skills",
+    "values": ["Remote · Worldwide"],
+    "based": "Based",
+    "basedValue": "Vushtrri, Kosovo",
+    "languages": "Languages",
+    "languagesValue": "English · Albanian",
     "experience": "Experience",
-    "education": "Education",
-    "capabilities": [
-      "Full-Stack Engineering",
-      "Product Design",
-      "AI Integration",
-      "Developer Tooling",
-      "UI Engineering",
-      "Cloud Deployment"
-    ],
-    "timelineLabel": "The road so far",
-    "timelineNow": "Shipping ESMP + A++(APL) — open to contract roles.",
-    "timeline2026": "A++(APL) — a language with Albanian syntax; ESMP marketplace OS in production.",
-    "timeline2025": "Eltrix Cloud, ForexPulse, FlixVerse — shipped end-to-end as solo projects.",
-    "timeline2024": "Foodery — a delivery ecosystem: restaurant dashboard, driver app, marketplace.",
-    "timeline2023": "Calista — a high-end retail storefront; where the frontend craft started.",
-    "timelineNowLabel": "Now"
+    "experienceValue": "4+ years shipping production products",
+    "contact": "Contact"
   },
   "services": {
     "title": "Services",
@@ -152,21 +134,7 @@
     "loadMoreCount": "Load {count} more"
   },
   "resume": {
-    "title": "Resume",
-    "subtitle": "Career Core.",
-    "downloadCV": "Download CV",
-    "contactInfo": "Contact Information",
-    "email": "Email",
-    "phone": "Phone",
-    "location": "Location",
-    "education": "Education",
-    "experience": "Experience",
-    "skills": "What I Build With",
-    "period": "Period",
-    "role": "Role",
-    "company": "Company",
-    "description": "Description",
-    "heading": "Career Core."
+    "downloadCV": "Download CV"
   },
   "skills": {
     "title": "Skills",
@@ -181,16 +149,6 @@
     },
     "tagline": "Built for production, not for slides.",
     "stackTagline": "What I build with."
-  },
-  "testimonials": {
-    "title": "Feedback",
-    "subtitle": "In their words.",
-    "description": "What clients and collaborators say about working together on ambitious digital products.",
-    "previous": "Previous",
-    "next": "Next",
-    "pause": "Pause",
-    "play": "Play",
-    "goTo": "Go to testimonial {index}"
   },
   "contact": {
     "title": "Get in Touch",
@@ -223,19 +181,16 @@
       "emailPlaceholder": "your@email.com",
       "messagePlaceholder": "Tell me about your project, timeline, and goals..."
     },
-    "directContact": "Or reach me directly:"
+    "directContact": "Or reach me directly:",
+    "rateLimited": "Too many messages — give it a minute and try again.",
+    "reference": "Reference",
+    "detailsToggle": "Add project details (optional)"
   },
   "footer": {
-    "copyright": "© {year} Elios Mernica. All rights reserved.",
-    "builtWith": "Built with Next.js, React, TypeScript",
-    "available": "Available for projects",
-    "social": "Connect",
-    "quickLinks": "Quick Links",
-    "connect": "Connect",
-    "bio": "Full-stack developer crafting digital experiences with precision and purpose. Based in Kosovo, available worldwide.",
-    "backToTop": "Back to top",
-    "goTo": "Go to the {section} section",
-    "navigation": "Footer navigation"
+    "tagline": "Based in Kosovo. Building for the world.",
+    "rights": "All rights reserved.",
+    "email": "eliosmernica@gmail.com",
+    "colophon": "Set in Fraunces & Plus Jakarta · paper & terracotta"
   },
   "blog": {
     "title": "Blog",
@@ -266,7 +221,8 @@
     "teaserHeading": "Notes on the work.",
     "notesTitle": "Notes",
     "notesHero": "Writing on what I build.",
-    "notesDescription": "Short, focused pieces on AI systems, web performance, language design, and the craft of shipping software."
+    "notesDescription": "Short, focused pieces on AI systems, web performance, language design, and the craft of shipping software.",
+    "viewAll": "All notes"
   },
   "terminal": {
     "welcome": "Welcome — type `help` to list commands. Esc to close. ⌘/ctrl+L to clear.",
@@ -377,18 +333,10 @@
     "skipToTerminal": "Skip to terminal",
     "skipToAssistant": "Skip to AI assistant",
     "skipToNavigation": "Skip to navigation",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
     "toggleTheme": "Toggle theme",
     "openCommandPalette": "Open command palette",
     "openThemeSelector": "Open theme selector",
     "switchLanguage": "Switch language"
-  },
-  "stats": {
-    "projectsShipped": "Projects Shipped",
-    "yearsExperience": "Years Experience",
-    "technologiesUsed": "Technologies Used",
-    "notesPublished": "Notes Published"
   },
   "projectDetail": {
     "backToProjects": "Back to Showcase",
@@ -407,119 +355,6 @@
     "previous": "Previous case study",
     "next": "Next case study",
     "moreWork": "More case studies"
-  },
-  "boot": {
-    "title": "ELIOS/OS",
-    "version": "v1.0",
-    "status1": "Initializing kernel…",
-    "status2": "Mounting /portfolio…",
-    "status3": "Loading interface…",
-    "status4": "Welcome",
-    "skip": "Skip",
-    "srLabel": "ELIOS/OS startup sequence"
-  },
-  "menubar": {
-    "brand": "ELIOS/OS"
-  },
-  "dock": {
-    "finder": "Finder",
-    "finderHint": "Projects",
-    "terminal": "Terminal",
-    "terminalHint": "Interactive shell",
-    "notes": "Notes",
-    "notesHint": "Technical writing",
-    "preview": "Preview",
-    "previewHint": "Project case studies",
-    "about": "About This System",
-    "aboutHint": "Profile, résumé & experience",
-    "preferences": "System Preferences",
-    "preferencesHint": "Services & skills",
-    "mail": "Mail",
-    "mailHint": "Compose a message",
-    "hireMe": "Hire Me",
-    "hireMeHint": "Project inquiry",
-    "launchApp": "Open {app}",
-    "desktop": "Desktop"
-  },
-  "desktop": {
-    "kicker": "ELIOS MERNICA — ENGINEER · DESIGNER · PRODUCT BUILDER",
-    "headline": "I build the systems,\nthe interfaces,\nand the tools\nunderneath them",
-    "lede": "I design, engineer and ship digital products end-to-end — from the interface people touch to the architecture and tooling that power it.",
-    "location": "Based in Kosovo. Building for the world.",
-    "ctaWork": "Explore the work",
-    "ctaHire": "Hire me",
-    "featuredLabel": "A++ (APL) — the product that defines the work",
-    "viewProject": "View project",
-    "aplName": "A++(APL)",
-    "aplDesc": "A programming language with Albanian syntax. Transpiles to Python, React and FastAPI — with a live transpiler, playground and CLI.",
-    "esmpName": "ESMP",
-    "esmpDesc": "The operating system for micro-business. Storefront, payments, invoicing and analytics in one fast dashboard.",
-    "specTitle": "elios — about this system",
-    "specName": "Name",
-    "specNameValue": "Elios Mernica",
-    "specRole": "Role",
-    "specRoleValue": "Engineer · Designer · Product Builder",
-    "specFocus": "Focus",
-    "specFocusValue": "Full-stack, AI integration, developer tooling",
-    "specLocation": "Location",
-    "specLocationValue": "Vushtrri, Kosovo — remote worldwide",
-    "specStatus": "Status",
-    "specStatusValue": "Available for international projects",
-    "osLabel": "ELIOS/OS",
-    "osVersion": "1.0.0",
-    "mastheadTag": "Personal operating environment"
-  },
-  "os": {
-    "minimizeWindow": "Minimize",
-    "maximizeWindow": "Maximize",
-    "restoreWindow": "Restore",
-    "closeWindow": "Close",
-    "loadingApp": "Loading…"
-  },
-  "finder": {
-    "all": "All",
-    "featured": "Featured",
-    "collections": "Collections",
-    "projectsLabel": "Projects",
-    "empty": "Nothing in this collection yet.",
-    "backToList": "Back to list",
-    "openCaseStudy": "Open case study",
-    "liveSite": "Live site",
-    "stack": "Stack",
-    "previewAlt": "project preview"
-  },
-  "preview": {
-    "challenge": "Challenge",
-    "outcome": "Outcome",
-    "role": "Role",
-    "metrics": "Metrics"
-  },
-  "notesApp": {
-    "openFull": "Read the full article"
-  },
-  "aboutSystem": {
-    "philosophyLabel": "Engineering philosophy",
-    "philosophy": "I care about the whole arc — the problem, the architecture, the interface, the deploy. Software is done when it's in production and someone uses it.",
-    "nowLabel": "Currently"
-  },
-  "prefs": {
-    "servicesPane": "Services",
-    "stackPane": "Skills & Stack",
-    "deliverLabel": "What I deliver",
-    "stackLabel": "How I build",
-    "stackNote": "Technologies I use in production — no self-rated percentage meters.",
-    "servicesNote": "Every engagement below ends with something deployed and usable."
-  },
-  "mail": {
-    "compose": "New message",
-    "via": "via",
-    "to": "To",
-    "from": "From",
-    "subject": "Subject",
-    "subjectPlaceholder": "Project inquiry — e.g. \"ESMP onboarding\"",
-    "successBody": "I read every message personally. Expect a considered reply, not an auto-responder.",
-    "reference": "Reference",
-    "rateLimited": "Too many messages — give it a minute and try again."
   },
   "hire": {
     "eyebrow": "ELIOS — Project intake",
@@ -571,21 +406,40 @@
     "go": "Go",
     "runInTerminal": "Prefill in terminal",
     "close": "Close palette",
-    "navHome": "Home",
-    "navProjects": "Projects",
     "navContact": "Contact",
     "hintNav": "navigate",
     "hintRun": "select",
     "hintCount": "results",
     "groups": {
-      "apps": "Applications",
       "projects": "Projects",
       "notes": "Notes",
       "services": "Services",
-      "skills": "Skills",
       "navigation": "Navigation",
-      "commands": "Terminal commands"
+      "commands": "Terminal commands",
+      "actions": "Actions"
     },
-    "short": "Search"
+    "actions": {
+      "hire": "Hire me — start a project",
+      "cv": "Download CV"
+    },
+    "navWork": "Work",
+    "navServices": "Services",
+    "navAbout": "About"
+  },
+  "hero": {
+    "kicker": "KOS — ENGINEER · DESIGNER · PRODUCT BUILDER",
+    "headline": "I build the systems,\nthe interfaces,\nand the tools underneath them.",
+    "lede": "Elios Mernica — from first sketch to production. Design, frontend, backend and AI in one pair of hands.",
+    "ctaWork": "See the work",
+    "ctaHire": "Hire me",
+    "proofLine": "8 products shipped — A++(APL) · ESMP · Eltrix Cloud",
+    "aplImageAlt": "A++(APL) — screenshot of the live transpiler",
+    "aplCaption": "a programming language with Albanian syntax",
+    "aplLinkLabel": "Open the A++(APL) case study"
+  },
+  "work": {
+    "kicker": "01 — Work",
+    "title": "Selected work.",
+    "count": "{count} products, shipped end-to-end"
   }
 }

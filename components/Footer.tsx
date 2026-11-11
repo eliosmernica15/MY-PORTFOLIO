@@ -1,216 +1,94 @@
 "use client";
 
-import React, { memo, useEffect, useState } from "react";
-import { Github, Instagram, Linkedin, Mail, ArrowUp } from "lucide-react";
-import { SOCIALS } from "@/data/socials";
-import { CONTACT_INFO } from "@/data/contact-info";
+import React from "react";
+import { ArrowUpRight } from "lucide-react";
 import { SITE } from "@/data/site";
-import MagneticButton from "./MagneticButton";
+import { CONTACT_INFO } from "@/data/contact-info";
 import { useT } from "@/i18n/LocaleProvider";
 
-const quickLinks = [
-  { id: "projects", key: "navigation.projects" },
-  { id: "services", key: "navigation.services" },
-  { id: "resume", key: "navigation.resume" },
-  { id: "about", key: "navigation.about" },
-  { id: "contact", key: "navigation.contact" },
-];
-
-const useBackToTopVisible = () => {
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    const update = () => setShow(window.scrollY > 250);
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
-  }, []);
-  return show;
-};
-
-const scrollToId = (id: string) => {
-  const tryScroll = () => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-      return true;
-    }
-    return false;
-  };
-  if (tryScroll()) return;
-  const deadline = Date.now() + 3000;
-  const interval = setInterval(() => {
-    if (Date.now() > deadline) {
-      clearInterval(interval);
-      return;
-    }
-    if (tryScroll()) clearInterval(interval);
-  }, 80);
-};
-
+/**
+ * Colophon footer — a small type specimen note and the two true links.
+ */
 const Footer: React.FC = () => {
   const t = useT();
-  const showBackToTop = useBackToTopVisible();
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const year = new Date().getFullYear();
+
+  const links = [
+    { label: "GitHub", href: "https://github.com/eliosmernica15" },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/elios-mernica-880562204/",
+    },
+    { label: "Instagram", href: "https://www.instagram.com/e_mer03/" },
+  ];
 
   return (
-    <>
-      <footer
-        className="relative overflow-hidden content-auto"
-        style={{ borderTop: "1px solid var(--border)" }}
-      >
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-50" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-12 mb-12 sm:mb-16">
-            <div>
-              <a
-                href="#home"
-                className="flex items-center gap-3 group mb-6 interactive-btn"
-              >
-                <div className="w-10 h-10 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-xl flex items-center justify-center font-bold text-sm shadow-accent">
-                  EM
-                </div>
-                <span
-                  className="text-sm font-bold transition-colors"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  {SITE.name}
-                </span>
-              </a>
-              <p
-                className="text-sm leading-relaxed max-w-xs"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                {t("footer.bio")}
-              </p>
-            </div>
-
-            <div>
-              <h4
-                className="text-[10px] font-bold uppercase tracking-[0.4em] mb-6"
-                style={{ color: "var(--accent-light)" }}
-              >
-                {t("footer.quickLinks")}
-              </h4>
-              <nav
-                className="flex flex-col gap-3"
-                aria-label={t("footer.navigation")}
-              >
-                {quickLinks.map((link) => (
-                  <button
-                    key={link.id}
-                    type="button"
-                    onClick={() => scrollToId(link.id)}
-                    className="interactive-btn text-sm text-left transition-colors hover:text-[var(--accent-light)]"
-                    style={{ color: "var(--text-secondary)" }}
-                    aria-label={t("footer.goTo", { section: t(link.key) })}
-                  >
-                    {t(link.key)}
-                  </button>
-                ))}
-              </nav>
-            </div>
-
-            <div>
-              <h4
-                className="text-[10px] font-bold uppercase tracking-[0.4em] mb-6"
-                style={{ color: "var(--accent-light)" }}
-              >
-                {t("footer.connect")}
-              </h4>
-              <div className="flex flex-col gap-3 mb-6">
-                <a
-                  href={`mailto:${CONTACT_INFO.email}`}
-                  className="interactive-btn text-sm flex items-center gap-2 transition-colors hover:text-[var(--accent-light)]"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  <Mail size={14} /> {CONTACT_INFO.email}
-                </a>
-              </div>
-              <div className="flex gap-3">
-                {SOCIALS.map((s) => (
-                  <MagneticButton key={s.name} strength={0.2}>
-                    <a
-                      href={s.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="interactive-btn w-10 h-10 flex items-center justify-center rounded-xl border transition-all duration-300 hover:scale-105"
-                      style={{
-                        backgroundColor: "var(--bg-card)",
-                        borderColor: "var(--border)",
-                        color: "var(--text-secondary)",
-                      }}
-                      aria-label={s.name}
-                    >
-                      {s.icon === "Github" && <Github size={18} />}
-                      {s.icon === "Instagram" && <Instagram size={18} />}
-                      {s.icon === "Linkedin" && <Linkedin size={18} />}
-                    </a>
-                  </MagneticButton>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div
-            className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6"
-            style={{ borderTop: "1px solid var(--border)" }}
-          >
-            <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-              {t("footer.copyright", {
-                year: String(new Date().getFullYear()),
-              })}
+    <footer
+      className="border-t px-5 sm:px-8 py-10"
+      style={{ borderColor: "var(--border)", background: "var(--bg-primary)" }}
+    >
+      <div className="mx-auto flex max-w-6xl flex-col gap-6">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="font-display text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+              Elios{" "}
+              <em className="italic" style={{ color: "var(--accent)" }}>
+                Mernica.
+              </em>
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <span className="status-live">
-                <span className="status-live-dot" aria-hidden />
-                {t("footer.available")}
-              </span>
-              <div
-                className="flex gap-3 text-[10px] font-medium uppercase tracking-[0.2em]"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">
-                  Next.js
-                </span>
-                <span style={{ opacity: 0.3 }}>/</span>
-                <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">
-                  React
-                </span>
-                <span style={{ opacity: 0.3 }}>/</span>
-                <span className="hover:text-[var(--accent-light)] transition-colors cursor-default">
-                  TypeScript
-                </span>
-              </div>
-            </div>
+            <p className="mt-1 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-[var(--text-muted)]">
+              {t("footer.tagline")}
+            </p>
           </div>
-        </div>
-      </footer>
 
-      {showBackToTop && (
-        // Sits directly under the assistant trigger. The assistant's
-        // own bottom is `bottom-4 sm:bottom-6` (16-24px from viewport
-        // edge) and the trigger is ~48px tall, so this button needs
-        // `bottom` of at least `16 + 48 + 12 = 76px` on mobile and
-        // `24 + 48 + 16 = 88px` on `sm+` to clear it with breathing
-        // room. The `max(env(safe-area-inset-bottom), …)` keeps it
-        // above the iOS home-bar indicator on notched devices. Same
-        // right edge as the assistant so they stack vertically.
-        <div className="fixed z-40 right-4 sm:right-6 bottom-[max(5rem,calc(4rem+env(safe-area-inset-bottom)))] sm:bottom-[max(5.5rem,calc(5rem+env(safe-area-inset-bottom)))] back-to-top-enter">
-          <MagneticButton strength={0.3}>
+          <nav
+            aria-label={t("navigation.main")}
+            className="flex flex-wrap items-center gap-x-6 gap-y-2"
+          >
+            {links.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer me"
+                className="interactive-btn inline-flex items-center gap-1 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]"
+              >
+                {link.label}
+                <ArrowUpRight size={11} aria-hidden />
+              </a>
+            ))}
+            <a
+              href={`mailto:${CONTACT_INFO.email}`}
+              className="interactive-btn font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-[var(--text-primary)] transition-colors hover:text-[var(--accent)]"
+            >
+              {t("footer.email")}
+            </a>
             <button
               type="button"
-              onClick={scrollToTop}
-              className="interactive-btn w-12 h-12 rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] flex items-center justify-center shadow-accent hover:shadow-accent-hover transition-transform hover:scale-105 active:scale-95"
-              aria-label={t("footer.backToTop")}
+              onClick={() =>
+                window.dispatchEvent(new CustomEvent("elios:palette-toggle"))
+              }
+              aria-keyshortcuts="Control+K Meta+K"
+              title={t("palette.label")}
+              className="interactive-btn inline-flex items-center gap-1 rounded border border-[var(--border)] bg-[var(--pill-bg)] px-2 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]"
             >
-              <ArrowUp size={20} />
+              ⌘K
             </button>
-          </MagneticButton>
+          </nav>
         </div>
-      )}
-    </>
+
+        <div
+          className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 border-t pt-5 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-[var(--text-muted)]"
+          style={{ borderColor: "var(--border)" }}
+        >
+          <p>
+            © {year} {SITE.name} — {t("footer.rights")}
+          </p>
+          <p>{t("footer.colophon")}</p>
+        </div>
+      </div>
+    </footer>
   );
 };
 
-export default memo(Footer);
+export default Footer;

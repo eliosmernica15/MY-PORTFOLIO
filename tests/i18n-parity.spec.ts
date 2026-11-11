@@ -44,7 +44,7 @@ test("en/sq catalogs have identical key trees", () => {
     missingInEn,
     `keys missing in en.json: ${missingInEn.join(", ")}`,
   ).toEqual([]);
-  expect(enKeys.length).toBeGreaterThan(400);
+  expect(enKeys.length).toBeGreaterThan(250);
 });
 
 test("no catalog value is an empty string", () => {

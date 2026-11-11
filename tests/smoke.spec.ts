@@ -77,20 +77,20 @@ test("contact API path does not exist as a public endpoint", async ({
   expect(res.status()).toBe(404);
 });
 
-test("EN homepage renders ELIOS/OS menu bar", async ({ page }) => {
+test("EN homepage renders the paper masthead", async ({ page }) => {
   await page.goto("/en");
   await expect(page.locator("#navigation")).toContainText("PROJECTS", {
     ignoreCase: true,
   });
-  await expect(page.locator("#navigation")).toContainText("ELIOS/OS");
+  await expect(page.locator("#navigation")).toContainText(/elios/i);
 });
 
-test("SQ homepage renders ELIOS/OS menu bar in Albanian", async ({ page }) => {
+test("SQ homepage renders the paper masthead in Albanian", async ({ page }) => {
   await page.goto("/sq");
   await expect(page.locator("#navigation")).toContainText("PROJEKTET", {
     ignoreCase: true,
   });
-  await expect(page.locator("#navigation")).toContainText("ELIOS/OS");
+  await expect(page.locator("#navigation")).toContainText(/elios/i);
 });
 
 test("no console errors on homepage", async ({ page }) => {
