@@ -446,9 +446,7 @@
     "srLabel": "ELIOS/OS startup sequence"
   },
   "menubar": {
-    "brand": "ELIOS/OS",
-    "desktop": "Desktop",
-    "switchLanguage": "Switch language"
+    "brand": "ELIOS/OS"
   },
   "dock": {
     "finder": "Finder",
@@ -467,7 +465,8 @@
     "mailHint": "Compose a message",
     "hireMe": "Hire Me",
     "hireMeHint": "Project inquiry",
-    "launchApp": "Open {app}"
+    "launchApp": "Open {app}",
+    "desktop": "Desktop"
   },
   "desktop": {
     "kicker": "ELIOS MERNICA — ENGINEER · DESIGNER · PRODUCT BUILDER",

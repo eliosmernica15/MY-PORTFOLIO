@@ -446,9 +446,7 @@
     "srLabel": "Sekuenca e nisjes së ELIOS/OS"
   },
   "menubar": {
-    "brand": "ELIOS/OS",
-    "desktop": "Desktopi",
-    "switchLanguage": "Ndrysho gjuhën"
+    "brand": "ELIOS/OS"
   },
   "dock": {
     "finder": "Finder",
@@ -467,7 +465,8 @@
     "mailHint": "Shkruaj një mesazh",
     "hireMe": "Më Punëso",
     "hireMeHint": "Kërkesë për projekt",
-    "launchApp": "Hap {app}"
+    "launchApp": "Hap {app}",
+    "desktop": "Desktopi"
   },
   "desktop": {
     "kicker": "ELIOS MERNICA — INXHINIER · DIZAJNER · NDËRTUES PRODUKTESH",
