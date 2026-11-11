@@ -441,6 +441,23 @@ export default function Terminal({}: TerminalProps = {}) {
     return () => window.removeEventListener("elios:terminal-toggle", onToggle);
   }, []);
 
+  // Prefill the shell with a command (e.g. from the command palette).
+  // Focuses the input so the visitor can review and press Enter.
+  useEffect(() => {
+    const onPrefill = (event: Event) => {
+      const command = (event as CustomEvent<{ command?: string }>).detail
+        ?.command;
+      if (!command) return;
+      setIsOpen(true);
+      setMinimized(false);
+      setInput(command);
+      window.setTimeout(() => inputRef.current?.focus(), 50);
+    };
+    window.addEventListener("elios:terminal-prefill", onPrefill);
+    return () =>
+      window.removeEventListener("elios:terminal-prefill", onPrefill);
+  }, []);
+
   // Keyboard shortcut to toggle minimize: ⌘/Ctrl+M. Only meaningful on
   // desktop — on mobile the panel is fullscreen, so minimize = close.
   useKeyShortcut(
@@ -822,7 +839,7 @@ export default function Terminal({}: TerminalProps = {}) {
         data-floating-trigger
         data-open={isOpen ? "true" : "false"}
         data-minimized={isOpen && minimized ? "true" : "false"}
-        className="floating-trigger group fixed left-4 sm:left-6 bottom-4 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
+        className="floating-trigger group fixed left-4 sm:left-6 bottom-24 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
         style={{
           background: "var(--glass-bg)",
           border: "1px solid var(--glass-border)",

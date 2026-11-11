@@ -696,7 +696,7 @@ export default function AssistantChat() {
         data-floating-trigger
         data-open={isOpen ? "true" : "false"}
         data-minimized={isOpen && minimized ? "true" : "false"}
-        className="floating-trigger group fixed right-4 sm:right-6 bottom-4 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
+        className="floating-trigger group fixed right-4 sm:right-6 bottom-24 sm:bottom-6 z-[60] flex items-center gap-2 rounded-full pl-3 pr-3 sm:pr-4 py-3 transition-all duration-300"
         style={{
           background: "var(--glass-bg)",
           border: "1px solid var(--glass-border)",

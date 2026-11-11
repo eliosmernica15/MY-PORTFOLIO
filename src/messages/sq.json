@@ -242,7 +242,8 @@
         "emailRequired": "Ju lutemi shkruani një email të vlefshëm",
         "emailInvalid": "Formati i email-it është i pavlefshëm",
         "messageRequired": "Mesazhi duhet të ketë të paktën 20 karaktere",
-        "tooFast": "Dërgimi shumë i shpejtë. Ju lutemi merrni kohën tuaj."
+        "tooFast": "Dërgimi shumë i shpejtë. Ju lutemi merrni kohën tuaj.",
+        "csrfError": "Seanca ka skaduar — rifresko faqen dhe provo sërish."
       },
       "successTitle": "Mesazhi u dërgua",
       "sendAnother": "Dërgo një mesazh tjetër",
@@ -495,5 +496,124 @@
     "osLabel": "ELIOS/OS",
     "osVersion": "1.0.0",
     "mastheadTag": "Mjedis personal operativ"
+  },
+  "os": {
+    "minimizeWindow": "Zvogëlo",
+    "maximizeWindow": "Maksimizo",
+    "restoreWindow": "Rikthe",
+    "closeWindow": "Mbyll",
+    "loadingApp": "Duke ngarkuar…"
+  },
+  "finder": {
+    "all": "Të gjitha",
+    "featured": "Të veçuara",
+    "collections": "Koleksionet",
+    "projectsLabel": "Projektet",
+    "empty": "Nuk ka asgjë në këtë koleksion ende.",
+    "backToList": "Kthehu te lista",
+    "openCaseStudy": "Hap studimin e rastit",
+    "liveSite": "Faqja live",
+    "stack": "Stack-u",
+    "previewAlt": "pamje e projektit"
+  },
+  "preview": {
+    "challenge": "Sfida",
+    "outcome": "Rezultati",
+    "role": "Roli",
+    "metrics": "Metrikat"
+  },
+  "notesApp": {
+    "openFull": "Lexo artikullin e plotë"
+  },
+  "aboutSystem": {
+    "philosophyLabel": "Filozofia e inxhinierisë",
+    "philosophy": "Kujdesem për të gjithë rrjedhën — problemin, arkitekturën, ndërfaqen, deploy-in. Softueri përfundon vetëm kur është në prodhim dhe dikush e përdor.",
+    "nowLabel": "Aktualisht"
+  },
+  "prefs": {
+    "servicesPane": "Shërbimet",
+    "stackPane": "Aftësitë & Stack-u",
+    "deliverLabel": "Çfarë dërgoj",
+    "stackLabel": "Si ndërtoj",
+    "stackNote": "Teknologjitë që përdor në prodhim — pa matësa përqindje të sajuar.",
+    "servicesNote": "Çdo angazhim më poshtë përfundon me diçka të deploy-uar dhe të përdorshme."
+  },
+  "mail": {
+    "compose": "Mesazh i ri",
+    "via": "nëpërmjet",
+    "to": "Për",
+    "from": "Nga",
+    "subject": "Subjekti",
+    "subjectPlaceholder": "Kërkesë për projekt — p.sh. \"Onboarding ESMP\"",
+    "successBody": "E lexoj çdo mesazh personalisht. Prit një përgjigje të menduar, jo një autoresponder.",
+    "reference": "Referenca",
+    "rateLimited": "Shumë mesazhe — prit një minutë dhe provo përsëri."
+  },
+  "hire": {
+    "eyebrow": "ELIOS — Pranimi i projekteve",
+    "title": "Më trego çfarë do të ndërtosh.",
+    "subhead": "Tre pyetje të shpejta, një minutë — drejt në kutinë time. Pa radhë pritjeje, pa skrips shitjeje.",
+    "q1": "Çfarë po kërkon të ndërtosh?",
+    "q2": "Afati i pritshëm?",
+    "q3": "Buxheti i vlerësuar?",
+    "optional": "opsionale",
+    "qualifierLegend": "Pyetësori i projektit",
+    "q1Required": "Zgjidh një — ose kalo detajet më poshtë.",
+    "messageLabel": "Rreth projektit",
+    "skipLink": "Kalo detajet",
+    "addBack": "Shto pyetësorin me 3 pyetje",
+    "sendButton": "Dërgo kërkesën",
+    "privacyNote": "Detajet shkojnë drejt në kutinë time — nuk ruhen dhe nuk ndahen.",
+    "projects": {
+      "website": "Uebfaqe ose landing page",
+      "webapp": "Aplikacion uebi",
+      "saas": "Produkt SaaS",
+      "ecommerce": "Dyqan online",
+      "ai": "Produkt ose integrim AI",
+      "custom": "Softuer i personalizuar",
+      "other": "Diçka tjetër"
+    },
+    "timelines": {
+      "asap": "Sa më shpejt",
+      "2-4w": "Brenda 2–4 javësh",
+      "1-3m": "Brenda 1–3 muajsh",
+      "flexible": "Fleksibël / e pasigurt"
+    },
+    "budgets": {
+      "<1k": "Nën $1,000",
+      "1k-3k": "$1,000–$3,000",
+      "3k-5k": "$3,000–$5,000",
+      "5k-10k": "$5,000–$10,000",
+      "10k+": "$10,000+",
+      "prefer_not_to_say": "Preferoj të mos them"
+    },
+    "successBody": "E lexoj çdo kërkesë personalisht. Prit një përgjigje të menduar — dhe këshilla të ndershme, edhe kur përgjigjja është «ende mos e ndërto»."
+  },
+  "palette": {
+    "label": "Paleta e komandave",
+    "placeholder": "Kërko çdo gjë — aplikacione, projekte, shënime, komanda…",
+    "noResults": "Nuk u gjet asgjë — provo «projektet», «apl», «punëso»…",
+    "open": "Hap",
+    "read": "Lexo",
+    "view": "Shiko",
+    "go": "Shko",
+    "runInTerminal": "Mbush terminalin",
+    "close": "Mbyll paletën",
+    "navHome": "Ballina",
+    "navProjects": "Projektet",
+    "navContact": "Kontakto",
+    "hintNav": "lëviz",
+    "hintRun": "zgjedh",
+    "hintCount": "rezultate",
+    "groups": {
+      "apps": "Aplikacionet",
+      "projects": "Projektet",
+      "notes": "Shënimet",
+      "services": "Shërbimet",
+      "skills": "Aftësitë",
+      "navigation": "Navigimi",
+      "commands": "Komandat e terminalit"
+    },
+    "short": "Kërko"
   }
 }

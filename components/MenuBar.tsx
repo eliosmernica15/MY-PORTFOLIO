@@ -3,7 +3,8 @@
 import React, { useEffect, useRef, useState, memo } from "react";
 import ThemeToggle from "./ThemeToggle";
 import { useT, useLocale, useSetLocale } from "@/i18n/LocaleProvider";
-import { Sparkles } from "lucide-react";
+import { useOs } from "./os/OsContext";
+import { Sparkles, Search } from "lucide-react";
 
 /**
  * ELIOS/OS menu bar — fixed top edge bar.
@@ -44,11 +45,21 @@ function useNow() {
   return now;
 }
 
+function useIsMac() {
+  const [mac, setMac] = useState(false);
+  useEffect(() => {
+    setMac(/mac/i.test(window.navigator.platform));
+  }, []);
+  return mac;
+}
+
 const MenuBar: React.FC = () => {
   const t = useT();
   const locale = useLocale();
   const setLocale = useSetLocale();
+  const os = useOs();
   const now = useNow();
+  const isMac = useIsMac();
   const [activeApp, setActiveApp] = useState<string>("desktop");
   const lastActiveUpdate = useRef(0);
 
@@ -105,7 +116,20 @@ const MenuBar: React.FC = () => {
       }).format(now)
     : "--:--:--";
 
-  const activeAppLabel = t(`dock.${activeApp}`);
+  // Focused OS window wins over the scroll heuristic.
+  const focusedApp = os.focused;
+  const FOCUSED_LABEL: Record<string, string> = {
+    finder: "dock.finder",
+    preview: "dock.preview",
+    notes: "dock.notes",
+    about: "dock.about",
+    preferences: "dock.preferences",
+    mail: "dock.mail",
+    hire: "dock.hireMe",
+  };
+  const activeAppLabel = focusedApp
+    ? t(FOCUSED_LABEL[focusedApp] ?? "dock.desktop")
+    : t(`dock.${activeApp}`);
 
   return (
     <header
@@ -169,8 +193,31 @@ const MenuBar: React.FC = () => {
           ))}
         </nav>
 
-        {/* Right: clock · language · theme · hire */}
+        {/* Right: palette · clock · language · theme · hire */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          <button
+            type="button"
+            onClick={() =>
+              window.dispatchEvent(new CustomEvent("elios:palette-toggle"))
+            }
+            aria-label={`${t("palette.label")} (${isMac ? "⌘K" : "Ctrl K"})`}
+            title={`${t("palette.label")} — ${isMac ? "⌘K" : "Ctrl K"}`}
+            className="interactive-btn inline-flex h-7 items-center gap-1.5 rounded-md border px-2 font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]"
+            style={{
+              borderColor: "var(--border)",
+              background: "var(--pill-bg)",
+            }}
+          >
+            <Search size={12} aria-hidden />
+            <span className="hidden md:inline">{t("palette.short")}</span>
+            <kbd
+              aria-hidden
+              className="hidden md:inline rounded border border-[var(--border)] bg-[var(--bg-card)] px-1 text-[8px] text-[var(--text-muted)]"
+            >
+              {isMac ? "⌘K" : "⌃K"}
+            </kbd>
+          </button>
+
           <time
             className="hidden sm:block font-mono text-[11px] tabular-nums tracking-wider text-[var(--text-secondary)]"
             suppressHydrationWarning

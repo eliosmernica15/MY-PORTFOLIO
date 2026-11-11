@@ -1,7 +1,6 @@
 "use client";
 
 import React, { memo, useCallback } from "react";
-import Link from "next/link";
 import {
   Folder,
   SquareTerminal,
@@ -13,56 +12,36 @@ import {
   Briefcase,
 } from "lucide-react";
 import { useT } from "@/i18n/LocaleProvider";
-import { SITE } from "@/data/site";
+import { useOs, type AppId } from "./os/OsContext";
 
 /**
- * ELIOS/OS Dock — fixed bottom application bar.
+ * ELIOS/OS Dock — the running application bar.
+ * Every icon launches its application window (Terminal toggles the
+ * terminal widget). Running apps show an indicator dot; clicking a
+ * focused app minimizes it, clicking again restores it.
  *
- * Every icon performs a real function:
- *  - Finder    → scrolls to #projects
- *  - Terminal  → toggles the actual terminal widget (custom event)
- *  - Notes     → scrolls to #notes
- *  - Preview   → navigates to the featured case study (/project/apl)
- *  - About     → scrolls to #about
- *  - Prefs     → scrolls to #services
- *  - Mail      → scrolls to #contact
- *  - Hire Me   → opens the visitor's mail client to SITE.email
- *
- * Windowed applications arrive in the next stage; in the meantime every
- * control is honest and functional.
+ * Mobile: horizontally scrollable, no overflow.
  */
 
-type DockAction =
-  | { type: "scroll"; id: string }
-  | { type: "terminal" }
-  | { type: "link"; href: string }
-  | { type: "mailto" };
+type DockAction = { type: "app"; appId: AppId } | { type: "terminal" };
 
 const APPS: { key: string; icon: React.ElementType; action: DockAction }[] = [
-  { key: "finder", icon: Folder, action: { type: "scroll", id: "projects" } },
+  { key: "finder", icon: Folder, action: { type: "app", appId: "finder" } },
   { key: "terminal", icon: SquareTerminal, action: { type: "terminal" } },
-  { key: "notes", icon: FileText, action: { type: "scroll", id: "notes" } },
-  {
-    key: "preview",
-    icon: Images,
-    action: { type: "link", href: "/project/apl" },
-  },
+  { key: "notes", icon: FileText, action: { type: "app", appId: "notes" } },
+  { key: "preview", icon: Images, action: { type: "app", appId: "preview" } },
   {
     key: "about",
     icon: CircleUserRound,
-    action: { type: "scroll", id: "about" },
+    action: { type: "app", appId: "about" },
   },
   {
     key: "preferences",
     icon: Settings,
-    action: { type: "scroll", id: "services" },
+    action: { type: "app", appId: "preferences" },
   },
-  { key: "mail", icon: Mail, action: { type: "scroll", id: "contact" } },
+  { key: "mail", icon: Mail, action: { type: "app", appId: "mail" } },
 ];
-
-const HIRE_ME_MAILTO = `mailto:${SITE.email}?subject=${encodeURIComponent(
-  "Project inquiry — via eliosmernica.vercel.app",
-)}`;
 
 const DockItem: React.FC<{
   name: string;
@@ -70,66 +49,56 @@ const DockItem: React.FC<{
   actionLabel: string;
   icon: React.ElementType;
   action: DockAction;
-  onAction: (action: DockAction) => void;
   elevated?: boolean;
-}> = ({ name, hint, actionLabel, icon: Icon, action, onAction, elevated }) => {
-  const content = (
-    <>
+}> = ({ name, hint, actionLabel, icon: Icon, action, elevated }) => {
+  const os = useOs();
+  const running = action.type === "app" && os.isOpen(action.appId);
+  const minimized = action.type === "app" && os.isMinimized(action.appId);
+  const focused = action.type === "app" && os.focused === action.appId;
+
+  const onClick = useCallback(
+    (ev: React.MouseEvent<HTMLButtonElement>) => {
+      const opener = ev.currentTarget;
+      if (action.type === "terminal") {
+        window.dispatchEvent(new CustomEvent("elios:terminal-toggle"));
+        return;
+      }
+      if (running && focused && !minimized) {
+        os.toggleMinimize(action.appId);
+        return;
+      }
+      os.open(action.appId, opener);
+    },
+    [action, running, focused, minimized, os],
+  );
+
+  return (
+    <button
+      type="button"
+      aria-label={actionLabel}
+      aria-pressed={focused}
+      onClick={onClick}
+      className="dock-app group interactive-btn"
+    >
       <span className={`dock-tile ${elevated ? "dock-tile-elevated" : ""}`}>
         <Icon size={20} strokeWidth={1.75} aria-hidden />
+        {running && (
+          <span
+            aria-hidden
+            className="dock-running-dot"
+            style={{ opacity: minimized ? 0.35 : 1 }}
+          />
+        )}
       </span>
       <span aria-hidden className="dock-tooltip">
         {name} · {hint}
       </span>
-    </>
-  );
-
-  const common = {
-    className: "dock-app group interactive-btn",
-    "aria-label": actionLabel,
-  } as const;
-
-  if (action.type === "link") {
-    return (
-      <Link {...common} href={action.href} prefetch={false}>
-        {content}
-      </Link>
-    );
-  }
-  if (action.type === "mailto") {
-    return (
-      <a {...common} href={HIRE_ME_MAILTO}>
-        {content}
-      </a>
-    );
-  }
-  return (
-    <button {...common} type="button" onClick={() => onAction(action)}>
-      {content}
     </button>
   );
 };
 
 const Dock: React.FC = () => {
   const t = useT();
-
-  const run = useCallback((action: DockAction) => {
-    switch (action.type) {
-      case "scroll":
-        document
-          .getElementById(action.id)
-          ?.scrollIntoView({ behavior: "smooth", block: "start" });
-        break;
-      case "terminal":
-        window.dispatchEvent(new CustomEvent("elios:terminal-toggle"));
-        break;
-      case "mailto":
-        window.location.href = HIRE_ME_MAILTO;
-        break;
-      default:
-        break;
-    }
-  }, []);
 
   const label = (key: string) => ({
     name: t(`dock.${key}`),
@@ -155,7 +124,6 @@ const Dock: React.FC = () => {
             {...label(app.key)}
             icon={app.icon}
             action={app.action}
-            onAction={run}
           />
         ))}
         <span
@@ -166,8 +134,7 @@ const Dock: React.FC = () => {
         <DockItem
           {...label("hireMe")}
           icon={Briefcase}
-          action={{ type: "mailto" }}
-          onAction={run}
+          action={{ type: "app", appId: "hire" }}
           elevated
         />
       </div>
