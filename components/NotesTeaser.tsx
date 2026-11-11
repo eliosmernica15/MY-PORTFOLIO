@@ -1,12 +1,18 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { NOTES } from "@/data/notes";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { RevealSection } from "@/components/RevealSection";
 import { formatDate, formatReadTime } from "@/lib/format";
+import { useT, useLocale } from "@/i18n/LocaleProvider";
+import { getNotes } from "@/data/i18n";
 
 export function NotesTeaser() {
-  const latest = NOTES.slice(0, 3);
+  const t = useT();
+  const locale = useLocale();
+  const intl = locale === "sq" ? "sq" : "en-US";
+  const latest = getNotes(locale).slice(0, 3);
 
   return (
     <section
@@ -16,15 +22,8 @@ export function NotesTeaser() {
       <RevealSection>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <SectionHeader
-            eyebrow="Writing"
-            title={
-              <>
-                Notes on{" "}
-                <span className="italic" style={{ color: "var(--text-muted)" }}>
-                  the work.
-                </span>
-              </>
-            }
+            eyebrow={t("notes.blog") ?? t("notes.title")}
+            title={t("notes.teaserHeading")}
             className="!mb-0"
           />
           <Link
@@ -32,7 +31,7 @@ export function NotesTeaser() {
             className="text-[10px] font-bold uppercase tracking-[0.3em] flex items-center gap-2 transition-colors hover:text-[var(--accent-light)]"
             style={{ color: "var(--text-muted)" }}
           >
-            All notes <ArrowUpRight size={12} />
+            {t("notes.readMore")} <ArrowUpRight size={12} />
           </Link>
         </div>
       </RevealSection>
@@ -53,9 +52,9 @@ export function NotesTeaser() {
                 className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest mb-3"
                 style={{ color: "var(--text-muted)" }}
               >
-                <time dateTime={n.date}>{formatDate(n.date)}</time>
+                <time dateTime={n.date}>{formatDate(n.date, intl)}</time>
                 <span>·</span>
-                <span>{formatReadTime(n.readMin)}</span>
+                <span>{formatReadTime(n.readMin, intl)}</span>
               </div>
               <h3
                 className="text-xl font-black tracking-tight mb-2 leading-snug"

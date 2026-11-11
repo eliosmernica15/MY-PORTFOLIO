@@ -225,7 +225,7 @@ export default async function RootLayout({
             .
           </div>
         </noscript>
-        <Providers>{children}</Providers>
+        <Providers initialLocale={locale as "en" | "sq"}>{children}</Providers>
         <SwRegister />
 
         <script

@@ -1,169 +1,160 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { Locale, locales, defaultLocale, localeNames, localeFlags, localeDirections } from './config';
-import { getLocaleFromPathname, addLocaleToPath, removeLocaleFromPath } from './utils';
-import { useRouter, usePathname } from 'next/navigation';
-import { useRouter as useNextRouter } from 'next/navigation';
+import React, {
+  createContext,
+  useContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import {
+  Locale,
+  defaultLocale,
+  localeNames,
+  localeFlags,
+  isValidLocale,
+} from "./config";
+import en from "@/messages/en.json";
+import sq from "@/messages/sq.json";
+import { getLocaleFromPathname, removeLocaleFromPath } from "./utils";
+import { useRouter, usePathname } from "next/navigation";
+
+const catalogs = { en, sq } as const;
+type Catalog = (typeof catalogs)["en"];
+type MessageValue = string | number | boolean | null | MessageMap;
+interface MessageMap {
+  [key: string]: MessageValue;
+}
+
+/** Nested lookup: t('contact.form.name') -> "Emri" */
+function lookup(locale: Locale, key: string): string | undefined {
+  const tryLookup = (catalog: Catalog): string | undefined => {
+    let node: MessageValue | undefined = catalog as unknown as MessageValue;
+    for (const part of key.split(".")) {
+      if (node === null || typeof node !== "object") return undefined;
+      node = (node as MessageMap)[part];
+    }
+    return typeof node === "string"
+      ? node
+      : typeof node === "number"
+        ? String(node)
+        : undefined;
+  };
+  return tryLookup(catalogs[locale]) ?? tryLookup(catalogs[defaultLocale]);
+}
+
+/** Interpolate {vars} into a string. */
+function interpolate(
+  template: string,
+  vars?: Record<string, string | number>,
+): string {
+  if (!vars) return template;
+  return template.replace(/\{(\w+)\}/g, (_, name) =>
+    name in vars ? String(vars[name]) : `{${name}}`,
+  );
+}
+
+export type Translate = (
+  key: string,
+  vars?: Record<string, string | number>,
+) => string;
 
 interface LocaleContextValue {
   locale: Locale;
   setLocale: (locale: Locale) => void;
-  locales: typeof locales;
+  t: Translate;
   localeNames: typeof localeNames;
   localeFlags: typeof localeFlags;
-  localeDirections: typeof localeDirections;
 }
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-interface LocaleProviderProps {
+export function LocaleProvider({
+  children,
+  initialLocale,
+}: {
   children: React.ReactNode;
-}
-
-/**
- * LocaleProvider - Client-side locale management
- * Handles locale state, switching, and persistence
- */
-export function LocaleProvider({ children }: LocaleProviderProps) {
-  const router = useRouter();
+  /** Server-resolved locale (from the request path/cookie) so SSR renders the
+   *  correct language and hydration matches. Falls back to pathname, then
+   *  the cookie, then the default. */
+  initialLocale?: Locale;
+}) {
   const pathname = usePathname();
+  const router = useRouter();
   const [locale, setLocaleState] = useState<Locale>(() => {
-    // Initialize from pathname or cookie
-    if (typeof window !== 'undefined') {
-      // Try to get from pathname first
+    if (initialLocale && isValidLocale(initialLocale)) return initialLocale;
+    if (typeof window !== "undefined") {
       const pathLocale = getLocaleFromPathname(window.location.pathname);
       if (pathLocale) return pathLocale;
-
-      // Fallback to cookie
       const cookie = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('NEXT_LOCALE='));
-      if (cookie) {
-        const value = cookie.split('=')[1];
-        if (['en', 'sq'].includes(value)) return value as Locale;
-      }
+        .split("; ")
+        .find((row) => row.startsWith("NEXT_LOCALE="));
+      const value = cookie?.split("=")[1];
+      if (value && isValidLocale(value)) return value;
     }
     return defaultLocale;
   });
 
-  const [mounted, setMounted] = useState(false);
-
-  // Initialize locale from pathname on mount
+  // Track client navigation between /en and /sq routes so the provider stays correct.
   useEffect(() => {
-    setMounted(true);
-    if (typeof window !== 'undefined') {
-      const pathLocale = getLocaleFromPathname(window.location.pathname);
-      if (pathLocale) {
-        setLocaleState(pathLocale);
-      }
+    const pathLocale = getLocaleFromPathname(pathname);
+    if (pathLocale && pathLocale !== locale) {
+      setLocaleState(pathLocale);
+      document.documentElement.lang = pathLocale;
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
-  // Listen for locale changes from other tabs/windows
-  useEffect(() => {
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === 'NEXT_LOCALE' && event.newValue) {
-        if (['en', 'sq'].includes(event.newValue)) {
-          setLocaleState(event.newValue as Locale);
-        }
-      }
-    };
+  const setLocale = useCallback(
+    (newLocale: Locale) => {
+      if (!isValidLocale(newLocale) || newLocale === locale) return;
+      setLocaleState(newLocale);
+      document.documentElement.lang = newLocale;
+      document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=lax${
+        window.location.protocol === "https:" ? "; Secure" : ""
+      }`;
+      const { path } = removeLocaleFromPath(pathname);
+      const newPath =
+        newLocale === defaultLocale
+          ? path
+          : `/${newLocale}${path === "/" ? "" : path}`;
+      router.push(newPath || "/");
+      router.refresh();
+    },
+    [locale, pathname, router],
+  );
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+  const t: Translate = useCallback(
+    (key, vars) => interpolate(lookup(locale, key) ?? key, vars),
+    [locale],
+  );
 
-  // Update locale and persist
-  const setLocale = useCallback((newLocale: Locale) => {
-    if (!['en', 'sq'].includes(newLocale)) return;
-
-    setLocaleState(newLocale);
-
-    // Update cookie
-    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=lax${window.location.protocol === 'https:' ? '; Secure' : ''}`;
-
-    // Navigate to new locale path
-    const { path } = removeLocaleFromPath(window.location.pathname);
-    const newPath = addLocaleToPath(path, newLocale);
-    window.location.href = newPath;
-  }, []);
-
-  // Provide locale info
-  const value = useMemo<{
-    locale: Locale;
-    setLocale: (locale: Locale) => void;
-    locales: typeof locales;
-    localeNames: typeof localeNames;
-    localeFlags: typeof localeFlags;
-    localeDirections: typeof localeDirections;
-  }>(() => ({
-    locale,
-    setLocale,
-    locales,
-    localeNames,
-    localeFlags,
-    localeDirections,
-  }), [locale]);
-
-  if (!mounted) {
-    return <>{children}</>;
-  }
+  const value = useMemo(
+    () => ({ locale, setLocale, t, localeNames, localeFlags }),
+    [locale, setLocale, t],
+  );
 
   return (
-    <LocaleContext.Provider value={value}>
-      {children}
-    </LocaleContext.Provider>
+    <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
   );
 }
 
-/**
- * Hook to access locale context
- */
-export function useLocaleContext() {
-  const context = useContext(LocaleContext);
-  if (!context) {
-    throw new Error('useLocaleContext must be used within a LocaleProvider');
-  }
-  return context;
+export function useLocaleContext(): LocaleContextValue {
+  const ctx = useContext(LocaleContext);
+  if (!ctx)
+    throw new Error("useLocaleContext must be used within a LocaleProvider");
+  return ctx;
 }
 
-/**
- * Hook to get current locale
- */
 export function useLocale(): Locale {
-  const { locale } = useLocaleContext();
-  return locale;
+  return useLocaleContext().locale;
 }
 
-/**
- * Hook to get locale switching function
- */
 export function useSetLocale(): (locale: Locale) => void {
-  const { setLocale } = useLocaleContext();
-  return setLocale;
+  return useLocaleContext().setLocale;
 }
 
-/**
- * Hook to get all available locales
- */
-export function useLocales(): typeof locales {
-  return locales;
-}
-
-/**
- * Hook to get locale metadata
- */
-export function useLocaleInfo(locale?: Locale): {
-  name: string;
-  flag: string;
-  direction: 'ltr' | 'rtl';
-} {
-  const resolvedLocale = useLocale();
-  const currentLocale = locale ?? resolvedLocale;
-  return useMemo(() => ({
-    name: localeNames[currentLocale],
-    flag: localeFlags[currentLocale],
-    direction: localeDirections[currentLocale],
-  }), [currentLocale, resolvedLocale]);
+export function useT(): Translate {
+  return useLocaleContext().t;
 }

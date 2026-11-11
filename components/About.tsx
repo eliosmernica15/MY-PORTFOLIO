@@ -4,18 +4,14 @@ import PremiumCard from "./ui/PremiumCard";
 import Chip from "./ui/Chip";
 import SectionHeader from "./ui/SectionHeader";
 import { AboutTimeline } from "./AboutTimeline";
-import { SITE } from "@/data/site";
+import { useT } from "@/i18n/LocaleProvider";
 
-const CAPABILITIES = [
-  "Full-Stack Engineering",
-  "System Architecture",
-  "Performance Optimization",
-  "UI/UX Engineering",
-  "Cloud Deployment",
-  "API Design",
-];
+const CAPABILITY_KEYS = [0, 1, 2, 3, 4, 5];
+const STAT_VALUE_KEYS = [0, 1, 2];
 
 const About: React.FC = () => {
+  const t = useT();
+
   return (
     <section
       id="about"
@@ -29,24 +25,14 @@ const About: React.FC = () => {
               style={{ background: "var(--glass-accent-bg)" }}
             />
             <SectionHeader
-              eyebrow="About Me"
-              title={
-                <>
-                  I am {SITE.name.split(" ")[0]}{" "}
-                  <span
-                    className="italic"
-                    style={{ color: "var(--text-muted)" }}
-                  >
-                    {SITE.title}
-                  </span>
-                </>
-              }
-              subtitle={SITE.summary}
+              eyebrow={t("about.title")}
+              title={t("about.subtitle")}
+              subtitle={t("about.description")}
               className="mb-8 !mb-10 relative z-10"
             />
             <div className="flex flex-wrap gap-2 mb-2 relative z-10">
-              {CAPABILITIES.map((item) => (
-                <Chip key={item}>{item}</Chip>
+              {CAPABILITY_KEYS.map((i) => (
+                <Chip key={i}>{t(`about.capabilities.${i}`)}</Chip>
               ))}
             </div>
             <AboutTimeline />
@@ -55,9 +41,9 @@ const About: React.FC = () => {
               style={{ borderTop: "1px solid var(--border)" }}
             >
               {[
-                { label: "Focus", value: "Web & Infrastructure" },
-                { label: "Principle", value: "Minimalism & Speed" },
-                { label: "Availability", value: "Remote · Worldwide" },
+                { label: t("about.focus"), value: t("about.values.0") },
+                { label: t("about.principle"), value: t("about.values.1") },
+                { label: t("about.availability"), value: t("about.values.2") },
               ].map((item) => (
                 <div key={item.label} className="space-y-2">
                   <h4

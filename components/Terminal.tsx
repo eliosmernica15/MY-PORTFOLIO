@@ -23,6 +23,8 @@ import { SERVICES } from "@/data/services";
 import { SKILL_CATEGORIES } from "@/data/skills";
 import { NOTES } from "@/data/notes";
 import { NOW } from "@/data/now";
+import { getNow } from "@/data/i18n";
+import { useT, useLocale } from "@/i18n/LocaleProvider";
 import { SITE } from "@/data/site";
 import { useTheme } from "@/context/ThemeProvider";
 import { play } from "@/lib/sound";
@@ -51,206 +53,218 @@ interface TerminalProps {
 
 // ---------- Command map ----------
 
-const COMMANDS: Record<
+// t is the translator injected from the component. PROJECTS/NOTES keep their
+// original English ids (they are stable handles), not user-facing prose.
+const buildCommands = (
+  t: (key: string, vars?: Record<string, string | number>) => string,
+  locale: "en" | "sq",
+): Record<
   string,
   { description: string; run: (args: string[]) => CommandOutput }
-> = {
-  help: {
-    description: "List every command with a one-line description.",
-    run: () => {
-      const list = Object.entries(COMMANDS)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([name, c]) => `  ${name.padEnd(14)}  ${c.description}`)
-        .join("\n");
-      return {
-        output: `Available commands:\n${list}\n\nTip: ⌘/ctrl+L clears the buffer. Esc closes.`,
-      };
-    },
-  },
-
-  about: {
-    description: "A short bio.",
-    run: () => `${SITE.name} — ${SITE.title}. ${SITE.tagline}`,
-  },
-
-  whoami: {
-    description: "Easter egg.",
-    run: () => "elios@worldwide",
-  },
-
-  projects: {
-    description: "List projects with id, title, year.",
-    run: () => {
-      const lines = PROJECTS.map(
-        (p) => `  ${p.id.padEnd(12)}  ${p.title}  (${p.year})  [${p.category}]`,
-      );
-      return `Projects (${PROJECTS.length}):\n${lines.join("\n")}\n\nTry \`repo <id>\` to open a case study.`;
-    },
-  },
-
-  skills: {
-    description: "Categorized skill list.",
-    run: () => {
-      const sections = SKILL_CATEGORIES.map((cat) => {
-        const list = cat.skills
-          .map((s) => `    ${s.name.padEnd(28)} ${"●".repeat(s.level)}`)
+> => {
+  const table: Record<
+    string,
+    { description: string; run: (args: string[]) => CommandOutput }
+  > = {
+    help: {
+      description: t("terminal.commands.help"),
+      run: () => {
+        const list = Object.entries(table)
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([name, c]) => `  ${name.padEnd(14)}  ${c.description}`)
           .join("\n");
-        return `[${cat.name}]\n${list}`;
-      });
-      return sections.join("\n\n");
-    },
-  },
-
-  services: {
-    description: "List the services I offer.",
-    run: () => {
-      const lines = SERVICES.map(
-        (s) => `  ${s.number}  ${s.title}\n      ${s.desc}`,
-      );
-      return `Services (${SERVICES.length}):\n${lines.join("\n\n")}`;
-    },
-  },
-
-  now: {
-    description: "What I am focused on right now.",
-    run: () => `Now: ${NOW.line}\nLast updated: ${NOW.updatedAt}`,
-  },
-
-  contact: {
-    description: "Scroll to the contact form.",
-    run: () => ({
-      output: `Email ${SITE.email} or use the form below. Opening it…`,
-      action: { type: "scroll_to" as const, target: "#contact" },
-    }),
-  },
-
-  cv: {
-    description: "Download the CV.",
-    run: () => ({
-      output: "Downloading CV…",
-      action: { type: "open_link" as const, target: "/Elios-Mernica-CV.pdf" },
-    }),
-  },
-
-  theme: {
-    description: "theme dark|light|toggle",
-    run: (args) => {
-      const arg = (args[0] || "").toLowerCase();
-      if (arg === "dark" || arg === "light") {
         return {
-          output: `Switching to ${arg}…`,
-          action: { type: "set_theme", theme: arg },
+          output: `${t("terminal.help")}\n${list}\n\n${t("terminal.tip")}`,
         };
-      }
-      if (arg === "toggle" || arg === "") {
-        // The previous version hard-coded `theme: 'dark'`, so
-        // `theme toggle` always switched to dark regardless of the
-        // current state. Now we send `theme: 'toggle'` and let
-        // `executeAction` invoke the provider's toggleTheme(), which
-        // flips based on the current value.
+      },
+    },
+
+    about: {
+      description: t("terminal.commands.about"),
+      run: () => `${SITE.name} — ${SITE.title}. ${SITE.tagline}`,
+    },
+
+    whoami: {
+      description: t("terminal.commands.sudo"),
+      run: () => "elios@worldwide",
+    },
+
+    projects: {
+      description: t("terminal.commands.projects"),
+      run: () => {
+        const lines = PROJECTS.map(
+          (p) =>
+            `  ${p.id.padEnd(12)}  ${p.title}  (${p.year})  [${p.category}]`,
+        );
+        return `Projects (${PROJECTS.length}):\n${lines.join("\n")}\n\nTry \`repo <id>\` to open a case study.`;
+      },
+    },
+
+    skills: {
+      description: t("terminal.commands.skills"),
+      run: () => {
+        const sections = SKILL_CATEGORIES.map((cat) => {
+          const list = cat.skills
+            .map((s) => `    ${s.name.padEnd(28)} ${"●".repeat(s.level)}`)
+            .join("\n");
+          return `[${cat.name}]\n${list}`;
+        });
+        return sections.join("\n\n");
+      },
+    },
+
+    services: {
+      description: t("terminal.commands.services"),
+      run: () => {
+        const lines = SERVICES.map(
+          (s) => `  ${s.number}  ${s.title}\n      ${s.desc}`,
+        );
+        return `Services (${SERVICES.length}):\n${lines.join("\n\n")}`;
+      },
+    },
+
+    now: {
+      description: t("terminal.commands.now"),
+      run: () => `${t("terminal.nowPrefix")}: ${getNow(locale)}`,
+    },
+
+    contact: {
+      description: t("terminal.commands.contact"),
+      run: () => ({
+        output: t("terminal.contactOutput", { email: SITE.email }),
+        action: { type: "scroll_to" as const, target: "#contact" },
+      }),
+    },
+
+    cv: {
+      description: t("terminal.commands.cv"),
+      run: () => ({
+        output: t("terminal.downloadingCv"),
+        action: { type: "open_link" as const, target: "/Elios-Mernica-CV.pdf" },
+      }),
+    },
+
+    theme: {
+      description: t("terminal.commands.theme"),
+      run: (args) => {
+        const arg = (args[0] || "").toLowerCase();
+        if (arg === "dark" || arg === "light") {
+          return {
+            output: t("terminal.switchingTo", { mode: arg }),
+            action: { type: "set_theme", theme: arg },
+          };
+        }
+        if (arg === "toggle" || arg === "") {
+          // The previous version hard-coded `theme: 'dark'`, so
+          // `theme toggle` always switched to dark regardless of the
+          // current state. Now we send `theme: 'toggle'` and let
+          // `executeAction` invoke the provider's toggleTheme(), which
+          // flips based on the current value.
+          return {
+            output: t("terminal.togglingTheme"),
+            action: { type: "set_theme", theme: "toggle" },
+          };
+        }
+        return t("terminal.errors.usageTheme");
+      },
+    },
+
+    clear: {
+      description: t("terminal.commands.clear"),
+      run: () => ({ output: "", action: { type: "clear" } }),
+    },
+
+    history: {
+      description: t("terminal.commands.history"),
+      run: () => t("terminal.historyHint"),
+    },
+
+    sudo: {
+      description: t("terminal.commands.sudo"),
+      run: (args) =>
+        args.length === 0
+          ? "sudo what? Try \`sudo rm -rf /\` for a laugh."
+          : "Permission denied: you're not in the sudoers file. This incident will be reported (to nobody, because I have no logs).",
+    },
+
+    matrix: {
+      description: t("terminal.commands.sudo"),
+      run: () =>
+        "There is no spoon. There is only the codebase.\n(Tip: the hero has a live particle field — go look.)",
+    },
+
+    coffee: {
+      description: t("terminal.commands.sudo"),
+      run: () =>
+        "I run on espresso and well-named variables. Ratio: 1:3, espresso to variables, on a good day.",
+    },
+
+    github: {
+      description: t("terminal.commands.github"),
+      run: () => ({
+        output: t("terminal.openingGithub"),
+        action: { type: "scroll_to" as const, target: "#github" },
+      }),
+    },
+
+    echo: {
+      description: t("terminal.commands.echo"),
+      run: (args) => args.join(" "),
+    },
+
+    date: {
+      description: t("terminal.commands.date"),
+      run: () => new Date().toString(),
+    },
+
+    repo: {
+      description: t("terminal.commands.repo"),
+      run: (args) => {
+        const id = (args[0] || "").toLowerCase();
+        const p = PROJECTS.find((p) => p.id === id);
+        if (!p) {
+          const known = PROJECTS.map((p) => p.id).join(", ");
+          return t("terminal.errors.unknownProject", { id, known });
+        }
         return {
-          output: "Toggling theme…",
-          action: { type: "set_theme", theme: "toggle" },
+          output: t("terminal.openingProject", { id: p.id }),
+          action: { type: "open_link" as const, target: `/project/${p.id}` },
         };
-      }
-      return "Usage: theme dark | light | toggle";
+      },
     },
-  },
 
-  clear: {
-    description: "Clear the message buffer.",
-    run: () => ({ output: "", action: { type: "clear" } }),
-  },
-
-  history: {
-    description: "Show recently run commands.",
-    run: () => "(history is shown as you scroll with ↑/↓)",
-  },
-
-  sudo: {
-    description: "Easter egg.",
-    run: (args) =>
-      args.length === 0
-        ? "sudo what? Try \`sudo rm -rf /\` for a laugh."
-        : "Permission denied: you're not in the sudoers file. This incident will be reported (to nobody, because I have no logs).",
-  },
-
-  matrix: {
-    description: "Easter egg.",
-    run: () =>
-      "There is no spoon. There is only the codebase.\n(Tip: the hero has a live particle field — go look.)",
-  },
-
-  coffee: {
-    description: "Easter egg.",
-    run: () =>
-      "I run on espresso and well-named variables. Ratio: 1:3, espresso to variables, on a good day.",
-  },
-
-  github: {
-    description: "Open the GitHub activity section.",
-    run: () => ({
-      output: "Opening the GitHub section…",
-      action: { type: "scroll_to" as const, target: "#github" },
-    }),
-  },
-
-  echo: {
-    description: "echo <text>",
-    run: (args) => args.join(" "),
-  },
-
-  date: {
-    description: "Current date and time.",
-    run: () => new Date().toString(),
-  },
-
-  repo: {
-    description: "repo <projectId> — open a project case study.",
-    run: (args) => {
-      const id = (args[0] || "").toLowerCase();
-      const p = PROJECTS.find((p) => p.id === id);
-      if (!p) {
-        const known = PROJECTS.map((p) => p.id).join(", ");
-        return `Unknown project "${id}". Try one of: ${known}.`;
-      }
-      return {
-        output: `Opening /project/${p.id}…`,
-        action: { type: "open_link" as const, target: `/project/${p.id}` },
-      };
+    note: {
+      description: t("terminal.commands.note"),
+      run: (args) => {
+        const slug = (args[0] || "").toLowerCase();
+        const n = NOTES.find((n) => n.slug === slug);
+        if (!n) {
+          const known = NOTES.map((n) => n.slug).join(", ");
+          return t("terminal.errors.unknownNote", { slug, known });
+        }
+        return {
+          output: t("terminal.openingNote", { slug: n.slug }),
+          action: { type: "open_link" as const, target: `/notes/${n.slug}` },
+        };
+      },
     },
-  },
 
-  note: {
-    description: "note <slug> — open a writing post.",
-    run: (args) => {
-      const slug = (args[0] || "").toLowerCase();
-      const n = NOTES.find((n) => n.slug === slug);
-      if (!n) {
-        const known = NOTES.map((n) => n.slug).join(", ");
-        return `Unknown note "${slug}". Try one of: ${known}.`;
-      }
-      return {
-        output: `Opening /notes/${n.slug}…`,
-        action: { type: "open_link" as const, target: `/notes/${n.slug}` },
-      };
+    open: {
+      description: t("terminal.commands.open"),
+      run: (args) => {
+        const id = args[0] || "";
+        if (!id) return t("terminal.errors.usageOpen");
+        return {
+          output: t("terminal.scrollingTo", { id }),
+          action: { type: "scroll_to" as const, target: `#${id}` },
+        };
+      },
     },
-  },
-
-  open: {
-    description: "open <sectionId> — scroll to a section by id.",
-    run: (args) => {
-      const id = args[0] || "";
-      if (!id) return "Usage: open <sectionId>";
-      return {
-        output: `Scrolling to #${id}…`,
-        action: { type: "scroll_to" as const, target: `#${id}` },
-      };
-    },
-  },
+  };
+  return table;
 };
 
-const COMMAND_NAMES = Object.keys(COMMANDS);
+// COMMAND_NAMES computed in the component from the memoized table
 
 function longestCommonPrefix(items: string[]): string {
   if (items.length === 0) return "";
@@ -280,6 +294,10 @@ function useOptionalTheme() {
 export default function Terminal({}: TerminalProps = {}) {
   // Theme is always available (the layout wraps with ThemeProvider).
   const { mode: currentTheme, toggleTheme } = useOptionalTheme();
+  const t = useT();
+  const locale = useLocale();
+  const COMMANDS = React.useMemo(() => buildCommands(t, locale), [t, locale]);
+  const COMMAND_NAMES = React.useMemo(() => Object.keys(COMMANDS), [COMMANDS]);
   // Set a specific theme value, or toggle. `toggleTheme` flips based
   // on the current state and is what the `theme toggle` command uses
   // (the previous version always set theme to 'dark', which was a
@@ -391,7 +409,7 @@ export default function Terminal({}: TerminalProps = {}) {
         {
           id: "0",
           prompt: "elios",
-          text: "Welcome — type \`help\` to list commands. Esc to close. ⌘/ctrl+L to clear.",
+          text: t("terminal.welcome"),
           ts: Date.now(),
         },
       ]);
@@ -513,7 +531,7 @@ export default function Terminal({}: TerminalProps = {}) {
       {
         id: String(Date.now()),
         prompt: "elios",
-        text: "Buffer cleared.",
+        text: t("terminal.clear"),
         ts: Date.now(),
       },
     ]);
@@ -579,7 +597,7 @@ export default function Terminal({}: TerminalProps = {}) {
           {
             id: `b-${ts}`,
             prompt: "",
-            text: `command not found: ${name}. Type \`help\` for a list.`,
+            text: t("terminal.unknownCommand", { command: name }),
             ts,
           },
         ]);
@@ -1029,7 +1047,7 @@ export default function Terminal({}: TerminalProps = {}) {
                   onKeyDown={onKeyDown}
                   className="flex-1 bg-transparent border-0 outline-none text-base sm:text-[12.5px] font-mono"
                   style={{ color: "var(--text-primary)" }}
-                  placeholder="type \`help\` for commands"
+                  placeholder={t("terminal.placeholder")}
                   spellCheck={false}
                   autoComplete="off"
                   aria-label="Terminal input"

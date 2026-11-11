@@ -1,20 +1,22 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import Home from '@/components/Home';
-import { getTranslations } from 'next-intl/server';
-import { SITE } from '@/data/site';
-import { buildBreadcrumbs } from '@/lib/breadcrumbs';
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Home from "@/components/Home";
+import { SITE } from "@/data/site";
+import { buildBreadcrumbs } from "@/lib/breadcrumbs";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
 }
 
-// Force dynamic rendering to avoid prerender cache that causes redirect loops
-export const dynamic = 'force-dynamic';
+// Force dynamic rendering - the HTML carries a per-request CSP nonce.
+export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'common' });
 
   return {
     title: {
@@ -26,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       canonical: `/${locale}`,
     },
     openGraph: {
-      locale: 'en_US',
+      locale: "en_US",
       url: `https://eliosmernica.vercel.app/${locale}`,
       siteName: SITE.name,
       title: `${SITE.name} — ${SITE.title}`,

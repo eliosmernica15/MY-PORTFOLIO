@@ -3,12 +3,14 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { RevealSection } from "@/components/RevealSection";
 import { StackMap } from "@/components/StackMap";
 import SkillMarquee from "@/components/SkillMarquee";
+import { useT } from "@/i18n/LocaleProvider";
 
 /**
  * Stack section: categorized skills with confidence dots (StackMap) above the
  * infinite skill marquee. Kept as its own section so Home stays readable.
  */
 const StackSection: React.FC = () => {
+  const t = useT();
   return (
     <section
       id="stack"
@@ -17,16 +19,9 @@ const StackSection: React.FC = () => {
     >
       <RevealSection>
         <SectionHeader
-          eyebrow="Stack"
-          title={
-            <>
-              What I build{" "}
-              <span className="italic" style={{ color: "var(--text-muted)" }}>
-                with.
-              </span>
-            </>
-          }
-          subtitle="Categorized by what they actually do in production - not a wall of logos."
+          eyebrow={t("skills.title")}
+          title={t("skills.stackTagline")}
+          subtitle={t("skills.tagline")}
         />
       </RevealSection>
       <RevealSection className="mt-14">

@@ -1,35 +1,23 @@
 /**
- * AboutTimeline — a 5-stop horizontal dot timeline at the top of the About section.
- *
- * Pure CSS + ARIA. No JS. Each dot is keyboard-focusable; hovering or focusing
- * reveals a one-line description. Uses `peer-hover` / `peer-focus-visible` so the
- * description swap is instant and SSR-safe.
+ * AboutTimeline - a 5-stop horizontal dot timeline at the top of the About section.
+ * Translated per locale via useT().
  */
-const STOPS = [
-  { id: "now", label: "Now", desc: "Shipping ESMP v2 + A++(APL) v1.2" },
-  {
-    id: "2026",
-    label: "2026",
-    desc: "AI agent systems, custom RAG, and a public compiler.",
-  },
-  {
-    id: "2025",
-    label: "2025",
-    desc: "Founding Flixverse; first 1k monthly users in week three.",
-  },
-  {
-    id: "2024",
-    label: "2024",
-    desc: "Shipped Eltrix Cloud to production; remote work worldwide.",
-  },
-  {
-    id: "2023",
-    label: "2023",
-    desc: "Founding ForexPulse; full-stack SaaS from zero to paying users.",
-  },
-] as const;
+import { useT } from "@/i18n/LocaleProvider";
 
 export function AboutTimeline() {
+  const t = useT();
+  const STOPS = [
+    {
+      id: "now",
+      label: t("about.timelineNowLabel"),
+      desc: t("about.timelineNow"),
+    },
+    { id: "2026", label: "2026", desc: t("about.timeline2026") },
+    { id: "2025", label: "2025", desc: t("about.timeline2025") },
+    { id: "2024", label: "2024", desc: t("about.timeline2024") },
+    { id: "2023", label: "2023", desc: t("about.timeline2023") },
+  ];
+
   return (
     <div className="mt-10 mb-2" aria-labelledby="about-timeline-label">
       <p
@@ -37,7 +25,7 @@ export function AboutTimeline() {
         className="text-[10px] font-bold uppercase tracking-[0.3em] mb-5"
         style={{ color: "var(--accent-light)" }}
       >
-        Where I&apos;ve been
+        {t("about.timelineLabel")}
       </p>
 
       <ol

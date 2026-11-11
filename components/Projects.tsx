@@ -1,16 +1,29 @@
-'use client';
+"use client";
 
-import React, { useState, useMemo, memo, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { ArrowUpRight, ChevronDown } from 'lucide-react';
-import { PROJECTS } from '@/data/projects';
-import RevealSection from './RevealSection';
-import SectionHeader from './ui/SectionHeader';
-import AdvancedButton from './ui/AdvancedButton';
-import { gradientBlur } from '@/lib/blurDataURL';
+import React, { useState, useMemo, memo, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
+import { PROJECTS } from "@/data/projects";
+import RevealSection from "./RevealSection";
+import SectionHeader from "./ui/SectionHeader";
+import AdvancedButton from "./ui/AdvancedButton";
+import { gradientBlur } from "@/lib/blurDataURL";
+import { useT, useLocale } from "@/i18n/LocaleProvider";
+import { getProjects } from "@/data/i18n";
 
 type Project = (typeof PROJECTS)[number];
+
+const CATEGORY_TO_KEY: Record<string, string> = {
+  "Web Development": "web",
+  "Zhvillim Web": "web",
+  "Mobile Development": "mobile",
+  "Zhvillim Mobile": "mobile",
+  Applications: "applications",
+  Aplikacione: "applications",
+  "Web Design": "design",
+  "Dizajn Web": "design",
+};
 
 interface ProjectCardProps {
   project: Project;
@@ -23,9 +36,12 @@ interface ProjectCardProps {
 // paid the JS cost on every render. The CSS `:hover` state is
 // purely declarative and the card now ships as a server-rendered
 // subtree.
-const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCardProps) {
+const ProjectCard = memo(function ProjectCard({
+  project,
+  isFeatured,
+}: ProjectCardProps) {
   return (
-    <div className={isFeatured ? 'md:col-span-2' : ''}>
+    <div className={isFeatured ? "md:col-span-2" : ""}>
       <Link
         href={`/project/${project.id}`}
         // `prefetch={true}` (the default for Link) means Next.js
@@ -37,9 +53,9 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCa
         // warm cache.
         prefetch={true}
         className={`project-card block relative overflow-hidden rounded-2xl sm:rounded-[2rem] group cursor-pointer ${
-          isFeatured ? 'aspect-[4/3] sm:aspect-[2.4/1]' : 'aspect-[16/10]'
+          isFeatured ? "aspect-[4/3] sm:aspect-[2.4/1]" : "aspect-[16/10]"
         }`}
-        style={{ border: '1px solid var(--border)' }}
+        style={{ border: "1px solid var(--border)" }}
         data-cursor-hover
       >
         <span className="project-year-badge">{project.year}</span>
@@ -49,7 +65,7 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCa
           width={isFeatured ? 1200 : 800}
           height={isFeatured ? 500 : 500}
           className="project-card-image w-full h-full object-cover object-top"
-          loading={isFeatured ? 'eager' : 'lazy'}
+          loading={isFeatured ? "eager" : "lazy"}
           priority={isFeatured}
           // Generate a gradient blur placeholder from the project's theme color
           placeholder="blur"
@@ -57,11 +73,18 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCa
           // `sizes` lets Next.js pick the smallest srcset variant
           // that fits the rendered size. The previous default
           // shipped 1200×500 even on mobile.
-          sizes={isFeatured ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 50vw, 100vw'}
+          sizes={
+            isFeatured
+              ? "(min-width: 768px) 66vw, 100vw"
+              : "(min-width: 768px) 50vw, 100vw"
+          }
         />
         <div
           className="project-card-overlay absolute inset-0 md:opacity-0 md:group-hover:opacity-100 flex flex-col justify-end p-5 sm:p-6 md:p-10"
-          style={{ background: 'linear-gradient(to top, var(--bg-primary) 0%, transparent 55%)' }}
+          style={{
+            background:
+              "linear-gradient(to top, var(--bg-primary) 0%, transparent 55%)",
+          }}
         >
           <div className="flex items-end justify-between gap-3 sm:gap-4">
             <div className="flex-1 space-y-2 project-card-content">
@@ -69,16 +92,19 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCa
                 {project.category}
               </span>
               <h4
-                className={`font-black tracking-tight ${isFeatured ? 'text-2xl sm:text-3xl md:text-5xl' : 'text-xl sm:text-2xl md:text-3xl'}`}
-                style={{ color: 'var(--text-primary)' }}
+                className={`font-black tracking-tight ${isFeatured ? "text-2xl sm:text-3xl md:text-5xl" : "text-xl sm:text-2xl md:text-3xl"}`}
+                style={{ color: "var(--text-primary)" }}
               >
                 {project.title}
               </h4>
-              <p className="text-xs sm:text-sm leading-relaxed max-w-md" style={{ color: 'var(--text-secondary)' }}>
+              <p
+                className="text-xs sm:text-sm leading-relaxed max-w-md"
+                style={{ color: "var(--text-secondary)" }}
+              >
                 {project.description}
               </p>
               <div className="project-tech-row">
-                {project.tech.slice(0, 4).map(tech => (
+                {project.tech.slice(0, 4).map((tech) => (
                   <span key={tech} className="project-tech-pill">
                     {tech}
                   </span>
@@ -86,7 +112,11 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCa
               </div>
             </div>
             <div className="project-card-arrow w-10 h-10 sm:w-12 sm:h-12 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-full flex items-center justify-center shadow-accent shrink-0">
-              <ArrowUpRight size={20} className="sm:w-6 sm:h-6" style={{ color: 'var(--accent-contrast)' }} />
+              <ArrowUpRight
+                size={20}
+                className="sm:w-6 sm:h-6"
+                style={{ color: "var(--accent-contrast)" }}
+              />
             </div>
           </div>
         </div>
@@ -98,25 +128,31 @@ const ProjectCard = memo(function ProjectCard({ project, isFeatured }: ProjectCa
 const INITIAL_VISIBLE_COUNT = 4;
 
 const Projects: React.FC = () => {
-  const [filter, setFilter] = useState('All');
+  const t = useT();
+  const locale = useLocale();
+  const projects = useMemo(() => getProjects(locale), [locale]);
+  const [filter, setFilter] = useState("all");
   const [showAll, setShowAll] = useState(false);
   const categories = useMemo(
-    () => ['All', 'Web Development', 'Mobile Development'],
-    []
+    () => ["all", "web", "applications", "design"],
+    [],
   );
   const filteredProjects = useMemo(
-    () => (filter === 'All' ? PROJECTS : PROJECTS.filter(p => p.category === filter)),
-    [filter]
+    () =>
+      filter === "all"
+        ? projects
+        : projects.filter((p) => CATEGORY_TO_KEY[p.category] === filter),
+    [filter, projects],
   );
   const visibleProjects = useMemo(
     () =>
-      filter === 'All' && !showAll
+      filter === "all" && !showAll
         ? filteredProjects.slice(0, INITIAL_VISIBLE_COUNT)
         : filteredProjects,
-    [filter, showAll, filteredProjects]
+    [filter, showAll, filteredProjects],
   );
   const hasMore =
-    filter === 'All' &&
+    filter === "all" &&
     !showAll &&
     filteredProjects.length > INITIAL_VISIBLE_COUNT;
   const remainingCount = filteredProjects.length - INITIAL_VISIBLE_COUNT;
@@ -126,44 +162,48 @@ const Projects: React.FC = () => {
   }, [filter]);
 
   return (
-    <section id="projects" className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto content-auto relative z-[1]">
+    <section
+      id="projects"
+      className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto content-auto relative z-[1]"
+    >
       <RevealSection className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
         <SectionHeader
-          eyebrow="Portfolio"
-          title={
-            <>
-              Latest <span className="italic" style={{ color: 'var(--text-muted)' }}>Works.</span>
-            </>
-          }
+          eyebrow={t("projects.eyebrow")}
+          title={<>{t("projects.heading")}</>}
           className="!mb-0"
         />
         <div
           className="flex flex-wrap gap-1.5 p-1.5 rounded-2xl shrink-0"
           style={{
-            backgroundColor: 'var(--bg-card)',
-            border: '1px solid var(--border)',
+            backgroundColor: "var(--bg-card)",
+            border: "1px solid var(--border)",
           }}
           role="tablist"
-          aria-label="Filter projects"
+          aria-label={t("projects.filterLabel")}
         >
-          {categories.map(cat => (
-            <button
-              key={cat}
-              type="button"
-              role="tab"
-              onClick={() => setFilter(cat)}
-              className={`interactive-btn nav-link px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
-                filter === cat
-                  ? 'nav-link-active bg-[var(--accent)] text-[var(--accent-contrast)] shadow-accent'
-                  : ''
-              }`}
-              style={filter !== cat ? { color: 'var(--text-muted)' } : undefined}
-              aria-label={`Filter projects by ${cat}`}
-              aria-selected={filter === cat}
-            >
-              {cat}
-            </button>
-          ))}
+          {categories.map((key) => {
+            const cat = t(`projects.categories.${key}`);
+            return (
+              <button
+                key={key}
+                type="button"
+                role="tab"
+                onClick={() => setFilter(key)}
+                className={`interactive-btn nav-link px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
+                  filter === key
+                    ? "nav-link-active bg-[var(--accent)] text-[var(--accent-contrast)] shadow-accent"
+                    : ""
+                }`}
+                style={
+                  filter !== key ? { color: "var(--text-muted)" } : undefined
+                }
+                aria-label={`${t("projects.filterBy")}: ${cat}`}
+                aria-selected={filter === key}
+              >
+                {cat}
+              </button>
+            );
+          })}
         </div>
       </RevealSection>
 
@@ -172,7 +212,7 @@ const Projects: React.FC = () => {
           <ProjectCard
             key={project.id}
             project={project}
-            isFeatured={idx === 0 && filter === 'All'}
+            isFeatured={idx === 0 && filter === "all"}
           />
         ))}
       </div>
@@ -184,9 +224,9 @@ const Projects: React.FC = () => {
             size="md"
             onClick={() => setShowAll(true)}
             iconRight={<ChevronDown size={16} />}
-            aria-label={`Load ${remainingCount} more projects`}
+            aria-label={t("projects.loadMoreCount", { count: remainingCount })}
           >
-            Load more ({remainingCount})
+            {t("projects.loadMoreCount", { count: remainingCount })}
           </AdvancedButton>
         </RevealSection>
       )}

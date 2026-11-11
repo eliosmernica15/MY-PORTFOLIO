@@ -1,51 +1,51 @@
 /**
  * i18n Configuration
  *
- * Configuration for next-intl internationalization.
+ * Configuration for the custom i18n system (no external runtime deps).
  * Supports English (en) and Albanian (sq) with extensibility for more locales.
  */
 
-export const locales = ['en', 'sq'] as const;
+export const locales = ["en", "sq"] as const;
 export type Locale = (typeof locales)[number];
 
-export const defaultLocale: Locale = 'en';
+export const defaultLocale: Locale = "en";
 
 export const localeNames: Record<Locale, string> = {
-  en: 'English',
-  sq: 'Shqip',
+  en: "English",
+  sq: "Shqip",
 };
 
 export const localeFlags: Record<Locale, string> = {
-  en: '🇺🇸',
-  sq: '🇦🇱',
+  en: "🇺🇸",
+  sq: "🇦🇱",
 };
 
-export const localeDirections: Record<Locale, 'ltr' | 'rtl'> = {
-  en: 'ltr',
-  sq: 'ltr',
+export const localeDirections: Record<Locale, "ltr" | "rtl"> = {
+  en: "ltr",
+  sq: "ltr",
 };
 
 export const localeDateFormats: Record<Locale, Intl.DateTimeFormatOptions> = {
   en: {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   },
   sq: {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   },
 };
 
 export const localeNumberFormats: Record<Locale, Intl.NumberFormatOptions> = {
   en: {
-    style: 'decimal',
+    style: "decimal",
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   },
   sq: {
-    style: 'decimal',
+    style: "decimal",
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   },
@@ -53,12 +53,12 @@ export const localeNumberFormats: Record<Locale, Intl.NumberFormatOptions> = {
 
 export const localeCurrencyFormats: Record<Locale, Intl.NumberFormatOptions> = {
   en: {
-    style: 'currency',
-    currency: 'USD',
+    style: "currency",
+    currency: "USD",
   },
   sq: {
-    style: 'currency',
-    currency: 'EUR',
+    style: "currency",
+    currency: "EUR",
   },
 };
 
@@ -67,7 +67,7 @@ export function isValidLocale(locale: string): locale is Locale {
 }
 
 export function getLocaleFromPath(pathname: string): Locale | null {
-  const segments = pathname.split('/').filter(Boolean);
+  const segments = pathname.split("/").filter(Boolean);
   const firstSegment = segments[0];
   if (firstSegment && isValidLocale(firstSegment)) {
     return firstSegment;
@@ -76,9 +76,9 @@ export function getLocaleFromPath(pathname: string): Locale | null {
 }
 
 export function getPathnameWithoutLocale(pathname: string): string {
-  const segments = pathname.split('/').filter(Boolean);
+  const segments = pathname.split("/").filter(Boolean);
   if (segments[0] && isValidLocale(segments[0])) {
-    return '/' + segments.slice(1).join('/');
+    return "/" + segments.slice(1).join("/");
   }
   return pathname;
 }
@@ -88,10 +88,10 @@ export function addLocaleToPath(pathname: string, locale: Locale): string {
   return `/${locale}${cleanPath}`;
 }
 
-export const localeCookieName = 'NEXT_LOCALE';
+export const localeCookieName = "NEXT_LOCALE";
 export const localeCookieOptions = {
   maxAge: 60 * 60 * 24 * 365, // 1 year
-  path: '/',
-  sameSite: 'lax' as const,
-  secure: process.env.NODE_ENV === 'production',
+  path: "/",
+  sameSite: "lax" as const,
+  secure: process.env.NODE_ENV === "production",
 };

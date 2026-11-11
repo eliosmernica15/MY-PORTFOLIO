@@ -2,9 +2,11 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "@/context/ThemeProvider";
+import { useT } from "@/i18n/LocaleProvider";
 
 const ThemeToggle: React.FC = () => {
   const { mode, toggleTheme } = useTheme();
+  const t = useT();
 
   return (
     <motion.button
@@ -18,7 +20,7 @@ const ThemeToggle: React.FC = () => {
         borderColor: "var(--border)",
         color: "var(--text-secondary)",
       }}
-      aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}
+      aria-label={t("accessibility.toggleTheme")}
     >
       <AnimatePresence mode="wait" initial={false}>
         {mode === "dark" ? (

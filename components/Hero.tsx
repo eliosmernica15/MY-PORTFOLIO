@@ -8,12 +8,14 @@ import AdvancedButton from "./ui/AdvancedButton";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
 import { useDeviceProfile } from "@/hooks/useDeviceProfile";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useT } from "@/i18n/LocaleProvider";
 import { NowWidget } from "./NowWidget";
 
 const LazySplineScene = lazy(() => import("./SplineScene"));
 const LazyParticleCanvas = lazy(() => import("./ParticleCanvas"));
 
 const Hero: React.FC = () => {
+  const t = useT();
   const profile = useDeviceProfile();
   const prefersReducedMotion = useReducedMotion();
   const [loadEffects, setLoadEffects] = useState(false);
@@ -42,12 +44,12 @@ const Hero: React.FC = () => {
 
   const heroPhrases = useMemo(
     () => [
-      "Web Development",
-      "System Design",
-      "Network Infrastructure",
-      "Full-Stack Engineering",
+      t("hero.typedPhrases.0"),
+      t("hero.typedPhrases.1"),
+      t("hero.typedPhrases.2"),
+      t("hero.typedPhrases.3"),
     ],
-    [],
+    [t],
   );
   const typedText = useTypingEffect(heroPhrases, 70, 35, 2200);
 
@@ -82,7 +84,7 @@ const Hero: React.FC = () => {
         >
           <div className="absolute top-4 right-4 sm:top-10 sm:right-10 status-live whitespace-nowrap">
             <span className="status-live-dot" aria-hidden />
-            Available for Work
+            {t("hero.available")}
           </div>
 
           <div className="relative z-10">
@@ -90,7 +92,7 @@ const Hero: React.FC = () => {
               className="text-xs font-bold uppercase tracking-[0.3em] mb-6"
               style={{ color: "var(--accent-light)" }}
             >
-              {SITE.title}
+              {t("hero.subtitle")}
             </p>
 
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter mb-6 sm:mb-8 leading-[0.9]">
@@ -109,7 +111,7 @@ const Hero: React.FC = () => {
               className="max-w-lg text-base sm:text-lg md:text-xl leading-relaxed mb-8 sm:mb-10 font-light"
               style={{ color: "var(--text-secondary)" }}
             >
-              Specializing in{" "}
+              {t("hero.specializing")}{" "}
               <span className="text-[var(--accent-light)] font-medium">
                 {typedText}
               </span>
@@ -127,7 +129,7 @@ const Hero: React.FC = () => {
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
               >
-                View Showcase
+                {t("hero.viewShowcase")}
               </AdvancedButton>
               <AdvancedButton
                 variant="secondary"
@@ -138,7 +140,7 @@ const Hero: React.FC = () => {
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
               >
-                Contact Me
+                {t("hero.contactMe")}
               </AdvancedButton>
             </div>
 
@@ -171,13 +173,13 @@ const Hero: React.FC = () => {
                 className="text-xl sm:text-2xl font-black mb-2"
                 style={{ color: "var(--text-primary)" }}
               >
-                Kosovo, EU
+                {t("hero.location")}
               </h3>
               <p
                 className="text-sm leading-relaxed"
                 style={{ color: "var(--text-muted)" }}
               >
-                Available for remote engineering and digital missions.
+                {t("hero.remoteAvailable")}
               </p>
             </div>
           </div>
@@ -192,7 +194,7 @@ const Hero: React.FC = () => {
               </h3>
             </div>
             <p className="font-bold text-[10px] sm:text-xs uppercase tracking-widest opacity-70 mt-6 sm:mt-10 relative z-10">
-              Years of Growth
+              {t("hero.yearsOfGrowth")}
             </p>
             <Zap
               size={140}

@@ -1,6 +1,17 @@
 import { SKILL_CATEGORIES } from "@/data/skills";
+import { useT } from "@/i18n/LocaleProvider";
+
+const CATEGORY_KEY: Record<string, string> = {
+  Languages: "languages",
+  Frontend: "frontend",
+  Backend: "backend",
+  "Database & AI": "database",
+  "DevOps & Infra": "devops",
+  Design: "design",
+};
 
 export function StackMap() {
+  const t = useT();
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {SKILL_CATEGORIES.map((category) => (
@@ -19,14 +30,16 @@ export function StackMap() {
               borderBottom: "1px solid var(--border)",
             }}
           >
-            {category.name}
+            {t(
+              `skills.categories.${CATEGORY_KEY[category.name] ?? "frontend"}`,
+            )}
           </h3>
           <ul className="space-y-3">
             {category.skills.map((skill) => (
               <li key={skill.name} className="flex items-center gap-3">
                 <span
                   className="flex items-center gap-1"
-                  aria-label={`Level ${skill.level} of 5`}
+                  aria-label={t("skills.levelOf", { level: skill.level })}
                 >
                   {[1, 2, 3, 4, 5].map((dot) => (
                     <span

@@ -12,12 +12,11 @@
     "search": "Kërko",
     "filter": "Filtroni",
     "sort": "Rendi",
-    "next": "Tjetër",
+    "next": "Tjetri",
     "previous": "Parës",
     "submit": "Dërgo",
     "confirm": "Konfirmo",
     "back": "Kthehu",
-    "next": "Tjetri",
     "finish": "Mbaro",
     "skip": "Kaloni",
     "continue": "Vazhdoni",
@@ -57,7 +56,11 @@
     "notes": "Shënimet",
     "github": "GitHub",
     "linkedin": "LinkedIn",
-    "email": "Email"
+    "email": "Email",
+    "hireMe": "Më punëso",
+    "getInTouch": "Lidhu me mua",
+    "main": "Navigimi kryesor",
+    "logo": "Elios Mernica - ballina"
   },
   "hero": {
     "title": "Elios Mernica",
@@ -67,7 +70,16 @@
     "viewShowcase": "Shiko Shfaqen",
     "contactMe": "Kontakto Me",
     "location": "Kosovë, BE",
-    "experience": "4+ Vjet Rritjeje"
+    "experience": "4+ Vjet Rritjeje",
+    "specializing": "Specializohem në",
+    "typedPhrases": [
+      "Zhvillim Web",
+      "Dizajn Sistemesh",
+      "Infrastrukturë Rrjeti",
+      "Inxhinieri Full-Stack"
+    ],
+    "remoteAvailable": "I disponueshëm për inxhinieri në distancë dhe misione digjitale.",
+    "yearsOfGrowth": "Vite të Rritjes"
   },
   "about": {
     "title": "Rreth Meje",
@@ -83,7 +95,22 @@
     ],
     "skills": "Teknologjet & Aftësitë",
     "experience": "Përvoja",
-    "education": "Arsimi"
+    "education": "Arsimi",
+    "capabilities": [
+      "Inxhinieri Full-Stack",
+      "Arkitektura e Sistemit",
+      "Optimizimi i Performancës",
+      "UI/UX Inxhinieri",
+      "Deployment në Cloud",
+      "API Design"
+    ],
+    "timelineLabel": "Ku kam qenë",
+    "timelineNow": "ESMP v2 + A++(APL) v1.2 në produksion.",
+    "timeline2026": "Sisteme agjentësh IA, RAG custom dhe një kompilues publik.",
+    "timeline2025": "Themelimi i Flixverse; 1k përdorues në javën e tretë.",
+    "timeline2024": "Eltrix Cloud në produksion; punë remote në të gjithë botën.",
+    "timeline2023": "Themelimi i ForexPulse; SaaS full-stack nga zero te klientët që paguajnë.",
+    "timelineNowLabel": "Tani"
   },
   "services": {
     "title": "Shërbimet",
@@ -110,7 +137,8 @@
         "title": "Krijim Full-Stack Web",
         "description": "Kthej një ide në një projekt real. Mbijetoj zhvillimin e tij nga zero deri në prodhim, duke ofruar mirëmbajtje vazhdimore."
       }
-    ]
+    ],
+    "eyebrow": "Shërbime të besueshme"
   },
   "projects": {
     "title": "Portofoli",
@@ -120,7 +148,8 @@
       "web": "Zhvillim Web",
       "mobile": "Zhvillim Mobile",
       "applications": "Aplikacione",
-      "ai": "AI/ML"
+      "ai": "AI/ML",
+      "design": "Dizajn Web"
     },
     "loadMore": "Ngarko më shumë",
     "viewProject": "Shiko projektin",
@@ -138,7 +167,12 @@
     "techStack": "Stiku Teknologjik",
     "architecture": "Arkitektura",
     "challenges": "Dega",
-    "lessonsLearned": "Mësimet e Mësuara"
+    "lessonsLearned": "Mësimet e Mësuara",
+    "eyebrow": "Portofoli",
+    "heading": "Punimet e Fundit.",
+    "filterLabel": "Filtro projektet",
+    "filterBy": "Filtro projektet sipas kategorisë",
+    "loadMoreCount": "Shfaq edhe {count}"
   },
   "resume": {
     "title": "CV",
@@ -154,7 +188,8 @@
     "period": "Periudha",
     "role": "Roli",
     "company": "Kompania",
-    "description": "Përshkrimi"
+    "description": "Përshkrimi",
+    "heading": "Thelbi i Karrierës."
   },
   "skills": {
     "title": "Aftësitë",
@@ -172,7 +207,10 @@
       "intermediate": "Mesatar",
       "advanced": "Të Avancuar",
       "expert": "Ekspert"
-    }
+    },
+    "tagline": "Ndërtuar për produksion, jo për prezantime.",
+    "stackTagline": "Çfarë ndërtoj me.",
+    "levelOf": "Niveli {level} nga 5"
   },
   "testimonials": {
     "title": "Përgjigjet",
@@ -181,7 +219,8 @@
     "previous": "Parës",
     "next": "Tjetri",
     "pause": "Pauzë",
-    "play": "Luaj"
+    "play": "Luaj",
+    "goTo": "Shko te dëshmia {index}"
   },
   "contact": {
     "title": "Kontaktohu",
@@ -204,7 +243,15 @@
         "emailInvalid": "Formati i email-it është i pavlefshëm",
         "messageRequired": "Mesazhi duhet të ketë të paktën 20 karaktere",
         "tooFast": "Dërgimi shumë i shpejtë. Ju lutemi merrni kohën tuaj."
-      }
+      },
+      "successTitle": "Mesazhi u dërgua",
+      "sendAnother": "Dërgo një mesazh tjetër",
+      "errorTitle": "Një gabim ndodhi",
+      "tryAgain": "Provo përsëri",
+      "chars": "karaktere",
+      "namePlaceholder": "Emri juaj",
+      "emailPlaceholder": "juaji@email.com",
+      "messagePlaceholder": "Tregoni për projektin tuaj, afatin dhe objektivat..."
     },
     "directContact": "Ose më kontaktoni drejtpërdrejt:"
   },
@@ -214,7 +261,11 @@
     "available": "I disponueshëm për projekte",
     "social": "Lidhuni",
     "quickLinks": "Linkë të Shpejta",
-    "connect": "Lidhuni"
+    "connect": "Lidhuni",
+    "bio": "Zhvillues full-stack që krijoj përvoja digjitale me saktësi dhe qëllim. Bazuar në Kosovë, i disponueshëm në mbarë botën.",
+    "backToTop": "Kthehu lart",
+    "goTo": "Shko te seksioni {section}",
+    "navigation": "Navigimi në fundfaqe"
   },
   "blog": {
     "title": "Blogu",
@@ -240,7 +291,12 @@
     "tags": "Etiketat",
     "categories": "Kategoritë",
     "noNotes": "Nuk ka shënime ende",
-    "backToNotes": "Kthehu në shënimet"
+    "backToNotes": "Kthehu në shënimet",
+    "blog": "Shkrime",
+    "teaserHeading": "Shënime mbi punën.",
+    "notesTitle": "Shënimet",
+    "notesHero": "Shkrime mbi atë që ndërtoj.",
+    "notesDescription": "Pjesë të shkurtra dhe të fokusuara mbi sistemet e AI-së, performancën web, dizajnin e gjuhëve dhe mjeshtërinë e dorëzimit të softuerit."
   },
   "terminal": {
     "welcome": "Mirësevini — shtypni `help` për të listuar komandat. Esc për të mbyllur. ⌘/ctrl+L për të pastër.",
@@ -274,8 +330,20 @@
     "errors": {
       "unknownProject": "Projekt i panjohur \"{id}\". Provoni një nga: {known}.",
       "unknownNote": "Shënim i panjohur \"{slug}\". Provoni një nga: {known}.",
-      "usageTheme": "Përdorim: theme dark | light | toggle"
-    }
+      "usageTheme": "Përdorim: theme dark | light | toggle",
+      "usageOpen": "Përdorimi: open <sectionId>"
+    },
+    "tip": "Këshillë: ⌘/Ctrl+L fshin buffer-in. Esc mbyll.",
+    "nowPrefix": "Tani",
+    "historyHint": "(historia shfaqet ndërsa lëviz me ↑/↓)",
+    "downloadingCv": "Duke shkarkuar CV-në…",
+    "switchingTo": "Duke kaluar në {mode}…",
+    "togglingTheme": "Duke ndërruar temën…",
+    "openingProject": "Duke hapur /project/{id}…",
+    "openingNote": "Duke hapur /notes/{slug}…",
+    "scrollingTo": "Duke lëvizur te #{id}…",
+    "openingGithub": "Duke hapur seksionin GitHub…",
+    "contactOutput": "Email {email} ose përdorni formularin më poshtë. Duke e hapur…"
   },
   "assistant": {
     "title": "Elios AI",
@@ -312,127 +380,6 @@
     "selectPalette": "Zgjidh ngjyrën akcenti",
     "currentPalette": "Aktuale: {emri}"
   },
-  "themeSelector": {
-    "title": "Cilësimet e Temës",
-    "mode": "Mënyra",
-    "accent": "Ngjyra Akcenti",
-    "autoSwitch": "Ndryshimi automatik me kohën",
-    "light": "E Dritë",
-    "dark": "E Erret",
-    "auto": "Auto (Sistemi)",
-    "timeBased": "Bazuar në Kohë"
-  },
-  "commandPalette": {
-    "placeholder": "Shkruani një komandë ose kërkoni...",
-    "shortcut": "⌘K",
-    "noResults": "Nuk u gjetën komanda",
-    "categories": {
-      "projects": "Projektet",
-      "skills": "Aftësitë",
-      "notes": "Shënimet",
-      "navigation": "Navigimi",
-      "external": "Jashtme",
-      "settings": "Cilësimet",
-      "actions": "Veprimet"
-    }
-  },
-  "codeTour": {
-    "title": "Tur Kodi",
-    "welcome": "Mirësevini në Turin e Kodit!",
-    "description": "Ky tur interaktiv do t'ju drejtojë përmes kodit hapa pas hapi.",
-    "next": "Tjetri",
-    "previous": "Parës",
-    "close": "Mbyll",
-    "complete": "Mbaroi Turin",
-    "progress": "Hapi {current} nga {total}",
-    "estimatedTime": "~{time}s",
-    "toc": "Tabela e Përmbajtjes",
-    "shortcuts": {
-      "next": "→ Tjetri",
-      "previous": "← Parës",
-      "toc": "T Tabela",
-      "fullscreen": "F Të Plotë Ekran",
-      "close": "Esc Mbyll"
-    }
-  },
-  "interviewSimulator": {
-    "title": "Simulator Interviste",
-    "modes": {
-      "screening": "Filtim",
-      "technical": "Teknike",
-      "systemDesign": "Dizajn Sistemi",
-      "behavioral": "Sjellës",
-      "mixed": "E Përzier"
-    },
-    "start": "Filloni Intervistën",
-    "next": "Pyetja Tjetër",
-    "previous": "Parës",
-    "submit": "Dërgo Përgjigjen",
-    "skip": "Kaloni",
-    "finish": "Mbaroi Intervistën",
-    "timeRemaining": "Koha e Mbetur",
-    "score": "Piket",
-    "feedback": "Përgjigjja",
-    "strengths": "Pikat e Fuqishme",
-    "improvements": "Përmirësime",
-    "actionItems": "Veprimet e Rekomanduara",
-    "resources": "Burimet e Rekomanduara",
-    "nextSteps": "Hapat e Ardhshëm",
-    "complete": "Intervista U Mbarua",
-    "summary": "Përmbledhje",
-    "scoreBreakdown": "Detajimi i Pikëve",
-    "technical": "Teknike",
-    "behavioral": "Sjellësore",
-    "communication": "Komunikimi",
-    "problemSolving": "Zgjidhja e Problemave"
-  },
-  "skillGap": {
-    "title": "Analiza e Brezave të Aftësive",
-    "analyze": "Analizoni Brezat",
-    "targetRole": "Roli Objektiv",
-    "currentSkills": "Aftësitë Aktuale",
-    "requiredSkills": "Aftësitë e Kërkuara",
-    "gaps": "Brezat e Aftësive",
-    "strengths": "Pikat e Fuqishme",
-    "learningPath": "Rruga e Mësimit",
-    "priority": "Prioriteti",
-    "estimatedHours": "Orët e Parashikuara",
-    "resources": "Burimet",
-    "milestones": "Hapat e Rëndësishëm",
-    "prerequisites": "Kushtet e Parapara",
-    "match": "Përputhja Totale",
-    "high": "E Lartë",
-    "medium": "Mesatare",
-    "low": "E Ulet",
-    "critical": "Kritike",
-    "important": "E Rëndësishme",
-    "niceToHave": "E Pëlqyer të Ketë"
-  },
-  "codeTourGenerator": {
-    "title": "Gjeneruesi i Turit të Kodit",
-    "generate": "Gjenero Turin",
-    "export": "Eksporto",
-    "templates": {
-      "default": "Standarde",
-      "onboarding": "Hyrje",
-      "feature": "Veçori",
-      "refactoring": "Rifaktorizim",
-      "debugging": "Debugim"
-    }
-  },
-  "analytics": {
-    "consentTitle": "E kuptojmë privatësinë tuaj",
-    "consentDescription": "Përdorim analitikë për të kuptuar si përdorni faqen tonë dhe për të përmirësuar përvojën tuaj. Nuk përdorim cookies apo mbledhim të dhëna personale pa konsentin tuaj.",
-    "acceptAll": "Pranoj Gjithë",
-    "rejectAll": "Mos Pranoj Gjithë",
-    "managePreferences": "Menaxho Preferencat",
-    "analytics": "Analitika",
-    "marketing": "Marketing",
-    "preferences": "Preferencat",
-    "necessary": "E Nevojshme",
-    "save": "Ruaj Preferencat",
-    "privacyPolicy": "Politika e Privatësisë"
-  },
   "errors": {
     "notFound": "Faqja nuk u gjet",
     "notFoundDescription": "Na vjen keq, nuk gjetëm faqen që kërkonit.",
@@ -444,7 +391,16 @@
     "forbiddenDescription": "Qasja në këtë burim është e ndaluar.",
     "goHome": "Shko në kryeqytet",
     "goBack": "Kthehu prapa",
-    "retry": "Provo përsëri"
+    "retry": "Provo përsëri",
+    "unexpected": "Gabim i paprisëshëm",
+    "somethingBroke": "Diçka u prish.",
+    "unrecoverable": "Faqja hasi një gabim të pariparueshëm. Ju mund të provoni përsëri ose të ktheheni në faqen kryesore.",
+    "backHome": "Kthehu në kryefaqe",
+    "notFoundHint": "Faqja mund të jetë zhvendosur ose nuk ka ekzistuar kurrë. Provoni njërën nga këto në vend të saj, ose kthehuni në faqen kryesore.",
+    "exploreProject": "Ose shikoni një projekt",
+    "offlineTitle": "Pa lidhje",
+    "offlineHeading": "Jeni jashtë linje.",
+    "offlineDescription": "Faqeja që kërkuat nuk është në cache ende. Kontrolloni lidhjen tuaj dhe provoni përsëri - faqja kryesore funksionon jashtë linje pasi të jetë ngarkuar një herë."
   },
   "accessibility": {
     "skipToMain": "Kaloni në përmbajtjen kryesore",
@@ -455,6 +411,28 @@
     "closeMenu": "Mbyll menun",
     "toggleTheme": "Ndrysho temën",
     "openCommandPalette": "Hap paletën e komandave",
-    "openThemeSelector": "Hap zgjedhësit e temës"
+    "openThemeSelector": "Hap zgjedhësit e temës",
+    "switchLanguage": "Ndrysho gjuhën"
+  },
+  "stats": {
+    "projectsCompleted": "Projekte të përfunduara",
+    "yearsExperience": "Vite përvojë",
+    "happyClients": "Klientë të kënaqur",
+    "skillsMastered": "Aftësi të zotëruara"
+  },
+  "projectDetail": {
+    "backToProjects": "Kthehu te Galeria",
+    "viewAll": "Shiko të gjitha projektet",
+    "challenge": "Sfida",
+    "outcome": "Rezultati",
+    "role": "Roli",
+    "duration": "Kohëzgjatja",
+    "highlights": "Pikat kryesore",
+    "techRationale": "Arsyetimi i teknologjisë",
+    "specs": "Specifikimet e Projektit",
+    "year": "Viti",
+    "category": "Kategoria",
+    "stack": "Teknologjitë",
+    "visitLive": "Vizito Live"
   }
 }

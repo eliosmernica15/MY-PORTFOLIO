@@ -17,7 +17,6 @@
     "submit": "Submit",
     "confirm": "Confirm",
     "back": "Back",
-    "next": "Next",
     "finish": "Finish",
     "skip": "Skip",
     "continue": "Continue",
@@ -57,7 +56,11 @@
     "notes": "Notes",
     "github": "GitHub",
     "linkedin": "LinkedIn",
-    "email": "Email"
+    "email": "Email",
+    "hireMe": "Hire Me",
+    "getInTouch": "Get in Touch",
+    "main": "Main navigation",
+    "logo": "Elios Mernica - home"
   },
   "hero": {
     "title": "Elios Mernica",
@@ -67,7 +70,16 @@
     "viewShowcase": "View Showcase",
     "contactMe": "Contact Me",
     "location": "Kosovo, EU",
-    "experience": "4+ Years of Growth"
+    "experience": "4+ Years of Growth",
+    "specializing": "Specializing in",
+    "typedPhrases": [
+      "Web Development",
+      "System Design",
+      "Network Infrastructure",
+      "Full-Stack Engineering"
+    ],
+    "remoteAvailable": "Available for remote engineering and digital missions.",
+    "yearsOfGrowth": "Years of Growth"
   },
   "about": {
     "title": "About Me",
@@ -83,7 +95,22 @@
     ],
     "skills": "Technologies & Skills",
     "experience": "Experience",
-    "education": "Education"
+    "education": "Education",
+    "capabilities": [
+      "Full-Stack Engineering",
+      "System Architecture",
+      "Performance Optimization",
+      "UI/UX Engineering",
+      "Cloud Deployment",
+      "API Design"
+    ],
+    "timelineLabel": "Where I've been",
+    "timelineNow": "Shipping ESMP v2 + A++(APL) v1.2.",
+    "timeline2026": "AI agent systems, custom RAG, and a public compiler.",
+    "timeline2025": "Founding Flixverse; first 1k monthly users in week three.",
+    "timeline2024": "Shipped Eltrix Cloud to production; remote work worldwide.",
+    "timeline2023": "Founding ForexPulse; full-stack SaaS from zero to paying users.",
+    "timelineNowLabel": "Now"
   },
   "services": {
     "title": "Services",
@@ -110,7 +137,8 @@
         "title": "Full-Stack Web Creation",
         "description": "Transform an idea into a real project. I oversee its development from zero to production, providing ongoing maintenance."
       }
-    ]
+    ],
+    "eyebrow": "Services you can trust"
   },
   "projects": {
     "title": "Portfolio",
@@ -120,7 +148,8 @@
       "web": "Web Development",
       "mobile": "Mobile Development",
       "applications": "Applications",
-      "ai": "AI/ML"
+      "ai": "AI/ML",
+      "design": "Web Design"
     },
     "loadMore": "Load more",
     "viewProject": "View project",
@@ -138,7 +167,12 @@
     "techStack": "Tech Stack",
     "architecture": "Architecture",
     "challenges": "Challenges",
-    "lessonsLearned": "Lessons Learned"
+    "lessonsLearned": "Lessons Learned",
+    "eyebrow": "Portfolio",
+    "heading": "Latest Works.",
+    "filterLabel": "Filter projects",
+    "filterBy": "Filter projects by category",
+    "loadMoreCount": "Load {count} more"
   },
   "resume": {
     "title": "Resume",
@@ -154,7 +188,8 @@
     "period": "Period",
     "role": "Role",
     "company": "Company",
-    "description": "Description"
+    "description": "Description",
+    "heading": "Career Core."
   },
   "skills": {
     "title": "Skills",
@@ -172,7 +207,10 @@
       "intermediate": "Intermediate",
       "advanced": "Advanced",
       "expert": "Expert"
-    }
+    },
+    "tagline": "Built for production, not for slides.",
+    "stackTagline": "What I build with.",
+    "levelOf": "Level {level} of 5"
   },
   "testimonials": {
     "title": "Feedback",
@@ -181,7 +219,8 @@
     "previous": "Previous",
     "next": "Next",
     "pause": "Pause",
-    "play": "Play"
+    "play": "Play",
+    "goTo": "Go to testimonial {index}"
   },
   "contact": {
     "title": "Get in Touch",
@@ -204,7 +243,15 @@
         "emailInvalid": "Invalid email format",
         "messageRequired": "Message must be at least 20 characters",
         "tooFast": "Submission too fast. Please take your time."
-      }
+      },
+      "successTitle": "Message sent",
+      "sendAnother": "Send another message",
+      "errorTitle": "Something went wrong",
+      "tryAgain": "Try again",
+      "chars": "chars",
+      "namePlaceholder": "Your Name",
+      "emailPlaceholder": "your@email.com",
+      "messagePlaceholder": "Tell me about your project, timeline, and goals..."
     },
     "directContact": "Or reach me directly:"
   },
@@ -214,7 +261,11 @@
     "available": "Available for projects",
     "social": "Connect",
     "quickLinks": "Quick Links",
-    "connect": "Connect"
+    "connect": "Connect",
+    "bio": "Full-stack developer crafting digital experiences with precision and purpose. Based in Kosovo, available worldwide.",
+    "backToTop": "Back to top",
+    "goTo": "Go to the {section} section",
+    "navigation": "Footer navigation"
   },
   "blog": {
     "title": "Blog",
@@ -240,7 +291,12 @@
     "tags": "Tags",
     "categories": "Categories",
     "noNotes": "No notes yet",
-    "backToNotes": "Back to notes"
+    "backToNotes": "Back to notes",
+    "blog": "Writing",
+    "teaserHeading": "Notes on the work.",
+    "notesTitle": "Notes",
+    "notesHero": "Writing on what I build.",
+    "notesDescription": "Short, focused pieces on AI systems, web performance, language design, and the craft of shipping software."
   },
   "terminal": {
     "welcome": "Welcome — type `help` to list commands. Esc to close. ⌘/ctrl+L to clear.",
@@ -274,8 +330,20 @@
     "errors": {
       "unknownProject": "Unknown project \"{id}\". Try one of: {known}.",
       "unknownNote": "Unknown note \"{slug}\". Try one of: {known}.",
-      "usageTheme": "Usage: theme dark | light | toggle"
-    }
+      "usageTheme": "Usage: theme dark | light | toggle",
+      "usageOpen": "Usage: open <sectionId>"
+    },
+    "tip": "Tip: ⌘/Ctrl+L clears the buffer. Esc closes.",
+    "nowPrefix": "Now",
+    "historyHint": "(history is shown as you scroll with ↑/↓)",
+    "downloadingCv": "Downloading CV…",
+    "switchingTo": "Switching to {mode}…",
+    "togglingTheme": "Toggling theme…",
+    "openingProject": "Opening /project/{id}…",
+    "openingNote": "Opening /notes/{slug}…",
+    "scrollingTo": "Scrolling to #{id}…",
+    "openingGithub": "Opening the GitHub section…",
+    "contactOutput": "Email {email} or use the form below. Opening it…"
   },
   "assistant": {
     "title": "Elios AI",
@@ -312,127 +380,6 @@
     "selectPalette": "Select accent color",
     "currentPalette": "Current: {name}"
   },
-  "themeSelector": {
-    "title": "Theme Settings",
-    "mode": "Mode",
-    "accent": "Accent Color",
-    "autoSwitch": "Auto-switch by time",
-    "light": "Light",
-    "dark": "Dark",
-    "auto": "Auto (System)",
-    "timeBased": "Time-based"
-  },
-  "commandPalette": {
-    "placeholder": "Type a command or search...",
-    "shortcut": "⌘K",
-    "noResults": "No commands found",
-    "categories": {
-      "projects": "Projects",
-      "skills": "Skills",
-      "notes": "Notes",
-      "navigation": "Navigation",
-      "external": "External",
-      "settings": "Settings",
-      "actions": "Actions"
-    }
-  },
-  "codeTour": {
-    "title": "Code Tour",
-    "welcome": "Welcome to the Code Tour!",
-    "description": "This interactive tour will guide you through the codebase step by step.",
-    "next": "Next",
-    "previous": "Previous",
-    "close": "Close",
-    "complete": "Complete Tour",
-    "progress": "Step {current} of {total}",
-    "estimatedTime": "~{time}s",
-    "toc": "Table of Contents",
-    "shortcuts": {
-      "next": "→ Next",
-      "previous": "← Previous",
-      "toc": "T TOC",
-      "fullscreen": "F Fullscreen",
-      "close": "Esc Close"
-    }
-  },
-  "interviewSimulator": {
-    "title": "Interview Simulator",
-    "modes": {
-      "screening": "Screening",
-      "technical": "Technical",
-      "systemDesign": "System Design",
-      "behavioral": "Behavioral",
-      "mixed": "Mixed"
-    },
-    "start": "Start Interview",
-    "next": "Next Question",
-    "previous": "Previous",
-    "submit": "Submit Answer",
-    "skip": "Skip",
-    "finish": "Finish Interview",
-    "timeRemaining": "Time remaining",
-    "score": "Score",
-    "feedback": "Feedback",
-    "strengths": "Strengths",
-    "improvements": "Areas for Improvement",
-    "actionItems": "Action Items",
-    "resources": "Recommended Resources",
-    "nextSteps": "Next Steps",
-    "complete": "Interview Complete",
-    "summary": "Summary",
-    "scoreBreakdown": "Score Breakdown",
-    "technical": "Technical",
-    "behavioral": "Behavioral",
-    "communication": "Communication",
-    "problemSolving": "Problem Solving"
-  },
-  "skillGap": {
-    "title": "Skill Gap Analysis",
-    "analyze": "Analyze Gaps",
-    "targetRole": "Target Role",
-    "currentSkills": "Current Skills",
-    "requiredSkills": "Required Skills",
-    "gaps": "Skill Gaps",
-    "strengths": "Strengths",
-    "learningPath": "Learning Path",
-    "priority": "Priority",
-    "estimatedHours": "Estimated Hours",
-    "resources": "Resources",
-    "milestones": "Milestones",
-    "prerequisites": "Prerequisites",
-    "match": "Overall Match",
-    "high": "High",
-    "medium": "Medium",
-    "low": "Low",
-    "critical": "Critical",
-    "important": "Important",
-    "niceToHave": "Nice to Have"
-  },
-  "codeTourGenerator": {
-    "title": "Code Tour Generator",
-    "generate": "Generate Tour",
-    "export": "Export",
-    "templates": {
-      "default": "Default",
-      "onboarding": "Onboarding",
-      "feature": "Feature",
-      "refactoring": "Refactoring",
-      "debugging": "Debugging"
-    }
-  },
-  "analytics": {
-    "consentTitle": "We value your privacy",
-    "consentDescription": "We use analytics to understand how you use our site and improve your experience. We don't use cookies or collect personal data without your consent.",
-    "acceptAll": "Accept All",
-    "rejectAll": "Reject All",
-    "managePreferences": "Manage Preferences",
-    "analytics": "Analytics",
-    "marketing": "Marketing",
-    "preferences": "Preferences",
-    "necessary": "Necessary",
-    "save": "Save Preferences",
-    "privacyPolicy": "Privacy Policy"
-  },
   "errors": {
     "notFound": "Page not found",
     "notFoundDescription": "Sorry, we couldn't find the page you're looking for.",
@@ -444,7 +391,16 @@
     "forbiddenDescription": "Access to this resource is denied.",
     "goHome": "Go home",
     "goBack": "Go back",
-    "retry": "Try again"
+    "retry": "Try again",
+    "unexpected": "Unexpected error",
+    "somethingBroke": "Something broke.",
+    "unrecoverable": "The page hit an unrecoverable error. You can retry, or head back to the home page.",
+    "backHome": "Back home",
+    "notFoundHint": "The page may have moved or never existed. Try one of these instead, or head home.",
+    "exploreProject": "Or explore a project",
+    "offlineTitle": "No connection",
+    "offlineHeading": "You're offline.",
+    "offlineDescription": "The page you asked for isn't cached yet. Check your connection and try again - the home page works offline once it has loaded once."
   },
   "accessibility": {
     "skipToMain": "Skip to main content",
@@ -455,6 +411,28 @@
     "closeMenu": "Close menu",
     "toggleTheme": "Toggle theme",
     "openCommandPalette": "Open command palette",
-    "openThemeSelector": "Open theme selector"
+    "openThemeSelector": "Open theme selector",
+    "switchLanguage": "Switch language"
+  },
+  "stats": {
+    "projectsCompleted": "Projects Completed",
+    "yearsExperience": "Years Experience",
+    "happyClients": "Happy Clients",
+    "skillsMastered": "Skills Mastered"
+  },
+  "projectDetail": {
+    "backToProjects": "Back to Showcase",
+    "viewAll": "View all projects",
+    "challenge": "Challenge",
+    "outcome": "Outcome",
+    "role": "Role",
+    "duration": "Duration",
+    "highlights": "Highlights",
+    "techRationale": "Tech rationale",
+    "specs": "Project Specs",
+    "year": "Year",
+    "category": "Category",
+    "stack": "Stack",
+    "visitLive": "Visit Live"
   }
 }

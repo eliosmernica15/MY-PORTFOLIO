@@ -1,18 +1,13 @@
+"use client";
+
 import type { Metadata } from "next";
 import Link from "next/link";
 import Brand from "@/components/ui/Brand";
+import { useT } from "@/i18n/LocaleProvider";
 
-export const metadata: Metadata = {
-  title: "You're offline",
-  description:
-    "This page is available offline. Everything else needs a connection.",
-  robots: { index: false, follow: false },
-};
+const OfflinePage = () => {
+  const t = useT();
 
-// NOTE: keep this page dependency-free and static - the service worker
-// (public/sw.js) precaches /offline and must be able to serve it with no
-// network access. No client-side fetching, no external fonts.
-export default function OfflinePage() {
   return (
     <main
       className="min-h-screen flex items-center justify-center px-6"
@@ -26,14 +21,13 @@ export default function OfflinePage() {
           className="text-[10px] font-bold uppercase tracking-[0.4em]"
           style={{ color: "var(--accent-light)" }}
         >
-          No connection
+          {t("errors.offlineTitle")}
         </p>
         <h1 className="text-3xl md:text-4xl font-black tracking-tight">
-          You&rsquo;re offline.
+          {t("errors.offlineHeading")}
         </h1>
         <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-          The page you asked for isn&rsquo;t cached yet. Check your connection
-          and try again - the home page works offline once it has loaded once.
+          {t("errors.offlineDescription")}
         </p>
         <Link
           href="/"
@@ -44,9 +38,11 @@ export default function OfflinePage() {
             textDecoration: "none",
           }}
         >
-          Back to home
+          {t("errors.goHome")}
         </Link>
       </div>
     </main>
   );
-}
+};
+
+export default OfflinePage;
