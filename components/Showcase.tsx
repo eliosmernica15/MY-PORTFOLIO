@@ -58,8 +58,9 @@ const Showcase: React.FC = () => {
 
   return (
     <section
+      id="showcase"
       aria-labelledby="showcase-heading"
-      className="border-t px-5 sm:px-8 py-16 sm:py-20"
+      className="border-t px-5 sm:px-8 py-16 sm:py-20 scroll-mt-24"
       style={{ borderColor: "var(--border)" }}
     >
       <div className="mx-auto max-w-6xl">

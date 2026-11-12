@@ -1,17 +1,17 @@
-import { SITE } from '@/data/site';
-import { PROJECTS } from '@/data/projects';
-import { NOTES } from '@/data/notes';
+import { SITE } from "@/data/site";
+import { PROJECTS } from "@/data/projects";
+import { NOTES } from "@/data/notes";
 
 export interface BreadcrumbItem {
-  '@type': 'ListItem';
+  "@type": "ListItem";
   position: number;
   name: string;
   item: string;
 }
 
 export interface BreadcrumbList {
-  '@context': 'https://schema.org';
-  '@type': 'BreadcrumbList';
+  "@context": "https://schema.org";
+  "@type": "BreadcrumbList";
   itemListElement: BreadcrumbItem[];
 }
 
@@ -26,22 +26,27 @@ export interface BreadcrumbList {
  *   anything else              → Home
  */
 export function buildBreadcrumbs(pathname: string): BreadcrumbList {
-  const base = SITE.url.replace(/\/$/, '');
+  const base = SITE.url.replace(/\/$/, "");
   const home: BreadcrumbItem = {
-    '@type': 'ListItem',
+    "@type": "ListItem",
     position: 1,
-    name: 'Home',
+    name: "Home",
     item: `${base}/`,
   };
 
-  if (pathname === '/' || pathname === '') {
+  if (pathname === "/" || pathname === "") {
     return wrap([home]);
   }
 
-  if (pathname === '/notes' || pathname === '/notes/') {
+  if (pathname === "/notes" || pathname === "/notes/") {
     return wrap([
       home,
-      { '@type': 'ListItem', position: 2, name: 'Notes', item: `${base}/notes` },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Notes",
+        item: `${base}/notes`,
+      },
     ]);
   }
 
@@ -52,8 +57,18 @@ export function buildBreadcrumbs(pathname: string): BreadcrumbList {
     const title = note?.title ?? slug;
     return wrap([
       home,
-      { '@type': 'ListItem', position: 2, name: 'Notes', item: `${base}/notes` },
-      { '@type': 'ListItem', position: 3, name: title, item: `${base}/notes/${slug}` },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Notes",
+        item: `${base}/notes`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: title,
+        item: `${base}/notes/${slug}`,
+      },
     ]);
   }
 
@@ -64,8 +79,18 @@ export function buildBreadcrumbs(pathname: string): BreadcrumbList {
     const title = project?.title ?? id;
     return wrap([
       home,
-      { '@type': 'ListItem', position: 2, name: 'Projects', item: `${base}/#projects` },
-      { '@type': 'ListItem', position: 3, name: title, item: `${base}/project/${id}` },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Projects",
+        item: `${base}/#work`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: title,
+        item: `${base}/project/${id}`,
+      },
     ]);
   }
 
@@ -74,8 +99,8 @@ export function buildBreadcrumbs(pathname: string): BreadcrumbList {
 
 function wrap(items: BreadcrumbItem[]): BreadcrumbList {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
     itemListElement: items,
   };
 }

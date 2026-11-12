@@ -36,7 +36,7 @@ const ProjectDetail = ({ project, blurDataURL }: Props) => {
     <div className="project-detail-enter pt-24 sm:pt-28 md:pt-32 pb-20 sm:pb-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-[1]">
       <div className="mb-10 sm:mb-14 flex flex-wrap items-center gap-3 sm:gap-4 relative z-10">
         <Link
-          href="/#projects"
+          href="/#showcase"
           className="flex items-center gap-2 sm:gap-3 transition-all group hover:text-[var(--accent-light)]"
           style={{ color: "var(--text-muted)" }}
           aria-label={t("projectDetail.backToProjects")}
@@ -50,7 +50,7 @@ const ProjectDetail = ({ project, blurDataURL }: Props) => {
           </span>
         </Link>
         <Link
-          href="/#projects"
+          href="/#work"
           className="flex items-center gap-2 sm:gap-3 transition-all group hover:text-[var(--accent-light)]"
           style={{ color: "var(--text-muted)" }}
         >

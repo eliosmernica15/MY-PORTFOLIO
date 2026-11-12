@@ -23,7 +23,7 @@ const About: React.FC = () => {
     <section
       id="about"
       aria-labelledby="about-heading"
-      className="border-t px-5 sm:px-8 py-16 sm:py-20"
+      className="border-t px-5 sm:px-8 py-16 sm:py-20 scroll-mt-24"
       style={{ borderColor: "var(--border)" }}
     >
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 lg:grid-cols-12">
