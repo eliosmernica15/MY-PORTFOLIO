@@ -12,9 +12,11 @@ import { Reveal } from "./motion/Reveal";
 /**
  * Work index — two covers with restrained parallax, then a numbered
  * index of the rest. Rows slide in; arrows nudge on hover.
+ * Project order (PROJECTS / SQ_PROJECTS) is latest-first per the CV.
+ * The two featured covers are the two most recent projects.
  */
 
-const FEATURED = ["apl", "esmp"] as const;
+const FEATURED = ["genpact-hackathon-2026", "em-motors"] as const;
 
 const Work: React.FC = () => {
   const t = useT();
@@ -77,7 +79,7 @@ const Work: React.FC = () => {
             >
               <div
                 ref={covers[i]}
-                className="parallax-frame aspect-[16/10]"
+                className="parallax-frame relative aspect-[16/10]"
                 style={{ background: "#0d0d0f" }}
               >
                 <Image
@@ -85,9 +87,20 @@ const Work: React.FC = () => {
                   alt={project.title}
                   width={1200}
                   height={750}
-                  sizes="(min-width: 768px) 50vw, 100vw"
+                  sizes="(min-width: 768px) 556px, 100vw"
+                  priority={i === 0}
+                  loading="eager"
                   className="parallax-inner aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                 />
+                {project.awards?.length ? (
+                  <span
+                    className="absolute left-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-full border border-amber-400/40 bg-black/60 px-2.5 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.14em] text-amber-300 backdrop-blur-sm"
+                    title={project.awards.join(" · ")}
+                  >
+                    <span aria-hidden>🏆</span>
+                    {project.awards[0].split("—")[0].trim()}
+                  </span>
+                ) : null}
               </div>
               <div
                 className="relative flex items-baseline justify-between gap-4 border-t px-4 py-3.5"
@@ -150,14 +163,27 @@ const Work: React.FC = () => {
                     />
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate text-[13px] sm:text-sm font-bold text-[var(--text-primary)] transition-colors group-hover:text-[var(--accent)]">
-                      {project.title}
+                    <span className="flex items-center gap-1.5">
+                      <span className="block truncate text-[13px] sm:text-sm font-bold text-[var(--text-primary)] transition-colors group-hover:text-[var(--accent)]">
+                        {project.title}
+                      </span>
+                      {project.awards?.length ? (
+                        <span
+                          className="shrink-0 text-[11px] leading-none text-amber-400"
+                          title={project.awards.join(" · ")}
+                          aria-label={project.awards.join(" · ")}
+                        >
+                          🏆
+                        </span>
+                      ) : null}
                     </span>
                     <span
                       className="mt-0.5 block truncate text-[10px] sm:text-[11px]"
                       style={{ color: "var(--text-secondary)" }}
                     >
-                      {project.description}
+                      {project.awards?.length
+                        ? project.awards[0]
+                        : project.description}
                     </span>
                   </span>
                   <span className="hidden md:block font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--text-muted)]">

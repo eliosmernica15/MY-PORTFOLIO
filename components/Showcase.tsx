@@ -166,7 +166,7 @@ const Showcase: React.FC = () => {
                     className="panel-frame group block"
                   >
                     <div
-                      className="relative overflow-hidden"
+                      className="skeleton-shimmer relative overflow-hidden"
                       style={{ background: "#0d0d0f" }}
                     >
                       <Image
@@ -174,7 +174,9 @@ const Showcase: React.FC = () => {
                         alt={chapter.title}
                         width={1400}
                         height={880}
-                        sizes="(min-width: 1024px) 58vw, 100vw"
+                        sizes="(min-width: 768px) 660px, 100vw"
+                        loading="eager"
+                        priority={i === 0}
                         className="aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                       />
                       <span
@@ -224,7 +226,7 @@ const Showcase: React.FC = () => {
               style={{ borderColor: "var(--border)" }}
             >
               <div
-                className="overflow-hidden"
+                className="skeleton-shimmer overflow-hidden"
                 style={{ background: "#1c1a17" }}
               >
                 <Image
@@ -233,6 +235,7 @@ const Showcase: React.FC = () => {
                   width={1200}
                   height={750}
                   sizes="100vw"
+                  loading="eager"
                   className="aspect-[16/10] w-full object-cover object-top"
                 />
               </div>

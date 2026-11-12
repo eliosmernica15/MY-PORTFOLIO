@@ -2336,6 +2336,20 @@ html:not(.js) .reveal-mask-inner,
 .reveal-mask.is-visible .reveal-mask-inner {
   transform: translateY(0);
 }
+/* Chunk-failure watchdog: the inline bootstrap stamps .reveal-fallback
+   when React hydration dies mid-flight (stale tab after a redeploy).
+   Fail open — every motion primitive renders fully visible. */
+.reveal-fallback .reveal,
+.reveal-fallback .reveal-rise,
+.reveal-fallback .reveal-fade,
+.reveal-fallback .reveal-slide,
+.reveal-fallback .reveal-clip,
+.reveal-fallback .reveal-mask,
+.reveal-fallback .reveal-mask-inner {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+}
 
 /* --- Hero entrance (JS adds .hero-in on mount) --- */
 .hero-line-inner {
@@ -2720,5 +2734,36 @@ button:focus-visible,
   .ghost-index,
   .row-accent::before {
     transition: none !important;
+  }
+}
+
+/* Shimmer skeleton — figure frames never render as empty voids */
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+.parallax-frame,
+.skeleton-shimmer {
+  background-color: #0d0d0f;
+  background-image: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0) 20%,
+    rgba(255, 255, 255, 0.035) 40%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0.035) 60%,
+    rgba(255, 255, 255, 0) 80%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 2.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .parallax-frame,
+  .skeleton-shimmer {
+    animation: none;
+    background-image: none;
   }
 }

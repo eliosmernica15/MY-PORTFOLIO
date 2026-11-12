@@ -32,6 +32,8 @@ export interface Project {
   title: string;
   category: string;
   description: string;
+  /** Awards / placements won with this project (e.g. "3rd Place, Genpact Hackathon 2026"). */
+  awards?: string[];
   longDescription: string;
   image: string;
   link: string;

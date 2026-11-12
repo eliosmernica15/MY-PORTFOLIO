@@ -482,7 +482,7 @@
     "lede": "Elios Mernica — nga skica e parë në produksion. Dizajn, frontend, backend dhe IA në një palë duar.",
     "ctaWork": "Shiko punën",
     "ctaHire": "Më punëso",
-    "proofLine": "8 produkte të dërguara — A++(APL) · ESMP · Eltrix Cloud",
+    "proofLine": "9 produkte të dërguara — Genpact Hackathon (vendi i 3-të) · Eltrix Cloud (vendi i 1-rë IA)",
     "aplImageAlt": "A++(APL) — pamje e transpiluesit live",
     "aplCaption": "një gjuhë programimi me sintaksë shqipe",
     "aplLinkLabel": "Hap studimin e rastit A++(APL)"
@@ -493,7 +493,7 @@
     "count": "{count} produkte, të dërguara nga fillimi deri në fund"
   },
   "ticker": {
-    "line": "A++(APL) — Sintaksë shqipe · ESMP — Sistemi operativ i tregtisë · Eltrix Cloud — Mjete kreative me IA · 8 produkte të dërguara · Kosovë → Botë"
+    "line": "Genpact Hackathon — vendi i 3-të · Eltrix Cloud — vendi i 1-rë (IA) · A++(APL) — Sintaksë shqipe · 9 produkte të dërguara · Kosovë → Botë"
   },
   "showcase": {
     "kicker": "Puna nga afër",

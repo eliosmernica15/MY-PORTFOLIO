@@ -8,14 +8,14 @@ test("work section lists all projects with real links", async ({ page }) => {
   await page.goto("/en", { waitUntil: "domcontentloaded" });
   const work = page.locator("#work");
   await expect(work).toBeVisible();
-  // Two featured cards + the index list = 8 links to project routes
+  // Two featured cards + the index list = 9 links to project routes
   const links = work.getByRole("link");
   const hrefs = await links.evaluateAll((els) =>
     els.map((el) => (el as HTMLAnchorElement).getAttribute("href")),
   );
   const projectLinks = hrefs.filter((h) => h?.startsWith("/project/"));
-  expect(projectLinks.length).toBe(8);
-  expect(new Set(projectLinks).size).toBe(8);
+  expect(projectLinks.length).toBe(9);
+  expect(new Set(projectLinks).size).toBe(9);
 });
 
 test("contact: 2s behavioral guard surfaces a localized message", async ({

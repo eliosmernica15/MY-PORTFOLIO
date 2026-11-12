@@ -153,6 +153,7 @@ const Hero: React.FC = () => {
                 alt={t("hero.aplImageAlt")}
                 width={1200}
                 height={900}
+                sizes="(min-width: 1024px) 560px, 100vw"
                 priority
                 className="aspect-[4/3] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               />

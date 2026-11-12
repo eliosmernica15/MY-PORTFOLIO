@@ -132,6 +132,27 @@ const ProjectDetail = ({ project, blurDataURL }: Props) => {
             </div>
           )}
 
+          {/* Awards — shown only when the project won something. */}
+          {project.awards && project.awards.length > 0 && (
+            <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-2.5">
+              {project.awards.map((award) => (
+                <span
+                  key={award}
+                  className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] sm:text-xs font-semibold"
+                  style={{
+                    borderColor: "var(--accent)",
+                    background:
+                      "color-mix(in srgb, var(--accent) 14%, transparent)",
+                    color: "var(--accent-light)",
+                  }}
+                >
+                  <span aria-hidden>🏆</span>
+                  {award}
+                </span>
+              ))}
+            </div>
+          )}
+
           {/* Highlights — bullet list. */}
           {project.highlights && project.highlights.length > 0 && (
             <div className="mt-10 sm:mt-14">
@@ -262,15 +283,17 @@ const ProjectDetail = ({ project, blurDataURL }: Props) => {
                     </div>
                   </div>
                 </div>
-                <AdvancedButton
-                  variant="primary"
-                  size="lg"
-                  href={project.link}
-                  iconRight={<ExternalLink size={16} />}
-                  className="w-full mt-8"
-                >
-                  {t("projectDetail.visitLive")}
-                </AdvancedButton>
+                {project.link ? (
+                  <AdvancedButton
+                    variant="primary"
+                    size="lg"
+                    href={project.link}
+                    iconRight={<ExternalLink size={16} />}
+                    className="w-full mt-8"
+                  >
+                    {t("projectDetail.visitLive")}
+                  </AdvancedButton>
+                ) : null}
               </div>
             </PremiumCard>
           </div>

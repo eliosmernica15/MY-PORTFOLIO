@@ -133,8 +133,32 @@ const themeInitScript = `
       || (systemDark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', theme);
     document.documentElement.classList.add('js');
+    var showFallback = function () {
+      document.documentElement.classList.add('reveal-fallback');
+    };
+    // If hydration dies mid-flight (e.g. a stale tab still pointing at an
+    // older build after a redeploy), never leave motion primitives hidden.
+    window.addEventListener('error', function (e) {
+      var t = e && e.target;
+      var src = (t && (t.src || t.href)) || '';
+      if (/\\/_next\\/static\\//.test(src) && (t.tagName === 'SCRIPT' || t.tagName === 'LINK')) {
+        showFallback();
+        return;
+      }
+      var msg = String((e && (e.message || (e.error && e.error.message))) || '');
+      if (/ChunkLoadError|Loading chunk|dynamically imported module|Failed to fetch/i.test(msg)) {
+        showFallback();
+      }
+    }, true);
+    window.addEventListener('unhandledrejection', function (e) {
+      var msg = String((e && e.reason && (e.reason.message || e.reason)) || '');
+      if (/ChunkLoadError|Loading chunk|dynamically imported module|Failed to fetch/i.test(msg)) {
+        showFallback();
+      }
+    });
   } catch(e) {
     document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.classList.add('reveal-fallback');
   }
 })();
 `;

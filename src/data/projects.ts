@@ -1,85 +1,49 @@
+/**
+ * Selected work, ordered latest-first by completion time (per the CV).
+ * 2026: Genpact Hackathon (3rd place), EM Motors
+ * 2025: Eltrix Cloud (1st place, AI), FlixVerse, A++ (APL)
+ * 2024: ESMP, Foodery, ForexPulse, Calista
+ */
 import type { Project, ProjectMetric, ProjectTechRationale } from "@/types";
 
 export const PROJECTS: Project[] = [
   {
-    id: "esmp",
-    title: "ESMP",
-    category: "Web Development",
+    id: "genpact-hackathon-2026",
+    title: "Genpact Hackathon 2026",
+    category: "AI & Healthcare",
     description:
-      "Enterprise marketplace OS — storefront, payments, invoicing, and analytics for modern business.",
+      "Enterprise-grade AI healthcare diagnostic triage — streaming records, FHIR-compliant, sub-second decision support.",
     longDescription:
-      "ESMP is the operating system for micro-businesses, agencies, and service providers. It unifies storefront management, payments, invoicing, and analytics into one fast, polished dashboard. The landing page and product UI feature a clean monochrome design with layered dashboard previews, theme switching, and enterprise-grade UX patterns built for speed.",
-    image: "/projects/esmp.png",
-    link: "https://esmp-cloud.vercel.app/",
-    color: "#171717",
-    tech: ["React", "TypeScript", "Vite", "Tailwind CSS", "Vercel"],
+      "Genpact Hackathon 2026 (Kosovo) — 3rd Place. An enterprise-grade AI healthcare diagnostic triage platform featuring streaming clinical records ingestion, FHIR compliance, and sub-second decision support. Built under hackathon time pressure end-to-end: ingestion pipeline, triage model integration, clinician-facing UI, and a Dockerized deployment.",
+    image: "/projects/genpact-hackathon-2026.svg",
+    link: "",
+    color: "#1a1611",
+    tech: ["Python", "FastAPI", "React", "PostgreSQL", "LLMs", "Docker"],
     year: "2026",
+    awards: ["3rd Place — Genpact Hackathon 2026, Kosovo"],
     challenge:
-      "Unify storefront, payments, invoicing, and analytics into a single fast dashboard",
+      "Triage clinical records of any volume down to sub-second, explainable recommendations for clinicians",
     outcome:
-      "Enterprise marketplace OS — storefront, payments, invoicing and analytics unified in one production dashboard",
-    role: "Solo product engineer",
-    duration: "4 months",
-    metrics: [],
+      "A streaming, FHIR-compliant triage pipeline with sub-second decision support, taken from zero to working demo in the hackathon",
+    role: "AI systems architect & full-stack engineer",
+    duration: "Hackathon",
+    metrics: [{ label: "Placement", value: "3rd", suffix: "Place" }],
     highlights: [
-      "Single-dashboard OS for SMBs",
-      "Stripe + invoicing + analytics",
-      "Theme switching with system preference",
-      "Designed, built and shipped end-to-end",
+      "3rd Place, Genpact Hackathon 2026 (Kosovo)",
+      "FHIR-compliant streaming records ingestion",
+      "Sub-second diagnostic decision support",
+      "Engineered end-to-end in the hackathon",
     ],
     techRationale: [
-      {
-        name: "React",
-        reason: "Component model that matches the dashboard structure 1:1.",
-      },
-      {
-        name: "Vite",
-        reason: "Sub-second dev loop for fast iteration on the UI.",
-      },
-      {
-        name: "Tailwind CSS",
-        reason: "Design tokens expressed as utilities — easy theming.",
-      },
-    ],
-  },
-  {
-    id: "apl",
-    title: "A++(APL)",
-    category: "Web Development",
-    description:
-      "Albanian programming language with natural syntax — transpiles to Python, React, and FastAPI.",
-    longDescription:
-      "A++(APL) is a programming language written in Albanian that reads like natural language. The platform includes a live transpiler demo, interactive playground, CLI tooling, and full documentation. Developers write .apl files with plain Albanian syntax and compile to Python, React TSX, or FastAPI with a single command — supported by hot reload, a CIL architecture, and cross-platform installers.",
-    image: "/projects/apl.png",
-    link: "https://aplplus.vercel.app/",
-    color: "#2e2e2e",
-    tech: ["Python", "React", "FastAPI", "TypeScript", "Vite", "CIL"],
-    year: "2026",
-    challenge:
-      "Let developers write code in Albanian and compile to mainstream targets (Python, React, FastAPI)",
-    outcome:
-      "A live transpiler with a CIL architecture, a playground, and a CLI toolchain",
-    role: "Designer, compiler engineer, and product engineer",
-    duration: "5 months",
-    metrics: [{ label: "Targets", value: "3", suffix: "" }],
-    highlights: [
-      "Natural-language Albanian syntax",
-      "CIL-based compiler pipeline",
-      "Python / React / FastAPI backends",
-      "Live in-browser playground",
-    ],
-    techRationale: [
-      {
-        name: "Python",
-        reason: "Best ecosystem for language tooling and AST manipulation.",
-      },
       {
         name: "FastAPI",
-        reason: "Fast to ship a stable transpile API for the playground.",
+        reason:
+          "Streaming-friendly async runtime for the records ingestion pipeline.",
       },
       {
-        name: "React",
-        reason: "Renders the live transpile output and docs site.",
+        name: "PostgreSQL",
+        reason:
+          "Durable clinical store with JSONB for variable-record payloads.",
       },
     ],
   },
@@ -121,86 +85,56 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
-    id: "forexpulse",
-    title: "ForexPulse",
-    category: "Web Development",
-    description:
-      "Trading platform for forex and prop with live rates, charts, tools, and dashboard.",
-    longDescription:
-      "ForexPulse is a trading platform built for forex and prop traders. It delivers real-time forex rates for 50+ pairs via the Frankfurter API, pair detail pages with full charts, a Tools page with pip value, position size calculator, and currency converter, plus a dashboard for portfolio snapshot and watchlist. The landing page and app share a dark, modern UI with amber accents—free to use, with optional sign-in for saving preferences.",
-    image: "/forexpulse-hero.png",
-    link: "https://forexpulse-trading.vercel.app/",
-    color: "#1f1f1f",
-    tech: ["HTML", "JavaScript", "Tailwind CSS", "Frankfurter API", "Vercel"],
-    year: "2025",
-    challenge:
-      "Give traders a single place to view live rates, charts, and position-size math",
-    outcome:
-      "A focused multi-page app with 50+ pairs, calculators, and a watchlist dashboard",
-    role: "Solo product engineer",
-    duration: "6 weeks",
-    metrics: [
-      { label: "Pairs", value: "50+", suffix: "" },
-      { label: "Refresh", value: "30", suffix: "s" },
-      { label: "Pages", value: "6", suffix: "" },
-    ],
-    highlights: [
-      "Live rates for 50+ pairs",
-      "Pip value + position size calculator",
-      "Watchlist + portfolio dashboard",
-      "Dark UI with amber accents",
-    ],
-    techRationale: [
-      {
-        name: "Frankfurter API",
-        reason: "Free, reliable FX data with no API key needed.",
-      },
-      {
-        name: "Tailwind CSS",
-        reason: "Speeds up iteration on a dense, data-heavy UI.",
-      },
-    ],
-  },
-  {
     id: "eltrix-cloud",
     title: "Eltrix Cloud",
     category: "Applications",
     description:
       "AI-powered creative platform for content creation, file sharing, and digital asset management.",
     longDescription:
-      "Eltrix Cloud is an all-in-one AI-powered platform that combines content creation, file sharing, and digital asset management into a seamless experience. It features AI-assisted content generation, secure cloud storage, real-time collaboration tools, and an intuitive dashboard for managing digital assets. The platform delivers a premium, immersive UI with 3D visuals and smooth interactions.",
+      "Eltrix Cloud is a distributed creative content platform powered by the Anthropic Claude API, LangChain and LangGraph, with pgvector semantic indexing and automated RAG workflows. It combines AI-assisted content generation, secure cloud storage, real-time collaboration tools, and a premium, immersive UI with 3D visuals.",
     image: "/projects/eltrix-cloud.png",
     link: "https://eltrixcloud.netlify.app/",
     color: "#232323",
     tech: [
+      "FastAPI",
+      "Python",
       "React",
       "TypeScript",
-      "AI Integration",
-      "Cloud Storage",
-      "Tailwind CSS",
+      "LangChain",
+      "Claude API",
+      "PostgreSQL",
     ],
     year: "2025",
+    awards: ["1st Place (AI) — Innovation Academy Hackathon, June 2025"],
     challenge:
       "Combine AI content tools, file sharing, and asset management in one premium UI",
     outcome:
-      "A polished, immersive platform with 3D visuals and AI-assisted content workflows",
+      "A distributed creative-content platform with automated RAG workflows — winner, Innovation Academy Hackathon, June 2025",
     role: "Solo product engineer",
-    duration: "3 months",
+    duration: "Hackathon — June 2025",
     metrics: [],
     highlights: [
-      "AI-assisted content generation",
-      "Secure cloud storage",
-      "Real-time collaboration",
+      "1st Place (AI) — Innovation Academy Hackathon, June 2025",
+      "Claude API + LangChain & LangGraph agents",
+      "pgvector semantic indexing",
+      "Automated RAG content workflows",
       "3D visuals and smooth interactions",
     ],
     techRationale: [
       {
-        name: "React + TS",
-        reason: "Strict types catch AI/asset shape mismatches early.",
+        name: "Claude API",
+        reason:
+          "Best-in-class model for content reasoning inside RAG pipelines.",
       },
       {
-        name: "Cloud Storage",
-        reason: "Durable, signed-URL access for large media files.",
+        name: "pgvector",
+        reason:
+          "Semantic retrieval for assets and generated content — inside Postgres.",
+      },
+      {
+        name: "LangChain / LangGraph",
+        reason:
+          "Composable, inspectable RAG and agent graphs with human-in-the-loop steps.",
       },
     ],
   },
@@ -242,17 +176,102 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
+    id: "apl",
+    title: "A++(APL)",
+    category: "Web Development",
+    description:
+      "Albanian programming language with natural syntax — transpiles to Python, React, and FastAPI.",
+    longDescription:
+      "A++(APL) is a programming language written in Albanian that reads like natural language. The platform includes an AI-assisted live transpiler demo, an AST parser, an interactive web playground, a secure containerized execution sandbox and a CLI toolchain. Developers write .apl files with plain Albanian syntax and compile to Python or TypeScript with a single command.",
+    image: "/projects/apl.png",
+    link: "https://aplplus.vercel.app/",
+    color: "#2e2e2e",
+    tech: ["Python", "FastAPI", "React", "Node.js", "WebGL"],
+    year: "2024 – 2025",
+    challenge:
+      "Let developers write code in Albanian and compile to mainstream targets (Python, React, FastAPI)",
+    outcome:
+      "A live transpiler with a CIL architecture, a playground, and a CLI toolchain",
+    role: "Designer, compiler engineer, and product engineer",
+    duration: "5 months",
+    metrics: [{ label: "Targets", value: "3", suffix: "" }],
+    highlights: [
+      "AI-assisted live transpiler",
+      "AST parser + CIL compiler pipeline",
+      "Interactive web playground",
+      "CLI toolchain",
+      "Containerized execution sandbox",
+    ],
+    techRationale: [
+      {
+        name: "Python",
+        reason: "Best ecosystem for language tooling and AST manipulation.",
+      },
+      {
+        name: "WebGL",
+        reason:
+          "Hardware-accelerated rendering for the live playground and diagnostics views.",
+      },
+      {
+        name: "FastAPI",
+        reason: "Fast to ship a stable transpile API for the playground.",
+      },
+    ],
+  },
+  {
+    id: "esmp",
+    title: "ESMP",
+    category: "Web Development",
+    description:
+      "Enterprise marketplace OS — storefront, payments, invoicing, and analytics for modern business.",
+    longDescription:
+      "ESMP is a high-throughput e-commerce marketplace infrastructure. It unifies storefront management, ledger-grade automated invoicing, real-time streaming analytics and distributed inventory locking into one dashboard — with secure Stripe webhooks moving money end to end.",
+    image: "/projects/esmp.png",
+    link: "https://esmp-cloud.vercel.app/",
+    color: "#171717",
+    tech: ["React", "TypeScript", "Node.js", "PostgreSQL", "MongoDB", "Redis"],
+    year: "2024",
+    challenge:
+      "Unify storefront, payments, invoicing, and analytics into a single fast dashboard",
+    outcome:
+      "Enterprise marketplace OS — storefront, payments, invoicing and analytics unified in one production dashboard",
+    role: "Solo product engineer",
+    duration: "4 months",
+    metrics: [],
+    highlights: [
+      "High-throughput marketplace runtime",
+      "Real-time streaming analytics",
+      "Ledger-grade automated invoicing",
+      "Distributed inventory locking",
+      "Secure Stripe webhooks",
+    ],
+    techRationale: [
+      {
+        name: "Redis",
+        reason: "Hot caches, rate limiting and distributed inventory locks.",
+      },
+      {
+        name: "PostgreSQL",
+        reason: "Ledger-grade transactional truth — invoicing and payouts.",
+      },
+      {
+        name: "Node.js",
+        reason: "Event-driven API tier for the streaming analytics feed.",
+      },
+    ],
+  },
+  {
     id: "foodery",
     title: "Foodery",
     category: "Web Design",
     description:
       "A comprehensive food delivery and ordering platform with modern UI.",
     longDescription:
-      "Foodery is a food delivery ecosystem: a reactive dashboard for restaurant owners, a driver app with live GPS tracking, and a consumer marketplace. Next.js serves the product pages and SEO surface, Supabase powers realtime driver locations, and Redis caches menu and order state.",
+      "Foodery is a scalable microservices delivery ecosystem: a reactive executive dashboard for restaurant owners, a driver app with live GPS WebSocket tracking, and a consumer marketplace. Geospatial dispatcher routing algorithms match orders to drivers; Supabase powers realtime location and auth; Postgres holds order truth.",
     image: "/projects/project-7.jpg",
     link: "https://fooderydelivery.netlify.app",
     color: "#2b2b2b",
-    tech: ["Next.js", "Supabase", "Redis", "Framer Motion", "Tailwind CSS"],
+    tech: ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "WebSockets"],
     year: "2024",
     challenge:
       "Build a delivery ecosystem with a reactive dashboard, a driver app, and a marketplace",
@@ -276,18 +295,65 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
+    id: "forexpulse",
+    title: "ForexPulse",
+    category: "Web Development",
+    description:
+      "Trading platform for forex and prop with live rates, charts, tools, and dashboard.",
+    longDescription:
+      "ForexPulse is a financial market telemetry engine with high-frequency WebSocket rate feeds. 50+ currency pairs with 30-second refresh — pip-value and position-size calculators, a tools page, and a watchlist dashboard.",
+    image: "/forexpulse-hero.png",
+    link: "https://forexpulse-trading.vercel.app/",
+    color: "#1f1f1f",
+    tech: [
+      "JavaScript",
+      "React",
+      "Tailwind CSS",
+      "WebSockets",
+      "Frankfurter API",
+    ],
+    year: "2024",
+    challenge:
+      "Give traders a single place to view live rates, charts, and position-size math",
+    outcome:
+      "A focused multi-page app with 50+ pairs, calculators, and a watchlist dashboard",
+    role: "Solo product engineer",
+    duration: "6 weeks",
+    metrics: [
+      { label: "Pairs", value: "50+", suffix: "" },
+      { label: "Refresh", value: "30", suffix: "s" },
+      { label: "Pages", value: "6", suffix: "" },
+    ],
+    highlights: [
+      "Live rates for 50+ pairs",
+      "Pip value + position size calculator",
+      "Watchlist + portfolio dashboard",
+      "Dark UI with amber accents",
+    ],
+    techRationale: [
+      {
+        name: "Frankfurter API",
+        reason: "Free, reliable FX data with no API key needed.",
+      },
+      {
+        name: "Tailwind CSS",
+        reason: "Speeds up iteration on a dense, data-heavy UI.",
+      },
+    ],
+  },
+  {
     id: "calista",
     title: "Calista",
     category: "Web Development",
     description:
       "High-end retail experience with bespoke interaction patterns.",
     longDescription:
-      "Calista redefines the online shopping experience for high-end fashion. The project focuses on micro-interactions, seamless transitions, and high-quality asset delivery. It includes a custom headless CMS integration for dynamic inventory management.",
+      "Calista is a high-performance luxury e-commerce portal with GPU-accelerated 3D WebGL rendering, bespoke micro-interactions, seamless transitions, and a headless CMS driving dynamic inventory.",
     image: "/projects/project-8.png",
     link: "https://calista-bake.netlify.app",
     color: "#282828",
-    tech: ["React", "Shopify Hydrogen", "Three.js", "GSAP"],
-    year: "2023",
+    tech: ["React", "Three.js", "Shopify Hydrogen", "GSAP"],
+    year: "2024",
     challenge:
       "Deliver a high-end fashion storefront with bespoke micro-interactions",
     outcome:

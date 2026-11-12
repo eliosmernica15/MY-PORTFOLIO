@@ -62,7 +62,7 @@ test("terminal: ls and pwd work", async ({ page }) => {
 
   await input.pressSequentially("ls");
   await input.press("Enter");
-  await expect(page.locator("#terminal")).toContainText("Projects (8)", {
+  await expect(page.locator("#terminal")).toContainText("Projects (9)", {
     timeout: 5000,
   });
 });
