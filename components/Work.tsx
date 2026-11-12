@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Trophy } from "lucide-react";
 import { getProjects } from "@/data/i18n";
 import { useT, useLocale } from "@/i18n/LocaleProvider";
 import { useParallax } from "@/hooks/useParallax";
@@ -94,10 +94,10 @@ const Work: React.FC = () => {
                 />
                 {project.awards?.length ? (
                   <span
-                    className="absolute left-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-full border border-amber-400/40 bg-black/60 px-2.5 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.14em] text-amber-300 backdrop-blur-sm"
+                    className="absolute left-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-full border border-amber-400/40 bg-black/65 px-2.5 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.14em] text-amber-300 backdrop-blur-sm"
                     title={project.awards.join(" · ")}
                   >
-                    <span aria-hidden>🏆</span>
+                    <Trophy size={11} strokeWidth={2.5} aria-hidden />
                     {project.awards[0].split("—")[0].trim()}
                   </span>
                 ) : null}
@@ -169,11 +169,11 @@ const Work: React.FC = () => {
                       </span>
                       {project.awards?.length ? (
                         <span
-                          className="shrink-0 text-[11px] leading-none text-amber-400"
+                          className="shrink-0 inline-flex items-center text-amber-500"
                           title={project.awards.join(" · ")}
                           aria-label={project.awards.join(" · ")}
                         >
-                          🏆
+                          <Trophy size={12} strokeWidth={2.5} aria-hidden />
                         </span>
                       ) : null}
                     </span>

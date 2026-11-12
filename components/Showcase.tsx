@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Trophy } from "lucide-react";
 import { getProjects } from "@/data/i18n";
 import { useT, useLocale } from "@/i18n/LocaleProvider";
 import { Reveal } from "./motion/Reveal";
@@ -118,6 +118,22 @@ const Showcase: React.FC = () => {
                       >
                         {chapter.description}
                       </span>
+                      {chapter.awards?.length ? (
+                        <span className="mt-2 inline-flex max-w-full items-center gap-1.5 font-mono text-[8px] sm:text-[9px] font-bold uppercase leading-snug tracking-[0.12em] text-amber-500">
+                          <Trophy
+                            size={11}
+                            strokeWidth={2.5}
+                            aria-hidden
+                            className="shrink-0"
+                          />
+                          <span
+                            className="truncate"
+                            title={chapter.awards.join(" · ")}
+                          >
+                            {chapter.awards[0]}
+                          </span>
+                        </span>
+                      ) : null}
                       <span
                         aria-hidden
                         className="absolute left-0 top-0 h-full w-[2px] transition-all duration-500"
@@ -195,8 +211,26 @@ const Showcase: React.FC = () => {
                   </Link>
                 </Reveal>
                 <figcaption className="mt-4 flex items-baseline justify-between gap-4">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--text-muted)]">
-                    {chapter.category} · {chapter.year}
+                  <span className="flex min-w-0 flex-col gap-1">
+                    <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--text-muted)]">
+                      {chapter.category} · {chapter.year}
+                    </span>
+                    {chapter.awards?.length ? (
+                      <span className="inline-flex items-center gap-1.5 font-mono text-[8px] sm:text-[9px] font-bold uppercase leading-snug tracking-[0.12em] text-amber-500">
+                        <Trophy
+                          size={11}
+                          strokeWidth={2.5}
+                          aria-hidden
+                          className="shrink-0"
+                        />
+                        <span
+                          className="truncate"
+                          title={chapter.awards.join(" · ")}
+                        >
+                          {chapter.awards[0]}
+                        </span>
+                      </span>
+                    ) : null}
                   </span>
                   <Link
                     href={`/project/${chapter.id}`}
@@ -258,6 +292,22 @@ const Showcase: React.FC = () => {
                 >
                   {chapter.description}
                 </p>
+                {chapter.awards?.length ? (
+                  <p className="mt-2 inline-flex max-w-full items-center gap-1.5 font-mono text-[8px] font-bold uppercase leading-snug tracking-[0.12em] text-amber-500">
+                    <Trophy
+                      size={11}
+                      strokeWidth={2.5}
+                      aria-hidden
+                      className="shrink-0"
+                    />
+                    <span
+                      className="truncate"
+                      title={chapter.awards.join(" · ")}
+                    >
+                      {chapter.awards[0]}
+                    </span>
+                  </p>
+                ) : null}
               </div>
             </Link>
           ))}

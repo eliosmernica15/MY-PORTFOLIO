@@ -63,7 +63,7 @@
     "subtitle": "Elios Mernica — Inxhinier · Dizajner · Ndërtues Produktesh",
     "description": "Dizajnoj, inxhinieroj dhe dërgoj produkte dixhitale nga fillimi deri në fund — nga ndërfaqja që prekin njerëzit deri te arkitektura dhe mjetet që e mbajnë atë. Me bazë në Kosovë. Duke ndërtuar për botën.",
     "availability": "Disponueshmëria",
-    "values": ["Remote · Në të gjithë botën"],
+    "availabilityValue": "Remote · Në të gjithë botën",
     "based": "Vendndodhja",
     "basedValue": "Vushtrri, Kosovë",
     "languages": "Gjuhët",
@@ -243,6 +243,7 @@
   "terminal": {
     "welcome": "Mirë se vini — shkruani `help` për hartën · ↑/↓ historia · Tab plotëson · Esc mbyll.",
     "prompt": "$",
+    "placeholder": "shkruaj një komandë…",
     "help": "Komandat e disponueshme:",
     "unknownCommand": "komande e panjohur: {command}. Shtypni `help` për listë.",
     "clear": "Bufri u pastër.",

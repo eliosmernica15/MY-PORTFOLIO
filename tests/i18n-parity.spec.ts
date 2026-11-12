@@ -4,7 +4,7 @@
  * so a catalog edit that only translated one language cannot slip through.
  */
 import { test, expect } from "@playwright/test";
-import { readFileSync } from "fs";
+import { readFileSync, readdirSync, statSync } from "fs";
 import { join } from "path";
 
 function flatten(obj: unknown, prefix = ""): string[] {
@@ -45,6 +45,55 @@ test("en/sq catalogs have identical key trees", () => {
     `keys missing in en.json: ${missingInEn.join(", ")}`,
   ).toEqual([]);
   expect(enKeys.length).toBeGreaterThan(250);
+});
+
+test("every t() key used in source exists in both catalogs", () => {
+  const root = process.cwd();
+  const en = JSON.parse(
+    readFileSync(join(root, "src/messages/en.json"), "utf8"),
+  );
+  const sq = JSON.parse(
+    readFileSync(join(root, "src/messages/sq.json"), "utf8"),
+  );
+  const enKeys = new Set(flatten(en).map((k) => k.replace(/\.$/, "")));
+  const sqKeys = new Set(flatten(sq).map((k) => k.replace(/\.$/, "")));
+
+  const used = new Set<string>();
+  const walk = (dir: string) => {
+    for (const entry of readdirSync(join(root, dir))) {
+      const rel = join(dir, entry);
+      const full = join(root, rel);
+      if (statSync(full).isDirectory()) {
+        if (/node_modules|\.next|\.git/.test(rel)) continue;
+        walk(rel);
+        continue;
+      }
+      if (!/\.(tsx|ts)$/.test(full)) continue;
+      const src = readFileSync(full, "utf8");
+      for (const m of src.matchAll(/\bt\(\s*["']([a-zA-Z0-9_.-]+)["']/g)) {
+        used.add(m[1]);
+      }
+    }
+  };
+  for (const d of ["components", "app", "src", "context", "hooks"]) {
+    try {
+      statSync(join(root, d));
+      walk(d);
+    } catch {
+      // directory does not exist — skip
+    }
+  }
+
+  const missingEn = [...used].filter((k) => !enKeys.has(k));
+  const missingSq = [...used].filter((k) => !sqKeys.has(k));
+  expect(
+    missingEn,
+    `t() keys missing from en.json: ${missingEn.join(", ")}`,
+  ).toEqual([]);
+  expect(
+    missingSq,
+    `t() keys missing from sq.json: ${missingSq.join(", ")}`,
+  ).toEqual([]);
 });
 
 test("no catalog value is an empty string", () => {

@@ -63,7 +63,7 @@
     "subtitle": "Elios Mernica — Engineer · Designer · Product Builder",
     "description": "I design, engineer and ship digital products end-to-end — from the interface people touch to the architecture and tooling that power it. Based in Kosovo. Building for the world.",
     "availability": "Availability",
-    "values": ["Remote · Worldwide"],
+    "availabilityValue": "Remote · Worldwide",
     "based": "Based",
     "basedValue": "Vushtrri, Kosovo",
     "languages": "Languages",
@@ -243,6 +243,7 @@
   "terminal": {
     "welcome": "Welcome — type `help` for the map · ↑/↓ history · Tab autocompletes · Esc closes.",
     "prompt": "$",
+    "placeholder": "type a command…",
     "help": "Available commands:",
     "unknownCommand": "command not found: {command}. Type `help` for a list.",
     "clear": "Buffer cleared.",

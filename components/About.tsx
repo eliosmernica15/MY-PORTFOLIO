@@ -15,7 +15,7 @@ const About: React.FC = () => {
   const facts: [string, string][] = [
     [t("about.based"), t("about.basedValue")],
     [t("about.languages"), t("about.languagesValue")],
-    [t("about.availability"), t("about.values.2")],
+    [t("about.availability"), t("about.availabilityValue")],
     [t("about.experience"), t("about.experienceValue")],
   ];
 
