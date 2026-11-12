@@ -14,7 +14,7 @@ import { Reveal } from "./motion/Reveal";
  * Mobile: a simple stacked sequence (no sticky traps on small screens).
  */
 
-const CHAPTER_IDS = ["apl", "esmp", "eltrix-cloud"] as const;
+const CHAPTER_IDS = ["eltrix-cloud", "apl", "esmp"] as const;
 
 const Showcase: React.FC = () => {
   const t = useT();

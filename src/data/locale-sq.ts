@@ -88,9 +88,9 @@ export const SQ_PROJECTS: Project[] = [
   {
     id: "eltrix-cloud",
     title: "Eltrix Cloud",
-    category: "Aplikacione",
+    category: "IA & Cloud",
     description:
-      "Platformë krijuese me IA për krijim përmbajtjeje, ndarje skedarësh dhe menaxhim asetesh digjitale.",
+      "Platformë e shpërndarë për përmbajtje kreative — Claude API, RAG me LangChain & LangGraph, indeksim semantik pgvector.",
     longDescription:
       "Eltrix Cloud është një platformë e shpërndarë për krijimin e përmbajtjes, e fuqizuar nga Anthropic Claude API, LangChain dhe LangGraph, me indeksim semantik pgvector dhe rrjedha pune automatike RAG. Kombinon gjenerimin e përmbajtjes së asistuar nga IA, ruajtje të sigurt cloud, mjete bashkëpunimi në kohë reale dhe një UI premium me pamje 3D.",
     image: "/projects/eltrix-cloud.png",
@@ -179,9 +179,9 @@ export const SQ_PROJECTS: Project[] = [
   {
     id: "apl",
     title: "A++(APL)",
-    category: "Zhvillim Web",
+    category: "Gjuhë & Vegla",
     description:
-      "Gjuhë programimi në shqip me sintaksë natyrale — kompilon në Python, React dhe FastAPI.",
+      "Gjuhë programimi e shkruar në shqip — lexohet si gjuhë natyrale; transpiluesi live i asistuar nga IA, analizues AST dhe sandbox i kontejnerizuar.",
     longDescription:
       "A++(APL) është një gjuhë programimi e shkruar në shqip që lexohet si gjuhë natyrale. Platforma përfshin një demo transpiluesi live të asistuar nga IA, një analizues AST, një playground interaktiv web, një sandbox ekzekutimi të kontejnerizuar të sigurt dhe një zinxhir mjetesh CLI. Zhvilluesit shkruajnë skedarë .apl me sintaksë të thjeshtë shqipe dhe kompilojnë në Python ose në TypeScript me një komandë të vetme.",
     image: "/projects/apl.png",
@@ -223,9 +223,9 @@ export const SQ_PROJECTS: Project[] = [
   {
     id: "esmp",
     title: "ESMP",
-    category: "Zhvillim Web",
+    category: "OS i tregtisë",
     description:
-      "Sistemi operativ i tregut për bizneset moderne — vitrinë, pagesa, faturime dhe analiza në një vend.",
+      "Infrastrukturë tregtie me shpejtësi të lartë — analitikë në transmetim, faturim në nivel ledger dhe bllokim i shpërndarë i inventarit.",
     longDescription:
       "ESMP është infrastruktura e tregtisë me shpejtësi të lartë. Unifikon menaxhimin e vitrinës, faturimin automatik në nivel ledger, analitikën në transmetim në kohë reale dhe bllokimin e shpërndarë të inventarit në një panel të vetëm — me webhooks të sigurt të Stripe-it që lëvizin paratë nga fillimi në fund.",
     image: "/projects/esmp.png",
@@ -270,7 +270,7 @@ export const SQ_PROJECTS: Project[] = [
     title: "Foodery",
     category: "Dizajn Web",
     description:
-      "Një platformë gjithëpërfshirëse shpërndarje ushqimi dhe porosie me UI moderne.",
+      "Ekosistem i shkallëzueshëm mikroshërbimesh shpërndarje — panel restoranti, gjurmim GPS live i shoferëve dhe treg konsumatorësh.",
     longDescription:
       "Foodery është një ekosistem i shkallëzueshëm mikroshërbimësh për shpërndarjen e ushqimit: një panel reaktiv ekzekutiv për pronarët e restoranteve, një aplikacion shoferësh me gjurmim GPS live WebSocket dhe një treg konsumatorësh. Algoritme gjeohapësinore të rrugëtimit dispeçerësh çiftëzojnë porositë me shoferët; Supabase fuqizon vendndodhjet dhe autentikimin në kohë reale; Postgres mban të vërtetën e porosive.",
     image: "/projects/project-7.jpg",
@@ -310,7 +310,7 @@ export const SQ_PROJECTS: Project[] = [
     title: "ForexPulse",
     category: "Zhvillim Web",
     description:
-      "Platformë tregtimi forex dhe prop me kurse live, grafikë, mjete dhe panel.",
+      "Motor telemetrie tregjesh financiare — kurse WebSocket me frekuencë të lartë për 50+ çifte.",
     longDescription:
       "ForexPulse është një motor telemetrie tregjesh financiare me ushqime kursesh WebSocket me frekuencë të lartë. 50+ çifte kunreadash me rifreskim 30-sekondësh — kalkulatorë vlerë pip dhe madhësi pozicioni, një faqe Mjetesh dhe një panel liste vëzhgimi.",
     image: "/forexpulse-hero.png",
@@ -357,7 +357,7 @@ export const SQ_PROJECTS: Project[] = [
     title: "Calista",
     category: "Zhvillim Web",
     description:
-      "Përvojë shitjeje e lartë me modele ndërveprimi të personalizuara.",
+      "Portal tregtie luksoze — renderim Three.js i përshpejtuar nga GPU dhe mikro-ndërveprime të personalizuara.",
     longDescription:
       "Calista është një portal tregtie luksoze me performancë të lartë me renderim 3D WebGL të përshpejtuar nga GPU, mikro-ndërveprime të personalizuara, kalime të pandërprera dhe një headless CMS që drejton inventarin dinamik.",
     image: "/projects/project-8.png",

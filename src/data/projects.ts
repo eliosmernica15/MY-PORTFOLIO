@@ -87,9 +87,9 @@ export const PROJECTS: Project[] = [
   {
     id: "eltrix-cloud",
     title: "Eltrix Cloud",
-    category: "Applications",
+    category: "AI & Cloud",
     description:
-      "AI-powered creative platform for content creation, file sharing, and digital asset management.",
+      "Distributed creative-content platform — Claude API, LangChain & LangGraph RAG, pgvector semantic indexing.",
     longDescription:
       "Eltrix Cloud is a distributed creative content platform powered by the Anthropic Claude API, LangChain and LangGraph, with pgvector semantic indexing and automated RAG workflows. It combines AI-assisted content generation, secure cloud storage, real-time collaboration tools, and a premium, immersive UI with 3D visuals.",
     image: "/projects/eltrix-cloud.png",
@@ -178,9 +178,9 @@ export const PROJECTS: Project[] = [
   {
     id: "apl",
     title: "A++(APL)",
-    category: "Web Development",
+    category: "Language & Tooling",
     description:
-      "Albanian programming language with natural syntax — transpiles to Python, React, and FastAPI.",
+      "Albanian programming language — reads like natural language; AI-assisted live transpiler, AST parser and a containerized sandbox.",
     longDescription:
       "A++(APL) is a programming language written in Albanian that reads like natural language. The platform includes an AI-assisted live transpiler demo, an AST parser, an interactive web playground, a secure containerized execution sandbox and a CLI toolchain. Developers write .apl files with plain Albanian syntax and compile to Python or TypeScript with a single command.",
     image: "/projects/apl.png",
@@ -221,9 +221,9 @@ export const PROJECTS: Project[] = [
   {
     id: "esmp",
     title: "ESMP",
-    category: "Web Development",
+    category: "Marketplace OS",
     description:
-      "Enterprise marketplace OS — storefront, payments, invoicing, and analytics for modern business.",
+      "High-throughput marketplace infrastructure — streaming analytics, ledger-grade invoicing and distributed inventory locking.",
     longDescription:
       "ESMP is a high-throughput e-commerce marketplace infrastructure. It unifies storefront management, ledger-grade automated invoicing, real-time streaming analytics and distributed inventory locking into one dashboard — with secure Stripe webhooks moving money end to end.",
     image: "/projects/esmp.png",
@@ -265,7 +265,7 @@ export const PROJECTS: Project[] = [
     title: "Foodery",
     category: "Web Design",
     description:
-      "A comprehensive food delivery and ordering platform with modern UI.",
+      "Scalable microservices delivery ecosystem — restaurant dashboard, driver GPS tracking and a consumer marketplace.",
     longDescription:
       "Foodery is a scalable microservices delivery ecosystem: a reactive executive dashboard for restaurant owners, a driver app with live GPS WebSocket tracking, and a consumer marketplace. Geospatial dispatcher routing algorithms match orders to drivers; Supabase powers realtime location and auth; Postgres holds order truth.",
     image: "/projects/project-7.jpg",
@@ -299,7 +299,7 @@ export const PROJECTS: Project[] = [
     title: "ForexPulse",
     category: "Web Development",
     description:
-      "Trading platform for forex and prop with live rates, charts, tools, and dashboard.",
+      "Financial market telemetry engine — high-frequency WebSocket rates across 50+ pairs.",
     longDescription:
       "ForexPulse is a financial market telemetry engine with high-frequency WebSocket rate feeds. 50+ currency pairs with 30-second refresh — pip-value and position-size calculators, a tools page, and a watchlist dashboard.",
     image: "/forexpulse-hero.png",
@@ -346,7 +346,7 @@ export const PROJECTS: Project[] = [
     title: "Calista",
     category: "Web Development",
     description:
-      "High-end retail experience with bespoke interaction patterns.",
+      "Luxury e-commerce portal — GPU-accelerated Three.js rendering and bespoke micro-interactions.",
     longDescription:
       "Calista is a high-performance luxury e-commerce portal with GPU-accelerated 3D WebGL rendering, bespoke micro-interactions, seamless transitions, and a headless CMS driving dynamic inventory.",
     image: "/projects/project-8.png",
