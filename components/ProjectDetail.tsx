@@ -15,11 +15,12 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ExternalLink, LayoutGrid } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, LayoutGrid } from "lucide-react";
 import AdvancedButton from "./ui/AdvancedButton";
 import PremiumCard from "./ui/PremiumCard";
 import type { Project } from "@/types";
-import { useT, useLocale } from "@/i18n/LocaleProvider";
+import { PROJECTS } from "@/data/projects";
+import { useT } from "@/i18n/LocaleProvider";
 
 interface Props {
   project: Project;
@@ -28,11 +29,14 @@ interface Props {
 
 const ProjectDetail = ({ project, blurDataURL }: Props) => {
   const t = useT();
+  const index = PROJECTS.findIndex((p) => p.id === project.id);
+  const prevProject = PROJECTS[(index - 1 + PROJECTS.length) % PROJECTS.length];
+  const nextProject = PROJECTS[(index + 1) % PROJECTS.length];
   return (
     <div className="project-detail-enter pt-24 sm:pt-28 md:pt-32 pb-20 sm:pb-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-[1]">
       <div className="mb-10 sm:mb-14 flex flex-wrap items-center gap-3 sm:gap-4 relative z-10">
         <Link
-          href="/#projects"
+          href="/#showcase"
           className="flex items-center gap-2 sm:gap-3 transition-all group hover:text-[var(--accent-light)]"
           style={{ color: "var(--text-muted)" }}
           aria-label={t("projectDetail.backToProjects")}
@@ -46,7 +50,7 @@ const ProjectDetail = ({ project, blurDataURL }: Props) => {
           </span>
         </Link>
         <Link
-          href="/#projects"
+          href="/#work"
           className="flex items-center gap-2 sm:gap-3 transition-all group hover:text-[var(--accent-light)]"
           style={{ color: "var(--text-muted)" }}
         >
@@ -125,6 +129,27 @@ const ProjectDetail = ({ project, blurDataURL }: Props) => {
                   body={project.duration}
                 />
               )}
+            </div>
+          )}
+
+          {/* Awards — shown only when the project won something. */}
+          {project.awards && project.awards.length > 0 && (
+            <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-2.5">
+              {project.awards.map((award) => (
+                <span
+                  key={award}
+                  className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] sm:text-xs font-semibold"
+                  style={{
+                    borderColor: "var(--accent)",
+                    background:
+                      "color-mix(in srgb, var(--accent) 14%, transparent)",
+                    color: "var(--accent-light)",
+                  }}
+                >
+                  <span aria-hidden>🏆</span>
+                  {award}
+                </span>
+              ))}
             </div>
           )}
 
@@ -258,20 +283,64 @@ const ProjectDetail = ({ project, blurDataURL }: Props) => {
                     </div>
                   </div>
                 </div>
-                <AdvancedButton
-                  variant="primary"
-                  size="lg"
-                  href={project.link}
-                  iconRight={<ExternalLink size={16} />}
-                  className="w-full mt-8"
-                >
-                  {t("projectDetail.visitLive")}
-                </AdvancedButton>
+                {project.link ? (
+                  <AdvancedButton
+                    variant="primary"
+                    size="lg"
+                    href={project.link}
+                    iconRight={<ExternalLink size={16} />}
+                    className="w-full mt-8"
+                  >
+                    {t("projectDetail.visitLive")}
+                  </AdvancedButton>
+                ) : null}
               </div>
             </PremiumCard>
           </div>
         </div>
       </div>
+
+      {/* Previous / next case study — always something to do next */}
+      <nav
+        aria-label={t("projectDetail.moreWork")}
+        className="mt-16 sm:mt-20 grid grid-cols-1 sm:grid-cols-2 gap-px border overflow-hidden rounded-2xl"
+        style={{ borderColor: "var(--border)", background: "var(--border)" }}
+      >
+        <Link
+          href={`/project/${prevProject.id}`}
+          className="group flex flex-col gap-2 p-5 sm:p-6 transition-colors"
+          style={{ background: "var(--bg-card)" }}
+        >
+          <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-[var(--text-muted)] flex items-center gap-2">
+            <ArrowLeft
+              size={12}
+              aria-hidden
+              className="transition-transform group-hover:-translate-x-1"
+            />
+            {t("projectDetail.previous")}
+          </span>
+          <span className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+            {prevProject.title}
+          </span>
+        </Link>
+        <Link
+          href={`/project/${nextProject.id}`}
+          className="group flex flex-col gap-2 p-5 sm:p-6 sm:items-end text-right transition-colors"
+          style={{ background: "var(--bg-card)" }}
+        >
+          <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-[var(--text-muted)] flex items-center gap-2">
+            {t("projectDetail.next")}
+            <ArrowRight
+              size={12}
+              aria-hidden
+              className="transition-transform group-hover:translate-x-1"
+            />
+          </span>
+          <span className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+            {nextProject.title}
+          </span>
+        </Link>
+      </nav>
     </div>
   );
 };

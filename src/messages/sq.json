@@ -46,76 +46,36 @@
     "timeBasedMode": "Bazuar në Kohë"
   },
   "navigation": {
-    "home": "Ballina",
     "about": "Rreth Meje",
-    "services": "Shërbimet",
     "projects": "Projektet",
-    "resume": "CV",
     "contact": "Kontakto",
     "blog": "Blogu",
     "notes": "Shënimet",
     "github": "GitHub",
     "linkedin": "LinkedIn",
     "email": "Email",
-    "hireMe": "Më punëso",
-    "getInTouch": "Lidhu me mua",
     "main": "Navigimi kryesor",
-    "logo": "Elios Mernica - ballina"
-  },
-  "hero": {
-    "title": "Elios Mernica",
-    "subtitle": "Inxhinier Softueri · Sisteme AI · Kosova → Botë",
-    "description": "Inxhinieroj sisteme AI, platforma web me performancë të lartë dhe plumbimin e rrjetëve që i mbështesin.",
-    "available": "I Lirë për Punë",
-    "viewShowcase": "Shiko Shfaqen",
-    "contactMe": "Kontakto Me",
-    "location": "Kosovë, BE",
-    "experience": "4+ Vjet Rritjeje",
-    "specializing": "Specializohem në",
-    "typedPhrases": [
-      "Zhvillim Web",
-      "Dizajn Sistemesh",
-      "Infrastrukturë Rrjeti",
-      "Inxhinieri Full-Stack"
-    ],
-    "remoteAvailable": "I disponueshëm për inxhinieri në distancë dhe misione digjitale.",
-    "yearsOfGrowth": "Vite të Rritjes"
+    "logo": "Elios Mernica - ballina",
+    "home": "Ballina"
   },
   "about": {
     "title": "Rreth Meje",
-    "subtitle": "Unë jam Elios Mernica, Inxhinier Softueri",
-    "description": "Inxhinier softueri i specializuar në zhvillim web, dizajn sistimesh dhe infrastrukturë rrjetesh. Bazuar në Kosovë, disponibil botërisht.",
-    "focus": "Fokusi",
-    "principle": "Principi",
+    "subtitle": "Elios Mernica — Inxhinier · Dizajner · Ndërtues Produktesh",
+    "description": "Dizajnoj, inxhinieroj dhe dërgoj produkte dixhitale nga fillimi deri në fund — nga ndërfaqja që prekin njerëzit deri te arkitektura dhe mjetet që e mbajnë atë. Me bazë në Kosovë. Duke ndërtuar për botën.",
     "availability": "Disponueshmëria",
-    "values": [
-      "Web & Infrastruktura",
-      "Minimalizëm & Shpejtësi",
-      "Larg · Botërisht"
-    ],
-    "skills": "Teknologjet & Aftësitë",
+    "availabilityValue": "Remote · Në të gjithë botën",
+    "based": "Vendndodhja",
+    "basedValue": "Vushtrri, Kosovë",
+    "languages": "Gjuhët",
+    "languagesValue": "Anglisht · Shqip",
     "experience": "Përvoja",
-    "education": "Arsimi",
-    "capabilities": [
-      "Inxhinieri Full-Stack",
-      "Arkitektura e Sistemit",
-      "Optimizimi i Performancës",
-      "UI/UX Inxhinieri",
-      "Deployment në Cloud",
-      "API Design"
-    ],
-    "timelineLabel": "Ku kam qenë",
-    "timelineNow": "ESMP v2 + A++(APL) v1.2 në produksion.",
-    "timeline2026": "Sisteme agjentësh IA, RAG custom dhe një kompilues publik.",
-    "timeline2025": "Themelimi i Flixverse; 1k përdorues në javën e tretë.",
-    "timeline2024": "Eltrix Cloud në produksion; punë remote në të gjithë botën.",
-    "timeline2023": "Themelimi i ForexPulse; SaaS full-stack nga zero te klientët që paguajnë.",
-    "timelineNowLabel": "Tani"
+    "experienceValue": "4+ vjet produkte në produksion",
+    "contact": "Kontakti"
   },
   "services": {
     "title": "Shërbimet",
-    "subtitle": "Projekte Web Unike.",
-    "description": "Kthej ide në produkte dixhitale me performancë të lartë — inxhinieruar për qartësi, shpejtësi dhe skaluese të gjatë kohës.",
+    "subtitle": "Çfarë ndërtoj.",
+    "description": "Nga një landing page deri te një produkt i plotë — dizajnuar, inxhinieruar dhe dërguar nga fillimi deri në fund nga një person i vetëm që kujdeset për çdo shtresë.",
     "items": [
       {
         "number": "01",
@@ -138,7 +98,7 @@
         "description": "Kthej një ide në një projekt real. Mbijetoj zhvillimin e tij nga zero deri në prodhim, duke ofruar mirëmbajtje vazhdimore."
       }
     ],
-    "eyebrow": "Shërbime të besueshme"
+    "eyebrow": "Shërbimet"
   },
   "projects": {
     "title": "Portofoli",
@@ -175,21 +135,7 @@
     "loadMoreCount": "Shfaq edhe {count}"
   },
   "resume": {
-    "title": "CV",
-    "subtitle": "Baza e Karrierës.",
-    "downloadCV": "Shkarko CV-në",
-    "contactInfo": "Informacioni i Kontaktit",
-    "email": "Email",
-    "phone": "Telefoni",
-    "location": "Vendndodhja",
-    "education": "Arsimi",
-    "experience": "Përvoja",
-    "skills": "Aftësitë Sisteme",
-    "period": "Periudha",
-    "role": "Roli",
-    "company": "Kompania",
-    "description": "Përshkrimi",
-    "heading": "Thelbi i Karrierës."
+    "downloadCV": "Shkarko CV-në"
   },
   "skills": {
     "title": "Aftësitë",
@@ -202,30 +148,13 @@
       "devops": "Infra & DevOps",
       "design": "Dizajn"
     },
-    "level": {
-      "beginner": "Fillestar",
-      "intermediate": "Mesatar",
-      "advanced": "Të Avancuar",
-      "expert": "Ekspert"
-    },
     "tagline": "Ndërtuar për produksion, jo për prezantime.",
-    "stackTagline": "Çfarë ndërtoj me.",
-    "levelOf": "Niveli {level} nga 5"
-  },
-  "testimonials": {
-    "title": "Përgjigjet",
-    "subtitle": "Besimi i Verifikuar.",
-    "description": "Çfarë thonë klientët dhe kolaboruesit rreth bashkëpunimit në produkte dixhitale ambicioze.",
-    "previous": "Parës",
-    "next": "Tjetri",
-    "pause": "Pauzë",
-    "play": "Luaj",
-    "goTo": "Shko te dëshmia {index}"
+    "stackTagline": "Çfarë ndërtoj me."
   },
   "contact": {
     "title": "Kontaktohu",
-    "subtitle": "Formoni të Ardhmen.",
-    "description": "Arkitektim i brezit të ardhshëm të shkollës dixhitale. Ndani vizionin tuaj — unë do ta inxhinieroj rrugën nga koncepti në prodhim.",
+    "subtitle": "Ke diçka për të ndërtuar?",
+    "description": "Trego çfarë dëshiron të ndërtosh. Do të kthehem me një përgjigje të drejtëpërdrejtë, një vlerësim real dhe hapin e parë — ose një rekomandim të ndershëm për të mos e bërë ende.",
     "email": "Email",
     "phone": "Telefoni",
     "form": {
@@ -240,9 +169,9 @@
       "validation": {
         "nameRequired": "Emri duhet të ketë të paktën 3 karaktere",
         "emailRequired": "Ju lutemi shkruani një email të vlefshëm",
-        "emailInvalid": "Formati i email-it është i pavlefshëm",
         "messageRequired": "Mesazhi duhet të ketë të paktën 20 karaktere",
-        "tooFast": "Dërgimi shumë i shpejtë. Ju lutemi merrni kohën tuaj."
+        "tooFast": "Dërgimi shumë i shpejtë. Ju lutemi merrni kohën tuaj.",
+        "csrfError": "Seanca ka skaduar — rifresko faqen dhe provo sërish."
       },
       "successTitle": "Mesazhi u dërgua",
       "sendAnother": "Dërgo një mesazh tjetër",
@@ -253,19 +182,16 @@
       "emailPlaceholder": "juaji@email.com",
       "messagePlaceholder": "Tregoni për projektin tuaj, afatin dhe objektivat..."
     },
-    "directContact": "Ose më kontaktoni drejtpërdrejt:"
+    "directContact": "Ose më kontaktoni drejtpërdrejt:",
+    "rateLimited": "Shumë mesazhe — prit një minutë dhe provo sërish.",
+    "reference": "Referenca",
+    "detailsToggle": "Shto detaje të projektit (opsionale)"
   },
   "footer": {
-    "copyright": "© {viti} Elios Mernica. Të drejtat e rezervuara.",
-    "builtWith": "Ndërtuar me Next.js, React, TypeScript",
-    "available": "I disponueshëm për projekte",
-    "social": "Lidhuni",
-    "quickLinks": "Linkë të Shpejta",
-    "connect": "Lidhuni",
-    "bio": "Zhvillues full-stack që krijoj përvoja digjitale me saktësi dhe qëllim. Bazuar në Kosovë, i disponueshëm në mbarë botën.",
-    "backToTop": "Kthehu lart",
-    "goTo": "Shko te seksioni {section}",
-    "navigation": "Navigimi në fundfaqe"
+    "tagline": "Me bazë në Kosovë. Duke ndërtuar për botën.",
+    "rights": "Të gjitha të drejtat e rezervuara.",
+    "email": "eliosmernica@gmail.com",
+    "colophon": "Vendosur në Fraunces & Plus Jakarta · letër & terakotë"
   },
   "blog": {
     "title": "Blogu",
@@ -296,11 +222,28 @@
     "teaserHeading": "Shënime mbi punën.",
     "notesTitle": "Shënimet",
     "notesHero": "Shkrime mbi atë që ndërtoj.",
-    "notesDescription": "Pjesë të shkurtra dhe të fokusuara mbi sistemet e AI-së, performancën web, dizajnin e gjuhëve dhe mjeshtërinë e dorëzimit të softuerit."
+    "notesDescription": "Pjesë të shkurtra dhe të fokusuara mbi sistemet e AI-së, performancën web, dizajnin e gjuhëve dhe mjeshtërinë e dorëzimit të softuerit.",
+    "viewAll": "Të gjitha shënimet",
+    "addNote": "Shto shënim",
+    "modalTitle": "Shënim i ri",
+    "noteTitleLabel": "Titulli",
+    "noteTitlePlaceholder": "Vendosi një titull shënimit…",
+    "noteBodyLabel": "Shënimi",
+    "noteBodyPlaceholder": "Shkruaje shënimin — qëndron në këtë pajisje…",
+    "noteTagsLabel": "Etiketat (opsionale)",
+    "noteTagsPlaceholder": "inxhinieri, apl, ide",
+    "saveNote": "Ruaj shënimin",
+    "cancel": "Anulo",
+    "noteAdded": "Shënimi u shtua",
+    "noteRemoved": "Shënimi u hoq",
+    "yourNote": "Shënimi juaj",
+    "deleteNote": "Fshi shënimin",
+    "noteInvalid": "Jepni një titull (3+ karaktere) dhe të paktën 20 karaktere përmbajtje."
   },
   "terminal": {
-    "welcome": "Mirësevini — shtypni `help` për të listuar komandat. Esc për të mbyllur. ⌘/ctrl+L për të pastër.",
+    "welcome": "Mirë se vini — shkruani `help` për hartën · ↑/↓ historia · Tab plotëson · Esc mbyll.",
     "prompt": "$",
+    "placeholder": "shkruaj një komandë…",
     "help": "Komandat e disponueshme:",
     "unknownCommand": "komande e panjohur: {command}. Shtypni `help` për listë.",
     "clear": "Bufri u pastër.",
@@ -325,7 +268,9 @@
       "date": "Data dhe koha aktuale.",
       "repo": "repo <projectId> — hap studimin e rastit të projektit.",
       "note": "note <slug> — hap një postim shkrim.",
-      "open": "open <sectionId> — kaloni te seksioni me id."
+      "open": "open <sectionId> — kaloni te seksioni me id.",
+      "ls": "ls — rendit projektet (alias i projects).",
+      "pwd": "pwd — shfaq direktorinë aktuale."
     },
     "errors": {
       "unknownProject": "Projekt i panjohur \"{id}\". Provoni një nga: {known}.",
@@ -333,7 +278,7 @@
       "usageTheme": "Përdorim: theme dark | light | toggle",
       "usageOpen": "Përdorimi: open <sectionId>"
     },
-    "tip": "Këshillë: ⌘/Ctrl+L fshin buffer-in. Esc mbyll.",
+    "tip": "Këshillë: `clear` zbraz bufferin · Esc mbyll.",
     "nowPrefix": "Tani",
     "historyHint": "(historia shfaqet ndërsa lëviz me ↑/↓)",
     "downloadingCv": "Duke shkarkuar CV-në…",
@@ -343,22 +288,21 @@
     "openingNote": "Duke hapur /notes/{slug}…",
     "scrollingTo": "Duke lëvizur te #{id}…",
     "openingGithub": "Duke hapur seksionin GitHub…",
-    "contactOutput": "Email {email} ose përdorni formularin më poshtë. Duke e hapur…"
+    "contactOutput": "Email {email} ose përdorni formularin më poshtë. Duke e hapur…",
+    "didYouMean": "komanda nuk u gjet: {command}. A mos vallë: {suggestion}? Përndryshe, `help` rendit gjithçka.",
+    "helpGroupWork": "PUNA",
+    "helpGroupAbout": "RRETH MEJE",
+    "helpGroupShell": "SHELL",
+    "helpGroupFun": "ARGËTIM",
+    "pwdPath": "~/elios-mernica"
   },
   "assistant": {
     "title": "Elios AI",
     "subtitle": "Gati pa Internet",
     "online": "Online",
-    "placeholder": "Pyete cfarë doni…",
+    "placeholder": "Pyetni çfarëdo…",
     "send": "Dërgo",
-    "quickPrompts": [
-      "Çfarë bëni?",
-      "Trego punën me AI",
-      "A jeni i disponueshëm?",
-      "Çfarë është A++(APL)?",
-      "Si fillojmë?"
-    ],
-    "rateLimited": "Ehi, ngadalë — kufizoj në 5 pyetje në minutë. Marri frymë, pastaj provoni përsëri.",
+    "rateLimited": "Ngadalë pak — kufizohem në 5 pyetje për minutë. Merrni frymë dhe provoni sërish.",
     "unknown": "Nuk jam i sigurt si të përgjigjem. Provoni një nga pyetjet e shpejta më poshtë.",
     "copy": "Kopjo",
     "copied": "Kopjua!",
@@ -366,9 +310,38 @@
     "infoText": "Përgjigjet vijnë nga një bazë e diturisë e ndërtuar nga ky faqe (projekte, shërbime, aftësi, shënime, dhe një FAQ manual). Ekzekutohet plotësisht në shfletuesin tuaj — pa çelës API, pa thirrje server, asnjë të dhënë nuk largohet nga pajisja juaj. Regjenerohet në çdo ekzekutim të `sync:kb`.",
     "voice": "Hyrje zëri",
     "listening": "Duke dëgjuar...",
-    "stopVoice": "Ndal hyrjen zëri",
-    "rateLimit": "{remaining}/{max} këtë min",
-    "privacy": "Baza e Diturisë Skriptuar · asnjë të dhënë nuk largohet nga shfletuesi"
+    "stopVoice": "Ndal hyrjen me zë",
+    "rateLimit": "{remaining}/{max} këtë minutë",
+    "privacy": "Asistent i skriptuar — jo LLM · asnjë e dhënë nuk del nga shfletuesi",
+    "qp1": "Çfarë bëni?",
+    "qp2": "Trego punën me AI",
+    "qp3": "A jeni i disponueshëm?",
+    "qp4": "Çfarë është A++(APL)?",
+    "qp5": "Si fillojmë?",
+    "greeting": "Hej — unë jam Elios AI. Pyetni për punën time, stack-un, ose si fillojmë një projekt. Punon jashtë linje nga një bazë diturie e ndërtuar nga faqja, kështu që përgjigjet pasqyrojnë saktësisht atë që është këtu.",
+    "fallback": "Nuk jam i sigurt si t’ju përgjigjem këtij. Provoni një nga pyetjet poshtë.",
+    "howThisWorks": "Si funksionon",
+    "howThisWorksBody": "Kjo është një bazë diturie e skriptuar, e drejtpërdrejtë në pajisjen tuaj — jo një model i strehuar AI apo LLM. Krahason pyetjen tuaj me përgjigje të kuruara të ndërtuara nga kjo faqe (projekte, shërbime, aftësi, shënime dhe një FAQ i shkruar me dorë). Vrap në shfletuesin tuaj — pa çelës API, pa thirrje serverësh, asnjë e dhënë nuk del nga pajisja juaj. Riegjenerohet në çdo nisje të",
+    "askTitle": "Pyetni Elios AI (Ctrl/⌘ + J)",
+    "expandAssistant": "Zgjeroni asistentin",
+    "minimizeAssistant": "Zvogëloni asistentin",
+    "openAssistant": "Hapni asistentin Elios AI",
+    "expand": "Zgjero",
+    "minimize": "Zvogëlo",
+    "expandTitle": "Zgjero (⌘M)",
+    "minimizeTitle": "Zvogëlo (⌘M)",
+    "askElios": "Pyetni Elios AI",
+    "panelLabel": "Asistenti Elios AI",
+    "copyTranscript": "Kopjo bisedën",
+    "aboutAssistant": "Rreth këtij asistenti",
+    "close": "Mbyll",
+    "closeTitle": "Mbyll (Esc)",
+    "typing": "Elios AI po shkruan",
+    "startVoice": "Fillo hyrjen me zë",
+    "messageInput": "Fusha e mesazhit",
+    "copyMessage": "Kopjo mesazhin",
+    "transcriptYou": "Ju",
+    "transcriptName": "Elios AI"
   },
   "theme": {
     "light": "E Dritë",
@@ -407,18 +380,13 @@
     "skipToTerminal": "Kaloni në terminal",
     "skipToAssistant": "Kaloni në asistentin AI",
     "skipToNavigation": "Kaloni në navigim",
-    "openMenu": "Hap menun",
-    "closeMenu": "Mbyll menun",
     "toggleTheme": "Ndrysho temën",
     "openCommandPalette": "Hap paletën e komandave",
     "openThemeSelector": "Hap zgjedhësit e temës",
-    "switchLanguage": "Ndrysho gjuhën"
-  },
-  "stats": {
-    "projectsCompleted": "Projekte të përfunduara",
-    "yearsExperience": "Vite përvojë",
-    "happyClients": "Klientë të kënaqur",
-    "skillsMastered": "Aftësi të zotëruara"
+    "switchLanguage": "Ndrysho gjuhën",
+    "backToTop": "Kthehu lart",
+    "switchToDark": "Kalo në temën e errët",
+    "switchToLight": "Kalo në temën e ndritshme"
   },
   "projectDetail": {
     "backToProjects": "Kthehu te Galeria",
@@ -433,6 +401,103 @@
     "year": "Viti",
     "category": "Kategoria",
     "stack": "Teknologjitë",
-    "visitLive": "Vizito Live"
+    "visitLive": "Vizito Live",
+    "previous": "Studimi i mëparshëm",
+    "next": "Studimi tjetër",
+    "moreWork": "Më shumë studime rasti"
+  },
+  "hire": {
+    "eyebrow": "ELIOS — Pranimi i projekteve",
+    "title": "Më trego çfarë do të ndërtosh.",
+    "subhead": "Tre pyetje të shpejta, një minutë — drejt në kutinë time. Pa radhë pritjeje, pa skrips shitjeje.",
+    "q1": "Çfarë po kërkon të ndërtosh?",
+    "q2": "Afati i pritshëm?",
+    "q3": "Buxheti i vlerësuar?",
+    "optional": "opsionale",
+    "qualifierLegend": "Pyetësori i projektit",
+    "q1Required": "Zgjidh një — ose kalo detajet më poshtë.",
+    "messageLabel": "Rreth projektit",
+    "skipLink": "Kalo detajet",
+    "addBack": "Shto pyetësorin me 3 pyetje",
+    "sendButton": "Dërgo kërkesën",
+    "privacyNote": "Detajet shkojnë drejt në kutinë time — nuk ruhen dhe nuk ndahen.",
+    "projects": {
+      "website": "Uebfaqe ose landing page",
+      "webapp": "Aplikacion uebi",
+      "saas": "Produkt SaaS",
+      "ecommerce": "Dyqan online",
+      "ai": "Produkt ose integrim AI",
+      "custom": "Softuer i personalizuar",
+      "other": "Diçka tjetër"
+    },
+    "timelines": {
+      "asap": "Sa më shpejt",
+      "2-4w": "Brenda 2–4 javësh",
+      "1-3m": "Brenda 1–3 muajsh",
+      "flexible": "Fleksibël / e pasigurt"
+    },
+    "budgets": {
+      "<1k": "Nën $1,000",
+      "1k-3k": "$1,000–$3,000",
+      "3k-5k": "$3,000–$5,000",
+      "5k-10k": "$5,000–$10,000",
+      "10k+": "$10,000+",
+      "prefer_not_to_say": "Preferoj të mos them"
+    },
+    "successBody": "E lexoj çdo kërkesë personalisht. Prit një përgjigje të menduar — dhe këshilla të ndershme, edhe kur përgjigjja është «ende mos e ndërto»."
+  },
+  "palette": {
+    "label": "Paleta e komandave",
+    "placeholder": "Kërko çdo gjë — aplikacione, projekte, shënime, komanda…",
+    "noResults": "Nuk u gjet asgjë — provo «projektet», «apl», «punëso»…",
+    "open": "Hap",
+    "read": "Lexo",
+    "view": "Shiko",
+    "go": "Shko",
+    "runInTerminal": "Mbush terminalin",
+    "close": "Mbyll paletën",
+    "navContact": "Kontakto",
+    "hintNav": "lëviz",
+    "hintRun": "zgjedh",
+    "hintCount": "rezultate",
+    "groups": {
+      "projects": "Projektet",
+      "notes": "Shënimet",
+      "services": "Shërbimet",
+      "navigation": "Navigimi",
+      "commands": "Komandat e terminalit",
+      "actions": "Veprimet"
+    },
+    "actions": {
+      "hire": "Më punëso — nis një projekt",
+      "cv": "Shkarko CV-në"
+    },
+    "navWork": "Puna",
+    "navServices": "Shërbimet",
+    "navAbout": "Rreth meje",
+    "short": "Kërko"
+  },
+  "hero": {
+    "kicker": "KOS — INXHINIER · DIZAJNER · NDËRTUES PRODUKTESH",
+    "headline": "Ndërtoj sistemet,\nndërfaqet,\ndhe mjetet që qëndrojnë poshtë tyre.",
+    "lede": "Elios Mernica — nga skica e parë në produksion. Dizajn, frontend, backend dhe IA në një palë duar.",
+    "ctaWork": "Shiko punën",
+    "ctaHire": "Më punëso",
+    "proofLine": "9 produkte të dërguara — Genpact Hackathon (vendi i 3-të) · Eltrix Cloud (vendi i 1-rë IA)",
+    "aplImageAlt": "A++(APL) — pamje e transpiluesit live",
+    "aplCaption": "një gjuhë programimi me sintaksë shqipe",
+    "aplLinkLabel": "Hap studimin e rastit A++(APL)"
+  },
+  "work": {
+    "kicker": "01 — Puna",
+    "title": "Punë të zgjedhura.",
+    "count": "{count} produkte, të dërguara nga fillimi deri në fund"
+  },
+  "ticker": {
+    "line": "Genpact Hackathon — vendi i 3-të · Eltrix Cloud — vendi i 1-rë (IA) · A++(APL) — Sintaksë shqipe · 9 produkte të dërguara · Kosovë → Botë"
+  },
+  "showcase": {
+    "kicker": "Puna nga afër",
+    "openCaseStudy": "Hap studimin e rastit"
   }
 }

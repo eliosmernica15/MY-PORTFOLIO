@@ -1,217 +1,186 @@
 "use client";
 
-import React, { useState, useEffect, lazy, Suspense, useMemo } from "react";
-import { ArrowUpRight, Globe, Zap, ArrowDown } from "lucide-react";
-import { SITE } from "@/data/site";
-import AnimatedCounter from "./AnimatedCounter";
-import AdvancedButton from "./ui/AdvancedButton";
-import { useTypingEffect } from "@/hooks/useTypingEffect";
-import { useDeviceProfile } from "@/hooks/useDeviceProfile";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useT } from "@/i18n/LocaleProvider";
-import { NowWidget } from "./NowWidget";
 
-const LazySplineScene = lazy(() => import("./SplineScene"));
-const LazyParticleCanvas = lazy(() => import("./ParticleCanvas"));
-
+/**
+ * The paper masthead — an editorial opening scene.
+ * Kicker → masked headline lines (terracotta italic with a drawing
+ * underline) → lede → artwork wipe → CTAs → proof line.
+ * All transform/opacity; reduced-motion users get an instant page.
+ */
 const Hero: React.FC = () => {
   const t = useT();
-  const profile = useDeviceProfile();
-  const prefersReducedMotion = useReducedMotion();
-  const [loadEffects, setLoadEffects] = useState(false);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    if (!profile.enable3D && !profile.enableHeavyEffects) return;
-    if (prefersReducedMotion) return;
+    // Kick the entrance on the next frame so the SSR paint happens first.
+    const id = window.requestAnimationFrame(() => setInView(true));
+    return () => window.cancelAnimationFrame(id);
+  }, []);
 
-    let cancelled = false;
-    const run = () => {
-      if (!cancelled) setLoadEffects(true);
-    };
-    const delay = profile.enable3D ? 500 : 900;
-    const id =
-      typeof requestIdleCallback !== "undefined"
-        ? requestIdleCallback(run, { timeout: delay + 400 })
-        : window.setTimeout(run, delay);
+  const scrollTo = (id: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
-    return () => {
-      cancelled = true;
-      if (typeof cancelIdleCallback !== "undefined")
-        cancelIdleCallback(id as number);
-      else clearTimeout(id as number);
-    };
-  }, [profile.enable3D, profile.enableHeavyEffects, prefersReducedMotion]);
-
-  const heroPhrases = useMemo(
-    () => [
-      t("hero.typedPhrases.0"),
-      t("hero.typedPhrases.1"),
-      t("hero.typedPhrases.2"),
-      t("hero.typedPhrases.3"),
-    ],
-    [t],
-  );
-  const typedText = useTypingEffect(heroPhrases, 70, 35, 2200);
+  const headline = t("hero.headline").split("\n");
+  const fade = (d: number) => ({ "--d": `${d}ms` }) as React.CSSProperties;
 
   return (
     <section
       id="home"
-      className="relative pt-28 sm:pt-32 md:pt-40 lg:pt-44 pb-16 sm:pb-20 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden min-h-[100dvh] sm:min-h-screen flex flex-col justify-center z-[1]"
+      aria-label={t("hero.kicker")}
+      className={`hero relative overflow-hidden px-5 sm:px-8 pt-24 sm:pt-28 pb-14 sm:pb-20 ${
+        inView ? "hero-in" : ""
+      }`}
     >
-      {loadEffects && profile.enable3D && (
-        <div className="absolute inset-0 z-0">
-          <Suspense fallback={null}>
-            <LazySplineScene />
-          </Suspense>
-        </div>
-      )}
-
-      {loadEffects && profile.enableHeavyEffects && (
-        <div className="absolute inset-0 pointer-events-none z-[1]">
-          <Suspense fallback={null}>
-            <LazyParticleCanvas />
-          </Suspense>
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
-        <div
-          className="lg:col-span-8 p-6 sm:p-10 md:p-14 lg:p-16 rounded-[2rem] sm:rounded-[2.5rem] lg:rounded-[3rem] relative overflow-hidden flex flex-col justify-end min-h-[360px] sm:min-h-[420px] md:min-h-[480px] lg:min-h-[520px] animate-fade-up"
-          style={{
-            backgroundColor: "var(--hero-card-bg)",
-            border: "1px solid var(--border)",
-          }}
-        >
-          <div className="absolute top-4 right-4 sm:top-10 sm:right-10 status-live whitespace-nowrap">
-            <span className="status-live-dot" aria-hidden />
-            {t("hero.available")}
-          </div>
-
-          <div className="relative z-10">
-            <p
-              className="text-xs font-bold uppercase tracking-[0.3em] mb-6"
-              style={{ color: "var(--accent-light)" }}
-            >
-              {t("hero.subtitle")}
-            </p>
-
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter mb-6 sm:mb-8 leading-[0.9]">
-              {SITE.name.split(" ").map((word, i) => (
-                <span
-                  key={word + i}
-                  className="text-gradient inline-block mr-2 sm:mr-3 md:mr-4"
-                >
-                  {word}
-                  {i === SITE.name.split(" ").length - 1 ? "." : ""}
-                </span>
-              ))}
-            </h1>
-
-            <p
-              className="max-w-lg text-base sm:text-lg md:text-xl leading-relaxed mb-8 sm:mb-10 font-light"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              {t("hero.specializing")}{" "}
-              <span className="text-[var(--accent-light)] font-medium">
-                {typedText}
-              </span>
-              <span className="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 animate-pulse align-middle" />
-            </p>
-
-            <div className="flex flex-wrap gap-3 sm:gap-4">
-              <AdvancedButton
-                variant="primary"
-                size="lg"
-                iconRight={<ArrowUpRight size={18} />}
-                onClick={() =>
-                  document
-                    .getElementById("projects")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                {t("hero.viewShowcase")}
-              </AdvancedButton>
-              <AdvancedButton
-                variant="secondary"
-                size="lg"
-                onClick={() =>
-                  document
-                    .getElementById("contact")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                {t("hero.contactMe")}
-              </AdvancedButton>
-            </div>
-
-            <div className="mt-12">
-              <NowWidget />
-            </div>
-          </div>
-        </div>
-
-        <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
-          <div
-            className="p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] flex flex-col justify-between group hover:shadow-accent animate-fade-up"
-            style={{
-              animationDelay: "0.1s",
-              backgroundColor: "var(--hero-card-bg)",
-              border: "1px solid var(--border)",
-            }}
+      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 lg:grid-cols-12">
+        {/* Statement */}
+        <div className="lg:col-span-7">
+          <p
+            className="hero-fade font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.4em] text-[var(--accent)]"
+            style={fade(0)}
           >
-            <div
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-accent"
+            {t("hero.kicker")}
+          </p>
+
+          <h1 className="font-display mt-5 sm:mt-7 font-semibold leading-[0.98] tracking-[-0.02em] text-[var(--text-primary)] text-[clamp(2.7rem,9.2vw,6.75rem)]">
+            <span className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
+              <span
+                className="hero-line-inner block"
+                style={{ transitionDelay: "80ms" }}
+              >
+                {headline[0]}
+              </span>
+            </span>
+            <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
+              <span
+                className="hero-line-inner block italic"
+                style={{ transitionDelay: "170ms", color: "var(--accent)" }}
+              >
+                <span
+                  className="hero-underline-draw"
+                  style={{ "--line-delay": "680ms" } as React.CSSProperties}
+                >
+                  {headline[1]}
+                </span>
+              </span>
+            </span>
+            <span className="block overflow-hidden pb-[0.14em] -mb-[0.14em]">
+              <span
+                className="hero-line-inner block"
+                style={{ transitionDelay: "260ms" }}
+              >
+                {headline[2]}
+              </span>
+            </span>
+          </h1>
+
+          <p
+            className="hero-fade mt-6 sm:mt-8 max-w-md text-[15px] sm:text-lg leading-snug"
+            style={{ ...fade(380), color: "var(--text-secondary)" }}
+          >
+            {t("hero.lede")}
+          </p>
+
+          <div
+            className="hero-fade mt-8 sm:mt-10 flex flex-wrap items-center gap-x-6 gap-y-4"
+            style={fade(480)}
+          >
+            <a
+              href="#work"
+              onClick={scrollTo("work")}
+              className="btn-lift inline-flex items-center gap-2 rounded-full px-6 py-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] text-[var(--bg-primary)]"
+              style={{ background: "var(--text-primary)" }}
+            >
+              {t("hero.ctaWork")}
+              <ArrowDown
+                size={13}
+                strokeWidth={2.5}
+                aria-hidden
+                className="arrow-nudge"
+              />
+            </a>
+            <a
+              href="#contact"
+              onClick={scrollTo("contact")}
+              className="link-draw inline-flex items-center gap-1.5 font-bold text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[var(--text-primary)]"
+            >
+              {t("hero.ctaHire")}
+              <ArrowUpRight
+                size={14}
+                strokeWidth={2.5}
+                aria-hidden
+                className="arrow-nudge"
+                style={{ color: "var(--accent)" }}
+              />
+            </a>
+          </div>
+
+          <p
+            className="hero-fade mt-10 sm:mt-12 font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.28em] text-[var(--text-muted)]"
+            style={fade(590)}
+          >
+            {t("hero.proofLine")}
+          </p>
+        </div>
+
+        {/* One proof — wipes open */}
+        <figure className="lg:col-span-5">
+          <Link
+            href="/project/apl"
+            className="hero-figure panel-frame group block"
+            style={
+              {
+                "--fig-delay": "300ms",
+              } as React.CSSProperties
+            }
+            aria-label={t("hero.aplLinkLabel")}
+          >
+            <div className="window-chrome">
+              <span className="window-dot" />
+              <span className="window-dot" />
+              <span className="window-dot" />
+              <span className="window-title">apl.sh — live</span>
+            </div>
+            <div className="overflow-hidden" style={{ background: "#0d0d0f" }}>
+              <Image
+                src="/projects/apl.png"
+                alt={t("hero.aplImageAlt")}
+                width={1200}
+                height={900}
+                sizes="(min-width: 1024px) 560px, 100vw"
+                priority
+                className="aspect-[4/3] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+              />
+            </div>
+            <figcaption
+              className="flex items-baseline justify-between gap-4 border-t px-4 py-3"
               style={{
-                backgroundColor: "var(--glass-accent-bg)",
-                color: "var(--accent)",
+                borderColor: "var(--border)",
+                background: "var(--bg-card)",
               }}
             >
-              <Globe size={22} className="sm:w-6 sm:h-6" />
-            </div>
-            <div className="mt-8 sm:mt-12">
-              <h3
-                className="text-xl sm:text-2xl font-black mb-2"
-                style={{ color: "var(--text-primary)" }}
+              <span
+                className="flex items-center gap-2 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.3em]"
+                style={{ color: "var(--accent)" }}
               >
-                {t("hero.location")}
-              </h3>
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: "var(--text-muted)" }}
+                <span className="status-dot" aria-hidden />
+                A++(APL) — 2026
+              </span>
+              <span
+                className="truncate text-[10px] sm:text-[11px]"
+                style={{ color: "var(--text-secondary)" }}
               >
-                {t("hero.remoteAvailable")}
-              </p>
-            </div>
-          </div>
-
-          <div
-            className="p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] bg-[var(--accent)] text-[var(--accent-contrast)] flex flex-col justify-between shadow-accent overflow-hidden relative group animate-fade-up"
-            style={{ animationDelay: "0.18s" }}
-          >
-            <div className="relative z-10">
-              <h3 className="text-5xl sm:text-6xl font-black tracking-tighter">
-                <AnimatedCounter target={4} suffix="+" />
-              </h3>
-            </div>
-            <p className="font-bold text-[10px] sm:text-xs uppercase tracking-widest opacity-70 mt-6 sm:mt-10 relative z-10">
-              {t("hero.yearsOfGrowth")}
-            </p>
-            <Zap
-              size={140}
-              className="absolute -bottom-6 -right-6 sm:-bottom-8 sm:-right-8 opacity-10 group-hover:rotate-12 transition-transform duration-1000 w-[100px] h-[100px] sm:w-[140px] sm:h-[140px] lg:w-[180px] lg:h-[180px]"
-              fill="currentColor"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="flex justify-center mt-12 relative z-10">
-        <div
-          className="scroll-indicator w-8 h-12 rounded-full flex items-center justify-center"
-          style={{ border: "1px solid var(--border)" }}
-        >
-          <ArrowDown size={14} style={{ color: "var(--text-muted)" }} />
-        </div>
+                {t("hero.aplCaption")}
+              </span>
+            </figcaption>
+          </Link>
+        </figure>
       </div>
     </section>
   );

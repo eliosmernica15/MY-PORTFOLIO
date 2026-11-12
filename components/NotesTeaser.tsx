@@ -1,14 +1,17 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { RevealSection } from "@/components/RevealSection";
-import { formatDate, formatReadTime } from "@/lib/format";
-import { useT, useLocale } from "@/i18n/LocaleProvider";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { getNotes } from "@/data/i18n";
+import { useT, useLocale } from "@/i18n/LocaleProvider";
+import { formatDate, formatReadTime } from "@/lib/format";
+import { Reveal } from "./motion/Reveal";
 
-export function NotesTeaser() {
+/**
+ * Notes — an index, not a blog feed. Rows cascade in; arrows nudge.
+ */
+const NotesTeaser: React.FC = () => {
   const t = useT();
   const locale = useLocale();
   const intl = locale === "sq" ? "sq" : "en-US";
@@ -17,61 +20,84 @@ export function NotesTeaser() {
   return (
     <section
       id="notes"
-      className="py-20 sm:py-24 lg:py-28 px-4 sm:px-6 max-w-7xl mx-auto content-auto relative z-[1]"
+      aria-labelledby="notes-heading"
+      className="border-t px-5 sm:px-8 py-16 sm:py-20 scroll-mt-24"
+      style={{ borderColor: "var(--border)" }}
     >
-      <RevealSection>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <SectionHeader
-            eyebrow={t("notes.blog") ?? t("notes.title")}
-            title={t("notes.teaserHeading")}
-            className="!mb-0"
-          />
+      <div className="mx-auto max-w-6xl">
+        <div
+          className="flex items-end justify-between gap-6 border-b pb-5"
+          style={{ borderColor: "var(--border)" }}
+        >
+          <div>
+            <Reveal
+              as="p"
+              variant="rise"
+              className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.4em] text-[var(--accent)]"
+            >
+              {t("notes.blog")}
+            </Reveal>
+            <h2
+              id="notes-heading"
+              className="font-display mt-2 text-4xl sm:text-6xl font-semibold tracking-[-0.02em] text-[var(--text-primary)]"
+            >
+              <Reveal as="span" variant="mask" delay={90}>
+                {t("notes.teaserHeading")}
+              </Reveal>
+            </h2>
+          </div>
           <Link
             href="/notes"
-            className="text-[10px] font-bold uppercase tracking-[0.3em] flex items-center gap-2 transition-colors hover:text-[var(--accent-light)]"
-            style={{ color: "var(--text-muted)" }}
+            className="interactive-btn link-draw shrink-0 inline-flex items-center gap-1.5 font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em]"
+            style={{ color: "var(--accent)" }}
           >
-            {t("notes.readMore")} <ArrowUpRight size={12} />
+            {t("notes.viewAll")}
+            <ArrowRight
+              size={13}
+              strokeWidth={2.25}
+              aria-hidden
+              className="arrow-nudge"
+            />
           </Link>
         </div>
-      </RevealSection>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {latest.map((n, idx) => (
-          <RevealSection key={n.slug} delay={idx * 0.05}>
-            <Link
-              href={`/notes/${n.slug}`}
-              className="block p-6 rounded-2xl border transition-colors h-full hover:border-[var(--border-hover)]"
-              style={{
-                background: "var(--bg-card)",
-                borderColor: "var(--border)",
-              }}
-              data-cursor-hover
-            >
-              <div
-                className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest mb-3"
-                style={{ color: "var(--text-muted)" }}
-              >
-                <time dateTime={n.date}>{formatDate(n.date, intl)}</time>
-                <span>·</span>
-                <span>{formatReadTime(n.readMin, intl)}</span>
-              </div>
-              <h3
-                className="text-xl font-black tracking-tight mb-2 leading-snug"
-                style={{ color: "var(--text-primary)" }}
-              >
-                {n.title}
-              </h3>
-              <p
-                className="text-sm leading-relaxed line-clamp-3"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                {n.summary}
-              </p>
-            </Link>
-          </RevealSection>
-        ))}
+        <ol>
+          {latest.map((note, i) => (
+            <li key={note.slug}>
+              <Reveal variant="slide" delay={i * 80}>
+                <Link
+                  href={`/notes/${note.slug}`}
+                  className="group row-accent grid grid-cols-[1fr_auto] sm:grid-cols-[9rem_1fr_auto] items-baseline gap-3 sm:gap-6 border-b py-5 pl-4 sm:pl-5 pr-2 sm:pr-4 transition-colors hover:bg-[var(--pill-bg)]"
+                  style={{ borderColor: "var(--border)" }}
+                >
+                  <span className="hidden sm:block font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">
+                    {formatDate(note.date, intl)}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="font-display block text-lg sm:text-2xl font-semibold leading-snug tracking-tight text-[var(--text-primary)] transition-colors group-hover:text-[var(--accent)]">
+                      {note.title}
+                    </span>
+                    <span className="mt-1 block font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-[var(--text-muted)] sm:hidden">
+                      {formatDate(note.date, intl)} ·{" "}
+                      {formatReadTime(note.readMin, intl)}
+                    </span>
+                  </span>
+                  <span className="hidden sm:flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--text-muted)]">
+                    {formatReadTime(note.readMin, intl)}
+                    <ArrowUpRight
+                      size={13}
+                      aria-hidden
+                      className="arrow-nudge"
+                    />
+                  </span>
+                </Link>
+              </Reveal>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );
-}
+};
+
+export default NotesTeaser;

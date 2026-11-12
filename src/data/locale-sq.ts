@@ -6,96 +6,45 @@
  */
 import type { Project, Note } from "@/types";
 
+/** Renditja: më i riu i pari (sipas CV-së). */
 export const SQ_PROJECTS: Project[] = [
   {
-    id: "esmp",
-    title: "ESMP",
-    category: "Zhvillim Web",
+    id: "genpact-hackathon-2026",
+    title: "Genpact Hackathon 2026",
+    category: "IA & Shëndetësi",
     description:
-      "Sistemi operativ i tregut për bizneset moderne — vitrinë, pagesa, faturime dhe analiza në një vend.",
+      "Triage diagnostik AI i nivelit ndërmarrësor — regjistra në transmetim, FHIR, mbështetje vendimmarrjeje nën sekondë.",
     longDescription:
-      "ESMP është sistemi operativ për mikro-biznese, agjenci dhe ofrues shërbimesh. Ai unifikon menaxhimin e vitrinës, pagesat, faturimet dhe analizat në një panel të vetëm të shpejtë dhe të rafinuar. Faqe ulëse e produktit dhe ndërfaqja e produktit shfaqin një dizajn monokrom të pastër me pamje të shtresuara të panelit, ndërrim temash dhe modele UX të nivelit ndërmarrës të ndërtuara për shpejtësi.",
-    image: "/projects/esmp.png",
-    link: "https://esmp-cloud.vercel.app/",
-    color: "#171717",
-    tech: ["React", "TypeScript", "Vite", "Tailwind CSS", "Vercel"],
+      "Genpact Hackathon 2026 (Kosovë) — Vendi i 3-të. Një platformë diagnostike e nivelit ndërmarrësor me IA për triage të kujdesit shëndetësor, me marrjen e regjistrave klinikë në transmetim, pajtueshmëri FHIR dhe mbështetje vendimmarrjeje nën sekondë. Ndërtuar gjatë hackathonit nga fillimi deri në fund: pipeline i marrjes së të dhënave, integrimi i modelit të triage-it, UI për mjekët dhe një vendosje e dockerizuar.",
+    image: "/projects/genpact-hackathon-2026.svg",
+    link: "",
+    color: "#1a1611",
+    tech: ["Python", "FastAPI", "React", "PostgreSQL", "LLMs", "Docker"],
     year: "2026",
+    awards: ["Vendi i 3-të — Genpact Hackathon 2026, Kosovë"],
     challenge:
-      "Unifikimi i vitrinës, pagesave, faturimeve dhe analizave në një panel të vetëm të shpejtë",
-    outcome: "Një OS tregu ndërmarrës i rafinuar, i përdorur në mbi 120 vende",
-    role: "Inxhinier produkti (i vetëm)",
-    duration: "4 muaj",
-    metrics: [
-      { label: "TTFB", value: "<200", suffix: "ms" },
-      { label: "Lighthouse", value: "98", suffix: "/100" },
-      { label: "Bundle", value: "92", suffix: "KB" },
-    ],
-    highlights: [
-      "Panel i vetëm OS për SMB",
-      "Stripe + faturim + analiza",
-      "Ndërrim temash sipas preferencës së sistemit",
-      "120+ vende të mbështetura",
-    ],
-    techRationale: [
-      {
-        name: "React",
-        reason: "Modeli i komponentëve përputhet 1:1 me strukturën e panelit.",
-      },
-      {
-        name: "Vite",
-        reason:
-          "Cikli i zhvillimit nën sekondë për iterim të shpejtë të UI-së.",
-      },
-      {
-        name: "Tailwind CSS",
-        reason: "Tokena dizajnesh si klasa — tematizim i lehtë.",
-      },
-    ],
-  },
-  {
-    id: "apl",
-    title: "A++(APL)",
-    category: "Zhvillim Web",
-    description:
-      "Gjuhë programimi në shqip me sintaksë natyrale — kompilon në Python, React dhe FastAPI.",
-    longDescription:
-      "A++(APL) është një gjuhë programimi e shkruar në shqip që lexohet si gjuhë natyrale. Platforma përfshin një demo transpiluesi live, një playground interaktiv, mjete CLI dhe dokumentacion të plotë. Zhvilluesit shkruajnë skedarë .apl me sintaksë të thjeshtë shqipe dhe kompilojnë në Python, React TSX ose FastAPI me një komandë të vetme — me hot reload, një arkitekturë CIL dhe instalues ndër-platform.",
-    image: "/projects/apl.png",
-    link: "https://aplplus.vercel.app/",
-    color: "#e879f9",
-    tech: ["Python", "React", "FastAPI", "TypeScript", "Vite", "CIL"],
-    year: "2026",
-    challenge:
-      "T’u mundësosh zhvilluesve të shkruajnë kod në shqip dhe të kompilojnë në objektiva kryesore (Python, React, FastAPI)",
+      "Triage i regjistrave klinikë të çfarëdo vëllimi deri te rekomandime të shpjegueshme dhe nën sekondë për mjekët",
     outcome:
-      "Një transpilues live me arkitekturë CIL, një playground dhe një zinxhir mjetesh CLI",
-    role: "Dizajnues, inxhinier kompiluesi dhe inxhinier produkti",
-    duration: "5 muaj",
-    metrics: [
-      { label: "Objektiva", value: "3", suffix: "" },
-      { label: "Koha e leximit", value: "<12", suffix: "ms" },
-      { label: "Dokumente", value: "40+", suffix: "faqe" },
-    ],
+      "Një pipeline triage FHIR-i në transmetim me mbështetje vendimmarrjeje nën sekondë, nga zero në demo pune gjatë hackathonit",
+    role: "Arkitekt sistemesh IA & inxhinier full-stack",
+    duration: "Hackathon",
+    metrics: [{ label: "Renditja", value: "3-të", suffix: "" }],
     highlights: [
-      "Sintaksë shqipe në gjuhë natyrale",
-      "Zinxhir kompiluesi i bazuar në CIL",
-      "Backend-e Python / React / FastAPI",
-      "Playground live në shfletues",
+      "Vendi i 3-të, Genpact Hackathon 2026 (Kosovë)",
+      "Marrje e regjistrave klinikë në transmetim, e përputhshme me FHIR",
+      "Mbështetje vendimmarrjeje diagnostike nën sekondë",
+      "Inxhinieruar nga fillimi deri në fund gjatë hackathonit",
     ],
     techRationale: [
-      {
-        name: "Python",
-        reason: "Ekosistemi më i mirë për mjete gjuhe dhe manipulim AST.",
-      },
       {
         name: "FastAPI",
         reason:
-          "Mënyra më e shpejtë për një API transpileje të qëndrueshëm për playground-in.",
+          "Runtime async i përshtatshëm për transmetim për pipeline-in e regjistrave.",
       },
       {
-        name: "React",
+        name: "PostgreSQL",
         reason:
-          "Jep rezultatet e transpilimit live dhe faqen e dokumentacionit.",
+          "Ruajtje klinike e qëndrueshme me JSONB për payload-et e ndryshueshme.",
       },
     ],
   },
@@ -109,7 +58,7 @@ export const SQ_PROJECTS: Project[] = [
       "EM Motors është një faqe interaktive me performancë të lartë për shfaqjen e makinave. Ajo shfaq një dizajn modern të ndërtuar me HTML, CSS, JavaScript dhe Bootstrap, duke siguruar një përvojë përdoruesi responzive dhe angazhuese në të gjitha pajisjet. Platforma ofron listime të detajuara makinash, animacione të buta dhe një ndërfaqe intuitive.",
     image: "/projects/em-motors.png",
     link: "https://em-motors.vercel.app/",
-    color: "#3b82f6",
+    color: "#262626",
     tech: ["HTML", "CSS", "JavaScript", "Bootstrap"],
     year: "2026",
     challenge:
@@ -118,11 +67,7 @@ export const SQ_PROJECTS: Project[] = [
       "Një faqe e rafinuar dhe e shpejtë me animacione të buta dhe listime të detajuara mjetesh",
     role: "Inxhinier frontend i vetëm",
     duration: "3 javë",
-    metrics: [
-      { label: "LCP", value: "1.1", suffix: "s" },
-      { label: "CLS", value: "0", suffix: "" },
-      { label: "Faqe", value: "8", suffix: "" },
-    ],
+    metrics: [],
     highlights: [
       "Layout responziv mobile-first",
       "Listime dinamike mjetesh",
@@ -141,18 +86,244 @@ export const SQ_PROJECTS: Project[] = [
     ],
   },
   {
+    id: "eltrix-cloud",
+    title: "Eltrix Cloud",
+    category: "IA & Cloud",
+    description:
+      "Platformë e shpërndarë për përmbajtje kreative — Claude API, RAG me LangChain & LangGraph, indeksim semantik pgvector.",
+    longDescription:
+      "Eltrix Cloud është një platformë e shpërndarë për krijimin e përmbajtjes, e fuqizuar nga Anthropic Claude API, LangChain dhe LangGraph, me indeksim semantik pgvector dhe rrjedha pune automatike RAG. Kombinon gjenerimin e përmbajtjes së asistuar nga IA, ruajtje të sigurt cloud, mjete bashkëpunimi në kohë reale dhe një UI premium me pamje 3D.",
+    image: "/projects/eltrix-cloud.png",
+    link: "https://eltrixcloud.netlify.app/",
+    color: "#232323",
+    tech: [
+      "FastAPI",
+      "Python",
+      "React",
+      "TypeScript",
+      "LangChain",
+      "Claude API",
+      "PostgreSQL",
+    ],
+    year: "2025",
+    awards: ["Vendi i 1-rë (IA) — Innovation Academy Hackathon, Qershor 2025"],
+    challenge:
+      "Kombinimi i mjeteve të përmbajtjes IA, ndarjes së skedarëve dhe menaxhimit të aseteve në një UI premium",
+    outcome:
+      "Një platformë e shpërndarë për përmbajtje kreative me RAG automatik — fituese, Innovation Academy Hackathon, Qershor 2025",
+    role: "Inxhinier produkti i vetëm",
+    duration: "Hackathon — Qershor 2025",
+    metrics: [],
+    highlights: [
+      "Vendi i 1-rë (IA) — Innovation Academy Hackathon, Qershor 2025",
+      "Claude API + LangChain & LangGraph agjentë",
+      "Indeksim semantik pgvector",
+      "Rrjedha pune përmbajtjeje me RAG automatik",
+      "Pamje 3D dhe ndërveprime të buta",
+    ],
+    techRationale: [
+      {
+        name: "Claude API",
+        reason:
+          "Modeli më i mirë i klasës për arsyetim përmbajtjeje brenda pipeline-eve RAG.",
+      },
+      {
+        name: "pgvector",
+        reason:
+          "Gjetja semantike për asete dhe përmbajtje të gjeneruar — brenda Postgres.",
+      },
+      {
+        name: "LangChain / LangGraph",
+        reason:
+          "Graph RAG dhe agjentë të përbëshëm, të inspektuar me hapa human-in-the-loop.",
+      },
+    ],
+  },
+  {
+    id: "flixverse",
+    title: "FlixVerse",
+    category: "Zhvillim Web",
+    description:
+      "Një platformë transmetimi premium me zbulim përmbajtjeje në kohë reale dhe UI zhytëse.",
+    longDescription:
+      "FlixVerse është një platformë transmetimi e plotë e frymëzuar nga Netflix, e ndërtuar me fokus në performancë dhe përvojë përdoruesi. Ajo ofron karusele dinamike përmbajtjeje, kërkim në kohë reale me autoplotësim, autentikim përdoruesish, menaxhim liste vëzhgimi dhe riprodhim video të gatshme për HD. UI-ja jep një ndjesi kinematografike me animacione të buta dhe paraqitje responzive në të gjitha pajisjet.",
+    image: "/flixverse-hero.png",
+    link: "https://flixverse-streaming-pro.vercel.app/",
+    color: "#191919",
+    tech: ["React", "TypeScript", "TMDB API", "Tailwind CSS", "Vercel"],
+    year: "2025",
+    challenge:
+      "Krijimi i një përvoje transmetimi kinematografike me zbulim përmbajtjeje në kohë reale",
+    outcome:
+      "Një UI transmetimi me ndjesi premium me karusele, kërkim të menjëhershëm dhe listë vëzhgimi",
+    role: "Inxhinier produkti i vetëm",
+    duration: "5 javë",
+    metrics: [{ label: "Katalog", value: "10k+", suffix: "tituj" }],
+    highlights: [
+      "Karusele dinamike përmbajtjeje",
+      "Kërkim i menjëhershëm me autoplotësim",
+      "Menaxhim liste vëzhgimi",
+      "Riprodhim i gatshëm për HD",
+    ],
+    techRationale: [
+      {
+        name: "TMDB API",
+        reason: "Metadata të pasura dhe CDN poster-ash jashtë kutisë.",
+      },
+      {
+        name: "Tailwind CSS",
+        reason: "Tema e errët kinematografike me hapësirë konsistente.",
+      },
+    ],
+  },
+  {
+    id: "apl",
+    title: "A++(APL)",
+    category: "Gjuhë & Vegla",
+    description:
+      "Gjuhë programimi e shkruar në shqip — lexohet si gjuhë natyrale; transpiluesi live i asistuar nga IA, analizues AST dhe sandbox i kontejnerizuar.",
+    longDescription:
+      "A++(APL) është një gjuhë programimi e shkruar në shqip që lexohet si gjuhë natyrale. Platforma përfshin një demo transpiluesi live të asistuar nga IA, një analizues AST, një playground interaktiv web, një sandbox ekzekutimi të kontejnerizuar të sigurt dhe një zinxhir mjetesh CLI. Zhvilluesit shkruajnë skedarë .apl me sintaksë të thjeshtë shqipe dhe kompilojnë në Python ose në TypeScript me një komandë të vetme.",
+    image: "/projects/apl.png",
+    link: "https://aplplus.vercel.app/",
+    color: "#2e2e2e",
+    tech: ["Python", "FastAPI", "React", "Node.js", "WebGL"],
+    year: "2024 – 2025",
+    challenge:
+      "T’u mundësosh zhvilluesve të shkruajnë kod në shqip dhe të kompilojnë në objektiva kryesore (Python, React, FastAPI)",
+    outcome:
+      "Një transpilues live me arkitekturë CIL, një playground dhe një zinxhir mjetesh CLI",
+    role: "Dizajnues, inxhinier kompiluesi dhe inxhinier produkti",
+    duration: "5 muaj",
+    metrics: [{ label: "Objektiva", value: "3", suffix: "" }],
+    highlights: [
+      "Transpiluesi live i asistuar nga IA",
+      "Analizues AST + pipeline kompiluesi CIL",
+      "Playground interaktiv web",
+      "Zinxhir mjetesh CLI",
+      "Sandbox ekzekutimi i kontejnerizuar",
+    ],
+    techRationale: [
+      {
+        name: "Python",
+        reason: "Ekosistemi më i mirë për mjete gjuhe dhe manipulim AST.",
+      },
+      {
+        name: "WebGL",
+        reason:
+          "Renderim i përshpejtuar nga hardware për playground-in live dhe pamjet e diagnostikimit.",
+      },
+      {
+        name: "FastAPI",
+        reason:
+          "Mënyra më e shpejtë për një API transpileje të qëndrueshëm për playground-in.",
+      },
+    ],
+  },
+  {
+    id: "esmp",
+    title: "ESMP",
+    category: "OS i tregtisë",
+    description:
+      "Infrastrukturë tregtie me shpejtësi të lartë — analitikë në transmetim, faturim në nivel ledger dhe bllokim i shpërndarë i inventarit.",
+    longDescription:
+      "ESMP është infrastruktura e tregtisë me shpejtësi të lartë. Unifikon menaxhimin e vitrinës, faturimin automatik në nivel ledger, analitikën në transmetim në kohë reale dhe bllokimin e shpërndarë të inventarit në një panel të vetëm — me webhooks të sigurt të Stripe-it që lëvizin paratë nga fillimi në fund.",
+    image: "/projects/esmp.png",
+    link: "https://esmp-cloud.vercel.app/",
+    color: "#171717",
+    tech: ["React", "TypeScript", "Node.js", "PostgreSQL", "MongoDB", "Redis"],
+    year: "2024",
+    challenge:
+      "Unifikimi i vitrinës, pagesave, faturimeve dhe analizave në një panel të vetëm të shpejtë",
+    outcome:
+      "Sistemi operativ i tregtisë ndërmarrëse — vitrina, pagesat, faturimet dhe analizat të unifikuara në një panel të vetëm produktiv",
+    role: "Inxhinier produkti (i vetëm)",
+    duration: "4 muaj",
+    metrics: [],
+    highlights: [
+      "Performancë e lartë e runtime-it të tregtisë",
+      "Analitikë në transmetim në kohë reale",
+      "Faturim automatik në nivel ledger",
+      "Bllokim i shpërndarë i inventarit",
+      "Webhooks të sigurt të Stripe-it",
+    ],
+    techRationale: [
+      {
+        name: "Redis",
+        reason:
+          "Cache të nxehta, kufizim shpejtësie dhe bllokime të shpërndara inventari.",
+      },
+      {
+        name: "PostgreSQL",
+        reason:
+          "E vërteta transaksionale e nivelit ledger — faturim dhe pagesa.",
+      },
+      {
+        name: "Node.js",
+        reason:
+          "Shtresa API e drejtuar nga ngjarjet për transmetimin e analitikës.",
+      },
+    ],
+  },
+  {
+    id: "foodery",
+    title: "Foodery",
+    category: "Dizajn Web",
+    description:
+      "Ekosistem i shkallëzueshëm mikroshërbimesh shpërndarje — panel restoranti, gjurmim GPS live i shoferëve dhe treg konsumatorësh.",
+    longDescription:
+      "Foodery është një ekosistem i shkallëzueshëm mikroshërbimësh për shpërndarjen e ushqimit: një panel reaktiv ekzekutiv për pronarët e restoranteve, një aplikacion shoferësh me gjurmim GPS live WebSocket dhe një treg konsumatorësh. Algoritme gjeohapësinore të rrugëtimit dispeçerësh çiftëzojnë porositë me shoferët; Supabase fuqizon vendndodhjet dhe autentikimin në kohë reale; Postgres mban të vërtetën e porosive.",
+    image: "/projects/project-7.jpg",
+    link: "https://fooderydelivery.netlify.app",
+    color: "#2b2b2b",
+    tech: ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "WebSockets"],
+    year: "2024",
+    challenge:
+      "Ndërtimi i një ekosistemi shpërndarjeje me një panel reaktiv, një aplikacion shoferësh dhe një treg",
+    outcome:
+      "Një ekosistem shpërndarje ushqimi — panel restoranti, aplikacion shoferësh me GPS live dhe treg konsumatorësh",
+    role: "Inxhinier full-stack",
+    duration: "4 muaj",
+    metrics: [{ label: "Rolë", value: "3", suffix: "" }],
+    highlights: [
+      "Panel restoranti reaktiv",
+      "Aplikacion shoferësh me GPS live",
+      "Autentikim shumë-rolësh",
+    ],
+    techRationale: [
+      {
+        name: "Next.js",
+        reason: "SSR + ISR për faqe produkti të shpejta dhe SEO.",
+      },
+      {
+        name: "Supabase",
+        reason: "Abonime në kohë reale për rrjedhën e gjurmimit të shoferëve.",
+      },
+      {
+        name: "Redis",
+        reason: "Cache të ngrohta për meny dhe gjendje porosie.",
+      },
+    ],
+  },
+  {
     id: "forexpulse",
     title: "ForexPulse",
     category: "Zhvillim Web",
     description:
-      "Platformë tregtimi forex dhe prop me kurse live, grafikë, mjete dhe panel.",
+      "Motor telemetrie tregjesh financiare — kurse WebSocket me frekuencë të lartë për 50+ çifte.",
     longDescription:
-      "ForexPulse është një platformë tregtimi e ndërtuar për tregtarët forex dhe prop. Ajo ofron kurse reale forex për 50+ çifte përmes API-së Frankfurter, faqe çiftesh me grafikë të plotë, një faqe Mjetesh me vlerën e pip-it, kalkulator madhësie pozicioni dhe konvertues valutash, plus një panel me snapshot portofoli dhe listë vëzhgimi. Faqe ulëse dhe aplikacioni ndajnë një UI të errët dhe moderne me thekse qelibar — falas për t’u përdorur, me hyrje opsionale për ruajtjen e preferencave.",
+      "ForexPulse është një motor telemetrie tregjesh financiare me ushqime kursesh WebSocket me frekuencë të lartë. 50+ çifte kunreadash me rifreskim 30-sekondësh — kalkulatorë vlerë pip dhe madhësi pozicioni, një faqe Mjetesh dhe një panel liste vëzhgimi.",
     image: "/forexpulse-hero.png",
     link: "https://forexpulse-trading.vercel.app/",
-    color: "#f59e0b",
-    tech: ["HTML", "JavaScript", "Tailwind CSS", "Frankfurter API", "Vercel"],
-    year: "2025",
+    color: "#1f1f1f",
+    tech: [
+      "JavaScript",
+      "React",
+      "Tailwind CSS",
+      "WebSockets",
+      "Frankfurter API",
+    ],
+    year: "2024",
     challenge:
       "T’u japë tregtarëve një vend të vetëm për kurse live, grafikë dhe matematikën e madhësisë së pozicionit",
     outcome:
@@ -182,163 +353,25 @@ export const SQ_PROJECTS: Project[] = [
     ],
   },
   {
-    id: "eltrix-cloud",
-    title: "Eltrix Cloud",
-    category: "Aplikacione",
-    description:
-      "Platformë krijuese me IA për krijim përmbajtjeje, ndarje skedarësh dhe menaxhim asetesh digjitale.",
-    longDescription:
-      "Eltrix Cloud është një platformë gjithë-në-një e fuqizuar nga IA që kombinon krijimin e përmbajtjes, ndarjen e skedarëve dhe menaxhimin e aseteve digjitale në një përvojë të pandërprerë. Ajo ofron gjenerim përmbajtjeje të asistuar nga IA, ruajtje të sigurt cloud, mjete bashkëpunimi në kohë reale dhe një panel intuitiv për menaxhimin e aseteve digjitale. Platforma jep një UI premium dhe zhytëse me pamje 3D dhe ndërveprime të buta.",
-    image: "/projects/eltrix-cloud.png",
-    link: "https://eltrixcloud.netlify.app/",
-    color: "#7c3aed",
-    tech: [
-      "React",
-      "TypeScript",
-      "AI Integration",
-      "Cloud Storage",
-      "Tailwind CSS",
-    ],
-    year: "2025",
-    challenge:
-      "Kombinimi i mjeteve të përmbajtjes IA, ndarjes së skedarëve dhe menaxhimit të aseteve në një UI premium",
-    outcome:
-      "Një platformë e rafinuar dhe zhytëse me pamje 3D dhe rrjedha pune përmbajtjeje të asistuara nga IA",
-    role: "Inxhinier produkti i vetëm",
-    duration: "3 muaj",
-    metrics: [
-      { label: "Mjete IA", value: "6", suffix: "" },
-      { label: "Lloje asetesh", value: "12", suffix: "" },
-      { label: "Skena 3D", value: "4", suffix: "" },
-    ],
-    highlights: [
-      "Gjenerim përmbajtjeje i asistuar nga IA",
-      "Ruajtje e sigurt cloud",
-      "Bashkëpunim në kohë reale",
-      "Pamje 3D dhe ndërveprime të buta",
-    ],
-    techRationale: [
-      {
-        name: "React + TS",
-        reason: "Llojet strikte kapin mospërputhjet e formës IA/aseteve herët.",
-      },
-      {
-        name: "Cloud Storage",
-        reason:
-          "Akses i qëndrueshëm, me URL të nënshkruar për skedarë të mëdhenj mediash.",
-      },
-    ],
-  },
-  {
-    id: "flixverse",
-    title: "FlixVerse",
-    category: "Zhvillim Web",
-    description:
-      "Një platformë transmetimi premium me zbulim përmbajtjeje në kohë reale dhe UI zhytëse.",
-    longDescription:
-      "FlixVerse është një platformë transmetimi e plotë e frymëzuar nga Netflix, e ndërtuar me fokus në performancë dhe përvojë përdoruesi. Ajo ofron karusele dinamike përmbajtjeje, kërkim në kohë reale me autoplotësim, autentikim përdoruesish, menaxhim liste vëzhgimi dhe riprodhim video të gatshme për HD. UI-ja jep një ndjesi kinematografike me animacione të buta dhe paraqitje responzive në të gjitha pajisjet.",
-    image: "/projects/eltrix-finance.png",
-    link: "https://flixverse-streaming-pro.vercel.app/",
-    color: "#e50914",
-    tech: ["React", "TypeScript", "TMDB API", "Tailwind CSS", "Vercel"],
-    year: "2025",
-    challenge:
-      "Krijimi i një përvoje transmetimi kinematografike me zbulim përmbajtjeje në kohë reale",
-    outcome:
-      "Një UI transmetimi me ndjesi premium me karusele, kërkim të menjëhershëm dhe listë vëzhgimi",
-    role: "Inxhinier produkti i vetëm",
-    duration: "5 javë",
-    metrics: [
-      { label: "Katalog", value: "10k+", suffix: "tituj" },
-      { label: "LCP", value: "1.3", suffix: "s" },
-      { label: "Animacione", value: "60", suffix: "fps" },
-    ],
-    highlights: [
-      "Karusele dinamike përmbajtjeje",
-      "Kërkim i menjëhershëm me autoplotësim",
-      "Menaxhim liste vëzhgimi",
-      "Riprodhim i gatshëm për HD",
-    ],
-    techRationale: [
-      {
-        name: "TMDB API",
-        reason: "Metadata të pasura dhe CDN poster-ash jashtë kutisë.",
-      },
-      {
-        name: "Tailwind CSS",
-        reason: "Tema e errët kinematografike me hapësirë konsistente.",
-      },
-    ],
-  },
-  {
-    id: "foodery",
-    title: "Foodery",
-    category: "Dizajn Web",
-    description:
-      "Një platformë gjithëpërfshirëse shpërndarje ushqimi dhe porosie me UI moderne.",
-    longDescription:
-      "Foodery është një ekosistem shpërndarje ushqimi me performancë të lartë, i ndërtuar për shkallë. Ai ofron një panel reaktiv për pronarët e restoranteve, një aplikacion shoferësh me gjurmim GPS në kohë reale dhe një treg konsumatorësh. Sistemi trajton mijëra kërkesa të njëkohshme me kohë përgjigjeje nën 100ms.",
-    image: "/projects/project-7.jpg",
-    link: "https://fooderydelivery.netlify.app",
-    color: "#fbbf24",
-    tech: ["Next.js", "Supabase", "Redis", "Framer Motion", "Tailwind CSS"],
-    year: "2024",
-    challenge:
-      "Ndërtimi i një ekosistemi shpërndarjeje me një panel reaktiv, një aplikacion shoferësh dhe një treg",
-    outcome:
-      "Një platformë me performancë të lartë që trajton mijëra kërkesa të njëkohshme nën 100ms",
-    role: "Inxhinier full-stack",
-    duration: "4 muaj",
-    metrics: [
-      { label: "Latenca p95", value: "<100", suffix: "ms" },
-      { label: "Rolë", value: "3", suffix: "" },
-      { label: "Në kohë reale", value: "po", suffix: "" },
-    ],
-    highlights: [
-      "Panel restoranti reaktiv",
-      "Aplikacion shoferësh me GPS live",
-      "Kohë përgjigjeje nën 100ms",
-      "Autentikim shumë-rolësh",
-    ],
-    techRationale: [
-      {
-        name: "Next.js",
-        reason: "SSR + ISR për faqe produkti të shpejta dhe SEO.",
-      },
-      {
-        name: "Supabase",
-        reason: "Abonime në kohë reale për rrjedhën e gjurmimit të shoferëve.",
-      },
-      {
-        name: "Redis",
-        reason: "Cache të ngrohta për meny dhe gjendje porosie.",
-      },
-    ],
-  },
-  {
     id: "calista",
     title: "Calista",
     category: "Zhvillim Web",
     description:
-      "Përvojë shitjeje e lartë me modele ndërveprimi të personalizuara.",
+      "Portal tregtie luksoze — renderim Three.js i përshpejtuar nga GPU dhe mikro-ndërveprime të personalizuara.",
     longDescription:
-      "Calista ripërkufizon përvojën e blerjeve në internet për modën e lartë. Projekti fokusohet në mikro-ndërveprime, kalime pa ndërprerje dhe dorëzim asetesh me cilësi të lartë. Ai përfshin një integrim custom headless CMS për menaxhimin dinamik të inventarit.",
+      "Calista është një portal tregtie luksoze me performancë të lartë me renderim 3D WebGL të përshpejtuar nga GPU, mikro-ndërveprime të personalizuara, kalime të pandërprera dhe një headless CMS që drejton inventarin dinamik.",
     image: "/projects/project-8.png",
     link: "https://calista-bake.netlify.app",
-    color: "#ec4899",
+    color: "#282828",
     tech: ["React", "Shopify Hydrogen", "Three.js", "GSAP"],
-    year: "2023",
+    year: "2024",
     challenge:
       "Dorëzimi i një vitrine të modës së lartë me mikro-ndërveprime të personalizuara",
     outcome:
       "Një përvojë shitjeje premium me kalime custom dhe integrim headless CMS",
     role: "Inxhinier frontend",
     duration: "2 muaj",
-    metrics: [
-      { label: "Mikro-ndërveprime", value: "20+", suffix: "" },
-      { label: "Skena 3D", value: "3", suffix: "" },
-      { label: "Fusha CMS", value: "40+", suffix: "" },
-    ],
+    metrics: [],
     highlights: [
       "Mikro-ndërveprime të personalizuara",
       "Kalime faqeje pa ndërprerje",

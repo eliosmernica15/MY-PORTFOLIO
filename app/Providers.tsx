@@ -4,6 +4,7 @@ import React from "react";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import Terminal from "@/components/Terminal";
 import AssistantChat from "@/components/AssistantChat";
+import CommandPalette from "@/components/CommandPalette";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 
@@ -65,6 +66,7 @@ export function Providers({
         >
           <AssistantChat />
         </ErrorBoundary>
+        <CommandPalette />
       </ThemeProvider>
     </LocaleProvider>
   );

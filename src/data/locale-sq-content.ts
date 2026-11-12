@@ -1,13 +1,8 @@
 /**
- * Albanian overlay, part 2: notes bodies, testimonials quotes, resume data,
- * and the "Now" pill. Project data lives in locale-sq.ts.
+ * Albanian overlay, part 2: notes bodies, resume data, and the "Now" line.
+ * Project data lives in locale-sq.ts.
  */
-import type {
-  Note,
-  Testimonial,
-  EducationEntry,
-  ExperienceEntry,
-} from "@/types";
+import type { Note, EducationEntry, ExperienceEntry } from "@/types";
 
 // ---------- Notes ----------
 export const SQ_NOTES: Note[] = [
@@ -170,37 +165,3 @@ export const SQ_EXPERIENCE: ExperienceEntry[] = [
 // ---------- Now ----------
 export const SQ_NOW =
   "ESMP v2 + A++(APL) v1.2 në produksion — i hapur për roje me kontratë";
-
-// ---------- Testimonials ----------
-export const SQ_TESTIMONIALS: Testimonial[] = [
-  {
-    name: "Daniel Lewis",
-    role: "Drejtor i Strategjisë së Markës",
-    company: "Northwind Studio",
-    linkedinUrl: "https://www.linkedin.com/in/example-daniel-lewis",
-    text: "Elios u ngarkua të krijonte një identitet korporativ. Është modern, i thjeshtë dhe me një dizajn të bukur që mori shumë komplimente nga kolegët dhe vizitorët. Ishte shumë i kënaqur me punën e kryer. Ka shumë përvojë dhe interesohet thellësisht për nevojat e klientit.",
-    avatar: "/avatars/avatar-1.png",
-  },
-  {
-    name: "Jessica Miller",
-    role: "Menaxhere Projekti",
-    company: "Helios Agency",
-    text: "Puna me Eliosin ka qenë një kënaqësi absolute. Mbeta i impresionuar nga vëmendja e tij ndaj detajeve, aftësitë e tij të dizajnit web dhe qasja profesionale ndaj afateve dhe proceseve tona.",
-    avatar: "/avatars/avatar-2.png",
-  },
-  {
-    name: "Emily Evans",
-    role: "Menaxhere Marketing",
-    company: "Vermilion & Co.",
-    linkedinUrl: "https://www.linkedin.com/in/example-emily-evans",
-    text: "Nuk mund të jem më e kënaqur me faqen që krijoi Elios. Vëmendja e tij ndaj detajeve dhe kreativiteti janë të pashembullt. Klientët tanë komplimentonin shpesh dizajnin, dhe ai ka përmirësuar ndjeshëm imazhin e markës sonë.",
-    avatar: "/avatars/avatar-3.png",
-  },
-  {
-    name: "Henry Williams",
-    role: "Pronar Biznesi",
-    company: "Williams Goods",
-    text: "I mbingarkuar me mendimin e ridizajnimit të dyqanit tim online, por Elios e bëri procesin të pandërprerë. Faqeja nuk është vetëm vizualisht në rregull, por edhe e optimizuar për konvertime. Kam parë një rritje 50% të trafikut që nga lançimi!",
-    avatar: "/avatars/avatar-4.png",
-  },
-];

@@ -109,7 +109,7 @@ function buildSkillEntries(skillCategories) {
         id,
         intent: id,
         weight: 0.5,
-        text: `Skill: ${skill.name} (${cat.name}) — level ${skill.level}/5.`,
+        text: `Skill: ${skill.name} (${cat.name}).`,
         related: [`category_${toIntentId(cat.name)}`],
       });
     }

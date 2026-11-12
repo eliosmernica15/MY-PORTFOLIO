@@ -51,7 +51,42 @@ interface TerminalProps {
   // optional — when not provided, the `theme` command degrades gracefully.
 }
 
+// Module-level constant — never changes identity between renders.
+const STABLE_EXCLUDE_SELECTORS = ["[data-floating-trigger]"];
+
 // ---------- Command map ----------
+
+// Levenshtein distance for closest-command suggestions on unknown input.
+function levenshtein(a: string, b: string): number {
+  const m = a.length;
+  const n = b.length;
+  if (m === 0) return n;
+  if (n === 0) return m;
+  const dp: number[] = Array.from({ length: n + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) {
+    let prev = dp[0];
+    dp[0] = i;
+    for (let j = 1; j <= n; j++) {
+      const tmp = dp[j];
+      dp[j] =
+        a[i - 1] === b[j - 1] ? prev : 1 + Math.min(prev, dp[j], dp[j - 1]);
+      prev = tmp;
+    }
+  }
+  return dp[n];
+}
+
+function closestCommand(name: string, candidates: string[]): string | null {
+  let best: { word: string; distance: number } | null = null;
+  for (const candidate of candidates) {
+    const d = levenshtein(name, candidate);
+    const budget = Math.max(2, Math.floor(name.length / 2));
+    if (d <= budget && (!best || d < best.distance)) {
+      best = { word: candidate, distance: d };
+    }
+  }
+  return best?.word ?? null;
+}
 
 // t is the translator injected from the component. PROJECTS/NOTES keep their
 // original English ids (they are stable handles), not user-facing prose.
@@ -62,6 +97,12 @@ const buildCommands = (
   string,
   { description: string; run: (args: string[]) => CommandOutput }
 > => {
+  const printProjectsList = () => {
+    const lines = PROJECTS.map(
+      (p) => `  ${p.id.padEnd(12)}  ${p.title}  (${p.year})  [${p.category}]`,
+    );
+    return `Projects (${PROJECTS.length}):\n${lines.join("\n")}\n\nTry \`repo <id>\` to open a case study.`;
+  };
   const table: Record<
     string,
     { description: string; run: (args: string[]) => CommandOutput }
@@ -69,13 +110,37 @@ const buildCommands = (
     help: {
       description: t("terminal.commands.help"),
       run: () => {
-        const list = Object.entries(table)
-          .sort(([a], [b]) => a.localeCompare(b))
-          .map(([name, c]) => `  ${name.padEnd(14)}  ${c.description}`)
-          .join("\n");
-        return {
-          output: `${t("terminal.help")}\n${list}\n\n${t("terminal.tip")}`,
-        };
+        const sections: [string, string[]][] = [
+          [t("terminal.helpGroupWork"), ["projects", "repo", "services", "cv"]],
+          [t("terminal.helpGroupAbout"), ["about", "skills", "now", "contact"]],
+          [
+            t("terminal.helpGroupShell"),
+            [
+              "help",
+              "ls",
+              "pwd",
+              "echo",
+              "date",
+              "history",
+              "theme",
+              "open",
+              "clear",
+            ],
+          ],
+          [t("terminal.helpGroupFun"), ["sudo", "matrix", "coffee"]],
+        ];
+        const lines: string[] = [t("terminal.help")];
+        for (const [group, names] of sections) {
+          lines.push("");
+          lines.push(`  ${group}`);
+          for (const name of names) {
+            const cmd = table[name];
+            if (cmd) lines.push(`  ${name.padEnd(10)}  ${cmd.description}`);
+          }
+        }
+        lines.push("");
+        lines.push(t("terminal.tip"));
+        return lines.join("\n");
       },
     },
 
@@ -85,30 +150,22 @@ const buildCommands = (
     },
 
     whoami: {
-      description: t("terminal.commands.sudo"),
+      description: t("terminal.commands.whoami"),
       run: () => "elios@worldwide",
     },
 
     projects: {
       description: t("terminal.commands.projects"),
-      run: () => {
-        const lines = PROJECTS.map(
-          (p) =>
-            `  ${p.id.padEnd(12)}  ${p.title}  (${p.year})  [${p.category}]`,
-        );
-        return `Projects (${PROJECTS.length}):\n${lines.join("\n")}\n\nTry \`repo <id>\` to open a case study.`;
-      },
+      run: () => printProjectsList(),
     },
 
     skills: {
       description: t("terminal.commands.skills"),
       run: () => {
-        const sections = SKILL_CATEGORIES.map((cat) => {
-          const list = cat.skills
-            .map((s) => `    ${s.name.padEnd(28)} ${"●".repeat(s.level)}`)
-            .join("\n");
-          return `[${cat.name}]\n${list}`;
-        });
+        const sections = SKILL_CATEGORIES.map(
+          (cat) =>
+            `[${cat.name}]\n${cat.skills.map((s) => `    ${s.name}`).join("\n")}`,
+        );
         return sections.join("\n\n");
       },
     },
@@ -179,6 +236,16 @@ const buildCommands = (
       run: () => t("terminal.historyHint"),
     },
 
+    ls: {
+      description: t("terminal.commands.ls"),
+      run: () => printProjectsList(),
+    },
+
+    pwd: {
+      description: t("terminal.commands.pwd"),
+      run: () => t("terminal.pwdPath"),
+    },
+
     sudo: {
       description: t("terminal.commands.sudo"),
       run: (args) =>
@@ -188,13 +255,13 @@ const buildCommands = (
     },
 
     matrix: {
-      description: t("terminal.commands.sudo"),
+      description: t("terminal.commands.matrix"),
       run: () =>
         "There is no spoon. There is only the codebase.\n(Tip: the hero has a live particle field — go look.)",
     },
 
     coffee: {
-      description: t("terminal.commands.sudo"),
+      description: t("terminal.commands.coffee"),
       run: () =>
         "I run on espresso and well-named variables. Ratio: 1:3, espresso to variables, on a good day.",
     },
@@ -434,6 +501,30 @@ export default function Terminal({}: TerminalProps = {}) {
   // Keyboard shortcut to toggle the panel (open/close).
   useKeyShortcut({ key: "`", handler: () => setIsOpen((v) => !v) }, true);
 
+  // External toggle (e.g. the ELIOS/OS dock's Terminal app).
+  useEffect(() => {
+    const onToggle = () => setIsOpen((v) => !v);
+    window.addEventListener("elios:terminal-toggle", onToggle);
+    return () => window.removeEventListener("elios:terminal-toggle", onToggle);
+  }, []);
+
+  // Prefill the shell with a command (e.g. from the command palette).
+  // Focuses the input so the visitor can review and press Enter.
+  useEffect(() => {
+    const onPrefill = (event: Event) => {
+      const command = (event as CustomEvent<{ command?: string }>).detail
+        ?.command;
+      if (!command) return;
+      setIsOpen(true);
+      setMinimized(false);
+      setInput(command);
+      window.setTimeout(() => inputRef.current?.focus(), 50);
+    };
+    window.addEventListener("elios:terminal-prefill", onPrefill);
+    return () =>
+      window.removeEventListener("elios:terminal-prefill", onPrefill);
+  }, []);
+
   // Keyboard shortcut to toggle minimize: ⌘/Ctrl+M. Only meaningful on
   // desktop — on mobile the panel is fullscreen, so minimize = close.
   useKeyShortcut(
@@ -484,11 +575,13 @@ export default function Terminal({}: TerminalProps = {}) {
   // page interaction (clicking a project link, a card, etc.) and the
   // session is already preserved by the explicit minimize affordances.
 
+  const activateSound = useCallback(() => play("boot"), []);
+
   const focusTrapRef = useFocusTrap<HTMLDivElement>({
     active: isOpen && !minimized,
-    // Exclude the trigger button from being inert so it remains focusable
-    excludeSelectors: ["[data-floating-trigger]"],
-    onActivate: () => play("boot"),
+    // Exclude the trigger button from being inert so it remains focusable.
+    excludeSelectors: STABLE_EXCLUDE_SELECTORS,
+    onActivate: activateSound,
   });
 
   // Belt-and-suspenders: when `minimized` flips, force the panel's height
@@ -592,12 +685,15 @@ export default function Terminal({}: TerminalProps = {}) {
 
       if (!command) {
         play("error");
+        const suggestion = closestCommand(name, COMMAND_NAMES);
         setMessages((prev) => [
           ...prev,
           {
             id: `b-${ts}`,
             prompt: "",
-            text: t("terminal.unknownCommand", { command: name }),
+            text: suggestion
+              ? t("terminal.didYouMean", { command: name, suggestion })
+              : t("terminal.unknownCommand", { command: name }),
             ts,
           },
         ]);
@@ -617,7 +713,7 @@ export default function Terminal({}: TerminalProps = {}) {
       }
       executeAction(action);
     },
-    [input, setHistory, executeAction],
+    [input, setHistory, executeAction, COMMAND_NAMES, play, t],
   );
 
   const onKeyDown = useCallback(

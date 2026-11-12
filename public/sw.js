@@ -1,14 +1,17 @@
 // Hand-rolled service worker for the Elios Mernica portfolio.
 // Strategies:
-//   - Network-first with cache fallback for HTML navigations (falls back to /offline).
-//     HTML is NOT precached: it carries a per-request CSP nonce, so caching it
-//     would serve stale (and unusable) markup.
-//   - Cache-first for hashed _next/static assets (content-addressed, safe forever).
-//   - No caching for /api/* or anything else.
+//   - Network-first for EVERYTHING; no caching of HTML. HTML carries a
+//     per-request CSP nonce, so caching it would replay stale nonce'd
+//     markup. The ONLY precached page is /offline.html — a static,
+//     dependency-free file with zero framework involvement, so the cached
+//     copy never goes stale across builds or deploys.
+//   - Cache-first exception: content-hashed _next/static assets only.
+//   - Offline fallback: /offline.html for navigations; a plain 504 Response
+//     for everything else. NO fetch promise is allowed to reject.
 // Bump CACHE_VERSION on any strategy change; the activate handler purges old versions.
-const CACHE_VERSION = "v2";
+const CACHE_VERSION = "v6";
 const CACHE = `elios-portfolio-${CACHE_VERSION}`;
-const PRECACHE = ["/offline"];
+const PRECACHE = ["/offline.html"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -40,7 +43,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   const sameOrigin = url.origin === self.location.origin;
 
-  // Never cache API routes or non-GET traffic.
+  // Never cache API routes.
   if (url.pathname.startsWith("/api/")) return;
 
   // Cache-first for hashed Next.js static assets (content-hashed filenames).
@@ -51,52 +54,40 @@ self.addEventListener("fetch", (event) => {
       /\.(?:png|jpg|jpeg|svg|webp|avif|ico|woff2?)$/i.test(url.pathname))
   ) {
     event.respondWith(
-      caches.match(req).then(
-        (cached) =>
-          cached ||
-          fetch(req).then((res) => {
-            if (res.ok) {
-              const copy = res.clone();
-              caches
-                .open(CACHE)
-                .then((c) => c.put(req, copy))
-                .catch(() => {});
-            }
-            return res;
-          }),
-      ),
+      caches
+        .match(req)
+        .then(
+          (cached) =>
+            cached ||
+            fetch(req).then((res) => {
+              if (res.ok) {
+                const copy = res.clone();
+                caches
+                  .open(CACHE)
+                  .then((c) => c.put(req, copy))
+                  .catch(() => {});
+              }
+              return res;
+            }),
+        )
+        // Network down or chunk gone: answer a plain 504 — never reject.
+        .catch(() => new Response("Offline", { status: 504 })),
     );
     return;
   }
 
-  // Network-first for HTML navigations; fall back to cache, then /offline.
+  // Network-first for navigations. On failure, fall back to the precached
+  // hermetic offline page. HTML is NEVER cached (nonce-safe).
   if (
     req.mode === "navigate" ||
     req.headers.get("accept")?.includes("text/html")
   ) {
-    event.respondWith(
-      fetch(req)
-        .then((res) => {
-          if (res.ok) {
-            const copy = res.clone();
-            caches
-              .open(CACHE)
-              .then((c) => c.put(req, copy))
-              .catch(() => {});
-          }
-          return res;
-        })
-        .catch(() =>
-          caches
-            .match(req)
-            .then((cached) => cached || caches.match("/offline")),
-        ),
-    );
+    event.respondWith(fetch(req).catch(() => caches.match("/offline.html")));
     return;
   }
 
-  // Network-first for everything else; fall back to cache (no /offline for non-HTML).
-  if (sameOrigin) {
-    event.respondWith(fetch(req).catch(() => caches.match(req)));
-  }
+  // Network-first for everything else; plain 504 instead of a rejection.
+  event.respondWith(
+    fetch(req).catch(() => new Response("Offline", { status: 504 })),
+  );
 });

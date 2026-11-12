@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     template: `%s · ${SITE.name}`,
   },
   description: SITE.summary,
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/en" },
 };
 
 export default function Page() {

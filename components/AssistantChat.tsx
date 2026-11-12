@@ -38,11 +38,15 @@ import { PROJECTS } from "@/data/projects";
 import { SKILL_CATEGORIES } from "@/data/skills";
 import { SITE } from "@/data/site";
 import { useTheme } from "@/context/ThemeProvider";
+import { useT, useLocale } from "@/i18n/LocaleProvider";
 
 // Static import — `predev`/`prebuild` runs the knowledge generator before
 // `next dev`/`next build`, so the file is always present in normal use.
 // If the file is missing for any reason, we fall back to static entries only.
 import { KNOWLEDGE_GENERATED } from "@/data/knowledge.generated";
+// Module-level constant — never changes identity between renders.
+const STABLE_EXCLUDE_SELECTORS = ["[data-floating-trigger]"];
+
 const KB: typeof KNOWLEDGE_STATIC = [
   ...KNOWLEDGE_STATIC,
   ...KNOWLEDGE_GENERATED,
@@ -57,18 +61,11 @@ type Message = {
   role: "user" | "bot";
   content: string;
   card?: Card;
+  /** True when the assistant couldn't match an intent — surface the suggestion chips instead of dead-ending. */
+  suggest?: boolean;
   ts: number;
 };
 
-const QUICK_PROMPTS = [
-  "What do you do?",
-  "Show me AI work",
-  "Are you available?",
-  "What's A++(APL)?",
-  "How do we start?",
-];
-
-// Rate-limit: 5 queries / 60s.
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 5;
 
@@ -153,18 +150,11 @@ function renderCard(
         >
           {cat.name}
         </h4>
-        <div className="grid grid-cols-2 gap-1.5">
+        <div className="flex flex-wrap gap-1.5">
           {cat.skills.map((s) => (
-            <div
-              key={s.name}
-              className="flex items-center justify-between text-[11px]"
-              style={{ color: "var(--text-primary)" }}
-            >
-              <span>{s.name}</span>
-              <span style={{ color: "var(--accent)" }}>
-                {"●".repeat(s.level)}
-              </span>
-            </div>
+            <span key={s.name} className="os-chip">
+              {s.name}
+            </span>
           ))}
         </div>
       </div>
@@ -208,7 +198,7 @@ function renderCard(
   return null;
 }
 
-function CopyBtn({ text }: { text: string }) {
+function CopyBtn({ text, label }: { text: string; label?: string }) {
   const [done, setDone] = useState(false);
   const onCopy = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -223,7 +213,7 @@ function CopyBtn({ text }: { text: string }) {
       onClick={onCopy}
       className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded"
       style={{ color: "var(--text-muted)" }}
-      aria-label="Copy message"
+      aria-label={label ?? "Copy message"}
     >
       {done ? (
         <Copy size={11} className="text-emerald-400" />
@@ -237,6 +227,15 @@ function CopyBtn({ text }: { text: string }) {
 // ---------- Component ----------
 
 export default function AssistantChat() {
+  const t = useT();
+  const locale = useLocale();
+  const quickPrompts = [
+    t("assistant.qp1"),
+    t("assistant.qp2"),
+    t("assistant.qp3"),
+    t("assistant.qp4"),
+    t("assistant.qp5"),
+  ];
   const reduced = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const [minimized, setMinimized] = useState(false);
@@ -264,8 +263,10 @@ export default function AssistantChat() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const focusTrapRef = useFocusTrap<HTMLDivElement>({
     active: isOpen && !minimized,
-    // Exclude the trigger button from being inert so it remains focusable
-    excludeSelectors: ["[data-floating-trigger]"],
+    // Exclude the trigger button from being inert so it remains focusable.
+    // Memoized — a fresh array every render churns the trap's effect and
+    // re-focuses the first element on every keystroke.
+    excludeSelectors: STABLE_EXCLUDE_SELECTORS,
   });
   const panelRef = useRef<HTMLDivElement>(null);
   // Stable callback ref that writes to both the panel ref and the
@@ -369,9 +370,10 @@ export default function AssistantChat() {
     }
   }, [isOpen, minimized]);
 
-  // -- Cmd/Ctrl+K to toggle the panel --
+  // -- Ctrl/Cmd+J toggles the assistant panel (Ctrl/Cmd+K belongs to the
+  //    command palette; both must never fire together) --
   useKeyShortcut(
-    { key: "k", meta: true, handler: () => setIsOpen((v) => !v) },
+    { key: "j", meta: true, handler: () => setIsOpen((v) => !v) },
     true,
   );
 
@@ -426,13 +428,12 @@ export default function AssistantChat() {
         {
           id: uid(),
           role: "bot",
-          content:
-            "Hi — I'm Elios AI. Ask me about my work, my stack, or how to start a project. I work offline from a knowledge base built from the site, so replies reflect exactly what's here.",
+          content: t("assistant.greeting"),
           ts: Date.now(),
         },
       ]);
     }
-  }, [isOpen, messages.length, setMessages]);
+  }, [isOpen, messages.length, setMessages, t]);
 
   // ---------- Action execution ----------
 
@@ -499,8 +500,7 @@ export default function AssistantChat() {
           {
             id: uid(),
             role: "bot",
-            content:
-              "Whoa, slow down — I throttle to 5 questions per minute. Take a breath, then try again.",
+            content: t("assistant.rateLimited"),
             ts: Date.now(),
           },
         ]);
@@ -530,15 +530,17 @@ export default function AssistantChat() {
         () => {
           const result = matchKnowledge(text, KB) as MatchResult | null;
           const entry = result?.entry;
-          const content =
-            entry?.text ??
-            "I'm not sure how to answer that. Try one of the quick prompts below.";
+          const isFallback = !entry || entry.intent === "fallback";
+          const localeKey =
+            locale === "sq" && entry?.textSq ? entry.textSq : undefined;
+          const content = localeKey ?? entry?.text ?? t("assistant.fallback");
           const card = result?.card;
           const botMsg: Message = {
             id: uid(),
             role: "bot",
             content,
             card,
+            suggest: isFallback,
             ts: Date.now(),
           };
           setMessages((prev) => [...prev.slice(-19), botMsg]);
@@ -560,6 +562,8 @@ export default function AssistantChat() {
       setInputHistory,
       reduced,
       executeAction,
+      t,
+      locale,
     ],
   );
 
@@ -567,12 +571,15 @@ export default function AssistantChat() {
 
   const copyTranscript = useCallback(() => {
     const text = messages
-      .map((m) => `${m.role === "user" ? "You" : "Elios AI"}: ${m.content}`)
+      .map(
+        (m) =>
+          `${m.role === "user" ? t("assistant.transcriptYou") : t("assistant.transcriptName")}: ${m.content}`,
+      )
       .join("\n\n");
     try {
       navigator.clipboard.writeText(text);
     } catch {}
-  }, [messages]);
+  }, [messages, t]);
 
   // ---------- Voice ----------
 
@@ -596,7 +603,7 @@ export default function AssistantChat() {
       const Ctor = W.webkitSpeechRecognition || W.SpeechRecognition;
       if (!Ctor) return;
       const rec = new Ctor();
-      rec.lang = "en-US";
+      rec.lang = locale === "sq" ? "sq-AL" : "en-US";
       rec.interimResults = false;
       rec.continuous = false;
       rec.onresult = (e: {
@@ -613,7 +620,7 @@ export default function AssistantChat() {
     } catch {
       setIsListening(false);
     }
-  }, [isListening]);
+  }, [isListening, locale]);
 
   // ---------- Typing caret (bot) ----------
 
@@ -705,12 +712,14 @@ export default function AssistantChat() {
           boxShadow: "0 10px 40px -10px var(--shadow-accent)",
           marginBottom: "env(safe-area-inset-bottom)",
         }}
+        aria-keyshortcuts="Control+J Meta+J"
+        title={isOpen ? undefined : t("assistant.askTitle")}
         aria-label={
           isOpen && !isMobile
             ? minimized
-              ? "Expand assistant"
-              : "Minimize assistant"
-            : "Open Elios AI assistant"
+              ? t("assistant.expandAssistant")
+              : t("assistant.minimizeAssistant")
+            : t("assistant.openAssistant")
         }
         aria-expanded={isOpen}
         data-cursor-hover
@@ -727,9 +736,9 @@ export default function AssistantChat() {
         <span className="hidden sm:inline text-xs font-bold uppercase tracking-widest opacity-80 group-hover:opacity-100">
           {isOpen && !isMobile
             ? minimized
-              ? "Expand"
-              : "Minimize"
-            : "Ask Elios AI"}
+              ? t("assistant.expand")
+              : t("assistant.minimize")
+            : t("assistant.askElios")}
         </span>
         {isOpen && !isMobile && (
           // Live pulse so the user knows the assistant is still running
@@ -756,13 +765,13 @@ export default function AssistantChat() {
           style={panelStyle}
           role="dialog"
           aria-modal={isMobile ? "true" : "false"}
-          aria-label="Elios AI assistant"
+          aria-label={t("assistant.panelLabel")}
         >
           {/* Header — also acts as the click target to expand when minimized */}
           <div
             onClick={minimized ? () => setMinimized(false) : undefined}
             role={minimized ? "button" : undefined}
-            aria-label={minimized ? "Expand assistant" : undefined}
+            aria-label={minimized ? t("assistant.expandAssistant") : undefined}
             className={`flex items-center justify-between select-none transition-colors ${
               minimized
                 ? "px-3 py-2 cursor-pointer hover:bg-[var(--surface-elevated)]"
@@ -842,8 +851,8 @@ export default function AssistantChat() {
                     }}
                     className="p-1.5 rounded opacity-70 hover:opacity-100"
                     style={{ color: "var(--text-secondary)" }}
-                    aria-label="Copy transcript"
-                    title="Copy transcript"
+                    aria-label={t("assistant.copyTranscript")}
+                    title={t("assistant.copyTranscript")}
                   >
                     <Copy size={14} />
                   </button>
@@ -854,8 +863,8 @@ export default function AssistantChat() {
                     }}
                     className="p-1.5 rounded opacity-70 hover:opacity-100 transition-colors"
                     style={{ color: "var(--text-secondary)" }}
-                    aria-label="About this assistant"
-                    title="About this assistant"
+                    aria-label={t("assistant.aboutAssistant")}
+                    title={t("assistant.aboutAssistant")}
                   >
                     <Info size={14} />
                   </button>
@@ -869,8 +878,14 @@ export default function AssistantChat() {
                   }}
                   className="p-1.5 rounded opacity-70 hover:opacity-100 transition-colors"
                   style={{ color: "var(--text-secondary)" }}
-                  aria-label={minimized ? "Expand" : "Minimize"}
-                  title={minimized ? "Expand (⌘M)" : "Minimize (⌘M)"}
+                  aria-label={
+                    minimized ? t("assistant.expand") : t("assistant.minimize")
+                  }
+                  title={
+                    minimized
+                      ? t("assistant.expandTitle")
+                      : t("assistant.minimizeTitle")
+                  }
                 >
                   <Minus size={14} />
                 </button>
@@ -882,8 +897,8 @@ export default function AssistantChat() {
                 }}
                 className="p-1.5 rounded opacity-70 hover:opacity-100 transition-colors"
                 style={{ color: "var(--text-secondary)" }}
-                aria-label="Close"
-                title="Close (Esc)"
+                aria-label={t("assistant.close")}
+                title={t("assistant.closeTitle")}
               >
                 <X size={14} />
               </button>
@@ -905,14 +920,11 @@ export default function AssistantChat() {
                     className="font-bold mb-1"
                     style={{ color: "var(--text-primary)" }}
                   >
-                    How this works
+                    {t("assistant.howThisWorks")}
                   </p>
                   <p>
-                    Replies come from a knowledge base built from this site
-                    (projects, services, skills, notes, and a hand-written FAQ).
-                    It runs entirely in your browser — no API key, no server
-                    calls, no data leaves your device. Regenerated on every{" "}
-                    <code className="kbd">sync:kb</code> run.
+                    {t("assistant.howThisWorksBody")}{" "}
+                    <code className="kbd">sync:kb</code>
                   </p>
                 </div>
               )}
@@ -924,10 +936,11 @@ export default function AssistantChat() {
                 aria-live="polite"
                 style={{ background: "var(--bg-primary)" }}
               >
-                {/* Quick prompts */}
-                {messages.length <= 1 && (
+                {/* Quick prompts (first run) — or suggestions when the assistant didn't know the answer */}
+                {(messages.length <= 1 ||
+                  messages[messages.length - 1]?.suggest) && (
                   <div className="flex flex-wrap gap-1.5 mb-2">
-                    {QUICK_PROMPTS.map((p) => (
+                    {quickPrompts.map((p) => (
                       <button
                         key={p}
                         onClick={() => send(p)}
@@ -985,7 +998,10 @@ export default function AssistantChat() {
                           minute: "2-digit",
                         })}
                       </span>
-                      <CopyBtn text={m.content} />
+                      <CopyBtn
+                        text={m.content}
+                        label={t("assistant.copyMessage")}
+                      />
                     </div>
                   </div>
                 ))}
@@ -994,7 +1010,7 @@ export default function AssistantChat() {
                 {isGenerating && (
                   <div
                     className="flex items-center gap-1 px-2 py-1.5"
-                    aria-label="Elios AI is typing"
+                    aria-label={t("assistant.typing")}
                   >
                     {[0, 1, 2].map((i) => (
                       <span
@@ -1038,7 +1054,9 @@ export default function AssistantChat() {
                       border: "1px solid var(--border)",
                     }}
                     aria-label={
-                      isListening ? "Stop voice input" : "Start voice input"
+                      isListening
+                        ? t("assistant.stopVoice")
+                        : t("assistant.startVoice")
                     }
                   >
                     {isListening ? <MicOff size={14} /> : <Mic size={14} />}
@@ -1074,7 +1092,7 @@ export default function AssistantChat() {
                       setInput(inputHistory[next] || "");
                     }
                   }}
-                  placeholder="Ask me anything…"
+                  placeholder={t("assistant.placeholder")}
                   rows={1}
                   className="flex-1 resize-none bg-transparent border-0 outline-none text-base sm:text-[13px]"
                   style={{
@@ -1082,7 +1100,7 @@ export default function AssistantChat() {
                     maxHeight: 84,
                     minHeight: 32,
                   }}
-                  aria-label="Message input"
+                  aria-label={t("assistant.messageInput")}
                 />
                 <button
                   type="submit"
@@ -1092,7 +1110,7 @@ export default function AssistantChat() {
                     background: "var(--accent)",
                     color: "var(--accent-contrast)",
                   }}
-                  aria-label="Send"
+                  aria-label={t("assistant.send")}
                 >
                   <Send size={14} />
                 </button>
@@ -1109,10 +1127,13 @@ export default function AssistantChat() {
               >
                 <span className="flex items-center gap-1.5">
                   <ShieldCheck size={11} />
-                  Scripted KB · no data leaves browser
+                  {t("assistant.privacy")}
                 </span>
                 <span>
-                  {rateRemaining}/{RATE_MAX} this min
+                  {t("assistant.rateLimit", {
+                    remaining: rateRemaining,
+                    max: RATE_MAX,
+                  })}
                 </span>
               </div>
             </>

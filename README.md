@@ -22,7 +22,7 @@ A high-performance, content-first portfolio for a software engineer specializing
 | **Contact**         | Server action, zod-validated, honeypot + behavioral heuristic + per-IP rate limit.                                                     |
 | **Terminal**        | Floating, draggable, focus-trapped, persisted history, 18+ commands.                                                                   |
 | **Elios AI**        | Floating, scripted assistant — quick prompts, free chat, voice input, copy-transcript. Knowledge base auto-synced from the data layer. |
-| **Service worker**  | Cache-first for `_next/static` and images, stale-while-revalidate for HTML, offline fallback at `/offline`.                            |
+| **Service worker**  | Cache-first for `_next/static` and images, network-first for HTML, offline fallback at `/offline.html`.                                |
 
 ---
 
@@ -91,10 +91,10 @@ The nonce is generated per request, attached to the response as a header, and co
 `public/sw.js` is a hand-rolled 76-line worker (no Workbox). It is registered by `app/sw-register.tsx` only in production. Strategies:
 
 - **Cache-first** for `/_next/static/*`, `/_next/image*`, and image/font extensions.
-- **Stale-while-revalidate** for HTML navigations (falls back to `/offline` on network failure).
-- **Network-first** with cache fallback for everything else.
+- **Network-first** for HTML navigations (falls back to `/offline.html` on network failure; HTML is never cached).
+- **Network-first** (plain 504) for everything else; no fetch ever rejects unhandled.
 
-The offline fallback page is at `app/offline/page.tsx` (static, dependency-free, "Back to home" link).
+The offline fallback is `public/offline.html` — a static, dependency-free page (no framework, no JS chunks), precached by the SW so it always renders, regardless of builds.
 
 ---
 

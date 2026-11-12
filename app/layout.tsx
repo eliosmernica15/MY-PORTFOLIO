@@ -6,13 +6,33 @@ import { SITE } from "@/data/site";
 import { Providers } from "./Providers";
 import { SwRegister } from "./sw-register";
 
-// Self-hosted Plus Jakarta Sans (variable, latin) — avoids the build-time
+// Self-hosted Plus Jakarta Sans (variable, latin) - avoids the build-time
 // Google Fonts fetch that crashes Vercel builds.
 const jakarta = localFont({
   src: "./fonts/plus-jakarta-sans-latin-variable.woff2",
   display: "swap",
   variable: "--font-jakarta",
   weight: "200 800",
+  preload: true,
+});
+
+// Self-hosted Fraunces Variable + italic (SIL OFL 1.1, see ./fonts/fraunces-OFL.txt).
+// Display face for the ELIOS/redesign masthead, headlines and numerals.
+const fraunces = localFont({
+  src: [
+    {
+      path: "./fonts/fraunces-latin-variable.woff2",
+      weight: "100 900",
+      style: "normal",
+    },
+    {
+      path: "./fonts/fraunces-italic-latin-variable.woff2",
+      weight: "100 900",
+      style: "italic",
+    },
+  ],
+  display: "swap",
+  variable: "--font-fraunces",
   preload: true,
 });
 
@@ -27,22 +47,24 @@ export const metadata: Metadata = {
   authors: [{ name: SITE.name, url: SITE.url }],
   keywords: [
     "Elios Mernica",
-    "software engineer",
-    "web developer",
-    "AI engineer",
+    "product builder",
+    "engineer designer",
+    "full-stack engineer",
+    "AI products",
+    "developer tooling",
+    "A++ APL",
+    "Albanian programming language",
     "portfolio",
     "Kosovo",
     "React",
     "Next.js",
     "TypeScript",
-    "full-stack",
-    "AI systems",
-    "network infrastructure",
+    "end-to-end products",
   ],
   creator: SITE.name,
   publisher: SITE.name,
   alternates: {
-    canonical: "/",
+    canonical: "/en",
     languages: { en: "/en", sq: "/sq", "x-default": "/en" },
   },
   openGraph: {
@@ -84,21 +106,19 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: light)", color: "#FAF7F2" },
+    { media: "(prefers-color-scheme: dark)", color: "#171210" },
   ],
   colorScheme: "dark light",
 };
 
-// Theme bootstrap - runs before React hydrates so the theme is applied
-// without a light/dark flash. Mirrors the resolver ThemeProvider uses
-// (elios-theme-config): cookie > explicit config mode > legacy key > system.
-// MUST carry the per-request CSP nonce ('strict-dynamic' ignores
-// 'unsafe-inline' for scripts).
+// Theme bootstrap — runs before React hydrates so the theme stamps itself
+// without a light/dark flash. Resolution order mirrors the ThemeProvider:
+// cookie > saved config > legacy key > system preference.
 const themeInitScript = `
 (function() {
   try {
-    var t = document.cookie.match(/(?:^|; )theme=(dark|light)/);
+    var cookie = (document.cookie.match(/(?:^|; )theme=(dark|light)/) || [])[1];
     var cfgMode = null;
     try {
       var raw = localStorage.getItem('elios-theme-config');
@@ -106,14 +126,39 @@ const themeInitScript = `
     } catch (e) {}
     var legacy = null;
     try { legacy = localStorage.getItem('theme'); } catch (e) {}
-    var pref = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    var theme = t ? t[1]
-      : (cfgMode === 'dark' || cfgMode === 'light') ? cfgMode
-      : (legacy === 'dark' || legacy === 'light') ? legacy
-      : pref;
+    var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var theme = cookie
+      || (cfgMode === 'dark' || cfgMode === 'light' ? cfgMode : null)
+      || (legacy === 'dark' || legacy === 'light' ? legacy : null)
+      || (systemDark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.add('js');
+    var showFallback = function () {
+      document.documentElement.classList.add('reveal-fallback');
+    };
+    // If hydration dies mid-flight (e.g. a stale tab still pointing at an
+    // older build after a redeploy), never leave motion primitives hidden.
+    window.addEventListener('error', function (e) {
+      var t = e && e.target;
+      var src = (t && (t.src || t.href)) || '';
+      if (/\\/_next\\/static\\//.test(src) && (t.tagName === 'SCRIPT' || t.tagName === 'LINK')) {
+        showFallback();
+        return;
+      }
+      var msg = String((e && (e.message || (e.error && e.error.message))) || '');
+      if (/ChunkLoadError|Loading chunk|dynamically imported module|Failed to fetch/i.test(msg)) {
+        showFallback();
+      }
+    }, true);
+    window.addEventListener('unhandledrejection', function (e) {
+      var msg = String((e && e.reason && (e.reason.message || e.reason)) || '');
+      if (/ChunkLoadError|Loading chunk|dynamically imported module|Failed to fetch/i.test(msg)) {
+        showFallback();
+      }
+    });
   } catch(e) {
     document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.classList.add('reveal-fallback');
   }
 })();
 `;
@@ -133,7 +178,7 @@ export default async function RootLayout({
     "@context": "https://schema.org",
     "@type": "Person",
     name: SITE.name,
-    jobTitle: "Software Engineer",
+    jobTitle: "Engineer · Designer · Product Builder",
     url: SITE.url,
     email: `mailto:${SITE.email}`,
     telephone: SITE.phone,
@@ -163,24 +208,13 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang={locale} data-theme="dark" className={jakarta.variable}>
+    <html
+      lang={locale}
+      data-theme="dark"
+      className={`${jakarta.variable} ${fraunces.variable}`}
+    >
       <head>
-        <link
-          rel="preconnect"
-          href="https://prod.spline.design"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://i.postimg.cc"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://api.github.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="dns-prefetch" href="https://api.emailjs.com" />
+        <link rel="dns-prefetch" href="https://api.github.com" />
         {/* View Transitions API - smooth page transitions for same-origin navigation */}
         <meta name="view-transition" content="same-origin" />
         {/* Theme bootstrap. Carries the per-request CSP nonce. */}
