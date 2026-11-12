@@ -64,59 +64,60 @@ const Work: React.FC = () => {
           </p>
         </div>
 
-        {/* Two covers — wipe reveal + restrained parallax */}
+        {/* Two covers — plain render. The clip-path reveal used here never
+            opened on some devices/networks, leaving a huge empty gap with an
+            invisible cover in it. Covers must always be visible. */}
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           {featured.map((project, i) => (
-            <Reveal key={project.id} variant="clip" delay={i * 120}>
-              <Link
-                href={`/project/${project.id}`}
-                className="panel-frame group block"
-                aria-label={project.title}
+            <Link
+              key={project.id}
+              href={`/project/${project.id}`}
+              className="panel-frame group block"
+              aria-label={project.title}
+            >
+              <div
+                ref={covers[i]}
+                className="parallax-frame aspect-[16/10]"
+                style={{ background: "#0d0d0f" }}
               >
-                <div
-                  ref={covers[i]}
-                  className="parallax-frame aspect-[16/10]"
-                  style={{ background: "#0d0d0f" }}
-                >
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    width={1200}
-                    height={750}
-                    sizes="(min-width: 768px) 50vw, 100vw"
-                    className="parallax-inner aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                  />
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  width={1200}
+                  height={750}
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="parallax-inner aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                />
+              </div>
+              <div
+                className="relative flex items-baseline justify-between gap-4 border-t px-4 py-3.5"
+                style={{
+                  borderColor: "var(--border)",
+                  background: "var(--bg-card)",
+                }}
+              >
+                <div className="min-w-0">
+                  <p
+                    className="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.3em]"
+                    style={{ color: "var(--accent)" }}
+                  >
+                    0{i + 1} · {project.year}
+                  </p>
+                  <h3 className="font-display mt-1 truncate text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+                    {project.title}
+                  </h3>
                 </div>
-                <div
-                  className="relative flex items-baseline justify-between gap-4 border-t px-4 py-3.5"
-                  style={{
-                    borderColor: "var(--border)",
-                    background: "var(--bg-card)",
-                  }}
-                >
-                  <div className="min-w-0">
-                    <p
-                      className="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.3em]"
-                      style={{ color: "var(--accent)" }}
-                    >
-                      0{i + 1} · {project.year}
-                    </p>
-                    <h3 className="font-display mt-1 truncate text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
-                      {project.title}
-                    </h3>
-                  </div>
-                  <span className="ghost-index" aria-hidden>
-                    0{i + 1}
-                  </span>
-                  <ArrowUpRight
-                    size={20}
-                    strokeWidth={1.5}
-                    aria-hidden
-                    className="arrow-nudge relative shrink-0 text-[var(--text-muted)] group-hover:text-[var(--accent)]"
-                  />
-                </div>
-              </Link>
-            </Reveal>
+                <span className="ghost-index" aria-hidden>
+                  0{i + 1}
+                </span>
+                <ArrowUpRight
+                  size={20}
+                  strokeWidth={1.5}
+                  aria-hidden
+                  className="arrow-nudge relative shrink-0 text-[var(--text-muted)] group-hover:text-[var(--accent)]"
+                />
+              </div>
+            </Link>
           ))}
         </div>
 

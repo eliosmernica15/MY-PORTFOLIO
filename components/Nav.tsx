@@ -1,8 +1,9 @@
 "use client";
 
 import React, { memo, useEffect, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Sun, Moon } from "lucide-react";
 import { useT, useLocale, useSetLocale } from "@/i18n/LocaleProvider";
+import { useTheme } from "@/context/ThemeProvider";
 
 /**
  * Minimal paper masthead: wordmark left, four destinations right,
@@ -20,6 +21,7 @@ const Nav: React.FC = () => {
   const t = useT();
   const locale = useLocale();
   const setLocale = useSetLocale();
+  const { mode, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -107,6 +109,32 @@ const Nav: React.FC = () => {
             >
               ⌘K
             </kbd>
+          </button>
+
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={
+              mode === "light"
+                ? t("accessibility.switchToDark")
+                : t("accessibility.switchToLight")
+            }
+            title={
+              mode === "light"
+                ? t("accessibility.switchToDark")
+                : t("accessibility.switchToLight")
+            }
+            className="interactive-btn btn-lift inline-flex h-7 sm:h-8 w-7 sm:w-8 items-center justify-center rounded-md border text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]"
+            style={{
+              borderColor: "var(--border)",
+              background: "var(--pill-bg)",
+            }}
+          >
+            {mode === "light" ? (
+              <Moon size={13} strokeWidth={2} aria-hidden />
+            ) : (
+              <Sun size={13} strokeWidth={2} aria-hidden />
+            )}
           </button>
 
           <div

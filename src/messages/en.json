@@ -383,7 +383,9 @@
     "openCommandPalette": "Open command palette",
     "openThemeSelector": "Open theme selector",
     "switchLanguage": "Switch language",
-    "backToTop": "Back to top"
+    "backToTop": "Back to top",
+    "switchToDark": "Switch to dark theme",
+    "switchToLight": "Switch to light theme"
   },
   "projectDetail": {
     "backToProjects": "Back to Showcase",

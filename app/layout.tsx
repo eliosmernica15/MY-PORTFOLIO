@@ -107,20 +107,35 @@ export const viewport: Viewport = {
   maximumScale: 5,
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#FAF7F2" },
-    { media: "(prefers-color-scheme: dark)", color: "#FAF7F2" },
+    { media: "(prefers-color-scheme: dark)", color: "#171210" },
   ],
-  colorScheme: "light",
+  colorScheme: "dark light",
 };
 
-// Theme bootstrap — simplified: the redesigned site ships a single
-// warm-paper theme (no light/dark switching). Kept nonce'd so the CSP
-// story stays uniform across the app.
+// Theme bootstrap — runs before React hydrates so the theme stamps itself
+// without a light/dark flash. Resolution order mirrors the ThemeProvider:
+// cookie > saved config > legacy key > system preference.
 const themeInitScript = `
 (function() {
   try {
-    document.documentElement.setAttribute('data-theme', 'light');
+    var cookie = (document.cookie.match(/(?:^|; )theme=(dark|light)/) || [])[1];
+    var cfgMode = null;
+    try {
+      var raw = localStorage.getItem('elios-theme-config');
+      if (raw) cfgMode = JSON.parse(raw).mode;
+    } catch (e) {}
+    var legacy = null;
+    try { legacy = localStorage.getItem('theme'); } catch (e) {}
+    var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var theme = cookie
+      || (cfgMode === 'dark' || cfgMode === 'light' ? cfgMode : null)
+      || (legacy === 'dark' || legacy === 'light' ? legacy : null)
+      || (systemDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
     document.documentElement.classList.add('js');
-  } catch(e) {}
+  } catch(e) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
 })();
 `;
 
@@ -169,7 +184,11 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang={locale} className={`${jakarta.variable} ${fraunces.variable}`}>
+    <html
+      lang={locale}
+      data-theme="dark"
+      className={`${jakarta.variable} ${fraunces.variable}`}
+    >
       <head>
         <link rel="dns-prefetch" href="https://api.github.com" />
         {/* View Transitions API - smooth page transitions for same-origin navigation */}

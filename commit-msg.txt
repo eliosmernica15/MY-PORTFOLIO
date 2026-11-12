@@ -1,27 +1,17 @@
-fix(terminal): focus-trap was stealing keystrokes to the red close button
+feat(theme): real espresso dark theme + Nav toggle + terminal theme command verified
 
-useFocusTrap re-ran on every render because callers passed a fresh
-`excludeSelectors` array *and* an inline `onActivate` callback each render —
-so on every keystroke the trap force-focused its first focusable element
-(the red close button) and the visitor could only type one letter.
-
-Fix: caller callbacks/arrays hoisted to module-level constants
-(Style STABLE_EXCLUDE_SELECTORS + useCallback(activateSound) in Terminal),
-hook now keys activation off the false→true edge of `active` (never mere
-identity changes), and never steals focus from an element already inside
-the trap.
-
-Also:
-- Terminal: grouped help (WORK/ABOUT/SHELL/FUN), `ls` (projects alias),
-  `pwd` (~/elios-mernica), closest-command suggestion on unknown input
-  (Levenshtein, e.g. `projcts` → `projects`), welcome/tip copy now lists
-  shortcuts that actually exist — it falsely claimed Ctrl+L clears.
-- Assistant: fully bilingual (20 knowledge entries carry Albanian `textSq`;
-  answers follow the UI locale), Albanian intent synonyms added to the
-  matcher, dead-ends surface quick-prompt suggestions instead of a silent
-  dead end, voice input language follows the locale (sq-AL / en-US), and
-  every hardcoded English UI string is wired through the i18n catalogs.
-- New keys EN+SQ (assistant qp1-5 + ~25 UI strings; terminal groups ls/pwd
-  + closest-match strings). i18n parity 409/409.
-- Verified: 5 new workflow tests green; 150/150 across desktop/tablet/mobile.
-  Production untouched.
+- globals.css: warm-paper light theme (unchanged) + a true espresso dark theme
+  (#171210 ink on #ede7de, terracotta #e0754b accent) — the previous
+  [data-theme="dark"] block was an aliased copy of the paper tokens.
+- layout.tsx: theme bootstrap restored (cookie → saved config → legacy key →
+  system preference), html defaults to data-theme="dark" server-side and stamps
+  itself before paint; themeColor entries for both schemes.
+- Nav: sun/moon toggle between the ⌘K button and EN|SQ (aria-labeled in both
+  locales: accessibility.switchToDark / switchToLight).
+- Terminal: `theme dark|light|toggle` drives the real provider — persists to
+  localStorage (elios-theme-config, same key the bootstrap reads) and applies
+  <html data-theme> instantly; verified for both entrypoints + reload.
+- Tests: +theme.spec.ts (nav toggle flip + persist across reload; terminal
+  theme command), +dark-mode.spec.ts (CSS tokens applied end-to-end, zero
+  console errors on flip, floating terminal visible in dark mode).
+- 159/159 across desktop/tablet/mobile. Production untouched.

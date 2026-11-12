@@ -383,7 +383,9 @@
     "openCommandPalette": "Hap paletën e komandave",
     "openThemeSelector": "Hap zgjedhësit e temës",
     "switchLanguage": "Ndrysho gjuhën",
-    "backToTop": "Kthehu lart"
+    "backToTop": "Kthehu lart",
+    "switchToDark": "Kalo në temën e errët",
+    "switchToLight": "Kalo në temën e ndritshme"
   },
   "projectDetail": {
     "backToProjects": "Kthehu te Galeria",

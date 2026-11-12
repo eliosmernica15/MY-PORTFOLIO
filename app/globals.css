@@ -45,45 +45,45 @@
   --ring-focus: rgba(194, 65, 12, 0.55);
 }
 
-/* The redesigned site ships a single warm-paper theme. If a stale
-   data-theme="dark" attribute ever reaches the page, mirror paper. */
+/* Dark theme — espresso & ember. Warm counterpart to the paper light theme.
+   Same terracotta accent, deepened and warmed for contrast on dark ink. */
 [data-theme="dark"] {
-  --grid-line: rgba(28, 26, 23, 0.06);
-  --bg-primary: #faf7f2;
-  --bg-secondary: #faf7f2;
-  --bg-card: #fffdf9;
-  --hero-card-bg: #fffdf9;
-  --text-primary: #1c1a17;
-  --text-secondary: #57534a;
-  --text-muted: #8b8578;
-  --accent: #c2410c;
-  --accent-light: #c2410c;
-  --accent-dark: #9a3412;
-  --accent-muted: rgba(194, 65, 12, 0.4);
-  --accent-contrast: #faf7f2;
-  --text-on-accent: #faf7f2;
-  --border: rgba(28, 26, 23, 0.16);
-  --border-hover: rgba(28, 26, 23, 0.35);
-  --nav-bg: rgba(250, 247, 242, 0.82);
-  --nav-bg-scrolled: rgba(250, 247, 242, 0.96);
-  --glass-bg: rgba(255, 253, 249, 0.85);
-  --glass-border: rgba(28, 26, 23, 0.14);
-  --glass-accent-bg: rgba(194, 65, 12, 0.08);
-  --glass-accent-border: rgba(194, 65, 12, 0.25);
-  --gradient-text-from: #1c1a17;
-  --gradient-text-mid: #57534a;
-  --gradient-text-to: rgba(87, 83, 74, 0.45);
-  --scrollbar-thumb: #c9c4b8;
-  --selection-bg: rgba(194, 65, 12, 0.22);
-  --shadow-accent: rgba(194, 65, 12, 0.18);
-  --input-bg: rgba(28, 26, 23, 0.045);
-  --shadow-color: rgba(28, 26, 23, 0.12);
-  --overlay-bg: rgba(250, 247, 242, 0.97);
-  --pill-bg: rgba(28, 26, 23, 0.055);
-  --pill-border: rgba(28, 26, 23, 0.1);
-  --surface-elevated: rgba(255, 253, 249, 0.92);
-  --glow-soft: rgba(194, 65, 12, 0.09);
-  --ring-focus: rgba(194, 65, 12, 0.55);
+  --grid-line: rgba(237, 231, 222, 0.06);
+  --bg-primary: #171210;
+  --bg-secondary: #171210;
+  --bg-card: #1f1a17;
+  --hero-card-bg: #1f1a17;
+  --text-primary: #ede7de;
+  --text-secondary: #c4b8aa;
+  --text-muted: #8f8376;
+  --accent: #e0754b;
+  --accent-light: #e8956f;
+  --accent-dark: #c2572f;
+  --accent-muted: rgba(224, 117, 75, 0.45);
+  --accent-contrast: #171210;
+  --text-on-accent: #171210;
+  --border: rgba(237, 231, 222, 0.14);
+  --border-hover: rgba(237, 231, 222, 0.28);
+  --nav-bg: rgba(23, 18, 16, 0.78);
+  --nav-bg-scrolled: rgba(23, 18, 16, 0.94);
+  --glass-bg: rgba(31, 26, 23, 0.85);
+  --glass-border: rgba(237, 231, 222, 0.14);
+  --glass-accent-bg: rgba(224, 117, 75, 0.1);
+  --glass-accent-border: rgba(224, 117, 75, 0.3);
+  --gradient-text-from: #ede7de;
+  --gradient-text-mid: #c4b8aa;
+  --gradient-text-to: rgba(196, 184, 170, 0.45);
+  --scrollbar-thumb: #4a423c;
+  --selection-bg: rgba(224, 117, 75, 0.35);
+  --shadow-accent: rgba(224, 117, 75, 0.25);
+  --input-bg: rgba(237, 231, 222, 0.05);
+  --shadow-color: rgba(0, 0, 0, 0.55);
+  --overlay-bg: rgba(23, 18, 16, 0.97);
+  --pill-bg: rgba(237, 231, 222, 0.08);
+  --pill-border: rgba(237, 231, 222, 0.1);
+  --surface-elevated: rgba(31, 26, 23, 0.92);
+  --glow-soft: rgba(224, 117, 75, 0.12);
+  --ring-focus: rgba(224, 117, 75, 0.6);
 }
 
 /* ================================================================
