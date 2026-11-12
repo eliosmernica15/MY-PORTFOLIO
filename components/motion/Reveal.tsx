@@ -76,6 +76,21 @@ export function Reveal({
     );
   }
 
+  if (variant === "clip") {
+    // IMPORTANT: the observed box must carry NO clip-path — a clip-path on
+    // the target collapses its IntersectionObserver rect to zero and the
+    // reveal would never fire. The clip lives on the inner wrapper instead.
+    return (
+      <Component
+        ref={ref as React.Ref<any>}
+        className={classes}
+        style={mergedStyle}
+      >
+        <span className="reveal-clip-inner">{children}</span>
+      </Component>
+    );
+  }
+
   return (
     <Component
       ref={ref as React.Ref<any>}
